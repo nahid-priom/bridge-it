@@ -21,9 +21,11 @@ import { SearchPage } from './components/SearchPage';
 import { AboutPage } from './components/AboutPage';
 import { ChatWidget } from './components/ChatWidget';
 import { Notification } from './components/Notification';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 
 const App: React.FC = () => {
   const { currentPage } = useStore();
+  const isAdminDashboard = currentPage === 'admin-dashboard';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,6 +68,8 @@ const App: React.FC = () => {
         return <MessagesPage />;
       case 'dashboard':
         return <Dashboard />;
+      case 'admin-dashboard':
+        return <AdminDashboardPage />;
       case 'search':
         return <SearchPage />;
       case 'about':
@@ -77,12 +81,12 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-bridge-dark text-white">
-      <Navbar />
+      {!isAdminDashboard && <Navbar />}
       <main>
         {renderPage()}
       </main>
-      <Footer />
-      <ChatWidget />
+      {!isAdminDashboard && <Footer />}
+      {!isAdminDashboard && <ChatWidget />}
       <Notification />
     </div>
   );

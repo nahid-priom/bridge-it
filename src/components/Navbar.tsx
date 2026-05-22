@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
-import { Search, ShoppingCart, MessageCircle, Menu, X, Bell, User } from 'lucide-react';
+import { Search, ShoppingCart, MessageCircle, Menu, X, Bell, User, Shield } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { currentPage, setPage, cart, toggleMenu, isMenuOpen, searchQuery, setSearchQuery, setCategory, toggleChat } = useStore();
@@ -120,6 +120,16 @@ export const Navbar: React.FC = () => {
               )}
             </button>
 
+            {/* Admin */}
+            <button
+              onClick={() => setPage('admin-dashboard')}
+              className="hidden lg:flex items-center gap-2 px-3 py-2 glass border border-white/10 text-bridge-gray hover:text-white hover:border-bridge-primary/30 rounded-xl text-sm font-medium transition-all cursor-pointer"
+              title="Admin Control Center"
+            >
+              <Shield className="w-4 h-4 text-bridge-primary-light" />
+              <span>Admin</span>
+            </button>
+
             {/* User */}
             <button 
               onClick={() => setPage('dashboard')}
@@ -179,6 +189,13 @@ export const Navbar: React.FC = () => {
               className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-bridge-primary to-bridge-primary-light cursor-pointer"
             >
               ⚡ Dashboard
+            </button>
+            <button
+              onClick={() => setPage('admin-dashboard')}
+              className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-bridge-gray hover:text-white glass border border-white/10 cursor-pointer flex items-center gap-2"
+            >
+              <Shield className="w-4 h-4 text-bridge-primary-light" />
+              Admin Control Center
             </button>
           </div>
         </div>

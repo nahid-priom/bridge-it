@@ -117,5 +117,6 @@ export type PageType =
   | 'messages'
   | 'cart'
   | 'dashboard'
+  | 'admin-dashboard'
   | 'search'
   | 'about';
