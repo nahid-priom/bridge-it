@@ -1,22 +1,30 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useStore } from '../store/useStore';
 import { categories } from '../data/categories';
-import { featuredServices } from '../data/services';
+import { allMarketplaceServices } from '../data/services';
 import { PageFallback } from './PageFallback';
 import { ArrowLeft, Star, Clock, ShoppingCart, Filter, Grid3X3, List, Shield } from 'lucide-react';
 
 export const CategoryDetail: React.FC = () => {
-  const { selectedCategory, setPage, setSelectedService, addToCart } = useStore();
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState('popular');
+  const selectedCategory = useStore((s) => s.selectedCategory);
+  const viewMode = useStore((s) => s.viewMode);
+  const sortBy = useStore((s) => s.sortBy);
+  const setPage = useStore((s) => s.setPage);
+  const setSelectedService = useStore((s) => s.setSelectedService);
+  const addToCart = useStore((s) => s.addToCart);
+  const setViewMode = useStore((s) => s.setViewMode);
+  const setSortBy = useStore((s) => s.setSortBy);
+
+  const sortKey =
+    sortBy === 'price-low' ? 'price-low' : sortBy === 'price-high' ? 'price-high' : sortBy === 'rating' ? 'rating' : sortBy === 'newest' ? 'newest' : 'popular';
 
   const category = categories.find(c => c.id === selectedCategory);
 
   const services = useMemo(() => {
     if (!category) return [];
-    const filtered = featuredServices.filter(s => s.category === category.id);
+    const filtered = allMarketplaceServices.filter(s => s.category === category.id);
     const sorted = [...filtered];
-    switch (sortBy) {
+    switch (sortKey) {
       case 'rating':
         sorted.sort((a, b) => b.rating - a.rating);
         break;
@@ -33,7 +41,7 @@ export const CategoryDetail: React.FC = () => {
         sorted.sort((a, b) => Number(b.popular) - Number(a.popular) || b.reviewCount - a.reviewCount);
     }
     return sorted;
-  }, [category, sortBy]);
+  }, [category, sortKey]);
 
   if (!category) {
     return (
@@ -47,7 +55,7 @@ export const CategoryDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-20">
+    <div className="min-h-screen pt-[4.5rem] md:pt-20 pb-16 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <button 
           onClick={() => setPage('categories')}
@@ -78,8 +86,8 @@ export const CategoryDetail: React.FC = () => {
               <Filter className="w-4 h-4" /> Filters
             </button>
             <select 
-              value={sortBy} 
-              onChange={(e) => setSortBy(e.target.value)}
+              value={sortKey} 
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
               className="px-4 py-2 bg-bridge-dark-2 border border-white/10 rounded-xl text-sm text-white focus:outline-none cursor-pointer"
             >
               <option value="popular">Most Popular</option>

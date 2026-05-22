@@ -1,103 +1,218 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import { Grid3X3, List } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { featuredServices } from '../data/services';
-import { categories } from '../data/categories';
-import { ArrowLeft, Search, Star, Clock, ShoppingCart, Shield } from 'lucide-react';
+import { searchCatalog } from '../data/searchCatalog';
+import { allMarketplaceServices } from '../data/services';
+import { useDebouncedValue } from '../hooks/useDebouncedValue';
+import {
+  DEFAULT_SEARCH_FILTERS,
+  filterSearchCatalog,
+  getRecommendedResults,
+  sortSearchResults,
+  getActiveFilterCount,
+} from '../utils/searchFilter';
+import { SearchCatalogItem } from '../types';
+import { SearchHeroBar } from './search/SearchHeroBar';
+import { SearchFilterSidebar } from './search/SearchFilterSidebar';
+import { MobileSearchFilterDrawer, MobileFilterButton } from './search/MobileSearchFilterDrawer';
+import { SearchResultGrid } from './search/SearchResultGrid';
+import { SearchSortDropdown } from './search/SearchSortDropdown';
+import { SearchEmptyState } from './search/SearchEmptyState';
+import { ActiveFilterChips } from './search/ActiveFilterChips';
 
 export const SearchPage: React.FC = () => {
-  const { searchQuery, setSearchQuery, setPage, setSelectedService, addToCart } = useStore();
+  const searchQuery = useStore((s) => s.searchQuery);
+  const searchFilters = useStore((s) => s.searchFilters);
+  const sortBy = useStore((s) => s.sortBy);
+  const viewMode = useStore((s) => s.viewMode);
+  const setSearchQuery = useStore((s) => s.setSearchQuery);
+  const setSearchFilters = useStore((s) => s.setSearchFilters);
+  const updateSearchFilter = useStore((s) => s.updateSearchFilter);
+  const setSortBy = useStore((s) => s.setSortBy);
+  const setViewMode = useStore((s) => s.setViewMode);
+  const resetFilters = useStore((s) => s.resetFilters);
+  const setPage = useStore((s) => s.setPage);
+  const setSelectedService = useStore((s) => s.setSelectedService);
+  const setSelectedSeller = useStore((s) => s.setSelectedSeller);
+  const addToCart = useStore((s) => s.addToCart);
 
-  const results = featuredServices.filter(s => 
-    s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    s.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const [localQuery, setLocalQuery] = useState(searchQuery);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  const debouncedQuery = useDebouncedValue(localQuery, 300);
+
+  useEffect(() => {
+    setLocalQuery(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery(debouncedQuery);
+  }, [debouncedQuery, setSearchQuery]);
+
+  useEffect(() => {
+    setIsFiltering(true);
+    const t = window.setTimeout(() => setIsFiltering(false), 200);
+    return () => window.clearTimeout(t);
+  }, [debouncedQuery, searchFilters, sortBy]);
+
+  const hasQuery = debouncedQuery.trim().length > 0;
+
+  const results = useMemo(() => {
+    const filtered = hasQuery
+      ? filterSearchCatalog(searchCatalog, debouncedQuery, searchFilters)
+      : filterSearchCatalog(getRecommendedResults(searchCatalog), '', searchFilters);
+    return sortSearchResults(filtered, sortBy);
+  }, [debouncedQuery, searchFilters, sortBy, hasQuery]);
+
+  const activeFilterCount = getActiveFilterCount(searchFilters);
+
+  const handleClearFilters = useCallback(() => {
+    resetFilters();
+  }, [resetFilters]);
+
+  const handleRemoveFilter = useCallback(
+    (key: keyof typeof searchFilters | 'price' | 'clear') => {
+      if (key === 'clear') {
+        handleClearFilters();
+        return;
+      }
+      if (key === 'price') {
+        setSearchFilters({ ...searchFilters, priceMin: 0, priceMax: 200000 });
+        return;
+      }
+      updateSearchFilter(key, DEFAULT_SEARCH_FILTERS[key]);
+    },
+    [handleClearFilters, searchFilters, setSearchFilters, updateSearchFilter]
+  );
+
+  const handleViewDetails = useCallback(
+    (item: SearchCatalogItem) => {
+      if (item.kind === 'seller') {
+        setSelectedSeller(item.sellerId);
+        setPage('seller-profile');
+        return;
+      }
+      setSelectedService(item.service.id);
+      setPage('service-detail');
+    },
+    [setPage, setSelectedSeller, setSelectedService]
+  );
+
+  const handleAddToCart = useCallback(
+    (serviceId: string) => {
+      const service = allMarketplaceServices.find((s) => s.id === serviceId);
+      if (service) addToCart(service);
+    },
+    [addToCart]
   );
 
   return (
-    <div className="min-h-screen pt-20 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <button 
-          onClick={() => setPage('home')}
-          className="flex items-center gap-2 text-bridge-gray hover:text-white transition-colors mb-6 cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" /> Home
-        </button>
+    <div className="min-h-screen pt-[4.5rem] md:pt-20 pb-16 bg-bridge-dark overflow-x-hidden">
+      <div className="absolute top-24 right-0 w-96 h-96 bg-bridge-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-32 left-0 w-72 h-72 bg-bridge-cyan/5 rounded-full blur-[100px] pointer-events-none" />
 
-        {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-bridge-gray" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for services, products, sellers..."
-              className="w-full pl-12 pr-4 py-4 bg-bridge-dark-2 border border-white/10 rounded-2xl text-white placeholder-bridge-gray focus:outline-none focus:border-bridge-primary focus:ring-2 focus:ring-bridge-primary/20"
-              autoFocus
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <SearchHeroBar
+          query={localQuery}
+          onQueryChange={setLocalQuery}
+          onSearch={() => setSearchQuery(localQuery)}
+          onGoHome={() => setPage('home')}
+        />
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
+              <SearchFilterSidebar
+                filters={searchFilters}
+                onChange={setSearchFilters}
+                onClearAll={handleClearFilters}
+              />
+            </div>
+          </div>
+
+          <MobileSearchFilterDrawer
+            open={mobileFiltersOpen}
+            onClose={() => setMobileFiltersOpen(false)}
+            filters={searchFilters}
+            onChange={setSearchFilters}
+            onClearAll={handleClearFilters}
+            activeCount={activeFilterCount}
+          />
+
+          <main className="flex-1 min-w-0 animate-slide-up">
+            <ActiveFilterChips
+              filters={searchFilters}
+              onRemove={handleRemoveFilter}
+              onClearAll={handleClearFilters}
             />
-          </div>
-        </div>
 
-        <h2 className="text-xl font-bold text-white mb-6">
-          {searchQuery ? `Results for "${searchQuery}" (${results.length})` : 'Start typing to search...'}
-        </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+              <div className="min-w-0">
+                <p className="text-sm text-white font-medium">
+                  <span className="text-bridge-primary-light">{results.length}</span> results
+                  {hasQuery && (
+                    <span className="text-bridge-gray">
+                      {' '}
+                      for &quot;<span className="text-white">{debouncedQuery}</span>&quot;
+                    </span>
+                  )}
+                  {!hasQuery && (
+                    <span className="text-bridge-gray"> — featured & recommended</span>
+                  )}
+                </p>
+              </div>
 
-        {results.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {results.map(service => {
-              const cat = categories.find(c => c.id === service.category);
-              return (
-                <div
-                  key={service.id}
-                  className="group bg-bridge-dark-2 rounded-2xl overflow-hidden border border-white/5 hover:border-white/15 card-hover cursor-pointer"
-                  onClick={() => { setSelectedService(service.id); setPage('service-detail'); }}
-                >
-                  <div className="relative aspect-video overflow-hidden">
-                    <img src={service.thumbnail} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-bridge-dark-2 via-transparent to-transparent"></div>
-                    <div className="absolute top-3 right-3 px-2 py-1 glass-strong text-white text-xs rounded-lg">
-                      {cat?.icon} {cat?.name}
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <img src={service.sellerAvatar} alt="" className="w-5 h-5 rounded-full object-cover" />
-                      <span className="text-xs text-bridge-gray">{service.sellerName}</span>
-                      <Shield className="w-3 h-3 text-bridge-secondary" />
-                    </div>
-                    <h3 className="text-sm font-bold text-white mb-2 line-clamp-2">{service.title}</h3>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 text-bridge-gold fill-bridge-gold" />
-                        <span className="text-xs font-bold text-white">{service.rating}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-bridge-gray">
-                        <Clock className="w-3 h-3" /> {service.deliveryTime}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                      <span className="text-lg font-bold text-white">৳{service.price.toLocaleString()}</span>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); addToCart(service); }}
-                        className="p-2 bg-bridge-primary hover:bg-bridge-primary-light rounded-xl text-white transition-colors cursor-pointer"
-                      >
-                        <ShoppingCart className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <MobileFilterButton
+                  onClick={() => setMobileFiltersOpen(true)}
+                  activeCount={activeFilterCount}
+                />
+                <SearchSortDropdown value={sortBy} onChange={setSortBy} />
+                <div className="flex items-center gap-1 p-1 glass rounded-xl border border-white/10">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40 ${
+                      viewMode === 'grid' ? 'bg-bridge-primary text-white' : 'text-bridge-gray hover:text-white'
+                    }`}
+                    aria-label="Grid view"
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-2 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40 ${
+                      viewMode === 'list' ? 'bg-bridge-primary text-white' : 'text-bridge-gray hover:text-white'
+                    }`}
+                    aria-label="List view"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
                 </div>
-              );
-            })}
-          </div>
-        ) : searchQuery ? (
-          <div className="glass rounded-2xl p-16 text-center">
-            <Search className="w-16 h-16 text-bridge-gray mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">No results found</h3>
-            <p className="text-bridge-gray">Try different keywords or browse our categories</p>
-          </div>
-        ) : null}
+              </div>
+            </div>
+
+            {results.length > 0 ? (
+              <SearchResultGrid
+                items={results}
+                viewMode={viewMode}
+                loading={isFiltering}
+                onViewDetails={handleViewDetails}
+                onAddToCart={handleAddToCart}
+              />
+            ) : (
+              <SearchEmptyState
+                query={debouncedQuery}
+                onBrowseCategories={() => setPage('categories')}
+                onClearSearch={() => {
+                  setLocalQuery('');
+                  setSearchQuery('');
+                  handleClearFilters();
+                }}
+              />
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -19,9 +19,12 @@ export interface Seller {
   customUrl: string;
 }
 
+export type SearchResultType = 'service' | 'digital-product' | 'seller' | 'course';
+
 export interface Service {
   id: string;
   title: string;
+  titleBn?: string;
   description: string;
   price: number;
   currency: string;
@@ -38,7 +41,77 @@ export interface Service {
   demoItems: GalleryItem[];
   tags: string[];
   popular: boolean;
+  isVerified?: boolean;
+  isFeatured?: boolean;
+  hasProtectedDemo?: boolean;
+  location?: string;
+  language?: string;
+  escrowAvailable?: boolean;
+  instantDelivery?: boolean;
+  resultType?: SearchResultType;
 }
+
+export type SearchFilterResultType = 'all' | SearchResultType;
+
+export interface SearchFilters {
+  resultType: SearchFilterResultType;
+  category: CategoryType | 'all';
+  priceMin: number;
+  priceMax: number;
+  deliveryTime: 'all' | 'instant' | '1-3' | '4-7' | '8-14' | '15+';
+  minRating: number;
+  verifiedOnly: boolean;
+  featuredOnly: boolean;
+  protectedDemoOnly: boolean;
+  location: string;
+  language: string;
+  escrowOnly: boolean;
+  instantOnly: boolean;
+}
+
+export interface SearchListingItem {
+  kind: 'listing';
+  service: Service;
+}
+
+export interface SearchSellerItem {
+  kind: 'seller';
+  id: string;
+  title: string;
+  titleBn?: string;
+  description: string;
+  thumbnail: string;
+  category: CategoryType;
+  categoryName: string;
+  sellerId: string;
+  sellerName: string;
+  sellerAvatar: string;
+  rating: number;
+  reviewCount: number;
+  location: string;
+  language: string;
+  isVerified: boolean;
+  isFeatured: boolean;
+  tags: string[];
+}
+
+export type SearchCatalogItem = SearchListingItem | SearchSellerItem;
+
+export const DEFAULT_SEARCH_FILTERS: SearchFilters = {
+  resultType: 'all',
+  category: 'all',
+  priceMin: 0,
+  priceMax: 200000,
+  deliveryTime: 'all',
+  minRating: 0,
+  verifiedOnly: false,
+  featuredOnly: false,
+  protectedDemoOnly: false,
+  location: 'all',
+  language: 'all',
+  escrowOnly: false,
+  instantOnly: false,
+};
 
 export interface GalleryItem {
   id: string;
@@ -119,4 +192,14 @@ export type PageType =
   | 'dashboard'
   | 'admin-dashboard'
   | 'search'
+  | 'products'
   | 'about';
+
+export type ProductCategoryFilter =
+  | 'all'
+  | 'digital-products'
+  | 'courses'
+  | 'templates'
+  | 'scripts'
+  | 'ui-kits'
+  | 'marketing-assets';

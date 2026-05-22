@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useStore } from '../store/useStore';
+import { useNavigateToSearch } from '../hooks/useNavigateToSearch';
 import { ChevronLeft, ChevronRight, Search, ExternalLink, Megaphone } from 'lucide-react';
 
 const heroSlides = [
@@ -55,6 +56,7 @@ const customerAds = [
 
 export const Hero: React.FC = () => {
   const { setPage, searchQuery, setSearchQuery } = useStore();
+  const { goToSearch } = useNavigateToSearch();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
 
@@ -206,7 +208,7 @@ export const Hero: React.FC = () => {
       <div className="relative z-10 mt-8 md:mt-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <form
-            onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) setPage('search'); }}
+            onSubmit={(e) => { e.preventDefault(); goToSearch(); }}
           >
             <div className="relative group">
               <div className="absolute -inset-[2px] bg-gradient-to-r from-bridge-primary via-bridge-secondary to-bridge-cyan rounded-2xl opacity-40 blur-md group-hover:opacity-60 transition-opacity"></div>
@@ -234,7 +236,7 @@ export const Hero: React.FC = () => {
             {['2D Animation', '3D Render', 'Video Ads', 'Web Dev', 'UI/UX', 'Digital Marketing'].map((tag) => (
               <button
                 key={tag}
-                onClick={() => { setSearchQuery(tag); setPage('search'); }}
+                onClick={() => goToSearch(tag)}
                 className="px-3 py-1 text-xs text-bridge-gray/80 bg-white/5 hover:bg-bridge-primary/20 hover:text-bridge-primary-light border border-white/5 hover:border-bridge-primary/30 rounded-full transition-all cursor-pointer"
               >
                 {tag}

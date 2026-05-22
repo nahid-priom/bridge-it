@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { useStore } from './store/useStore';
+import type { PageType } from './types';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { TrustBanner } from './components/TrustBanner';
@@ -10,21 +11,39 @@ import { HowItWorks } from './components/HowItWorks';
 import { Testimonials } from './components/Testimonials';
 import { CTASection } from './components/CTASection';
 import { Footer } from './components/Footer';
-import { ServiceDetail } from './components/ServiceDetail';
-import { SellerProfile } from './components/SellerProfile';
-import { CartPage } from './components/CartPage';
-import { MessagesPage } from './components/MessagesPage';
-import { Dashboard } from './components/Dashboard';
-import { CategoryDetail } from './components/CategoryDetail';
-import { CategoriesPage } from './components/CategoriesPage';
-import { SearchPage } from './components/SearchPage';
-import { AboutPage } from './components/AboutPage';
 import { ChatWidget } from './components/ChatWidget';
 import { Notification } from './components/Notification';
-import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+import { GlobalSearchModal } from './components/GlobalSearchModal';
+import { PageLoading } from './components/PageLoading';
+
+const ServiceDetail = lazy(() =>
+  import('./components/ServiceDetail').then((m) => ({ default: m.ServiceDetail }))
+);
+const SellerProfile = lazy(() =>
+  import('./components/SellerProfile').then((m) => ({ default: m.SellerProfile }))
+);
+const CartPage = lazy(() => import('./components/CartPage').then((m) => ({ default: m.CartPage })));
+const MessagesPage = lazy(() =>
+  import('./components/MessagesPage').then((m) => ({ default: m.MessagesPage }))
+);
+const Dashboard = lazy(() => import('./components/Dashboard').then((m) => ({ default: m.Dashboard })));
+const CategoryDetail = lazy(() =>
+  import('./components/CategoryDetail').then((m) => ({ default: m.CategoryDetail }))
+);
+const CategoriesPage = lazy(() =>
+  import('./components/CategoriesPage').then((m) => ({ default: m.CategoriesPage }))
+);
+const SearchPage = lazy(() => import('./components/SearchPage').then((m) => ({ default: m.SearchPage })));
+const ProductsPage = lazy(() =>
+  import('./components/ProductsPage').then((m) => ({ default: m.ProductsPage }))
+);
+const AboutPage = lazy(() => import('./components/AboutPage').then((m) => ({ default: m.AboutPage })));
+const AdminDashboardPage = lazy(() =>
+  import('./pages/admin/AdminDashboardPage').then((m) => ({ default: m.AdminDashboardPage }))
+);
 
 const App: React.FC = () => {
-  const { currentPage } = useStore();
+  const currentPage = useStore((s) => s.currentPage);
   const isAdminDashboard = currentPage === 'admin-dashboard';
 
   useEffect(() => {
@@ -36,21 +55,13 @@ const App: React.FC = () => {
       case 'home':
         return (
           <>
-            {/* 1. Slideshow Hero + Ad Display + Search */}
             <Hero />
-            {/* 2. Scrolling Trust Marquee */}
             <TrustBanner />
-            {/* 3. Iconic Floating Category Grid */}
             <CategoriesSection />
-            {/* 4. Featured Services (2-per-row) */}
             <FeaturedServices />
-            {/* 5. How It Works (Timeline) */}
             <HowItWorks />
-            {/* 6. Top Sellers */}
             <TopSellers />
-            {/* 7. Testimonials (Carousel) */}
             <Testimonials />
-            {/* 8. CTA Section */}
             <CTASection />
           </>
         );
@@ -72,6 +83,8 @@ const App: React.FC = () => {
         return <AdminDashboardPage />;
       case 'search':
         return <SearchPage />;
+      case 'products':
+        return <ProductsPage />;
       case 'about':
         return <AboutPage />;
       default:
@@ -79,14 +92,34 @@ const App: React.FC = () => {
     }
   };
 
+  const lazyPages: PageType[] = [
+    'categories',
+    'category-detail',
+    'service-detail',
+    'seller-profile',
+    'cart',
+    'messages',
+    'dashboard',
+    'admin-dashboard',
+    'search',
+    'products',
+    'about',
+  ];
+  const useSuspense = lazyPages.includes(currentPage);
+
   return (
     <div className="min-h-screen bg-bridge-dark text-white">
       {!isAdminDashboard && <Navbar />}
       <main>
-        {renderPage()}
+        {useSuspense ? (
+          <Suspense fallback={<PageLoading />}>{renderPage()}</Suspense>
+        ) : (
+          renderPage()
+        )}
       </main>
       {!isAdminDashboard && <Footer />}
       {!isAdminDashboard && <ChatWidget />}
+      {!isAdminDashboard && <GlobalSearchModal />}
       <Notification />
     </div>
   );

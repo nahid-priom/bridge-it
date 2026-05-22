@@ -1,7 +1,36 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
-import { Heart, Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import { Heart, Mail, Phone, MapPin, ArrowUpRight, ExternalLink } from 'lucide-react';
 import { categories } from '../data/categories';
+
+const DEVELOPMENT_PARTNER = {
+  name: 'Code Bondhu IT',
+  url: 'https://www.codebondhuit.com',
+  displayUrl: 'www.codebondhuit.com',
+} as const;
+
+function FooterDevelopmentPartner() {
+  return (
+    <div className="flex flex-col items-center text-center py-8 border-t border-white/[0.05]">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-bridge-gray/70 mb-2.5">
+        Development Partner
+      </p>
+      <p className="text-sm font-semibold font-display tracking-tight bg-gradient-to-r from-bridge-primary via-bridge-secondary to-bridge-primary bg-clip-text text-transparent mb-2">
+        {DEVELOPMENT_PARTNER.name}
+      </p>
+      <a
+        href={DEVELOPMENT_PARTNER.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-[11px] text-bridge-gray/90 hover:text-bridge-secondary transition-colors group"
+        aria-label={`Visit ${DEVELOPMENT_PARTNER.name} website`}
+      >
+        <span>{DEVELOPMENT_PARTNER.displayUrl}</span>
+        <ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity shrink-0" />
+      </a>
+    </div>
+  );
+}
 
 export const Footer: React.FC = () => {
   const { setPage, setCategory } = useStore();
@@ -66,6 +95,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2">
               {[
                 { label: 'Home', page: 'home' as const },
+                { label: 'Products', page: 'products' as const },
+                { label: 'Search', page: 'search' as const },
                 { label: 'All Categories', page: 'categories' as const },
                 { label: 'About Us', page: 'about' as const },
                 { label: 'Dashboard', page: 'dashboard' as const },
@@ -106,6 +137,8 @@ export const Footer: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <FooterDevelopmentPartner />
 
         {/* Bottom */}
         <div className="pt-6 border-t border-white/[0.05]">

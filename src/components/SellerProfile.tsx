@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
-import { topSellers, featuredServices } from '../data/services';
+import { allSellers, allMarketplaceServices } from '../data/services';
 import { categories } from '../data/categories';
 import { PageFallback } from './PageFallback';
 import { Star, MapPin, CheckCircle, Clock, ArrowLeft, MessageCircle, Phone, ExternalLink, Copy, Shield, Calendar, Award } from 'lucide-react';
@@ -8,7 +8,7 @@ import { Star, MapPin, CheckCircle, Clock, ArrowLeft, MessageCircle, Phone, Exte
 export const SellerProfile: React.FC = () => {
   const { selectedSellerId, setPage, setSelectedService, setNotification } = useStore();
   
-  const seller = topSellers.find(s => s.id === selectedSellerId);
+  const seller = allSellers.find(s => s.id === selectedSellerId);
   if (!seller) {
     return (
       <PageFallback
@@ -21,7 +21,7 @@ export const SellerProfile: React.FC = () => {
   }
 
   const cat = categories.find(c => c.id === seller.category);
-  const sellerServices = featuredServices.filter(s => s.sellerId === seller.id);
+  const sellerServices = allMarketplaceServices.filter(s => s.sellerId === seller.id);
 
   return (
     <div className="min-h-screen pt-20 pb-20">

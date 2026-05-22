@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
-import { topSellers } from '../data/services';
+import { allSellers } from '../data/services';
 import { Star, MapPin, CheckCircle, Clock, ExternalLink, Copy, ArrowRight, Award } from 'lucide-react';
 import { categories } from '../data/categories';
 
@@ -38,16 +38,19 @@ export const TopSellers: React.FC = () => {
             <p className="text-bridge-gray text-sm mt-1">Each has a unique custom URL — share anywhere to bring customers directly</p>
           </div>
           <button
-            onClick={() => setPage('categories')}
+            onClick={() => {
+              useStore.getState().updateSearchFilter('resultType', 'seller');
+              setPage('search');
+            }}
             className="mt-3 sm:mt-0 text-bridge-primary-light hover:text-white text-sm font-medium flex items-center gap-1 cursor-pointer transition-colors"
           >
-            See More <ArrowRight className="w-4 h-4" />
+            Browse {allSellers.length}+ Sellers <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
         {/* Sellers Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {topSellers.map((seller) => {
+          {allSellers.slice(0, 8).map((seller) => {
             const cat = categories.find(c => c.id === seller.category);
             return (
               <div

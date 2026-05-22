@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { featuredServices, sampleReviews } from '../data/services';
+import { allMarketplaceServices, sampleReviews } from '../data/services';
 import { categories } from '../data/categories';
 import { PageFallback } from './PageFallback';
 import { Star, Clock, ShoppingCart, Shield, CheckCircle, MessageCircle, Phone, ArrowLeft, Copy, Eye, Lock } from 'lucide-react';
@@ -9,7 +9,7 @@ export const ServiceDetail: React.FC = () => {
   const { selectedServiceId, setPage, setSelectedSeller, addToCart, setNotification } = useStore();
   const [activeTab, setActiveTab] = useState<'overview' | 'gallery' | 'reviews'>('overview');
   
-  const service = featuredServices.find(s => s.id === selectedServiceId);
+  const service = allMarketplaceServices.find(s => s.id === selectedServiceId);
   if (!service) {
     return (
       <PageFallback

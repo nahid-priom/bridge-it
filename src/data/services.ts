@@ -1,4 +1,6 @@
 import { Service, Seller, Review } from '../types';
+import { additionalServices } from './additionalServices';
+import { additionalSellers } from './additionalSellers';
 
 export const featuredServices: Service[] = [
   {
@@ -163,6 +165,22 @@ export const featuredServices: Service[] = [
   },
 ];
 
+/** All marketplace listings (featured + search catalog) */
+export const allMarketplaceServices: Service[] = [
+  ...featuredServices.map((s) => ({
+    ...s,
+    isVerified: true,
+    isFeatured: s.popular,
+    hasProtectedDemo: s.demoItems.length > 0,
+    location: 'Dhaka, Bangladesh',
+    language: 'English & Bengali',
+    escrowAvailable: true,
+    instantDelivery: s.deliveryTime.toLowerCase() === 'instant',
+    resultType: s.category === 'courses' ? 'course' as const : s.category === 'digital-products' ? 'digital-product' as const : 'service' as const,
+  })),
+  ...additionalServices,
+];
+
 export const topSellers: Seller[] = [
   {
     id: 'seller1',
@@ -245,6 +263,9 @@ export const topSellers: Seller[] = [
     customUrl: 'bridge.app/s/codebridge-solutions',
   },
 ];
+
+/** All sellers (featured + expanded catalog) */
+export const allSellers: Seller[] = [...topSellers, ...additionalSellers];
 
 export const sampleReviews: Review[] = [
   {
