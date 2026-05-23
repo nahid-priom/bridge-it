@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
 
-export default function GlobalError({
+export default function Error({
   error,
   reset,
 }: {
