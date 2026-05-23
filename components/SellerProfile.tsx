@@ -2,32 +2,23 @@
 
 import React from 'react';
 import { useStore } from '@/store/useStore';
-import { allSellers, allMarketplaceServices } from '@/data/services';
-import { categories } from '@/data/categories';
 import { PageFallback } from './PageFallback';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { getSellerBySlug } from '@/lib/slugs';
 import { getServiceSlug } from '@/lib/slugs';
+import type { Category, Seller, Service } from '@/types';
 import { Star, MapPin, CheckCircle, Clock, ArrowLeft, MessageCircle, Phone, ExternalLink, Copy, Shield, Calendar, Award } from 'lucide-react';
 
-export const SellerProfile: React.FC<{ slug: string }> = ({ slug }) => {
+type SellerProfileProps = {
+  seller: Seller;
+  services: Service[];
+  categories: Category[];
+};
+
+export const SellerProfile: React.FC<SellerProfileProps> = ({ seller, services: sellerServices, categories }) => {
   const { setNotification } = useStore();
   const { goHome, goToService } = useAppNavigation();
 
-  const seller = getSellerBySlug(slug);
-  if (!seller) {
-    return (
-      <PageFallback
-        title="Seller not found"
-        message="Pick a seller from the Top Sellers section on the home page."
-        backLabel="Back to Home"
-        onBack={goHome}
-      />
-    );
-  }
-
-  const cat = categories.find(c => c.id === seller.category);
-  const sellerServices = allMarketplaceServices.filter(s => s.sellerId === seller.id);
+  const cat = categories.find((c) => c.id === seller.category);
 
   return (
     <article className="min-h-screen pb-20">

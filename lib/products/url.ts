@@ -1,8 +1,8 @@
 import {
-  getCategoryByKey,
+  normalizeProductCategoryKey,
   isProductCategoryKey,
   PRODUCT_CATEGORY_ALIASES,
-} from '@/data/productCategories';
+} from '@/lib/catalog/category-keys';
 import { DEFAULT_PRODUCT_LISTING_FILTERS } from '@/types/product';
 import type {
   ProductCategoryKey,
@@ -135,8 +135,15 @@ export function buildProductsHref(state: ProductsPageState): string {
   return qs ? `/products?${qs}` : '/products';
 }
 
-export function getCategoryBySlug(slug: string | null | undefined) {
-  return getCategoryByKey(slug);
+/** Sync helper when category list is already loaded */
+export function findCategoryInList(
+  categories: import('@/types/product').ProductCategory[],
+  slug: string | null | undefined
+) {
+  if (!slug) return null;
+  const normalized = normalizeProductCategoryKey(slug);
+  if (!normalized) return null;
+  return categories.find((c) => c.key === normalized) ?? null;
 }
 
 /** Index clean category (and optional q) URLs — not heavy filter combos. */

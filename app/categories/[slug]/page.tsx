@@ -1,21 +1,18 @@
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
-import { categories } from '@/data/categories';
 import { CategoryDetail } from '@/components/CategoryDetail';
 import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd';
 import { BreadcrumbOverrideProvider } from '@/components/seo/BreadcrumbOverride';
+import { fetchCategoryBySlug, fetchCategoryServices } from '@/lib/catalog/categories';
 import type { BreadcrumbItem } from '@/lib/seo/breadcrumbs';
-import type { CategoryType } from '@/types';
+
+export const revalidate = 60;
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return categories.map((c) => ({ slug: c.id }));
-}
-
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const category = categories.find((c) => c.id === slug);
+  const category = await fetchCategoryBySlug(slug);
   if (!category) return {};
   return buildPageMetadata({
     title: `${category.name} Services`,
@@ -27,8 +24,10 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function CategoryDetailRoute({ params }: Props) {
   const { slug } = await params;
-  const category = categories.find((c) => c.id === slug);
+  const category = await fetchCategoryBySlug(slug);
   if (!category) notFound();
+
+  const services = await fetchCategoryServices(slug);
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Home', href: '/' },
@@ -40,7 +39,7 @@ export default async function CategoryDetailRoute({ params }: Props) {
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <BreadcrumbOverrideProvider items={breadcrumbItems}>
-        <CategoryDetail categorySlug={slug as CategoryType} />
+        <CategoryDetail category={category} services={services} />
       </BreadcrumbOverrideProvider>
     </>
   );

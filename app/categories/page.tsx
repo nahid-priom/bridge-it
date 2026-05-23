@@ -1,20 +1,22 @@
 import { buildPageMetadata } from '@/lib/metadata';
 import { CategoriesPage } from '@/components/CategoriesPage';
+import { fetchAllCategories } from '@/lib/catalog/categories';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+
+export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
   title: 'Service Categories',
-  description:
-    'Browse all digital service categories on Bridge — animation, software, video ads, courses, web development, and more.',
+  description: 'Browse all Bridge Smart IT Park service categories.',
   path: '/categories',
-  keywords: ['categories', 'digital services', 'IT marketplace Bangladesh'],
 });
 
-export default function CategoriesRoute() {
+export default async function CategoriesRoute() {
+  const categories = await fetchAllCategories();
   return (
     <>
       <PageBreadcrumbJsonLd path="/categories" />
-      <CategoriesPage />
+      <CategoriesPage categories={categories} />
     </>
   );
 }

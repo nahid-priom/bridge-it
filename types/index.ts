@@ -23,6 +23,8 @@ export type SearchResultType = 'service' | 'digital-product' | 'seller' | 'cours
 
 export interface Service {
   id: string;
+  /** Canonical route slug when loaded from Supabase */
+  slug?: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -35,6 +37,7 @@ export interface Service {
   rating: number;
   reviewCount: number;
   sellerId: string;
+  sellerSlug?: string;
   sellerName: string;
   sellerAvatar: string;
   features: string[];
@@ -84,6 +87,7 @@ export interface SearchSellerItem {
   category: CategoryType;
   categoryName: string;
   sellerId: string;
+  sellerSlug?: string;
   sellerName: string;
   sellerAvatar: string;
   rating: number;

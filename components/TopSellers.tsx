@@ -3,17 +3,20 @@
 import React from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { topSellers, allSellers } from '@/data/services';
 import { Star, MapPin, CheckCircle, Clock, ExternalLink, Copy, ArrowRight, Award } from 'lucide-react';
-import { categories } from '@/data/categories';
+import type { Category, Seller } from '@/types';
 
-export const TopSellers: React.FC = () => {
+type TopSellersProps = {
+  sellers: Seller[];
+  categories: Category[];
+};
+
+export const TopSellers: React.FC<TopSellersProps> = ({ sellers, categories }) => {
   const { setNotification } = useStore();
   const { goToSeller, goToSearch } = useAppNavigation();
 
-  const handleSellerClick = (sellerId: string) => {
-    const seller = topSellers.find((s) => s.id === sellerId);
-    if (seller) goToSeller(seller.slug);
+  const handleSellerClick = (seller: Seller) => {
+    goToSeller(seller.slug);
   };
 
   const copyCustomUrl = (url: string, e: React.MouseEvent) => {
@@ -25,7 +28,7 @@ export const TopSellers: React.FC = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 relative">
+    <section className="py-8 md:py-16 relative">
       <div className="absolute inset-0 hero-gradient opacity-40"></div>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-secondary/20 to-transparent"></div>
 
@@ -48,18 +51,18 @@ export const TopSellers: React.FC = () => {
             }}
             className="mt-3 sm:mt-0 text-bridge-primary-light hover:text-text-primary text-sm font-medium flex items-center gap-1 cursor-pointer transition-colors"
           >
-            Browse {allSellers.length}+ Sellers <ArrowRight className="w-4 h-4" />
+            Browse {sellers.length}+ Sellers <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
         {/* Sellers Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {allSellers.slice(0, 8).map((seller) => {
+          {sellers.slice(0, 8).map((seller) => {
             const cat = categories.find(c => c.id === seller.category);
             return (
               <div
                 key={seller.id}
-                onClick={() => handleSellerClick(seller.id)}
+                onClick={() => handleSellerClick(seller)}
                 className="group relative overflow-hidden rounded-2xl bg-surface/60 border border-border-subtle hover:border-border-subtle card-float cursor-pointer"
               >
                 {/* Cover */}

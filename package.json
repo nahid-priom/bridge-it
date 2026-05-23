@@ -7,9 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:supabase": "tsx scripts/seed-supabase.ts",
+    "admin:promote": "tsx scripts/promote-super-admin.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.1",
     "clsx": "2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^0.562.0",
@@ -18,7 +23,9 @@
     "nextjs-toploader": "^3.9.17",
     "react": "19.2.6",
     "react-dom": "19.2.6",
+    "react-hook-form": "^7.76.0",
     "tailwind-merge": "3.4.0",
+    "zod": "^4.4.3",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
@@ -26,9 +33,11 @@
     "@types/node": "22.19.17",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "dotenv": "^17.4.2",
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.5.7",
     "tailwindcss": "4.1.17",
-    "typescript": "5.9.3"
+    "tsx": "^4.22.3",
+    "typescript": "5.8.2"
   }
 }

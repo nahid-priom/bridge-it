@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Filter } from 'lucide-react';
-import { SearchFilters } from '@/types';
+import { SearchFilters, Category } from '@/types';
 import { SearchFilterSidebar } from './SearchFilterSidebar';
 import { focusVisibleRing } from '@/lib/cn';
 
@@ -11,6 +11,7 @@ interface MobileSearchFilterDrawerProps {
   open: boolean;
   onClose: () => void;
   filters: SearchFilters;
+  categories: Category[];
   onChange: (filters: SearchFilters) => void;
   onClearAll: () => void;
   activeCount: number;
@@ -20,6 +21,7 @@ export const MobileSearchFilterDrawer: React.FC<MobileSearchFilterDrawerProps> =
   open,
   onClose,
   filters,
+  categories,
   onChange,
   onClearAll,
   activeCount,
@@ -63,6 +65,7 @@ export const MobileSearchFilterDrawer: React.FC<MobileSearchFilterDrawerProps> =
             <div className="p-4">
               <SearchFilterSidebar
                 filters={filters}
+                categories={categories}
                 onChange={onChange}
                 onClearAll={() => {
                   onClearAll();

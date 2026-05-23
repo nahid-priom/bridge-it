@@ -2,26 +2,29 @@
 
 import React from 'react';
 import { useStore } from '@/store/useStore';
-import { featuredServices } from '@/data/services';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { Star, Clock, ShoppingCart, Heart, Eye, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
-import { categories } from '@/data/categories';
+import type { Category, Service } from '@/types';
 
-export const FeaturedServices: React.FC = () => {
+type FeaturedServicesProps = {
+  services: Service[];
+  categories: Category[];
+};
+
+export const FeaturedServices: React.FC<FeaturedServicesProps> = ({ services, categories }) => {
   const { addToCart } = useStore();
   const { goToService, goToCategories } = useAppNavigation();
 
-  const handleServiceClick = (serviceId: string) => {
-    const service = featuredServices.find((s) => s.id === serviceId);
-    if (service) goToService(service);
+  const handleServiceClick = (service: Service) => {
+    goToService(service);
   };
 
   const getCategoryInfo = (categoryId: string) => {
-    return categories.find(c => c.id === categoryId);
+    return categories.find((c) => c.id === categoryId);
   };
 
   return (
-    <section className="py-16 md:py-24 relative">
+    <section className="py-8 md:py-16 relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-primary/20 to-transparent"></div>
       <div className="absolute bottom-1/4 left-0 w-72 h-72 bg-bridge-secondary/5 rounded-full blur-[150px]"></div>
 
@@ -47,7 +50,7 @@ export const FeaturedServices: React.FC = () => {
 
         {/* 2-per-row Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
-          {featuredServices.map((service) => {
+          {services.map((service) => {
             const cat = getCategoryInfo(service.category);
             return (
               <div
@@ -71,7 +74,7 @@ export const FeaturedServices: React.FC = () => {
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
                     <div className="flex gap-2">
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleServiceClick(service.id); }}
+                        onClick={(e) => { e.stopPropagation(); handleServiceClick(service); }}
                         className="p-2.5 glass-strong rounded-xl text-white hover:bg-bridge-primary/60 transition-colors cursor-pointer"
                       >
                         <Eye className="w-5 h-5" />
@@ -110,7 +113,7 @@ export const FeaturedServices: React.FC = () => {
 
                   {/* Title */}
                   <button
-                    onClick={() => handleServiceClick(service.id)}
+                    onClick={() => handleServiceClick(service)}
                     className="text-left cursor-pointer mb-2"
                   >
                     <h3 className="text-base md:text-lg font-bold text-text-primary group-hover:text-bridge-primary-light transition-colors line-clamp-2 leading-snug">

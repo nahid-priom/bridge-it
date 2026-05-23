@@ -16,18 +16,8 @@ import {
 import { AdminStatCard } from '../../../components/admin/AdminStatCard';
 import { AdminChartCard } from '../../../components/admin/AdminChartCard';
 import { AdminActivityFeed } from '../../../components/admin/AdminActivityFeed';
-import {
-  initialAdminStats,
-  adminActivities,
-  adminPendingActions,
-  topCategories,
-  topSellers,
-  monthlyRevenueData,
-  orderGrowthData,
-  formatCurrency,
-  type AdminSection,
-  type AdminStats,
-} from '@/data/adminData';
+import { formatCurrency, type AdminSection } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 const monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 
@@ -36,8 +26,16 @@ interface AdminOverviewSectionProps {
 }
 
 export const AdminOverviewSection: React.FC<AdminOverviewSectionProps> = ({ onNavigate }) => {
+  const {
+    stats,
+    activities: adminActivities,
+    pendingActions: adminPendingActions,
+    topCategories,
+    topSellers,
+    monthlyRevenueData,
+    orderGrowthData,
+  } = useAdminData();
   const [loading, setLoading] = useState(true);
-  const [stats] = useState<AdminStats>(initialAdminStats);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 600);

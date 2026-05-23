@@ -7,7 +7,8 @@ import { AdminFilterBar } from '../../../components/admin/AdminFilterBar';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminConfirmationModal } from '../../../components/admin/AdminConfirmationModal';
 import { AdminEmptyState } from '../../../components/admin/AdminEmptyState';
-import { initialAdminDisputes, formatCurrency, type AdminDispute } from '@/data/adminData';
+import { formatCurrency, type AdminDispute } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 import { useStore } from '@/store/useStore';
 import { Scale } from 'lucide-react';
 
@@ -15,7 +16,8 @@ type DisputeAction = 'refund' | 'release' | 'customer' | 'seller';
 
 export const AdminDisputesSection: React.FC = () => {
   const { setNotification } = useStore();
-  const [disputes, setDisputes] = useState(initialAdminDisputes);
+  const { disputes: initialDisputes } = useAdminData();
+  const [disputes, setDisputes] = useState(initialDisputes);
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState<{ open: boolean; action: DisputeAction; id: string } | null>(null);
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/cn';
-import type { AdminStatus } from '@/data/adminData';
+import type { AdminStatus } from '@/types/admin';
 
 const statusStyles: Record<string, string> = {
   active: 'bg-bridge-secondary/15 text-bridge-secondary border-bridge-secondary/30',

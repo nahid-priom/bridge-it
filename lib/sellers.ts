@@ -1,5 +1,5 @@
-import { allSellers } from '@/data/services';
+import type { Service } from '@/types';
 
-export function getSellerSlugById(sellerId: string): string | undefined {
-  return allSellers.find((s) => s.id === sellerId)?.slug;
+export function getSellerSlugFromService(service: Pick<Service, 'sellerSlug' | 'sellerId'>): string | undefined {
+  return service.sellerSlug;
 }

@@ -3,6 +3,10 @@ import { buildPageMetadata } from '@/lib/metadata';
 import { SearchPage } from '@/components/SearchPage';
 import { PageLoading } from '@/components/PageLoading';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+import { buildSearchCatalogFromDb } from '@/lib/catalog/search';
+import { fetchAllCategories } from '@/lib/catalog/categories';
+
+export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
   title: 'Search Bridge Marketplace',
@@ -12,12 +16,24 @@ export const metadata = buildPageMetadata({
   keywords: ['search', 'marketplace', 'digital services Bangladesh'],
 });
 
-export default function SearchRoute() {
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function SearchRoute({ searchParams }: Props) {
+  const params = await searchParams;
+  const q = typeof params.q === 'string' ? params.q : Array.isArray(params.q) ? params.q[0] ?? '' : '';
+
+  const [searchCatalog, categories] = await Promise.all([
+    buildSearchCatalogFromDb(q, 120),
+    fetchAllCategories(),
+  ]);
+
   return (
     <>
       <PageBreadcrumbJsonLd path="/search" />
       <Suspense fallback={<PageLoading />}>
-        <SearchPage />
+        <SearchPage searchCatalog={searchCatalog} categories={categories} initialQuery={q} />
       </Suspense>
     </>
   );

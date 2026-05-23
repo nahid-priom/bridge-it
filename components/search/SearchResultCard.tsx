@@ -12,12 +12,13 @@ import {
   MapPin,
 } from 'lucide-react';
 import { SearchCatalogItem } from '@/types';
-import { categories } from '@/data/categories';
+import type { Category } from '@/types';
 import { SafeImage } from './SafeImage';
 import { cn } from '@/lib/cn';
 
 interface SearchResultCardProps {
   item: SearchCatalogItem;
+  categories: Category[];
   viewMode: 'grid' | 'list';
   onViewDetails: (item: SearchCatalogItem) => void;
   onAddToCart?: (serviceId: string) => void;
@@ -32,6 +33,7 @@ const RESULT_TYPE_LABELS: Record<string, string> = {
 
 export const SearchResultCard = memo(function SearchResultCard({
   item,
+  categories,
   viewMode,
   onViewDetails,
   onAddToCart,

@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Store, Users, ShoppingBag, FolderTree } from 'lucide-react';
-import { buildSearchResults } from '@/data/adminData';
+import { buildAdminSearchResults } from '@/lib/admin/search';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 const groupIcons = {
   sellers: Store,
@@ -32,7 +33,8 @@ export const AdminSearchModal: React.FC<AdminSearchModalProps> = ({ open, onClos
     return () => window.removeEventListener('keydown', handleKey);
   }, [open, onClose]);
 
-  const results = buildSearchResults(query);
+  const data = useAdminData();
+  const results = buildAdminSearchResults(query, data);
 
   return (
     <AnimatePresence>

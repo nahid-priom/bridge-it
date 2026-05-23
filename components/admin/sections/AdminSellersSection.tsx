@@ -7,13 +7,15 @@ import { AdminFilterBar } from '../../../components/admin/AdminFilterBar';
 import { AdminDataTable } from '../../../components/admin/AdminDataTable';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminActionMenu } from '../../../components/admin/AdminActionMenu';
-import { initialAdminSellers, formatCurrency, type AdminSeller } from '@/data/adminData';
+import { formatCurrency, type AdminSeller } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 export const AdminSellersSection: React.FC = () => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('revenue');
   const [filter, setFilter] = useState('all');
-  const [sellers, setSellers] = useState(initialAdminSellers);
+  const { sellers: initialSellers } = useAdminData();
+  const [sellers, setSellers] = useState(initialSellers);
 
   const filtered = useMemo(() => {
     let list = sellers.filter(

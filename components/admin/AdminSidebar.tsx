@@ -4,7 +4,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Shield, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { adminNavItems, type AdminSection } from '@/data/adminData';
+import { adminNavItems } from '@/lib/admin/config';
+import type { AdminSection } from '@/types/admin';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 

@@ -2,20 +2,27 @@
 
 import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { products as allProducts } from '@/data/products';
-import { filterProductsListing } from '@/lib/products/listing';
 import {
-  getCategoryBySlug,
+  findCategoryInList,
   parseProductsSearchParams,
   searchParamsToRecord,
 } from '@/lib/products/url';
+import type { ProductCategory } from '@/types/product';
 import { ProductSearchBar } from './ProductSearchBar';
 
 interface ProductsPageHeaderProps {
+  categories: ProductCategory[];
+  resultCount: number;
+  totalCatalogHint?: number;
   initialDescription?: string;
 }
 
-export function ProductsPageHeader({ initialDescription }: ProductsPageHeaderProps) {
+export function ProductsPageHeader({
+  categories,
+  resultCount,
+  totalCatalogHint,
+  initialDescription,
+}: ProductsPageHeaderProps) {
   const searchParams = useSearchParams();
 
   const state = useMemo(
@@ -23,8 +30,7 @@ export function ProductsPageHeader({ initialDescription }: ProductsPageHeaderPro
     [searchParams]
   );
 
-  const category = getCategoryBySlug(state.categoryKey);
-  const results = useMemo(() => filterProductsListing(state), [state]);
+  const category = findCategoryInList(categories, state.categoryKey);
 
   const description =
     initialDescription ??
@@ -32,9 +38,10 @@ export function ProductsPageHeader({ initialDescription }: ProductsPageHeaderPro
       ? `Browse professional ${category.label} services from verified Bridge IT Park sellers.`
       : 'Discover trusted digital services, products, courses, software, and creative solutions.');
 
+  const catalogTotal = totalCatalogHint ?? categoryCountsFallback(resultCount);
   const resultLabel = category
-    ? `Showing ${results.length} ${category.label} service${results.length === 1 ? '' : 's'}`
-    : `Showing ${results.length} of ${allProducts.length}+ products & services`;
+    ? `Showing ${resultCount} ${category.label} service${resultCount === 1 ? '' : 's'}`
+    : `Showing ${resultCount} of ${catalogTotal}+ products & services`;
 
   return (
     <header className=" border-b border-border-subtle pb-5 md:mb-4 md:pb-6">
@@ -61,4 +68,8 @@ export function ProductsPageHeader({ initialDescription }: ProductsPageHeaderPro
       </section>
     </header>
   );
+}
+
+function categoryCountsFallback(count: number) {
+  return Math.max(count, 80);
 }

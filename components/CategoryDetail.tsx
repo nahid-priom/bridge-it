@@ -2,14 +2,18 @@
 
 import React, { useMemo } from 'react';
 import { useStore } from '@/store/useStore';
-import { categories } from '@/data/categories';
-import { allMarketplaceServices } from '@/data/services';
+import type { Category, Service } from '@/types';
 import { PageFallback } from './PageFallback';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import type { CategoryType } from '@/types';
 import { ArrowLeft, Star, Clock, ShoppingCart, Filter, Grid3X3, List, Shield } from 'lucide-react';
 
-export const CategoryDetail: React.FC<{ categorySlug: string }> = ({ categorySlug }) => {
+type CategoryDetailProps = {
+  category: Category;
+  services: Service[];
+};
+
+export const CategoryDetail: React.FC<CategoryDetailProps> = ({ category, services: initialServices }) => {
   const viewMode = useStore((s) => s.viewMode);
   const sortBy = useStore((s) => s.sortBy);
   const addToCart = useStore((s) => s.addToCart);
@@ -17,17 +21,11 @@ export const CategoryDetail: React.FC<{ categorySlug: string }> = ({ categorySlu
   const setSortBy = useStore((s) => s.setSortBy);
   const { goToCategories, goToService } = useAppNavigation();
 
-  const selectedCategory = categorySlug as CategoryType;
-
   const sortKey =
     sortBy === 'price-low' ? 'price-low' : sortBy === 'price-high' ? 'price-high' : sortBy === 'rating' ? 'rating' : sortBy === 'newest' ? 'newest' : 'popular';
 
-  const category = categories.find(c => c.id === selectedCategory);
-
   const services = useMemo(() => {
-    if (!category) return [];
-    const filtered = allMarketplaceServices.filter(s => s.category === category.id);
-    const sorted = [...filtered];
+    const sorted = [...initialServices];
     switch (sortKey) {
       case 'rating':
         sorted.sort((a, b) => b.rating - a.rating);
@@ -45,7 +43,7 @@ export const CategoryDetail: React.FC<{ categorySlug: string }> = ({ categorySlu
         sorted.sort((a, b) => Number(b.popular) - Number(a.popular) || b.reviewCount - a.reviewCount);
     }
     return sorted;
-  }, [category, sortKey]);
+  }, [initialServices, sortKey]);
 
   if (!category) {
     return (

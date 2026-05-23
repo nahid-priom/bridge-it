@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Pencil, X } from 'lucide-react';
-import { initialAdminCategories, type AdminCategory } from '@/data/adminData';
+import type { AdminCategory } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 export const AdminCategoriesSection: React.FC = () => {
-  const [categories, setCategories] = useState(initialAdminCategories);
+  const { categories: initialCategories } = useAdminData();
+  const [categories, setCategories] = useState(initialCategories);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<AdminCategory | null>(null);
   const [form, setForm] = useState({ icon: '', nameEn: '', nameBn: '' });

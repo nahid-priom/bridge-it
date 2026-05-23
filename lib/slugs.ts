@@ -1,31 +1,10 @@
-import { allMarketplaceServices } from '@/data/services';
-import { allSellers } from '@/data/services';
-import type { Service, Seller } from '@/types';
+import { slugify as baseSlugify } from '@/lib/catalog/slugify';
+import type { Service } from '@/types';
 
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
+export { baseSlugify as slugify };
 
-/** SEO-friendly slug: title slug + service id for uniqueness */
-export function getServiceSlug(service: Service): string {
-  return `${slugify(service.title)}-${service.id}`;
-}
-
-export function getServiceBySlug(slug: string): Service | undefined {
-  return allMarketplaceServices.find((s) => getServiceSlug(s) === slug || s.id === slug);
-}
-
-export function getAllServiceSlugs(): string[] {
-  return allMarketplaceServices.map(getServiceSlug);
-}
-
-export function getSellerBySlug(slug: string): Seller | undefined {
-  return allSellers.find((s) => s.slug === slug || s.id === slug);
-}
-
-export function getAllSellerSlugs(): string[] {
-  return allSellers.map((s) => s.slug);
+/** Client-safe slug for service/product links (prefers DB slug when present). */
+export function getServiceSlug(service: Pick<Service, 'title' | 'id'> & { slug?: string }): string {
+  if (service.slug?.trim()) return service.slug;
+  return `${baseSlugify(service.title)}-${service.id}`;
 }

@@ -1,12 +1,13 @@
 'use client';
 
 import { memo } from 'react';
-import { SearchCatalogItem } from '@/types';
+import { SearchCatalogItem, Category } from '@/types';
 import { SearchResultCard } from './SearchResultCard';
 import { SearchSkeletonCard } from './SearchSkeletonCard';
 
 interface SearchResultGridProps {
   items: SearchCatalogItem[];
+  categories: Category[];
   viewMode: 'grid' | 'list';
   loading?: boolean;
   onViewDetails: (item: SearchCatalogItem) => void;
@@ -15,6 +16,7 @@ interface SearchResultGridProps {
 
 export const SearchResultGrid = memo(function SearchResultGrid({
   items,
+  categories,
   viewMode,
   loading,
   onViewDetails,
@@ -48,6 +50,7 @@ export const SearchResultGrid = memo(function SearchResultGrid({
         <SearchResultCard
           key={item.kind === 'seller' ? item.id : item.service.id}
           item={item}
+          categories={categories}
           viewMode={viewMode}
           onViewDetails={onViewDetails}
           onAddToCart={onAddToCart}

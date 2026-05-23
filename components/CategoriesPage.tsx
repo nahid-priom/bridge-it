@@ -2,11 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { categories } from '@/data/categories';
+import type { Category } from '@/types';
 import { productsUrl } from '@/lib/routes';
 import { ArrowRight } from 'lucide-react';
 
-export const CategoriesPage: React.FC = () => {
+type CategoriesPageProps = { categories: Category[] };
+
+export const CategoriesPage: React.FC<CategoriesPageProps> = ({ categories }) => {
 
   return (
     <div className="min-h-screen pb-20">

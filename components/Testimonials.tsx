@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-  platformTestimonials,
-  testimonialsSectionContent,
-} from '@/data/testimonials';
+import { testimonialsSectionContent } from '@/data/testimonials';
+import type { PlatformTestimonial } from '@/types';
 
-export const Testimonials: React.FC = () => {
-  const testimonials = useMemo(() => platformTestimonials, []);
+type TestimonialsProps = { testimonials: PlatformTestimonial[] };
+
+export const Testimonials: React.FC<TestimonialsProps> = ({ testimonials: items }) => {
+  const testimonials = useMemo(() => items, [items]);
   const { badgeEmoji, badgeLabel, title, titleHighlight, subtitle, autoRotateMs } =
     testimonialsSectionContent;
 
@@ -26,7 +26,7 @@ export const Testimonials: React.FC = () => {
   if (!activeTestimonial) return null;
 
   return (
-    <section className="py-16 md:py-24 relative">
+    <section className="py-8 md:py-16 relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-pink/20 to-transparent"></div>
       <div className="absolute inset-0 hero-gradient opacity-30"></div>
 

@@ -1,7 +1,7 @@
-import { filterAndSortProducts } from '@/lib/products/filter';
+import { queryProductsListing } from '@/lib/catalog/products';
 import type { ProductsPageState } from './url';
 
-/** Filter and sort demo products from URL-driven state. */
-export function filterProductsListing(state: ProductsPageState) {
-  return filterAndSortProducts(state);
+/** Filter and sort products from Supabase using URL-driven state. */
+export async function filterProductsListing(state: ProductsPageState) {
+  return queryProductsListing(state);
 }

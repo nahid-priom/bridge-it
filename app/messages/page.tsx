@@ -1,6 +1,7 @@
 import { buildPageMetadata } from '@/lib/metadata';
 import { MessagesPage } from '@/components/MessagesPage';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+import { fetchTopSellers } from '@/lib/catalog/sellers';
 
 export const metadata = buildPageMetadata({
   title: 'Messages',
@@ -9,11 +10,13 @@ export const metadata = buildPageMetadata({
   noIndex: true,
 });
 
-export default function MessagesRoute() {
+export default async function MessagesRoute() {
+  const contacts = await fetchTopSellers(8);
+
   return (
     <>
       <PageBreadcrumbJsonLd path="/messages" />
-      <MessagesPage />
+      <MessagesPage contacts={contacts} />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import type { ProductCategoryKey, ProductReview } from '@/types/product';
-import { products } from '@/data/products';
+import { products } from './products';
 
 const REVIEWERS = [
   'Rakib Hasan',

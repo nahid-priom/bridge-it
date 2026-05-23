@@ -7,6 +7,10 @@ export const ROUTES = {
   about: '/about',
   search: '/search',
   dashboard: '/dashboard',
+  sellerDashboard: '/dashboard/seller',
+  sellerOnboarding: '/seller/onboarding',
+  login: '/login',
+  signup: '/signup',
   admin: '/admin',
   cart: '/cart',
   messages: '/messages',
@@ -30,6 +34,13 @@ export function productsUrl(category?: string, extra?: Record<string, string>): 
   }
   const qs = params.toString();
   return qs ? `${ROUTES.products}?${qs}` : ROUTES.products;
+}
+
+/** Products listing search — URL is the source of truth for navbar search. */
+export function productsSearchUrl(query?: string): string {
+  const trimmed = query?.trim();
+  if (!trimmed) return ROUTES.products;
+  return productsUrl(undefined, { q: trimmed });
 }
 
 /** Map legacy page keys to paths for hero CTAs etc. */

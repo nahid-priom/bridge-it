@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, Search, Bell, Plus, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import type { AdminNotification } from '@/data/adminData';
+import type { AdminNotification } from '@/types/admin';
 
 interface AdminTopbarProps {
   title: string;

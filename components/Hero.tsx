@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useStore } from '@/store/useStore';
 import { useNavigateToSearch } from '@/hooks/useNavigateToSearch';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
+import { useAuthProfile } from '@/components/auth/AuthProfileContext';
+import { useBecomeSeller } from '@/hooks/useBecomeSeller';
 import { BridgeImage } from '@/components/ui/BridgeImage';
 import { HeroMetric } from '@/components/hero/HeroMetric';
 import { PromotedServiceCard } from '@/components/hero/PromotedServiceCard';
@@ -51,8 +53,18 @@ export const Hero: React.FC = () => {
     return () => clearInterval(timer);
   }, [nextSlide]);
 
+  const authProfile = useAuthProfile();
+  const goBecomeSeller = useBecomeSeller(authProfile);
   const slide = heroSlides[currentSlide];
   const goCta = (page: HeroCtaPage) => goToPageKey(page);
+
+  const runCta = (label: string, page: HeroCtaPage) => {
+    if (label.includes('Become a Seller')) {
+      goBecomeSeller();
+    } else {
+      goCta(page);
+    }
+  };
 
   const scrollPromo = (dir: -1 | 1) => {
     setPromoIndex((prev) => {
@@ -79,14 +91,14 @@ export const Hero: React.FC = () => {
               className="absolute inset-0 transition-opacity duration-1000 ease-out"
               style={{ opacity: currentSlide === i ? 1 : 0, zIndex: currentSlide === i ? 1 : 0 }}
             >
-              <div className="absolute inset-0 md:left-[30%] lg:left-[38%]">
+              <div className="absolute inset-0">
                 <BridgeImage
                   src={s.image}
                   alt={`${s.title} ${s.highlight}`}
                   fill
                   priority={i === 0}
-                  sizes="(max-width: 768px) 100vw, 65vw"
-                  className="object-cover object-center opacity-[0.62] dark:opacity-[0.75]"
+                  sizes="100vw"
+                  className="object-cover object-center opacity-[0.42] md:opacity-[0.58] dark:opacity-[0.68]"
                   style={{
                     transform: currentSlide === i ? 'scale(1)' : 'scale(1.06)',
                     transition: 'transform 6s ease-out',
@@ -95,34 +107,33 @@ export const Hero: React.FC = () => {
               </div>
             </div>
           ))}
-          <div className="absolute inset-0 z-[2] hero-overlay-premium" />
-          <div className="absolute inset-0 z-[2] hero-gradient opacity-40 dark:opacity-70 pointer-events-none" />
+          <div className="absolute inset-0 z-[2] hero-overlay-centered" />
+          <div className="absolute inset-0 z-[2] hero-gradient opacity-20 dark:opacity-30 pointer-events-none" />
         </div>
 
-        {/* Slide counter */}
-        <div
-          className="absolute top-28 md:top-32 right-4 sm:right-8 z-[4] hidden sm:flex items-center gap-1.5 glass rounded-full px-3.5 py-1.5 shadow-sm border border-border-subtle"
-          aria-live="polite"
-        >
-          <span className="text-xs font-bold text-text-primary">
-            {String(currentSlide + 1).padStart(2, '0')}
-          </span>
-          <span className="text-xs text-text-muted">/</span>
-          <span className="text-xs text-text-muted">
-            {String(heroSlides.length).padStart(2, '0')}
-          </span>
-        </div>
+        {/* Hero content + search */}
+        <div className="relative z-[3] pt-28 md:pt-36 pb-6 md:pb-8">
+          <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+            <div
+              className="absolute top-0 right-4 sm:right-6 lg:right-8 z-[4] hidden sm:flex items-center gap-1.5 glass rounded-full px-3.5 py-1.5 shadow-sm border border-border-subtle"
+              aria-live="polite"
+            >
+              <span className="text-xs font-bold text-text-primary">
+                {String(currentSlide + 1).padStart(2, '0')}
+              </span>
+              <span className="text-xs text-text-muted">/</span>
+              <span className="text-xs text-text-muted">
+                {String(heroSlides.length).padStart(2, '0')}
+              </span>
+            </div>
 
-        {/* Hero content */}
-        <div className="relative z-[3] pt-28 md:pt-36 pb-8 md:pb-12">
-          <div className="container  mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-xl lg:max-w-2xl" key={slideKey}>
+            <div className="w-full max-w-3xl mx-auto" key={slideKey}>
               <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-bridge-primary/10 border border-bridge-primary/25 rounded-full mb-5 animate-slide-up"
+                className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-bridge-primary/10 border border-bridge-primary/25 rounded-full mb-5 animate-slide-up"
                 style={{ animationDelay: '0s' }}
               >
-                <Sun className="w-3.5 h-3.5 text-bridge-primary" aria-hidden />
-                <span className="text-xs sm:text-sm text-violet-800 dark:text-bridge-primary-light font-medium">
+                <Sun className="w-3.5 h-3.5 text-bridge-primary dark:text-icon-accent" aria-hidden />
+                <span className="text-xs sm:text-sm text-violet-800 dark:text-badge-accent font-medium">
                   {slide.badge}
                 </span>
               </div>
@@ -136,19 +147,19 @@ export const Hero: React.FC = () => {
               </h1>
 
               <p
-                className="text-sm sm:text-base md:text-lg text-text-secondary mb-7 max-w-lg leading-relaxed animate-slide-up"
+                className="text-sm sm:text-base md:text-lg text-text-secondary mb-7 max-w-2xl mx-auto leading-relaxed animate-slide-up"
                 style={{ animationDelay: '0.16s' }}
               >
                 {slide.subtitle}
               </p>
 
               <div
-                className="flex flex-col sm:flex-row flex-wrap gap-3 mb-8 animate-slide-up"
+                className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 mb-8 animate-slide-up"
                 style={{ animationDelay: '0.24s' }}
               >
                 <button
                   type="button"
-                  onClick={() => goCta(slide.primaryCtaPage)}
+                  onClick={() => runCta(slide.primaryCta, slide.primaryCtaPage)}
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold rounded-2xl hover:shadow-xl hover:shadow-bridge-primary/30 hover:-translate-y-0.5 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/50 text-sm md:text-base"
                 >
                   {slide.primaryCta}
@@ -157,7 +168,7 @@ export const Hero: React.FC = () => {
                 {slide.secondaryCta && slide.secondaryCtaPage && (
                   <button
                     type="button"
-                    onClick={() => goCta(slide.secondaryCtaPage!)}
+                    onClick={() => runCta(slide.secondaryCta!, slide.secondaryCtaPage!)}
                     className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-surface text-bridge-primary font-bold rounded-2xl border border-border-subtle hover:border-bridge-primary/40 hover:shadow-md transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/30 text-sm md:text-base"
                   >
                     {slide.secondaryCta}
@@ -167,11 +178,57 @@ export const Hero: React.FC = () => {
               </div>
 
               <div
-                className="flex flex-wrap gap-6 sm:gap-8 animate-slide-up"
+                className="hidden md:flex flex-wrap items-center justify-center gap-6 sm:gap-8 mb-8 md:mb-10 animate-slide-up"
                 style={{ animationDelay: '0.32s' }}
               >
                 {heroTrustMetrics.map((m) => (
                   <HeroMetric key={m.id} metric={m} />
+                ))}
+              </div>
+            </div>
+
+            {/* Search — inside hero */}
+            <div className="w-full max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.4s' }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  goToSearch();
+                }}
+                role="search"
+                className="w-full"
+              >
+                <div className="relative group w-full">
+                  <div className="absolute -inset-[2px] bg-gradient-to-r from-bridge-primary via-bridge-secondary to-bridge-cyan rounded-2xl opacity-30 blur-md group-hover:opacity-50 transition-opacity duration-300" />
+                  <div className="relative flex items-center w-full bg-white/98 max-md:backdrop-blur-md md:bg-surface/95 backdrop-blur-sm border border-border-subtle max-md:border-white/80 dark:border-white/90 dark:border-2 rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(15,14,23,0.08)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)] dark:bg-surface/95 dark:max-md:bg-surface/95">
+                    <Search className="ml-4 sm:ml-5 w-5 h-5 text-text-muted flex-shrink-0" aria-hidden />
+                    <input
+                      type="search"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Animation, Software, Courses, Editing..."
+                      aria-label="Search services"
+                      className="flex-1 min-w-0 px-3 sm:px-4 py-4 md:py-5 bg-transparent text-text-primary placeholder:text-text-muted text-sm md:text-base focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="mr-2 shrink-0 px-4 sm:px-7 py-2.5 md:py-3 bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold rounded-xl hover:shadow-lg hover:shadow-bridge-primary/25 transition-all text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/40"
+                    >
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                {heroSearchQuickTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => goToSearch(tag)}
+                    className="px-3 py-1.5 text-xs text-text-secondary bg-surface/80 backdrop-blur-sm hover:bg-bridge-primary/10 hover:text-bridge-primary border border-border-subtle hover:border-bridge-primary/30 rounded-full transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/30"
+                  >
+                    {tag}
+                  </button>
                 ))}
               </div>
             </div>
@@ -199,7 +256,7 @@ export const Hero: React.FC = () => {
 
         {/* ===== Promoted services ===== */}
         <div className="relative z-[4] pb-10 md:pb-14">
-          <div className="container  mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-2 mb-5">
               <Megaphone className="w-4 h-4 text-orange-500" aria-hidden />
               <span className="text-xs font-bold text-orange-500 uppercase tracking-wider">
@@ -211,7 +268,7 @@ export const Hero: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollPromo(-1)}
-                className="hidden md:flex absolute -left-3 lg:-left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-surface border border-border-subtle shadow-lg text-text-secondary hover:text-bridge-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
+                className="hidden md:flex lg:hidden absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-surface border border-border-subtle shadow-lg text-text-secondary hover:text-bridge-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
                 aria-label="Previous promoted services"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -219,7 +276,7 @@ export const Hero: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollPromo(1)}
-                className="hidden md:flex absolute -right-3 lg:-right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-surface border border-border-subtle shadow-lg text-text-secondary hover:text-bridge-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
+                className="hidden md:flex lg:hidden absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-surface border border-border-subtle shadow-lg text-text-secondary hover:text-bridge-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
                 aria-label="Next promoted services"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -227,10 +284,10 @@ export const Hero: React.FC = () => {
 
               <div
                 ref={promoScrollRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 md:overflow-visible md:snap-none md:grid md:grid-cols-2 lg:grid-cols-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-visible lg:snap-none lg:grid lg:grid-cols-4 lg:gap-4"
               >
                 {promotedServices.map((ad, i) => (
-                  <div key={ad.id} data-promo-card className="snap-center shrink-0 w-[min(100%,320px)] md:w-auto md:shrink">
+                  <div key={ad.id} data-promo-card className="snap-center shrink-0 w-[min(100%,320px)] lg:w-auto lg:shrink">
                     <PromotedServiceCard
                       ad={ad}
                       onClick={goToCategories}
@@ -254,53 +311,6 @@ export const Hero: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== Search bar ===== */}
-      <div className="relative z-10 bg-background pb-10 md:pb-14">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              goToSearch();
-            }}
-            role="search"
-          >
-            <div className="relative group">
-              <div className="absolute -inset-[2px] bg-gradient-to-r from-bridge-primary via-bridge-secondary to-bridge-cyan rounded-2xl opacity-30 blur-md group-hover:opacity-50 transition-opacity duration-300" />
-              <div className="relative flex items-center bg-surface border border-border-subtle rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(15,14,23,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
-                <Search className="ml-5 w-5 h-5 text-text-muted flex-shrink-0" aria-hidden />
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="সার্ভিস খুঁজুন... Animation, Software, Courses, Editing..."
-                  aria-label="Search services"
-                  className="flex-1 px-4 py-4 md:py-5 bg-transparent text-text-primary placeholder:text-text-muted text-sm md:text-base focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  className="mr-2 px-5 py-2.5 md:px-7 md:py-3 bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold rounded-xl hover:shadow-lg hover:shadow-bridge-primary/25 transition-all text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/40"
-                >
-                  Search
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
-            {heroSearchQuickTags.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => goToSearch(tag)}
-                className="px-3 py-1.5 text-xs text-text-secondary bg-background-soft hover:bg-bridge-primary/10 hover:text-bridge-primary border border-border-subtle hover:border-bridge-primary/30 rounded-full transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/30"
-              >
-                {tag}
-              </button>
-            ))}
           </div>
         </div>
       </div>

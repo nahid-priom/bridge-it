@@ -65,20 +65,6 @@ export const heroSlides: HeroSlide[] = [
     secondaryCta: 'Explore Services',
     secondaryCtaPage: 'categories',
   },
-  {
-    id: 'slide-3',
-    image:
-      'https://images.pexels.com/photos/29506609/pexels-photo-29506609.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600',
-    badge: 'Smart Virtual IT Park',
-    title: 'Secure Payments &',
-    highlight: 'Guaranteed Delivery',
-    subtitle:
-      'Escrow protection, bKash/Nagad/Card support, real-time messaging & 24/7 customer support.',
-    primaryCta: 'How It Works',
-    primaryCtaPage: 'about',
-    secondaryCta: 'Explore Services',
-    secondaryCtaPage: 'categories',
-  },
 ];
 
 export const promotedServices: PromotedServiceAd[] = [
@@ -126,6 +112,21 @@ export const promotedServices: PromotedServiceAd[] = [
     rating: 5.0,
     reviewCount: 56,
     priceLabel: 'From $499',
+  },
+  {
+    id: 'promo-4',
+    image:
+      'https://images.pexels.com/photos/33799399/pexels-photo-33799399.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=800',
+    title: 'Premium Video Editing & Post-Production',
+    description: 'Cinematic cuts, color grading, and sound design for ads and social.',
+    seller: 'EditFlow Media',
+    statusBadge: 'FEATURED',
+    statusColor: '#8B5CF6',
+    categoryBadge: 'Video & Film',
+    categoryGradient: 'from-amber-500 to-orange-500',
+    rating: 4.9,
+    reviewCount: 94,
+    priceLabel: 'From $120',
   },
 ];
 

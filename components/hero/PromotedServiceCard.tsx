@@ -23,7 +23,7 @@ export function PromotedServiceCard({ ad, onClick, priority = false }: PromotedS
           alt={ad.title}
           fill
           priority={priority}
-          sizes="(max-width: 640px) 85vw, 33vw"
+          sizes="(max-width: 1024px) 85vw, 25vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div

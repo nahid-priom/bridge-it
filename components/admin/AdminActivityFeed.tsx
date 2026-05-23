@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ShieldCheck, ShoppingBag, Scale, Store, CreditCard } from 'lucide-react';
-import type { AdminActivity } from '@/data/adminData';
+import type { AdminActivity } from '@/types/admin';
 
 const typeIcons = {
   verification: ShieldCheck,

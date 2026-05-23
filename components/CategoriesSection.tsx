@@ -3,15 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { categories } from '@/data/categories';
 import { productsUrl } from '@/lib/routes';
 import { ArrowRight } from 'lucide-react';
+import type { Category } from '@/types';
 
-export const CategoriesSection: React.FC = () => {
+type CategoriesSectionProps = { categories: Category[] };
+
+export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories }) => {
   const { goToCategories } = useAppNavigation();
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-8 md:py-16 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 hero-gradient opacity-60"></div>
       <div className="absolute top-1/3 right-0 w-80 h-80 bg-bridge-primary/5 rounded-full blur-[150px]"></div>

@@ -2,6 +2,8 @@ import dynamic from 'next/dynamic';
 import { buildPageMetadata } from '@/lib/metadata';
 import { PageLoading } from '@/components/PageLoading';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+import { getDashboardPageData } from '@/lib/catalog/dashboard';
+import { requireAuth } from '@/lib/auth/require-auth';
 
 export const metadata = buildPageMetadata({
   title: 'Seller Dashboard',
@@ -15,11 +17,14 @@ const Dashboard = dynamic(
   { loading: () => <PageLoading /> }
 );
 
-export default function DashboardRoute() {
+export default async function DashboardRoute() {
+  await requireAuth('/dashboard');
+  const data = await getDashboardPageData();
+
   return (
     <>
       <PageBreadcrumbJsonLd path="/dashboard" />
-      <Dashboard />
+      <Dashboard data={data} />
     </>
   );
 }

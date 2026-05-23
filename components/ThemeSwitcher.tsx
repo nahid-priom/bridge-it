@@ -94,7 +94,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ variant = 'navbar'
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-background-soft transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
+        className="flex items-center gap-1 p-2 rounded-lg text-text-muted hover:text-text-primary dark:text-white/90 dark:hover:text-white hover:bg-background-soft dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
         aria-label={`Theme: ${activeLabel}. Click to change`}
         aria-expanded={open}
         aria-haspopup="listbox"

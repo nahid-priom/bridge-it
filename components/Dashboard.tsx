@@ -4,25 +4,48 @@ import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { ArrowLeft, Package, Star, DollarSign, BarChart3, TrendingUp, ShoppingBag, CheckCircle, AlertCircle, Eye, Settings, Bell, Plus, ExternalLink, Copy } from 'lucide-react';
+import type { DashboardOrderView, DashboardPageData } from '@/types/dashboard';
 
-export const Dashboard: React.FC = () => {
+const STAT_ICONS = [
+  <DollarSign key="rev" className="w-5 h-5" />,
+  <Package key="ord" className="w-5 h-5" />,
+  <Star key="rev2" className="w-5 h-5" />,
+  <Eye key="eye" className="w-5 h-5" />,
+];
+
+const STAT_COLORS = [
+  'from-green-400 to-emerald-500',
+  'from-bridge-primary to-purple-500',
+  'from-bridge-gold to-orange-500',
+  'from-bridge-cyan to-blue-500',
+];
+
+const FALLBACK_STATS = [
+  { label: 'Total Revenue', value: '৳0', change: '—' },
+  { label: 'Active Orders', value: '0', change: '—' },
+  { label: 'Total Reviews', value: '0', change: '—' },
+  { label: 'Completed Projects', value: '0', change: '—' },
+];
+
+const FALLBACK_ORDERS: DashboardOrderView[] = [];
+
+interface DashboardProps {
+  data?: DashboardPageData | null;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   const { setNotification } = useStore();
   const { goHome } = useAppNavigation();
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'services' | 'analytics'>('overview');
 
-  const stats = [
-    { label: 'Total Revenue', value: '৳1,25,000', change: '+23%', icon: <DollarSign className="w-5 h-5" />, color: 'from-green-400 to-emerald-500' },
-    { label: 'Active Orders', value: '12', change: '+5', icon: <Package className="w-5 h-5" />, color: 'from-bridge-primary to-purple-500' },
-    { label: 'Total Reviews', value: '89', change: '+12', icon: <Star className="w-5 h-5" />, color: 'from-bridge-gold to-orange-500' },
-    { label: 'Profile Views', value: '2,340', change: '+18%', icon: <Eye className="w-5 h-5" />, color: 'from-bridge-cyan to-blue-500' },
-  ];
+  const stats = (data?.stats ?? FALLBACK_STATS).map((stat, i) => ({
+    ...stat,
+    icon: STAT_ICONS[i],
+    color: STAT_COLORS[i],
+  }));
 
-  const recentOrders = [
-    { id: 'ORD-001', service: '2D Character Animation', buyer: 'Rahim Ahmed', amount: '৳15,000', status: 'in-progress', date: '2024-12-20' },
-    { id: 'ORD-002', service: 'Video Ad Creation', buyer: 'Fatima Khan', amount: '৳8,000', status: 'completed', date: '2024-12-18' },
-    { id: 'ORD-003', service: 'Logo Animation', buyer: 'Karim Hassan', amount: '৳5,000', status: 'review', date: '2024-12-17' },
-    { id: 'ORD-004', service: 'Explainer Video', buyer: 'Nusrat Jahan', amount: '৳12,000', status: 'pending', date: '2024-12-16' },
-  ];
+  const recentOrders = data?.recentOrders?.length ? data.recentOrders : FALLBACK_ORDERS;
+  const customUrl = data?.customUrl ?? 'bridge.app/s/your-shop';
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -64,11 +87,11 @@ export const Dashboard: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <code className="px-3 py-2 bg-surface-elevated rounded-lg text-sm text-bridge-primary-light font-mono">
-                bridge.app/s/your-shop
+                {customUrl}
               </code>
               <button 
                 onClick={() => {
-                  navigator.clipboard.writeText('bridge.app/s/your-shop');
+                  navigator.clipboard.writeText(customUrl);
                   setNotification('URL copied! Share it on Facebook, Instagram, or anywhere.');
                   setTimeout(() => setNotification(null), 3000);
                 }}

@@ -1,5 +1,3 @@
-'use client';
-
 import { Hero } from '@/components/Hero';
 import { TrustBanner } from '@/components/TrustBanner';
 import { CategoriesSection } from '@/components/CategoriesSection';
@@ -8,17 +6,31 @@ import { HowItWorks } from '@/components/HowItWorks';
 import { TopSellers } from '@/components/TopSellers';
 import { Testimonials } from '@/components/Testimonials';
 import { CTASection } from '@/components/CTASection';
+import type { Category, Seller, Service } from '@/types';
+import type { PlatformTestimonial } from '@/types';
 
-export function HomePage() {
+type HomePageProps = {
+  categories: Category[];
+  featuredServices: Service[];
+  topSellers: Seller[];
+  testimonials: PlatformTestimonial[];
+};
+
+export function HomePage({
+  categories,
+  featuredServices,
+  topSellers,
+  testimonials,
+}: HomePageProps) {
   return (
     <>
       <Hero />
       <TrustBanner />
-      <CategoriesSection />
-      <FeaturedServices />
+      <CategoriesSection categories={categories} />
+      <FeaturedServices services={featuredServices} categories={categories} />
       <HowItWorks />
-      <TopSellers />
-      <Testimonials />
+      <TopSellers sellers={topSellers} categories={categories} />
+      <Testimonials testimonials={testimonials} />
       <CTASection />
     </>
   );

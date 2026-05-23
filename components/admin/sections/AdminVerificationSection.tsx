@@ -7,12 +7,14 @@ import { AdminFilterBar } from '../../../components/admin/AdminFilterBar';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminEmptyState } from '../../../components/admin/AdminEmptyState';
 import { AdminConfirmationModal } from '../../../components/admin/AdminConfirmationModal';
-import { initialVerificationQueue, type VerificationRequest } from '@/data/adminData';
+import type { VerificationRequest } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 import { useStore } from '@/store/useStore';
 
 export const AdminVerificationSection: React.FC = () => {
   const { setNotification } = useStore();
-  const [queue, setQueue] = useState(initialVerificationQueue);
+  const { verificationQueue } = useAdminData();
+  const [queue, setQueue] = useState(verificationQueue);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [modal, setModal] = useState<{ open: boolean; action: 'approve' | 'reject'; id: string } | null>(null);

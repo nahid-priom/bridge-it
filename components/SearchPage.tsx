@@ -6,9 +6,7 @@ import { Grid3X3, List } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { searchUrl } from '@/lib/routes';
-import { getSellerSlugById } from '@/lib/sellers';
-import { searchCatalog } from '@/data/searchCatalog';
-import { allMarketplaceServices } from '@/data/services';
+import type { Category, SearchCatalogItem } from '@/types';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import {
   DEFAULT_SEARCH_FILTERS,
@@ -17,7 +15,6 @@ import {
   sortSearchResults,
   getActiveFilterCount,
 } from '@/lib/searchFilter';
-import { SearchCatalogItem } from '@/types';
 import { SearchHeroBar } from './search/SearchHeroBar';
 import { SearchFilterSidebar } from './search/SearchFilterSidebar';
 import { MobileSearchFilterDrawer, MobileFilterButton } from './search/MobileSearchFilterDrawer';
@@ -26,7 +23,17 @@ import { SearchSortDropdown } from './search/SearchSortDropdown';
 import { SearchEmptyState } from './search/SearchEmptyState';
 import { ActiveFilterChips } from './search/ActiveFilterChips';
 
-export const SearchPage: React.FC = () => {
+type SearchPageProps = {
+  searchCatalog: SearchCatalogItem[];
+  categories: Category[];
+  initialQuery?: string;
+};
+
+export const SearchPage: React.FC<SearchPageProps> = ({
+  searchCatalog,
+  categories,
+  initialQuery = '',
+}) => {
   const searchQuery = useStore((s) => s.searchQuery);
   const searchFilters = useStore((s) => s.searchFilters);
   const sortBy = useStore((s) => s.sortBy);
@@ -41,7 +48,7 @@ export const SearchPage: React.FC = () => {
   const { goToCategories, goToService, goToSeller } = useAppNavigation();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const urlQuery = searchParams.get('q') ?? '';
+  const urlQuery = searchParams.get('q') ?? initialQuery;
 
   const [localQuery, setLocalQuery] = useState(urlQuery || searchQuery);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -73,10 +80,10 @@ export const SearchPage: React.FC = () => {
 
   const results = useMemo(() => {
     const filtered = hasQuery
-      ? filterSearchCatalog(searchCatalog, debouncedQuery, searchFilters)
-      : filterSearchCatalog(getRecommendedResults(searchCatalog), '', searchFilters);
+      ? filterSearchCatalog(searchCatalog, debouncedQuery, searchFilters, categories)
+      : filterSearchCatalog(getRecommendedResults(searchCatalog), '', searchFilters, categories);
     return sortSearchResults(filtered, sortBy);
-  }, [debouncedQuery, searchFilters, sortBy, hasQuery]);
+  }, [debouncedQuery, searchFilters, sortBy, hasQuery, searchCatalog, categories]);
 
   const activeFilterCount = getActiveFilterCount(searchFilters);
 
@@ -102,8 +109,7 @@ export const SearchPage: React.FC = () => {
   const handleViewDetails = useCallback(
     (item: SearchCatalogItem) => {
       if (item.kind === 'seller') {
-        const sellerSlug = getSellerSlugById(item.sellerId);
-        if (sellerSlug) goToSeller(sellerSlug);
+        if (item.sellerSlug) goToSeller(item.sellerSlug);
         return;
       }
       goToService(item.service);
@@ -113,10 +119,12 @@ export const SearchPage: React.FC = () => {
 
   const handleAddToCart = useCallback(
     (serviceId: string) => {
-      const service = allMarketplaceServices.find((s) => s.id === serviceId);
-      if (service) addToCart(service);
+      const listing = searchCatalog.find(
+        (item) => item.kind === 'listing' && item.service.id === serviceId
+      );
+      if (listing?.kind === 'listing') addToCart(listing.service);
     },
-    [addToCart]
+    [addToCart, searchCatalog]
   );
 
   return (
@@ -136,6 +144,7 @@ export const SearchPage: React.FC = () => {
             <div className="sticky top-[calc(var(--below-header)+4.5rem)] max-h-[calc(100vh-var(--below-header)-5rem)] overflow-y-auto pr-1">
               <SearchFilterSidebar
                 filters={searchFilters}
+                categories={categories}
                 onChange={setSearchFilters}
                 onClearAll={handleClearFilters}
               />
@@ -146,6 +155,7 @@ export const SearchPage: React.FC = () => {
             open={mobileFiltersOpen}
             onClose={() => setMobileFiltersOpen(false)}
             filters={searchFilters}
+            categories={categories}
             onChange={setSearchFilters}
             onClearAll={handleClearFilters}
             activeCount={activeFilterCount}
@@ -154,6 +164,7 @@ export const SearchPage: React.FC = () => {
           <main className="flex-1 min-w-0 animate-slide-up">
             <ActiveFilterChips
               filters={searchFilters}
+              categories={categories}
               onRemove={handleRemoveFilter}
               onClearAll={handleClearFilters}
             />
@@ -206,6 +217,7 @@ export const SearchPage: React.FC = () => {
             {results.length > 0 ? (
               <SearchResultGrid
                 items={results}
+                categories={categories}
                 viewMode={viewMode}
                 loading={isFiltering}
                 onViewDetails={handleViewDetails}

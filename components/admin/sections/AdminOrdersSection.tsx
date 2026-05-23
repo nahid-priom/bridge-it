@@ -8,11 +8,12 @@ import { AdminDataTable } from '../../../components/admin/AdminDataTable';
 import { AdminStatCard } from '../../../components/admin/AdminStatCard';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminActionMenu } from '../../../components/admin/AdminActionMenu';
-import { initialAdminOrders, formatCurrency, type AdminOrder } from '@/data/adminData';
+import { formatCurrency, type AdminOrder } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 export const AdminOrdersSection: React.FC = () => {
+  const { orders } = useAdminData();
   const [search, setSearch] = useState('');
-  const [orders] = useState(initialAdminOrders);
 
   const filtered = useMemo(
     () =>

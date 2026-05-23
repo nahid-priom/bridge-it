@@ -6,12 +6,13 @@ import { AdminFilterBar } from '../../../components/admin/AdminFilterBar';
 import { AdminDataTable } from '../../../components/admin/AdminDataTable';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminActionMenu } from '../../../components/admin/AdminActionMenu';
-import { initialAdminCustomers, formatCurrency, type AdminCustomer } from '@/data/adminData';
+import { formatCurrency, type AdminCustomer } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 export const AdminCustomersSection: React.FC = () => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('spending');
-  const [customers] = useState(initialAdminCustomers);
+  const { customers } = useAdminData();
 
   const filtered = useMemo(() => {
     let list = customers.filter(

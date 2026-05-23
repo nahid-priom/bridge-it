@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins, Noto_Sans_Bengali } from 'next/font/google';
 import { AppShell } from '@/components/layout/AppShell';
+import { fetchAllCategories } from '@/lib/catalog/categories';
+import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { TopLoader } from '@/components/navigation/TopLoader';
@@ -30,7 +32,12 @@ const notoSansBengali = Noto_Sans_Bengali({
 
 export const metadata: Metadata = rootMetadata;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [categories, authProfile] = await Promise.all([
+    fetchAllCategories(),
+    getCurrentProfile(),
+  ]);
+
   return (
     <html
       lang="en"
@@ -41,7 +48,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <TopLoader />
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-          <AppShell>{children}</AppShell>
+          <AppShell categories={categories} authProfile={authProfile}>
+            {children}
+          </AppShell>
         </ThemeProvider>
       </body>
     </html>

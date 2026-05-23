@@ -3,10 +3,11 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { SearchFilters } from '@/types';
-import { categories } from '@/data/categories';
+import type { Category } from '@/types';
 
 interface ActiveFilterChipsProps {
   filters: SearchFilters;
+  categories: Category[];
   onRemove: (key: keyof SearchFilters | 'price' | 'clear') => void;
   onClearAll: () => void;
 }
@@ -21,6 +22,7 @@ const RESULT_LABELS: Record<string, string> = {
 
 export const ActiveFilterChips: React.FC<ActiveFilterChipsProps> = ({
   filters,
+  categories,
   onRemove,
   onClearAll,
 }) => {

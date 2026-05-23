@@ -3,15 +3,21 @@
 import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { topSellers } from '@/data/services';
 import { ArrowLeft, Send, Phone, Video, MoreVertical, Paperclip, Image, Smile, Search, CheckCheck } from 'lucide-react';
+import type { Seller } from '@/types';
 
-export const MessagesPage: React.FC = () => {
+interface MessagesPageProps {
+  contacts: Seller[];
+}
+
+export const MessagesPage: React.FC<MessagesPageProps> = ({ contacts }) => {
   const { goHome } = useAppNavigation();
-  const [selectedChat, setSelectedChat] = useState<string | null>('seller1');
+  const [selectedChat, setSelectedChat] = useState<string | null>(
+    () => contacts[0]?.id ?? null
+  );
   const [newMessage, setNewMessage] = useState('');
 
-  const chatContacts = topSellers.map(seller => ({
+  const chatContacts = contacts.map(seller => ({
     id: seller.id,
     name: seller.name,
     avatar: seller.avatar,

@@ -5,17 +5,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ProductsPageHeader } from './ProductsPageHeader';
 import { useStore } from '@/store/useStore';
-import { filterProductsListing } from '@/lib/products/listing';
+import { findCategoryInList } from '@/lib/products/url';
 import { productToService } from '@/lib/products/adapter';
 import {
   parseProductsSearchParams,
   buildProductsHref,
   searchParamsToRecord,
-  getCategoryBySlug,
   DEFAULT_PRODUCTS_PAGE_STATE,
   type ProductsPageState,
 } from '@/lib/products/url';
-import type { ProductListingFilters } from '@/types/product';
+import type { Product, ProductCategory, ProductListingFilters } from '@/types/product';
 import { ProductCard } from './ProductCard';
 import { ProductFilterSidebar } from './ProductFilterSidebar';
 import { CategoryRail } from './CategoryRail';
@@ -39,9 +38,19 @@ function countActiveFilters(filters: ProductListingFilters, q: string): number {
 
 interface ProductsListingProps {
   initialState?: ProductsPageState;
+  products: Product[];
+  resultCount: number;
+  categories: ProductCategory[];
+  categoryCounts: Record<string, number>;
 }
 
-export const ProductsListing: React.FC<ProductsListingProps> = ({ initialState }) => {
+export const ProductsListing: React.FC<ProductsListingProps> = ({
+  initialState,
+  products,
+  resultCount,
+  categories,
+  categoryCounts,
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const addToCart = useStore((s) => s.addToCart);
@@ -58,9 +67,12 @@ export const ProductsListing: React.FC<ProductsListingProps> = ({ initialState }
     return parsed;
   }, [searchParams, initialState]);
 
-  const results = useMemo(() => filterProductsListing(state), [state]);
+  const results = products;
 
-  const category = useMemo(() => getCategoryBySlug(state.categoryKey), [state.categoryKey]);
+  const category = useMemo(
+    () => findCategoryInList(categories, state.categoryKey),
+    [categories, state.categoryKey]
+  );
 
   const activeFilterCount = useMemo(
     () => countActiveFilters(state.filters, state.q),
@@ -173,9 +185,17 @@ export const ProductsListing: React.FC<ProductsListingProps> = ({ initialState }
       <div className="absolute top-8 left-1/4 w-80 h-80 bg-bridge-gold/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container  mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <ProductsPageHeader />
+        <ProductsPageHeader
+          categories={categories}
+          resultCount={resultCount}
+          totalCatalogHint={categoryCounts.all}
+        />
 
-        <CategoryRail activeCategory={state.categoryKey} />
+        <CategoryRail
+          activeCategory={state.categoryKey}
+          categories={categories}
+          categoryCounts={categoryCounts}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8 items-start">
           <aside className="hidden lg:block min-w-0">
@@ -197,7 +217,7 @@ export const ProductsListing: React.FC<ProductsListingProps> = ({ initialState }
             />
 
             <ProductsToolbar
-              resultCount={results.length}
+              resultCount={resultCount}
               categoryLabel={category?.label ?? null}
               sort={state.sort}
               onSortChange={handleSortChange}
@@ -236,7 +256,11 @@ export const ProductsListing: React.FC<ProductsListingProps> = ({ initialState }
                 ))}
               </div>
             ) : (
-              <ProductsEmptyState query={state.q} onClearFilters={handleClearFilters} />
+              <ProductsEmptyState
+                query={state.q}
+                categories={categories}
+                onClearFilters={handleClearFilters}
+              />
             )}
           </section>
         </div>

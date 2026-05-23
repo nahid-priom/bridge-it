@@ -2,10 +2,15 @@ import { notFound } from 'next/navigation';
 import { ProductDetailView } from '@/components/products/ProductDetailView';
 import { ProductJsonLd } from '@/components/seo/ProductJsonLd';
 import { BreadcrumbOverrideProvider } from '@/components/seo/BreadcrumbOverride';
-import { getReviewsByProductSlug } from '@/data/reviews';
-import { getProductBySlug, getSimilarProducts } from '@/lib/products/detail';
+import {
+  fetchProductBySlug,
+  fetchProductReviews,
+  fetchSimilarProducts,
+} from '@/lib/catalog/products';
 import { buildProductDetailMetadata } from '@/lib/products/page-meta';
 import type { BreadcrumbItem } from '@/lib/seo/breadcrumbs';
+
+export const revalidate = 60;
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -18,12 +23,14 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await fetchProductBySlug(slug);
 
   if (!product) notFound();
 
-  const reviews = getReviewsByProductSlug(slug);
-  const similarProducts = getSimilarProducts(product, 8);
+  const [reviews, similarProducts] = await Promise.all([
+    fetchProductReviews(slug, 6),
+    fetchSimilarProducts(product, 8),
+  ]);
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Home', href: '/' },

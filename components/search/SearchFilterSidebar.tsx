@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { SearchFilters, SearchFilterResultType } from '@/types';
-import { categories } from '@/data/categories';
+import type { Category } from '@/types';
 
 interface SearchFilterSidebarProps {
   filters: SearchFilters;
+  categories: Category[];
   onChange: (filters: SearchFilters) => void;
   onClearAll: () => void;
   className?: string;
@@ -42,6 +43,7 @@ function FilterSection({ title, children }: { title: string; children: React.Rea
 
 export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   filters,
+  categories,
   onChange,
   onClearAll,
   className = '',

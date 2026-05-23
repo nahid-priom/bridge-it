@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Calendar } from 'lucide-react';
 import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
-import { initialFeaturedItems, type FeaturedItem } from '@/data/adminData';
+import type { FeaturedItem } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 
 export const AdminFeaturedSection: React.FC = () => {
-  const [items, setItems] = useState(initialFeaturedItems);
+  const { featured: initialFeatured } = useAdminData();
+  const [items, setItems] = useState(initialFeatured);
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">

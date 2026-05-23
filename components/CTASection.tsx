@@ -3,10 +3,14 @@
 import React from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
+import { useAuthProfile } from '@/components/auth/AuthProfileContext';
+import { useBecomeSeller } from '@/hooks/useBecomeSeller';
 import { ArrowRight, Sparkles, Shield, Globe, Rocket, Users, TrendingUp } from 'lucide-react';
 
 export const CTASection: React.FC = () => {
-  const { goToCategories, goToDashboard } = useAppNavigation();
+  const { goToCategories } = useAppNavigation();
+  const authProfile = useAuthProfile();
+  const goBecomeSeller = useBecomeSeller(authProfile);
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -48,7 +52,7 @@ export const CTASection: React.FC = () => {
                 <ArrowRight className="w-5 h-5" />
               </button>
               <button
-                onClick={goToDashboard}
+                onClick={goBecomeSeller}
                 className="flex items-center justify-center gap-2 px-8 py-4 glass border border-border-subtle text-text-primary font-bold rounded-2xl hover:bg-background-soft hover:-translate-y-1 transition-all cursor-pointer"
               >
                 <Rocket className="w-5 h-5" />

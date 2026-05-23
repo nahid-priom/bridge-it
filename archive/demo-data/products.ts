@@ -1,7 +1,7 @@
 import type { Product, ProductCategoryKey } from '@/types/product';
-import { getCategoryByKey } from '@/data/productCategories';
-import { pickProductImage } from '@/data/productCategoryImages';
-import { enrichProductDetailFields } from '@/data/productDetailContent';
+import { getCategoryByKey } from './productCategories';
+import { pickProductImage } from './productCategoryImages';
+import { enrichProductDetailFields } from './productDetailContent';
 
 const SELLERS = [
   { name: 'AnimateX Studio', slug: 'animatex-studio', level: 'Top Rated' },

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Heart, Mail, Phone, MapPin, ArrowUpRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import { categories } from '@/data/categories';
+import type { Category } from '@/types';
 import { productsUrl } from '@/lib/routes';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
@@ -37,7 +37,7 @@ function FooterDevelopmentPartner() {
   );
 }
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC<{ categories: Category[] }> = ({ categories }) => {
   const { navigate, goToDashboard, goToMessages, goHome, goToSearch, goToCategories, goToAbout, goToProducts } = useAppNavigation();
 
   return (

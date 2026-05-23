@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { buildPageMetadata } from '@/lib/metadata';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
-import { products } from '@/data/products';
+import { fetchProductBySlug } from '@/lib/catalog/products';
+import { getCategoryByKeyFromDb } from '@/lib/catalog/products';
 import type { ProductsPageState } from './url';
-import { getCategoryBySlug, shouldIndexProductsPage } from './url';
+import { shouldIndexProductsPage } from './url';
 
-export function buildProductsPageMetadata(state: ProductsPageState): Metadata {
-  const category = getCategoryBySlug(state.categoryKey);
+export async function buildProductsPageMetadata(state: ProductsPageState): Promise<Metadata> {
+  const category = state.categoryKey ? await getCategoryByKeyFromDb(state.categoryKey) : null;
   const indexable = shouldIndexProductsPage(state);
 
   if (category && category.key !== 'all') {
@@ -37,8 +38,8 @@ export function buildProductsPageMetadata(state: ProductsPageState): Metadata {
   };
 }
 
-export function buildProductDetailMetadata(slug: string): Metadata {
-  const product = products.find((p) => p.slug === slug);
+export async function buildProductDetailMetadata(slug: string): Promise<Metadata> {
+  const product = await fetchProductBySlug(slug);
   if (!product) {
     return buildPageMetadata({
       title: 'Product Not Found',

@@ -56,7 +56,7 @@ export const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-8 md:py-16 relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-cyan/20 to-transparent"></div>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-bridge-primary/5 rounded-full blur-[200px]"></div>
 

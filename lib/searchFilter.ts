@@ -3,9 +3,9 @@ import {
   SearchFilters,
   SearchListingItem,
   Service,
+  Category,
   DEFAULT_SEARCH_FILTERS,
 } from '@/types';
-import { categories } from '@/data/categories';
 
 export { DEFAULT_SEARCH_FILTERS };
 
@@ -18,7 +18,7 @@ function getListingResultType(service: Service): string {
   return 'service';
 }
 
-function matchesQuery(item: SearchCatalogItem, query: string): boolean {
+function matchesQuery(item: SearchCatalogItem, query: string, categories: Category[]): boolean {
   const q = query.trim().toLowerCase();
   if (!q) return true;
 
@@ -113,9 +113,12 @@ function applyFilters(item: SearchCatalogItem, filters: SearchFilters): boolean 
 export function filterSearchCatalog(
   catalog: SearchCatalogItem[],
   query: string,
-  filters: SearchFilters
+  filters: SearchFilters,
+  categories: Category[] = []
 ): SearchCatalogItem[] {
-  return catalog.filter((item) => matchesQuery(item, query) && applyFilters(item, filters));
+  return catalog.filter(
+    (item) => matchesQuery(item, query, categories) && applyFilters(item, filters)
+  );
 }
 
 export function getRecommendedResults(catalog: SearchCatalogItem[]): SearchCatalogItem[] {

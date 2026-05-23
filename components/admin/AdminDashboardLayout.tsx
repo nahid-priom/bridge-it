@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 import { AdminSearchModal } from './AdminSearchModal';
-import { adminNavItems, adminNotifications, type AdminSection } from '@/data/adminData';
+import { adminNavItems } from '@/lib/admin/config';
+import type { AdminSection } from '@/types/admin';
+import { useAdminData } from '@/components/admin/AdminDataContext';
 import { useStore } from '@/store/useStore';
 
 interface AdminDashboardLayoutProps {
@@ -18,6 +20,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
   onSectionChange,
   children,
 }) => {
+  const { notifications: adminNotifications } = useAdminData();
   const { setNotification } = useStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

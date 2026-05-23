@@ -4,23 +4,24 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Package, Sparkles } from 'lucide-react';
-import { categories } from '@/data/categories';
 import { productsUrl } from '@/lib/routes';
-import type { CategoryType } from '@/types';
+import type { ProductCategory, ProductCategoryKey } from '@/types/product';
 
 interface ProductsEmptyStateProps {
   query?: string;
+  categories: ProductCategory[];
   onClearFilters: () => void;
-  suggestedCategories?: CategoryType[];
+  suggestedCategories?: ProductCategoryKey[];
 }
 
 export const ProductsEmptyState: React.FC<ProductsEmptyStateProps> = ({
   query,
+  categories,
   onClearFilters,
   suggestedCategories = ['web-development', 'digital-marketing', 'ui-ux-design'],
 }) => {
   const suggested = suggestedCategories
-    .map((id) => categories.find((c) => c.id === id))
+    .map((key) => categories.find((c) => c.key === key))
     .filter(Boolean);
 
   return (
@@ -53,12 +54,12 @@ export const ProductsEmptyState: React.FC<ProductsEmptyStateProps> = ({
           <div className="flex flex-wrap justify-center gap-2">
             {suggested.map((cat) => (
               <Link
-                key={cat!.id}
-                href={productsUrl(cat!.id)}
+                key={cat!.key}
+                href={productsUrl(cat!.key)}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-bridge-primary/10 border border-bridge-primary/25 text-bridge-primary-light hover:bg-bridge-primary/20 transition-colors"
               >
                 <Sparkles className="w-3 h-3" />
-                {cat!.name}
+                {cat!.label}
               </Link>
             ))}
           </div>

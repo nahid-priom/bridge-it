@@ -4,8 +4,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Fixed navbar clearance (pt-3 + h-14) */
-  --header-offset: 4.75rem;
+  /* Floating navbar: pt-4 (16px) + h-72 (72px) ≈ 96px */
+  --header-offset: 6rem;
   /* Small gap between navbar and breadcrumb (pt-2) */
   --breadcrumb-gap: 0.5rem;
   /* Minimal breadcrumb row height */
@@ -35,6 +35,8 @@
   --toploader-height: 5px;
   --focus-ring: #6c3ce1;
   --focus-ring-offset: #f8fafc;
+  --icon-accent: #6c3ce1;
+  --badge-accent: #5b21b6;
 }
 
 .dark {
@@ -43,8 +45,8 @@
   --surface: #1A1832;
   --surface-elevated: #232042;
   --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
+  --text-secondary: #f0f0f0;
+  --text-muted: #dddddd;
   --border-subtle: rgba(255, 255, 255, 0.10);
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.12);
@@ -61,6 +63,9 @@
   --toploader-shadow: 0 0 12px rgba(151, 121, 223, 0.5);
   --focus-ring: #c4b5fd;
   --focus-ring-offset: #0f0e17;
+  /* 30% lighter than bridge-primary / violet-500 for badges & accent icons */
+  --icon-accent: color-mix(in srgb, #6c3ce1 70%, #ffffff 30%);
+  --badge-accent: color-mix(in srgb, #8b5cf6 70%, #ffffff 30%);
 }
 
 @theme {
@@ -85,6 +90,8 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
+  --color-icon-accent: var(--icon-accent);
+  --color-badge-accent: var(--badge-accent);
   --color-border-subtle: var(--border-subtle);
   --font-sans: var(--font-inter), var(--font-noto-bengali), sans-serif;
   --font-display: var(--font-poppins), var(--font-noto-bengali), sans-serif;
@@ -119,10 +126,10 @@ body {
   overflow-x: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   :root {
-    /* pt-4 + h-[4.25rem] */
-    --header-offset: 5.25rem;
+    /* pt-4 + h-[76px] ≈ 112px */
+    --header-offset: 7rem;
     --breadcrumb-gap: 0.75rem;
   }
 }
@@ -499,6 +506,84 @@ html[data-admin-route] body {
   );
 }
 
+/* White spotlight behind centered copy; sides stay clear for background image */
+.hero-overlay-centered {
+  background:
+    radial-gradient(
+      ellipse 58% 72% at 50% 38%,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.98) 28%,
+      rgba(255, 255, 255, 0.54) 48%,
+      rgba(255, 255, 255, 0.14) 62%,
+      transparent 74%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.04) 50%,
+      transparent 100%
+    );
+}
+
+.dark .hero-overlay-centered {
+  background:
+    radial-gradient(
+      ellipse 58% 72% at 50% 38%,
+      rgba(15, 14, 23, 0.78) 0%,
+      rgba(15, 14, 23, 0.69) 30%,
+      rgba(15, 14, 23, 0.34) 50%,
+      rgba(15, 14, 23, 0.1) 65%,
+      transparent 78%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(15, 14, 23, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+/* Light hero: stronger white spotlight on mobile for text readability */
+@media (max-width: 767px) {
+  .hero-overlay-centered {
+    background:
+      radial-gradient(
+        ellipse 78% 82% at 50% 38%,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.99) 28%,
+        rgba(255, 255, 255, 0.9) 48%,
+        rgba(255, 255, 255, 0.55) 62%,
+        transparent 80%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(255, 255, 255, 0.4) 100%
+      );
+  }
+
+  .dark .hero-overlay-centered {
+    background:
+      radial-gradient(
+        ellipse 78% 82% at 50% 38%,
+        rgba(15, 14, 23, 0.94) 0%,
+        rgba(15, 14, 23, 0.86) 30%,
+        rgba(15, 14, 23, 0.52) 50%,
+        rgba(15, 14, 23, 0.2) 66%,
+        transparent 80%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(15, 14, 23, 0.35) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(15, 14, 23, 0.25) 100%
+      );
+  }
+}
+
 .hero-headline-gradient {
   display: inline-block;
   background-image: linear-gradient(135deg, #6c3ce1 0%, #3b82f6 45%, #06b6d4 100%);
@@ -520,15 +605,17 @@ html[data-admin-route] body {
 
 /* Navbar — theme-aware glass */
 .navbar-shell {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(15, 14, 23, 0.08);
-  box-shadow: 0 20px 60px rgba(15, 14, 23, 0.08);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border-color: var(--border-subtle);
+  box-shadow: 0 18px 50px rgba(15, 14, 23, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .dark .navbar-shell {
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  border-color: var(--border-subtle);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  background: color-mix(in srgb, var(--color-bridge-dark-2, #1a1832) 90%, transparent);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
 }
 
 @media (prefers-reduced-motion: reduce) {
