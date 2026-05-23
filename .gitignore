@@ -1,8 +1,52 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+
+# Production / cache
 dist/
-*.local
-.DS_Store
-Thumbs.db
-*.log
+.turbo/
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment
 .env
 .env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Cursor (local workspace)
+.cursor/
+
+# Testing / coverage
+coverage/
+.nyc_output/
+
+# Misc
+*.local
+.cache/
