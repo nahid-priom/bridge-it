@@ -11,8 +11,8 @@ export async function buildProductsPageMetadata(state: ProductsPageState): Promi
   const indexable = shouldIndexProductsPage(state);
 
   if (category && category.key !== 'all') {
-    const title = `${category.label} Services`;
-    const description = `Find trusted ${category.label} services and sellers on ${SITE_NAME}.`;
+    const title = `${category.label} Products`;
+    const description = `Shop ${category.label} with BD pricing on ${SITE_NAME}.`;
     const path = `/products?category=${category.key}`;
     return {
       ...buildPageMetadata({

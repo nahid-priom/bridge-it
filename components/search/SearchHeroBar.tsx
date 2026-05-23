@@ -28,7 +28,7 @@ export const SearchHeroBar: React.FC<SearchHeroBarProps> = ({
 
         <div className="relative">
           <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary mb-1">
-            Search <span className="gradient-text">Bridge</span>
+            Search <span className="gradient-text">Deshi Fiverr</span>
           </h1>
           <p className="text-sm text-text-muted mb-5 max-w-2xl">
             Find verified services, digital products, sellers, and virtual offices.

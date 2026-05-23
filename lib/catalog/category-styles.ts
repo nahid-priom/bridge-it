@@ -1,91 +1,70 @@
 import type { CategoryType } from '@/types';
+import { MAIN_CATEGORY_SLUGS } from '@/constants/mainMarketplaceCategories';
+import { MAIN_PRODUCT_CATEGORY_SLUGS } from '@/constants/mainProductCategories';
 
 /** Visual styling for category cards (not stored in DB). */
 export const CATEGORY_STYLES: Record<
   string,
   { color: string; gradient: string; nameBn?: string }
 > = {
-  '2d-animation': {
-    color: '#FF6B6B',
-    gradient: 'from-red-500 to-pink-500',
-    nameBn: '২ডি এনিমেশন',
-  },
-  '3d-animation': {
-    color: '#8B5CF6',
-    gradient: 'from-violet-500 to-purple-600',
-    nameBn: '৩ডি এনিমেশন',
-  },
-  'video-ads': {
-    color: '#06D6A0',
-    gradient: 'from-emerald-400 to-teal-500',
-    nameBn: 'ভিডিও বিজ্ঞাপন',
-  },
-  'video-advertising': {
-    color: '#06D6A0',
-    gradient: 'from-emerald-400 to-teal-500',
-    nameBn: 'ভিডিও বিজ্ঞাপন',
-  },
-  software: {
-    color: '#06B6D4',
-    gradient: 'from-cyan-400 to-blue-500',
-    nameBn: 'সফটওয়্যার কোম্পানি',
-  },
-  'software-company': {
-    color: '#06B6D4',
-    gradient: 'from-cyan-400 to-blue-500',
-    nameBn: 'সফটওয়্যার কোম্পানি',
-  },
-  'digital-products': {
-    color: '#F59E0B',
-    gradient: 'from-amber-400 to-orange-500',
-    nameBn: 'ডিজিটাল পণ্য',
-  },
-  courses: {
-    color: '#EC4899',
-    gradient: 'from-pink-500 to-rose-500',
-    nameBn: 'অনলাইন কোর্স',
-  },
-  'online-courses': {
-    color: '#EC4899',
-    gradient: 'from-pink-500 to-rose-500',
-    nameBn: 'অনলাইন কোর্স',
-  },
-  'boosting-agency': {
-    color: '#10B981',
-    gradient: 'from-green-400 to-emerald-500',
-    nameBn: 'বুস্টিং এজেন্সি',
-  },
-  editing: {
-    color: '#F97316',
-    gradient: 'from-orange-400 to-red-500',
-    nameBn: 'এডিটিং সার্ভিস',
-  },
-  'editing-services': {
-    color: '#F97316',
-    gradient: 'from-orange-400 to-red-500',
-    nameBn: 'এডিটিং সার্ভিস',
+  // Service marketplace
+  'software-development': {
+    color: '#6366F1',
+    gradient: 'from-indigo-500 to-violet-600',
+    nameBn: 'সফটওয়্যার ডেভেলপমেন্ট',
   },
   'web-development': {
     color: '#3B82F6',
     gradient: 'from-blue-500 to-indigo-600',
     nameBn: 'ওয়েব ডেভেলপমেন্ট',
   },
-  'mobile-apps': {
+  'app-development': {
     color: '#14B8A6',
     gradient: 'from-teal-400 to-cyan-500',
-    nameBn: 'মোবাইল অ্যাপ',
-  },
-  'ui-ux-design': {
-    color: '#A855F7',
-    gradient: 'from-purple-500 to-pink-500',
-    nameBn: 'ইউআই/ইউএক্স ডিজাইন',
+    nameBn: 'অ্যাপ ডেভেলপমেন্ট',
   },
   'digital-marketing': {
     color: '#EF4444',
     gradient: 'from-red-500 to-orange-500',
     nameBn: 'ডিজিটাল মার্কেটিং',
   },
+  'ai-automations': {
+    color: '#8B5CF6',
+    gradient: 'from-violet-500 to-purple-600',
+    nameBn: 'এআই ও অটোমেশন',
+  },
+  // Product marketplace
+  electronics: {
+    color: '#0EA5E9',
+    gradient: 'from-sky-400 to-blue-600',
+    nameBn: 'ইলেকট্রনিক্স',
+  },
+  gadgets: {
+    color: '#8B5CF6',
+    gradient: 'from-violet-500 to-purple-600',
+    nameBn: 'গ্যাজেট',
+  },
+  'office-solutions': {
+    color: '#64748B',
+    gradient: 'from-slate-500 to-slate-700',
+    nameBn: 'অফিস সলিউশন',
+  },
+  'smart-devices': {
+    color: '#10B981',
+    gradient: 'from-emerald-400 to-teal-500',
+    nameBn: 'স্মার্ট ডিভাইস',
+  },
+  'digital-products': {
+    color: '#F59E0B',
+    gradient: 'from-amber-400 to-orange-500',
+    nameBn: 'ডিজিটাল পণ্য',
+  },
 };
+
+const KNOWN_KEYS = new Set([
+  ...MAIN_CATEGORY_SLUGS,
+  ...MAIN_PRODUCT_CATEGORY_SLUGS,
+]);
 
 export function getCategoryStyle(key: string) {
   return (
@@ -98,5 +77,5 @@ export function getCategoryStyle(key: string) {
 }
 
 export function isHomeCategoryType(key: string): key is CategoryType {
-  return key in CATEGORY_STYLES || key.length > 0;
+  return KNOWN_KEYS.has(key) || key in CATEGORY_STYLES;
 }

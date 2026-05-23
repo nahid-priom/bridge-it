@@ -2,7 +2,9 @@
 
 import { useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ROUTES, searchUrl, productsUrl, pathFromPageKey, isNavActive } from '@/lib/routes';
+import { unlockBodyScroll } from '@/hooks/useBodyScrollLock';
+import { ROUTES, productsUrl, pathFromPageKey, isNavActive } from '@/lib/routes';
+import { buildSearchUrl } from '@/lib/search/searchHelpers';
 import { getServiceSlug } from '@/lib/slugs';
 import { useStore } from '@/store/useStore';
 import type { Service } from '@/types';
@@ -44,7 +46,7 @@ export function useAppNavigation() {
     useStore.getState().updateSearchFilter('resultType', 'seller');
     closeSearchModal();
     useStore.setState({ isMenuOpen: false });
-    router.push(searchUrl(useStore.getState().searchQuery));
+    router.push(buildSearchUrl({ q: useStore.getState().searchQuery }));
   }, [router, closeSearchModal]);
 
   const goToSearch = useCallback(
@@ -53,7 +55,8 @@ export function useAppNavigation() {
       const q = query !== undefined ? query : useStore.getState().searchQuery;
       closeSearchModal();
       useStore.setState({ isMenuOpen: false });
-      router.push(searchUrl(q));
+      unlockBodyScroll();
+      router.push(buildSearchUrl({ q, page: 1 }));
     },
     [router, setSearchQuery, closeSearchModal]
   );

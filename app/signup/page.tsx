@@ -5,7 +5,7 @@ import { buildPageMetadata } from '@/lib/metadata';
 
 export const metadata = buildPageMetadata({
   title: 'Create account',
-  description: 'Join Bridge Smart IT Park',
+  description: 'Join Deshi Fiverr',
   path: '/signup',
   noIndex: true,
 });
@@ -13,7 +13,7 @@ export const metadata = buildPageMetadata({
 export default function SignupPage() {
   return (
     <AuthCard
-      title="Join Bridge"
+      title="Join Deshi Fiverr"
       subtitle="Create a buyer account — become a seller anytime"
       footer={
         <>

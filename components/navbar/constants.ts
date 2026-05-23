@@ -1,13 +1,34 @@
-import { ROUTES, productsUrl } from '@/lib/routes';
-import { productCategories } from '@/archive/demo-data/productCategories';
+import { ROUTES, marketplaceCategorySearchUrl, marketplaceProductCategoryUrl } from '@/lib/routes';
+import {
+  MAIN_MARKETPLACE_CATEGORIES,
+  MAIN_CATEGORY_EMOJI as SERVICE_CATEGORY_EMOJI,
+} from '@/constants/mainMarketplaceCategories';
+import {
+  MAIN_PRODUCT_CATEGORIES,
+  MAIN_PRODUCT_CATEGORY_EMOJI,
+} from '@/constants/mainProductCategories';
+import { NAV_HOW_IT_WORKS_HREF } from '@/data/homeContent';
 
-export const NAV_CATEGORY_ITEMS = productCategories.filter((c) => c.key !== 'all');
+/** Service marketplace — freelancers & digital services → /search */
+export const NAV_SERVICE_ITEMS = MAIN_MARKETPLACE_CATEGORIES.map((cat) => ({
+  slug: cat.slug,
+  label: cat.name,
+  short: cat.short,
+  icon: SERVICE_CATEGORY_EMOJI[cat.slug] ?? '💻',
+}));
+
+/** Product marketplace — ecommerce goods → /products */
+export const NAV_PRODUCT_ITEMS = MAIN_PRODUCT_CATEGORIES.map((cat) => ({
+  slug: cat.slug,
+  label: cat.name,
+  short: cat.short,
+  icon: MAIN_PRODUCT_CATEGORY_EMOJI[cat.slug] ?? '📦',
+  productCount: cat.productCount,
+}));
 
 export const MAIN_NAV_LINKS = [
-  { label: 'Home', href: ROUTES.home },
-  { label: 'Products', href: ROUTES.products },
-  { label: 'Services', href: ROUTES.search },
-  { label: 'About', href: ROUTES.about },
+  { label: 'Explore', href: marketplaceCategorySearchUrl('web-development') },
+  { label: 'How It Works', href: NAV_HOW_IT_WORKS_HREF },
 ] as const;
 
 export const DRAWER_ACCOUNT_LINKS = [
@@ -19,10 +40,13 @@ export const DRAWER_ACCOUNT_LINKS = [
   { label: 'Wishlist', href: ROUTES.products, auth: 'logged-in' as const },
 ] as const;
 
-export function categoryProductsHref(key: string): string {
-  return productsUrl(key);
+export function serviceCategoryHref(slug: string): string {
+  return marketplaceCategorySearchUrl(slug);
 }
 
-/** Shared floating navbar shell */
+export function productCategoryHref(slug: string): string {
+  return marketplaceProductCategoryUrl(slug);
+}
+
 export const NAVBAR_SHELL_CLASS =
-  'bg-white/90 dark:bg-bridge-dark-2/90 backdrop-blur-2xl border border-slate-200/70 dark:border-white/10 shadow-[0_24px_70px_rgba(108,60,225,0.16)]';
+  'bg-white/90 dark:bg-deshi-navy/95 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_4px_24px_rgba(15,14,23,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]';

@@ -1,12 +1,14 @@
 'use client';
 
-import { Briefcase, Headphones, Users } from 'lucide-react';
+import { Briefcase, Headphones, Shield, Star, Users } from 'lucide-react';
 import type { HeroTrustMetric } from '@/data/heroContent';
 
 const ICONS = {
   users: Users,
   briefcase: Briefcase,
   headphones: Headphones,
+  shield: Shield,
+  star: Star,
 } as const;
 
 export function HeroMetric({ metric }: { metric: HeroTrustMetric }) {

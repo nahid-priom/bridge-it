@@ -34,23 +34,23 @@ export function DesktopNavLink({
       aria-controls={ariaControls}
       className={cn(
         'relative flex items-center gap-0.5 px-2.5 py-2 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-colors rounded-lg shrink-0',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-bridge-primary/40',
+        'focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40',
         active
-          ? 'text-bridge-primary'
-          : 'text-slate-600 hover:text-bridge-primary dark:text-white/80 dark:hover:text-white',
+          ? 'text-deshi-green font-semibold'
+          : 'text-slate-600 hover:text-deshi-green-dark dark:text-white/80 dark:hover:text-white',
         className
       )}
     >
       {label}
       {hasChevron && (
         <ChevronDown
-          className={cn('w-3.5 h-3.5 shrink-0 opacity-70', active && 'text-bridge-primary')}
+          className={cn('w-3.5 h-3.5 shrink-0 opacity-70', active && 'text-deshi-green')}
           aria-hidden
         />
       )}
       {active && (
         <span
-          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-bridge-primary"
+          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-deshi-green"
           aria-hidden
         />
       )}

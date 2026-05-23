@@ -50,7 +50,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
       <div className="lg:pl-64 xl:pl-72 flex flex-col min-h-screen min-w-0">
         <AdminTopbar
           title={navItem?.label ?? 'Admin'}
-          subtitle="Bridge Smart Virtual IT Park — Platform Control"
+          subtitle="Deshi Fiverr Admin — Platform Control"
           onMenuClick={() => setMobileOpen(true)}
           onSearchOpen={() => setSearchOpen(true)}
           onQuickAction={() => setNotification('Quick action panel — demo mode')}

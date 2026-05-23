@@ -8,6 +8,7 @@ import type {
   VerificationRequest,
 } from '@/types/admin';
 import { getCategoryStyle } from '@/lib/catalog/category-styles';
+import { fetchMarketplaceAnalytics } from '@/lib/db/marketplace-unified';
 
 export async function fetchAdminStats(): Promise<AdminStats> {
   const supabase = createAdminSupabaseClient();
@@ -18,35 +19,56 @@ export async function fetchAdminStats(): Promise<AdminStats> {
       totalOrders: 0,
       totalRevenue: 0,
       pendingVerification: 0,
+      pendingSellerApplications: 0,
       activeDisputes: 0,
       platformCommission: 0,
       escrowBalance: 0,
     };
   }
 
-  const [sellers, products, orders, profiles] = await Promise.all([
-    supabase.from('sellers').select('id', { count: 'exact', head: true }),
-    supabase.from('products').select('price', { count: 'exact' }).eq('status', 'active'),
-    supabase.from('orders').select('total_amount', { count: 'exact' }),
-    supabase.from('profiles').select('id', { count: 'exact', head: true }),
+  const analyticsRes = await fetchMarketplaceAnalytics();
+  const analytics = analyticsRes.data;
+
+  const [sellers, products, orders, profiles, disputes] = await Promise.all([
+    supabase
+      .from('marketplace_sellers')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'active'),
+    supabase.from('marketplace_products').select('price', { count: 'exact' }),
+    supabase.from('marketplace_orders').select('total_amount', { count: 'exact' }),
+    supabase
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
+      .eq('role', 'buyer'),
+    supabase
+      .from('marketplace_orders')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'disputed'),
   ]);
 
-  const revenue = (orders.data ?? []).reduce((s, o) => s + Number(o.total_amount), 0);
+  const revenue = analytics.revenue || (orders.data ?? []).reduce((s, o) => s + Number(o.total_amount), 0);
+
+  const { count: pendingSellerApplications } = await supabase
+    .from('seller_applications')
+    .select('id', { count: 'exact', head: true })
+    .in('status', ['pending', 'needs_review']);
+
   const pendingVerification =
     (
       await supabase
-        .from('sellers')
+        .from('marketplace_sellers')
         .select('id', { count: 'exact', head: true })
-        .eq('verified', false)
+        .eq('is_verified', false)
     ).count ?? 0;
 
   return {
-    totalSellers: sellers.count ?? 0,
-    totalCustomers: profiles.count ?? 0,
-    totalOrders: orders.count ?? 0,
+    totalSellers: sellers.count ?? analytics.activeSellers,
+    totalCustomers: profiles.count ?? analytics.activeBuyers,
+    totalOrders: orders.count ?? analytics.orderCount,
     totalRevenue: revenue,
     pendingVerification,
-    activeDisputes: 0,
+    pendingSellerApplications: pendingSellerApplications ?? 0,
+    activeDisputes: disputes.count ?? 0,
     platformCommission: Math.round(revenue * 0.15),
     escrowBalance: Math.round(revenue * 0.2),
   };
@@ -57,27 +79,32 @@ export async function fetchAdminSellers(): Promise<AdminSeller[]> {
   if (!supabase) return [];
 
   const { data } = await supabase
-    .from('sellers')
-    .select('id, name, tagline, category_key, status, rating, review_count, verified')
+    .from('marketplace_sellers')
+    .select(
+      'id, full_name, title, primary_category_slug, status, rating, total_reviews, is_verified, is_featured, total_orders'
+    )
     .order('rating', { ascending: false })
     .limit(100);
 
-  const productCounts = await supabase.from('products').select('seller_id');
+  const productCounts = await supabase
+    .from('marketplace_products')
+    .select('seller_id');
   const countBySeller: Record<string, number> = {};
   for (const row of productCounts.data ?? []) {
+    if (!row.seller_id) continue;
     countBySeller[row.seller_id] = (countBySeller[row.seller_id] ?? 0) + 1;
   }
 
   return (data ?? []).map((s) => ({
     id: s.id,
-    name: s.name,
-    company: s.tagline ?? s.name,
-    category: s.category_key ?? 'General',
+    name: s.full_name,
+    company: s.title ?? s.full_name,
+    category: s.primary_category_slug ?? 'General',
     status: (s.status === 'active' ? 'active' : 'suspended') as AdminSeller['status'],
-    totalOrders: countBySeller[s.id] ?? s.review_count,
+    totalOrders: s.total_orders ?? countBySeller[s.id] ?? 0,
     revenue: (countBySeller[s.id] ?? 0) * 15000,
     rating: Number(s.rating),
-    featured: s.verified,
+    featured: Boolean(s.is_featured || s.is_verified),
   }));
 }
 
@@ -115,22 +142,29 @@ export async function fetchAdminOrders(): Promise<AdminOrder[]> {
   if (!supabase) return [];
 
   const { data } = await supabase
-    .from('orders')
-    .select('id, status, total_amount, buyer_id, seller_id, product_id, created_at')
+    .from('marketplace_orders')
+    .select('id, order_number, status, payment_status, total_amount, buyer_id, seller_id, created_at, metadata')
     .order('created_at', { ascending: false })
     .limit(50);
 
-  return (data ?? []).map((o) => ({
-    id: o.id.slice(0, 8).toUpperCase(),
-    customer: o.buyer_id.slice(0, 8),
-    seller: o.seller_id.slice(0, 8),
-    service: o.product_id?.slice(0, 8) ?? 'Product',
-    amount: Number(o.total_amount),
-    paymentStatus: 'completed' as const,
-    escrowStatus: o.status === 'completed' ? 'released' : 'held',
-    deliveryStatus: o.status as AdminOrder['deliveryStatus'],
-    disputeStatus: 'pending' as const,
-  }));
+  return (data ?? []).map((o) => {
+    const meta = o.metadata as { title?: string } | null;
+    return {
+      id: o.order_number ?? o.id.slice(0, 8).toUpperCase(),
+      customer: o.buyer_id.slice(0, 8),
+      seller: o.seller_id?.slice(0, 8) ?? '—',
+      service: meta?.title ?? 'Marketplace order',
+      amount: Number(o.total_amount),
+      paymentStatus: (o.payment_status === 'paid' ? 'completed' : 'pending') as AdminOrder['paymentStatus'],
+      escrowStatus: o.status === 'completed' ? 'released' : 'held',
+      deliveryStatus: (o.status === 'delivered' || o.status === 'completed'
+        ? 'delivered'
+        : o.status === 'in_progress'
+          ? 'in-progress'
+          : 'pending') as AdminOrder['deliveryStatus'],
+      disputeStatus: (o.status === 'disputed' ? 'open' : 'none') as AdminOrder['disputeStatus'],
+    };
+  });
 }
 
 export async function fetchFeaturedItems(): Promise<FeaturedItem[]> {
@@ -160,16 +194,16 @@ export async function fetchVerificationQueue(): Promise<VerificationRequest[]> {
   if (!supabase) return [];
 
   const { data } = await supabase
-    .from('sellers')
-    .select('id, name, tagline, category_key, verified, status, created_at')
-    .eq('verified', false)
+    .from('marketplace_sellers')
+    .select('id, full_name, title, primary_category_slug, is_verified, status, created_at')
+    .eq('is_verified', false)
     .limit(20);
 
   return (data ?? []).map((s) => ({
     id: s.id,
-    sellerName: s.name,
-    company: s.tagline ?? s.name,
-    category: s.category_key ?? 'General',
+    sellerName: s.full_name,
+    company: s.title ?? s.full_name,
+    category: s.primary_category_slug ?? 'General',
     documentsStatus: 'partial' as const,
     profileCompletion: 70,
     riskLevel: 'medium' as const,

@@ -10,7 +10,7 @@ import { AuthField, authInputClass } from '@/components/auth/AuthField';
 
 const PRINCIPLES = [
   'Submit authentic documents and a real portfolio.',
-  'Ads must follow Bridge IT Park quality and trust policy.',
+  'Ads must follow Deshi Fiverr quality and trust policy.',
   'No misleading claims, copied work, or spam promotions.',
   'Promoted listings require admin approval before going live.',
 ];
@@ -118,7 +118,7 @@ export function SellerOnboardingForm({ defaultFullName }: { defaultFullName?: st
       <label className="flex items-start gap-3 cursor-pointer">
         <input type="checkbox" className="mt-1" {...register('adInterest')} />
         <span className="text-sm text-text-secondary">
-          I want to run promoted services on Bridge (subject to admin approval).
+          I want to run promoted services on Deshi Fiverr (subject to admin approval).
         </span>
       </label>
 

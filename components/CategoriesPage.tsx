@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import type { Category } from '@/types';
-import { productsUrl } from '@/lib/routes';
+import { marketplaceProductCategoryUrl } from '@/lib/routes';
 import { ArrowRight } from 'lucide-react';
 
 type CategoriesPageProps = { categories: Category[] };
@@ -26,7 +26,7 @@ export const CategoriesPage: React.FC<CategoriesPageProps> = ({ categories }) =>
           {categories.map((category) => (
             <Link
               key={category.id}
-              href={productsUrl(category.id)}
+              href={marketplaceProductCategoryUrl(category.id)}
               className="group relative overflow-hidden rounded-2xl p-8 glass border border-border-subtle hover:border-border-subtle card-hover text-left cursor-pointer block"
             >
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${category.gradient} opacity-0 group-hover:opacity-100 transition-opacity`}></div>

@@ -34,7 +34,7 @@ export const MessagesPage: React.FC<MessagesPageProps> = ({ contacts }) => {
     { id: 4, sender: 'user', text: 'Sure! It should be around 60 seconds, modern flat style. Let me share a reference...', time: '10:05 AM' },
     { id: 5, sender: 'seller', text: 'Perfect! Based on your requirements, I\'d recommend our Standard package. It includes character design, storyboard, animation, and 2 rounds of revisions. Would you like to proceed?', time: '10:08 AM' },
     { id: 6, sender: 'user', text: 'That sounds great! What\'s the timeline and cost?', time: '10:10 AM' },
-    { id: 7, sender: 'seller', text: 'For a 60-second animation, it would be ৳15,000 with delivery in 7 business days. I can start right after you place the order through Bridge. Your payment is protected until you approve the final delivery. 🎨', time: '10:12 AM' },
+    { id: 7, sender: 'seller', text: 'For a 60-second animation, it would be ৳15,000 with delivery in 7 business days. I can start right after you place the order through Deshi Fiverr. Your payment is protected until you approve the final delivery. 🎨', time: '10:12 AM' },
   ];
 
   const handleSend = () => {

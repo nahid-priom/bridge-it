@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { sellerCustomUrl } from '@/lib/config/branding';
 import { listOrdersForSeller, getSellerOrderStats } from '@/lib/db/orders';
 import { listPublicSellers } from '@/lib/db/sellers';
 import { getSellerReviewStats } from '@/lib/db/reviews';
@@ -83,7 +84,7 @@ export async function getDashboardPageData(): Promise<DashboardPageData | null> 
 
   return {
     sellerSlug: seller.slug,
-    customUrl: `bridge.app/s/${seller.slug}`,
+    customUrl: sellerCustomUrl(seller.slug),
     stats,
     recentOrders,
   };

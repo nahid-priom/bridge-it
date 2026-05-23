@@ -40,9 +40,11 @@ export const TopSellers: React.FC<TopSellersProps> = ({ sellers, categories }) =
               <Award className="w-3 h-3" /> Verified & Trusted
             </span>
             <h2 className="text-2xl md:text-4xl font-black font-display text-text-primary">
-              Top <span className="gradient-text">Sellers</span>
+              Top <span className="gradient-text">Verified Freelancers</span>
             </h2>
-            <p className="text-text-muted text-sm mt-1">Each has a unique custom URL — share anywhere to bring customers directly</p>
+            <p className="text-text-muted text-sm mt-1">
+              Trusted Bangladeshi sellers with proven ratings, fast response times, and portfolio-ready work.
+            </p>
           </div>
           <button
             onClick={() => {

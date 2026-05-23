@@ -1,14 +1,12 @@
 import type { SearchSortOption } from '@/lib/searchFilter';
 
+/** Product marketplace category slugs (physical/digital goods) */
 export type ProductCategoryKey =
-  | '2d-animation'
-  | '3d-animation'
-  | 'video-advertising'
-  | 'software-company'
-  | 'digital-products'
-  | 'online-courses'
-  | 'boosting-agency'
-  | 'editing-services';
+  | 'electronics'
+  | 'gadgets'
+  | 'office-solutions'
+  | 'smart-devices'
+  | 'digital-products';
 
 export interface ProductCategory {
   label: string;

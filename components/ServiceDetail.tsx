@@ -35,7 +35,7 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({
     goToMessages();
   };
 
-  const shareUrl = `bridge.app/services/${slug}`;
+  const shareUrl = `deshifiverr.com/services/${slug}`;
   const sellerSlug = service.sellerSlug;
 
   return (

@@ -69,7 +69,7 @@ export interface Database {
             foreignKeyName: 'profiles_seller_id_fkey';
             columns: ['seller_id'];
             isOneToOne: false;
-            referencedRelation: 'sellers';
+            referencedRelation: 'marketplace_sellers';
             referencedColumns: ['id'];
           },
         ];
@@ -714,6 +714,170 @@ export interface Database {
           payload?: Json;
           created_at?: string;
         };
+        Relationships: [];
+      };
+      marketplace_sellers: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          legacy_seller_id: string | null;
+          slug: string;
+          full_name: string;
+          username: string | null;
+          title: string;
+          short_bio: string | null;
+          about: string | null;
+          avatar_url: string | null;
+          banner_url: string | null;
+          status: string;
+          is_public: boolean;
+          is_verified: boolean;
+          is_featured: boolean;
+          rating: number;
+          total_reviews: number;
+          total_orders: number;
+          primary_category_slug: string | null;
+          response_time: string | null;
+          member_since: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_orders: {
+        Row: {
+          id: string;
+          order_number: string;
+          buyer_id: string;
+          seller_id: string | null;
+          status: string;
+          payment_status: string;
+          subtotal: number;
+          platform_fee: number;
+          total_amount: number;
+          currency: string;
+          delivery_date: string | null;
+          metadata: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_milestones: {
+        Row: {
+          id: string;
+          order_id: string;
+          title: string;
+          amount: number;
+          currency: string;
+          progress: number;
+          status: string;
+          due_date: string | null;
+          sort_order: number;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_wallets: {
+        Row: {
+          id: string;
+          owner_id: string;
+          owner_type: string;
+          seller_id: string | null;
+          balance: number;
+          pending_balance: number;
+          currency: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_transactions: {
+        Row: {
+          id: string;
+          wallet_id: string;
+          order_id: string | null;
+          transaction_type: string;
+          label: string;
+          amount: number;
+          currency: string;
+          status: string;
+          created_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          body: string | null;
+          notification_type: string;
+          read_at: string | null;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_invoices: {
+        Row: {
+          id: string;
+          invoice_number: string;
+          buyer_id: string;
+          seller_id: string | null;
+          order_id: string | null;
+          amount: number;
+          currency: string;
+          status: string;
+          issued_at: string;
+          due_at: string | null;
+          created_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_conversations: {
+        Row: {
+          id: string;
+          buyer_id: string;
+          seller_id: string;
+          order_id: string | null;
+          subject: string | null;
+          last_message_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_products: {
+        Row: {
+          id: string;
+          slug: string;
+          seller_id: string | null;
+          name: string;
+          price: number;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      marketplace_services: {
+        Row: {
+          id: string;
+          category_slug: string | null;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
         Relationships: [];
       };
     };

@@ -36,7 +36,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               </div>
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white font-display">Bridge Admin</h2>
+              <h2 className="text-sm font-bold text-white font-display">Deshi Fiverr Admin</h2>
               <p className="text-[10px] text-bridge-gray">Control Center</p>
             </div>
           </div>
@@ -83,7 +83,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm text-bridge-gray hover:text-white glass border border-white/10 hover:border-bridge-primary/30 transition-all cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Bridge
+          Back to Deshi Fiverr
         </button>
       </div>
     </div>

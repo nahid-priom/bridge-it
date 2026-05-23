@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, LayoutDashboard, ShoppingCart } from 'lucide-react';
+import { Bell, Heart, MessageCircle, ShoppingCart } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { NavIconButton } from '@/components/navbar/NavIconButton';
 import type { AuthProfile } from '@/lib/auth/types';
@@ -26,24 +26,25 @@ export function NavActionButtons({
   cartOnly = false,
   className,
 }: NavActionButtonsProps) {
-  const dashboardHref = authProfile
-    ? authProfile.role === 'admin'
-      ? ROUTES.admin
-      : authProfile.role === 'seller'
-        ? ROUTES.sellerDashboard
-        : ROUTES.dashboard
-    : `${ROUTES.login}?next=${encodeURIComponent(ROUTES.dashboard)}`;
+  void authProfile;
 
   return (
     <div className={cn('flex items-center gap-0.5 shrink-0', className)}>
       {!cartOnly && (
         <>
           <NavIconButton
-            href={dashboardHref}
-            label={authProfile ? 'Dashboard' : 'Log in to dashboard'}
+            href={ROUTES.products}
+            label="Wishlist"
             size={iconSize}
           >
-            <LayoutDashboard className="w-5 h-5" aria-hidden />
+            <Heart className="w-5 h-5" aria-hidden />
+          </NavIconButton>
+          <NavIconButton
+            href={ROUTES.messages}
+            label="Messages"
+            size={iconSize}
+          >
+            <MessageCircle className="w-5 h-5" aria-hidden />
           </NavIconButton>
           <NavIconButton
             label={

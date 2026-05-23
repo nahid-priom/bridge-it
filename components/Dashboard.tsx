@@ -45,7 +45,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   }));
 
   const recentOrders = data?.recentOrders?.length ? data.recentOrders : FALLBACK_ORDERS;
-  const customUrl = data?.customUrl ?? 'bridge.app/s/your-shop';
+  const customUrl = data?.customUrl ?? 'deshifiverr.com/s/your-shop';
 
   const getStatusColor = (status: string) => {
     switch (status) {

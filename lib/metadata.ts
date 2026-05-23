@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BRANDING } from '@/lib/config/branding';
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/site';
 
 type PageMetaInput = {
@@ -60,8 +61,8 @@ export const rootMetadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
-  authors: [{ name: 'Bridge Smart IT Park' }],
-  creator: 'Bridge Smart IT Park',
+  authors: [{ name: BRANDING.appName }],
+  creator: BRANDING.appName,
   robots: { index: true, follow: true },
   openGraph: {
     type: 'website',

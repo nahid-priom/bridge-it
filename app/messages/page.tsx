@@ -5,7 +5,7 @@ import { fetchTopSellers } from '@/lib/catalog/sellers';
 
 export const metadata = buildPageMetadata({
   title: 'Messages',
-  description: 'Bridge marketplace messages.',
+  description: 'Deshi Fiverr marketplace messages.',
   path: '/messages',
   noIndex: true,
 });

@@ -43,6 +43,7 @@ export interface AdminStats {
   totalOrders: number;
   totalRevenue: number;
   pendingVerification: number;
+  pendingSellerApplications: number;
   activeDisputes: number;
   platformCommission: number;
   escrowBalance: number;

@@ -4,6 +4,7 @@ import {
   normalizeProductCategoryKey,
   toHomeCategoryId,
 } from '@/lib/catalog/category-keys';
+import { sellerCustomUrl } from '@/lib/config/branding';
 import { getCategoryStyle } from '@/lib/catalog/category-styles';
 import type {
   DbCategory,
@@ -227,7 +228,7 @@ export function mapDbSellerToSeller(row: DbSeller): import('@/types').Seller {
     responseTime: row.response_time ?? '< 2 hours',
     services: [],
     gallery: [],
-    customUrl: `bridge.app/s/${row.slug}`,
+    customUrl: sellerCustomUrl(row.slug),
   };
 }
 

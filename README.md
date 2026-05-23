@@ -1,4 +1,4 @@
-﻿# Bridge - Smart Virtual IT Park
+# Deshi Fiverr — Bangladesh Marketplace
 
 A Next.js marketplace demo for buying and selling digital services (animations, software, courses, and more). Built with Next.js 15, React 19, Tailwind CSS 4, and Zustand.
 

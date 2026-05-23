@@ -31,7 +31,7 @@ export interface PromotedServiceAd {
 export interface HeroTrustMetric {
   id: string;
   label: string;
-  icon: 'users' | 'briefcase' | 'headphones';
+  icon: 'users' | 'briefcase' | 'headphones' | 'shield' | 'star';
   iconBg: string;
   iconColor: string;
 }
@@ -55,9 +55,9 @@ export const heroSlides: HeroSlide[] = [
     id: 'slide-2',
     image:
       'https://images.pexels.com/photos/8728284/pexels-photo-8728284.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600',
-    badge: 'Smart Virtual IT Park',
+    badge: 'Bangladesh Marketplace',
     title: 'Grow Your Business',
-    highlight: 'With Bridge',
+    highlight: 'With Deshi Fiverr',
     subtitle:
       'Get your own custom URL, piracy-protected gallery & direct customer access from any platform.',
     primaryCta: 'Become a Seller',

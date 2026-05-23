@@ -1,8 +1,4 @@
-import {
-  normalizeProductCategoryKey,
-  isProductCategoryKey,
-  PRODUCT_CATEGORY_ALIASES,
-} from '@/lib/catalog/category-keys';
+import { isMainProductCategorySlug } from '@/constants/mainProductCategories';
 import { DEFAULT_PRODUCT_LISTING_FILTERS } from '@/types/product';
 import type {
   ProductCategoryKey,
@@ -46,8 +42,7 @@ function first(value: string | string[] | undefined): string | undefined {
 function parseCategoryKey(raw: string | undefined): ProductCategoryKey | null {
   if (!raw?.trim() || raw.trim().toLowerCase() === 'all') return null;
   const slug = raw.trim().toLowerCase();
-  const normalized = PRODUCT_CATEGORY_ALIASES[slug] ?? slug;
-  return isProductCategoryKey(normalized) ? normalized : null;
+  return isMainProductCategorySlug(slug) ? (slug as ProductCategoryKey) : null;
 }
 
 function parseSort(raw: string | undefined): SearchSortOption {
@@ -141,8 +136,7 @@ export function findCategoryInList(
   slug: string | null | undefined
 ) {
   if (!slug) return null;
-  const normalized = normalizeProductCategoryKey(slug);
-  if (!normalized) return null;
+  const normalized = slug.trim().toLowerCase();
   return categories.find((c) => c.key === normalized) ?? null;
 }
 

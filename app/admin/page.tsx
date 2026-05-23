@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
   title: 'Admin Control Center',
-  description: 'Bridge marketplace administration.',
+  description: 'Deshi Fiverr marketplace administration.',
   path: '/admin',
   noIndex: true,
 });

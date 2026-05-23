@@ -9,13 +9,32 @@ import { AdminStatusBadge } from '../../../components/admin/AdminStatusBadge';
 import { AdminActionMenu } from '../../../components/admin/AdminActionMenu';
 import { formatCurrency, type AdminSeller } from '@/types/admin';
 import { useAdminData } from '@/components/admin/AdminDataContext';
+import { updateMarketplaceSellerStatusAction } from '@/app/actions/admin-marketplace';
 
 export const AdminSellersSection: React.FC = () => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('revenue');
   const [filter, setFilter] = useState('all');
+  const [, setPending] = useState<string | null>(null);
   const { sellers: initialSellers } = useAdminData();
   const [sellers, setSellers] = useState(initialSellers);
+
+  const persistSeller = async (
+    sellerId: string,
+    patch: Partial<AdminSeller> & { status?: AdminSeller['status']; featured?: boolean }
+  ) => {
+    setPending(sellerId);
+    setSellers((prev) => prev.map((s) => (s.id === sellerId ? { ...s, ...patch } : s)));
+    const result = await updateMarketplaceSellerStatusAction({
+      sellerId,
+      status: patch.status === 'suspended' ? 'suspended' : 'active',
+      featured: patch.featured,
+    });
+    setPending(null);
+    if ('error' in result && result.error) {
+      setSellers(initialSellers);
+    }
+  };
 
   const filtered = useMemo(() => {
     let list = sellers.filter(
@@ -83,19 +102,16 @@ export const AdminSellersSection: React.FC = () => {
           actions={[
             {
               label: row.featured ? 'Remove Featured' : 'Mark Featured',
-              onClick: () =>
-                setSellers((prev) =>
-                  prev.map((s) => (s.id === row.id ? { ...s, featured: !s.featured } : s))
-                ),
+              onClick: () => void persistSeller(row.id, { featured: !row.featured }),
             },
             { label: 'View Profile', onClick: () => {} },
             {
-              label: 'Suspend',
+              label: row.status === 'suspended' ? 'Activate' : 'Suspend',
               variant: 'danger',
               onClick: () =>
-                setSellers((prev) =>
-                  prev.map((s) => (s.id === row.id ? { ...s, status: 'suspended' as const } : s))
-                ),
+                void persistSeller(row.id, {
+                  status: row.status === 'suspended' ? 'active' : 'suspended',
+                }),
             },
           ]}
         />

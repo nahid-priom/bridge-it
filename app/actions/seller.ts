@@ -6,6 +6,10 @@ import { createAdminSupabaseClient } from '@/lib/supabase/admin';
 import { assertAdminAction } from '@/lib/auth/admin-action';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { insertAdminAuditLog } from '@/lib/db/admin';
+import {
+  createMarketplaceNotification,
+  upsertMarketplaceSellerFromApplication,
+} from '@/lib/db/marketplace-unified';
 import { sellerApplicationSchema, type SellerApplicationInput } from '@/lib/validations/seller';
 
 function slugify(name: string): string {
@@ -127,27 +131,22 @@ export async function reviewSellerApplicationAction(input: {
     const baseSlug = slugify(app.display_name);
     const slug = `${baseSlug}-${app.user_id.slice(0, 8)}`;
 
-    const { data: seller, error: sellerErr } = await supabase
-      .from('sellers')
-      .upsert(
-        {
-          user_id: app.user_id,
-          slug,
-          name: app.display_name,
-          tagline: app.business_name,
-          description: app.bio,
-          location: app.location,
-          category_key: app.category_focus,
-          verified: false,
-          is_public: true,
-          status: 'active',
-        },
-        { onConflict: 'slug' }
-      )
-      .select('id')
-      .single();
+    const sellerResult = await upsertMarketplaceSellerFromApplication({
+      userId: app.user_id,
+      slug,
+      displayName: app.display_name,
+      businessName: app.business_name,
+      bio: app.bio,
+      location: app.location,
+      categoryFocus: app.category_focus,
+      applicationId: app.id,
+    });
 
-    if (sellerErr || !seller) return { error: sellerErr?.message ?? 'Failed to create seller.' };
+    if (sellerResult.error || !sellerResult.data?.id) {
+      return { error: sellerResult.error ?? 'Failed to create marketplace seller.' };
+    }
+
+    const seller = { id: sellerResult.data.id };
 
     await supabase
       .from('profiles')
@@ -164,13 +163,22 @@ export async function reviewSellerApplicationAction(input: {
       })
       .eq('id', app.id);
 
-    await supabase.from('notifications').insert({
-      user_id: app.user_id,
+    await createMarketplaceNotification({
+      userId: app.user_id,
       title: 'Seller application approved',
       body: 'Your seller application has been approved. You can access your seller dashboard.',
-      type: 'seller_approved',
+      notificationType: 'seller_approved',
       metadata: { application_id: app.id, seller_id: seller.id },
     });
+
+    await supabase.from('marketplace_wallets').upsert(
+      {
+        owner_id: app.user_id,
+        owner_type: 'seller',
+        seller_id: seller.id,
+      } as never,
+      { onConflict: 'owner_id,owner_type' }
+    );
   } else {
     await supabase
       .from('seller_applications')
@@ -183,11 +191,21 @@ export async function reviewSellerApplicationAction(input: {
       .eq('id', app.id);
 
     if (input.decision === 'rejected') {
-      await supabase.from('notifications').insert({
-        user_id: app.user_id,
+      await createMarketplaceNotification({
+        userId: app.user_id,
         title: 'Seller application update',
         body: input.adminNote ?? 'Your application was not approved.',
-        type: 'seller_rejected',
+        notificationType: 'seller_rejected',
+        metadata: { application_id: app.id },
+      });
+    } else if (input.decision === 'needs_review') {
+      await createMarketplaceNotification({
+        userId: app.user_id,
+        title: 'Application needs revision',
+        body:
+          input.adminNote ??
+          'Please update your seller application with the requested changes.',
+        notificationType: 'seller_needs_revision',
         metadata: { application_id: app.id },
       });
     }
@@ -203,6 +221,8 @@ export async function reviewSellerApplicationAction(input: {
 
   revalidatePath('/admin');
   revalidatePath('/seller/onboarding');
+  revalidatePath('/dashboard');
   revalidatePath('/dashboard/seller');
-  return { success: true as const };
+  revalidatePath('/seller-dashboard');
+  return { success: true as const, refreshAuth: input.decision === 'approved' };
 }

@@ -56,7 +56,11 @@ export const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-8 md:py-16 relative overflow-hidden">
+    <section
+      id="how-it-works"
+      className="py-8 md:py-16 relative overflow-hidden"
+      aria-labelledby="how-it-works-heading"
+    >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-cyan/20 to-transparent"></div>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-bridge-primary/5 rounded-full blur-[200px]"></div>
 
@@ -65,7 +69,10 @@ export const HowItWorks: React.FC = () => {
           <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-bridge-cyan/10 border border-bridge-cyan/20 rounded-full text-bridge-cyan text-xs font-semibold mb-3 uppercase tracking-wider">
             🛤️ Simple Process
           </span>
-          <h2 className="text-2xl md:text-4xl font-black font-display text-text-primary mb-3">
+          <h2
+            id="how-it-works-heading"
+            className="text-2xl md:text-4xl font-black font-display text-text-primary mb-3"
+          >
             How <span className="gradient-text">Bridge</span> Works
           </h2>
           <p className="text-text-muted text-sm max-w-lg mx-auto">

@@ -120,7 +120,7 @@ export const AdminSettingsSection: React.FC = () => {
         <SettingCard icon={Headphones} title="Support Settings" description="Support channels and SLA">
           <input
             placeholder="Support email"
-            defaultValue="support@bridge.app"
+            defaultValue="support@deshifiverr.com"
             className="w-full px-4 py-2.5 bg-bridge-dark-2 border border-white/10 rounded-xl text-white text-sm mb-2 focus:outline-none focus:border-bridge-primary"
           />
           <input

@@ -3,9 +3,9 @@ import { AboutPage } from '@/components/AboutPage';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 
 export const metadata = buildPageMetadata({
-  title: 'About Bridge',
+  title: 'About Deshi Fiverr',
   description:
-    'Learn about Bridge — Bangladesh\'s premier Smart Virtual IT Park for digital services, creators, and businesses.',
+    'Learn about Deshi Fiverr — Bangladesh\'s trusted freelance marketplace for digital services, creators, and businesses.',
   path: '/about',
 });
 

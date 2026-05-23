@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
+import { becomeSellerPath } from '@/lib/auth/become-seller';
 import type { AuthProfile } from '@/lib/auth/types';
 
 type AuthActionsProps = {
@@ -28,36 +29,18 @@ export function AuthActions({
   }
 
   if (isLoggedIn && authProfile) {
-    const dashboardHref = isAdmin
-      ? ROUTES.admin
-      : isSeller
-        ? ROUTES.sellerDashboard
-        : ROUTES.dashboard;
-    const dashboardLabel = isAdmin
-      ? 'Admin'
-      : isSeller
-        ? 'Seller Dashboard'
-        : 'Dashboard';
-
-    return (
-      <div className={cn('hidden lg:flex items-center gap-2 shrink-0', className)}>
-        <Link
-          href={dashboardHref}
-          onClick={onNavigate}
-          className="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-bridge-primary dark:text-white/85 dark:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-bridge-primary/40 rounded-lg"
-        >
-          {dashboardLabel}
-        </Link>
-      </div>
-    );
+    return null;
   }
+
+  const showBecomeSeller =
+    !authProfile || authProfile.role === 'buyer';
 
   return (
     <div className={cn('hidden lg:flex items-center gap-2 shrink-0', className)}>
       <Link
         href={ROUTES.login}
         onClick={onNavigate}
-        className="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-text-primary dark:text-white/85 dark:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-bridge-primary/40 rounded-lg"
+        className="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-text-primary dark:text-white/85 dark:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-lg"
       >
         Login
       </Link>
@@ -65,14 +48,23 @@ export function AuthActions({
         href={ROUTES.signup}
         onClick={onNavigate}
         className={cn(
-          'px-5 py-2.5 text-sm font-bold rounded-full text-white whitespace-nowrap',
-          'bg-gradient-to-r from-bridge-primary to-bridge-primary-light',
-          'shadow-[0_8px_24px_rgba(108,60,225,0.35)] hover:shadow-[0_10px_28px_rgba(108,60,225,0.45)]',
-          'transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-bridge-primary/40'
+          'px-5 py-2.5 text-sm font-bold rounded-lg text-white whitespace-nowrap',
+          'bg-deshi-green hover:bg-deshi-green-dark',
+          'shadow-[0_6px_20px_rgba(16,185,129,0.35)]',
+          'transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40'
         )}
       >
         Join
       </Link>
+      {showBecomeSeller && (
+        <Link
+          href={becomeSellerPath(authProfile)}
+          onClick={onNavigate}
+          className="px-4 py-2 text-sm font-bold rounded-lg border-2 border-deshi-green text-deshi-green-dark dark:text-deshi-green hover:bg-deshi-green/10 transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40"
+        >
+          Become a Seller
+        </Link>
+      )}
     </div>
   );
 }

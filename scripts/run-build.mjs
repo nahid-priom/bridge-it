@@ -1,16 +1,28 @@
 /**
- * Force production mode for `next build`.
- * A global NODE_ENV=development (common in some shells/IDEs) breaks 404 prerender
- * with: "<Html> should not be imported outside of pages/_document."
+ * Production build entrypoint (used by npm run build).
  */
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
-const env = { ...process.env, NODE_ENV: 'production' };
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const nextBin = path.join(root, 'node_modules', 'next', 'dist', 'bin', 'next');
 
-const result = spawnSync('npx', ['next', 'build'], {
+const child = spawn(process.execPath, [nextBin, 'build'], {
+  cwd: root,
   stdio: 'inherit',
-  shell: true,
-  env,
+  env: { ...process.env, NODE_ENV: 'production' },
 });
 
-process.exit(result.status ?? 1);
+child.on('error', (err) => {
+  console.error('Failed to start Next.js build:', err.message);
+  process.exit(1);
+});
+
+child.on('close', (code, signal) => {
+  if (signal) {
+    console.error(`Build terminated by signal: ${signal}`);
+    process.exit(1);
+  }
+  process.exit(code ?? 1);
+});

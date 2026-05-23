@@ -1,16 +1,23 @@
 import { redirect } from 'next/navigation';
-import { getCurrentProfile } from '@/lib/auth/get-current-user';
+import { loadMarketplaceAccessContext } from '@/lib/auth/load-marketplace-access';
+import { resolveSellerAccess } from '@/lib/auth/resolveMarketplaceAccess';
 import { safeNextPath } from '@/lib/auth/redirect';
+import { ROUTES } from '@/lib/routes';
 import type { AuthProfile } from '@/lib/auth/types';
 
 export async function requireSeller(next?: string): Promise<AuthProfile> {
-  const profile = await getCurrentProfile();
+  const ctx = await loadMarketplaceAccessContext();
+  const profile = ctx.profile;
+
   if (!profile) {
-    const dest = safeNextPath(next, '/dashboard/seller');
+    const dest = safeNextPath(next, ROUTES.sellerDashboard);
     redirect(`/login?next=${encodeURIComponent(dest)}`);
   }
-  if (profile.role !== 'seller' && profile.role !== 'admin') {
-    redirect('/unauthorized');
+
+  const resolution = resolveSellerAccess(ctx);
+  if (resolution.canAccessSellerDashboard) {
+    return profile;
   }
-  return profile;
+
+  redirect(resolution.redirectTo ?? ROUTES.sellerOnboarding);
 }

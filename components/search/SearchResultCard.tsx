@@ -92,7 +92,7 @@ export const SearchResultCard = memo(function SearchResultCard({
 
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
           <span className="px-2 py-1 glass-strong text-text-primary text-[10px] font-medium rounded-lg">
-            {cat?.icon} {cat?.name ?? 'Bridge'}
+            {cat?.icon} {cat?.name ?? 'Marketplace'}
           </span>
           {isFeatured && (
             <span className="inline-flex items-center gap-0.5 px-2 py-1 bg-bridge-gold/20 border border-bridge-gold/30 text-bridge-gold text-[10px] font-semibold rounded-lg">

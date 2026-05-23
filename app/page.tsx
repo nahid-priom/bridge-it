@@ -1,34 +1,35 @@
 import { buildPageMetadata } from '@/lib/metadata';
-import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/site';
+import { HOME_SEO_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from '@/lib/site';
 import { HomePage } from '@/components/home/HomePage';
+import { getHomeTestimonials } from '@/lib/catalog/home';
+import { getMarketplaceHomeData } from '@/lib/marketplace/getMarketplaceData';
 import {
-  getHomeCategories,
-  getHomeFeaturedServices,
-  getHomeTopSellers,
-  getHomeTestimonials,
-} from '@/lib/catalog/home';
+  getMarketplaceProductHomeData,
+  getPopularMarketplaceProducts,
+} from '@/lib/marketplace/getMarketplaceProducts';
 
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: SITE_NAME,
+  title: HOME_SEO_TITLE,
   description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
   path: '/',
 });
 
 export default async function Home() {
-  const [categories, featuredServices, topSellers, testimonials] = await Promise.all([
-    getHomeCategories(),
-    getHomeFeaturedServices(8),
-    getHomeTopSellers(8),
+  const [marketplace, productData, testimonials] = await Promise.all([
+    getMarketplaceHomeData(),
+    getMarketplaceProductHomeData(),
     getHomeTestimonials(6),
   ]);
 
+  const popularProducts = getPopularMarketplaceProducts(productData.products, 12);
+
   return (
     <HomePage
-      categories={categories}
-      featuredServices={featuredServices}
-      topSellers={topSellers}
+      marketplace={marketplace}
+      popularProducts={popularProducts}
       testimonials={testimonials}
     />
   );

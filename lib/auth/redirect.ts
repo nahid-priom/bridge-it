@@ -1,4 +1,5 @@
 import type { UserRole } from '@/types/database.types';
+import { getDashboardPathForRole } from '@/lib/auth/dashboard-routes';
 
 const ALLOWED_PREFIXES = [
   '/',
@@ -35,7 +36,5 @@ export function safeNextPath(next: string | null | undefined, fallback = '/'): s
 }
 
 export function defaultPathForRole(role: UserRole): string {
-  if (role === 'admin') return '/admin';
-  if (role === 'seller') return '/dashboard/seller';
-  return '/dashboard';
+  return getDashboardPathForRole(role);
 }

@@ -1,0 +1,556 @@
+import type {
+  ClientActivity,
+  ClientDashboardOverview,
+  ClientDashboardStats,
+  ClientInvoice,
+  ClientMessage,
+  ClientMilestone,
+  ClientNotification,
+  ClientOrder,
+  ClientProject,
+  ClientProjectDetail,
+  ClientPurchasedProduct,
+  ClientPurchasedService,
+  ClientSeller,
+  ClientTransaction,
+  SupportTicket,
+} from '@/types/client-dashboard';
+
+const CURRENCY = 'BDT';
+
+export const demoStats: ClientDashboardStats = {
+  activeProjects: 4,
+  totalOrders: 25,
+  pendingPayments: 2,
+  walletBalance: 48500,
+  completedProjects: 11,
+  activeSellers: 6,
+  currency: CURRENCY,
+};
+
+export const demoProjects: ClientProject[] = [
+  {
+    id: 'proj-1',
+    title: 'E-commerce Website — Next.js & Supabase',
+    sellerId: 's1',
+    sellerName: 'Rahim Tech Studio',
+    sellerAvatar: undefined,
+    progress: 68,
+    milestoneStatus: 'Design approval pending',
+    dueDate: '2026-06-12',
+    budget: 85000,
+    currency: CURRENCY,
+    status: 'in_progress',
+    category: 'Web Development',
+  },
+  {
+    id: 'proj-2',
+    title: 'Brand Identity & Social Kit',
+    sellerId: 's2',
+    sellerName: 'Nusrat Creative',
+    progress: 42,
+    milestoneStatus: 'Logo concepts delivered',
+    dueDate: '2026-05-30',
+    budget: 32000,
+    currency: CURRENCY,
+    status: 'pending_review',
+    category: 'Design',
+  },
+  {
+    id: 'proj-3',
+    title: 'Mobile App UI — Fintech Dashboard',
+    sellerId: 's3',
+    sellerName: 'Dhaka UX Lab',
+    progress: 91,
+    milestoneStatus: 'Final handoff',
+    dueDate: '2026-05-28',
+    budget: 120000,
+    currency: CURRENCY,
+    status: 'in_progress',
+    category: 'UI/UX',
+  },
+  {
+    id: 'proj-4',
+    title: 'SEO & Content — Marketplace Launch',
+    sellerId: 's4',
+    sellerName: 'GrowthBD Agency',
+    progress: 25,
+    milestoneStatus: 'Keyword research',
+    dueDate: '2026-06-20',
+    budget: 45000,
+    currency: CURRENCY,
+    status: 'delayed',
+    category: 'Marketing',
+  },
+];
+
+export const demoOrders: ClientOrder[] = [
+  {
+    id: 'ord-1',
+    orderNumber: 'DF-2026-1042',
+    type: 'service',
+    title: 'WordPress Business Site',
+    sellerName: 'Rahim Tech Studio',
+    amount: 28000,
+    currency: CURRENCY,
+    deliveryDate: '2026-05-25',
+    paymentStatus: 'paid',
+    status: 'active',
+    createdAt: '2026-05-10',
+  },
+  {
+    id: 'ord-2',
+    orderNumber: 'DF-2026-1038',
+    type: 'product',
+    title: 'Logitech MX Master 3S',
+    sellerName: 'TechMart BD',
+    amount: 12500,
+    currency: CURRENCY,
+    deliveryDate: '2026-05-22',
+    paymentStatus: 'paid',
+    status: 'delivered',
+    createdAt: '2026-05-08',
+  },
+  {
+    id: 'ord-3',
+    orderNumber: 'DF-2026-1031',
+    type: 'service',
+    title: 'Logo Animation Pack',
+    sellerName: 'Nusrat Creative',
+    amount: 15000,
+    currency: CURRENCY,
+    deliveryDate: '2026-05-30',
+    paymentStatus: 'pending',
+    status: 'active',
+    createdAt: '2026-05-05',
+  },
+  {
+    id: 'ord-4',
+    orderNumber: 'DF-2026-1024',
+    type: 'service',
+    title: 'API Integration — bKash',
+    sellerName: 'FinDev Bangladesh',
+    amount: 55000,
+    currency: CURRENCY,
+    deliveryDate: '2026-06-05',
+    paymentStatus: 'paid',
+    status: 'active',
+    createdAt: '2026-04-28',
+  },
+  {
+    id: 'ord-5',
+    orderNumber: 'DF-2026-1019',
+    type: 'product',
+    title: 'Adobe Creative Cloud — 1 Year',
+    sellerName: 'SoftwareHub BD',
+    amount: 42000,
+    currency: CURRENCY,
+    deliveryDate: '2026-05-18',
+    paymentStatus: 'paid',
+    status: 'delivered',
+    createdAt: '2026-04-20',
+  },
+];
+
+export const demoActivities: ClientActivity[] = [
+  {
+    id: 'act-1',
+    title: 'Files uploaded',
+    description: 'Rahim Tech Studio uploaded homepage mockups (v3)',
+    type: 'file',
+    createdAt: '2026-05-23T10:30:00',
+  },
+  {
+    id: 'act-2',
+    title: 'Milestone completed',
+    description: 'Design phase approved for Mobile App UI project',
+    type: 'milestone',
+    createdAt: '2026-05-23T09:15:00',
+  },
+  {
+    id: 'act-3',
+    title: 'Payment processed',
+    description: '৳25,000 milestone payment via bKash',
+    type: 'payment',
+    createdAt: '2026-05-22T16:40:00',
+  },
+  {
+    id: 'act-4',
+    title: 'Invoice generated',
+    description: 'INV-2026-0892 — E-commerce Website',
+    type: 'invoice',
+    createdAt: '2026-05-22T14:00:00',
+  },
+  {
+    id: 'act-5',
+    title: 'Support reply',
+    description: 'Your ticket #TK-441 received a response',
+    type: 'support',
+    createdAt: '2026-05-21T11:20:00',
+  },
+];
+
+export const demoNotifications: ClientNotification[] = [
+  {
+    id: 'n1',
+    title: 'Delivery due tomorrow',
+    body: 'WordPress Business Site — review delivery files',
+    type: 'order',
+    read: false,
+    createdAt: '2026-05-23T08:00:00',
+  },
+  {
+    id: 'n2',
+    title: 'New message',
+    body: 'Nusrat Creative sent you logo revisions',
+    type: 'message',
+    read: false,
+    createdAt: '2026-05-22T19:30:00',
+  },
+  {
+    id: 'n3',
+    title: 'Payment reminder',
+    body: 'Milestone payment of ৳15,000 is pending approval',
+    type: 'payment',
+    read: true,
+    createdAt: '2026-05-22T12:00:00',
+  },
+];
+
+export const demoSpendingByMonth = [
+  { month: 'Jan', amount: 42000 },
+  { month: 'Feb', amount: 58000 },
+  { month: 'Mar', amount: 35000 },
+  { month: 'Apr', amount: 72000 },
+  { month: 'May', amount: 94000 },
+  { month: 'Jun', amount: 28000 },
+];
+
+export const demoProjectCompletion = [
+  { label: 'Completed', value: 11 },
+  { label: 'In Progress', value: 4 },
+  { label: 'Delayed', value: 1 },
+];
+
+export function getClientDashboardOverview(): ClientDashboardOverview {
+  return {
+    stats: demoStats,
+    projects: demoProjects,
+    orders: demoOrders.slice(0, 5),
+    activities: demoActivities,
+    notifications: demoNotifications,
+    spendingByMonth: demoSpendingByMonth,
+    projectCompletion: demoProjectCompletion,
+  };
+}
+
+export const demoMilestones: ClientMilestone[] = [
+  {
+    id: 'ms-1',
+    projectId: 'proj-1',
+    title: 'Discovery & wireframes',
+    progress: 100,
+    dueDate: '2026-05-10',
+    amount: 20000,
+    currency: CURRENCY,
+    status: 'paid',
+  },
+  {
+    id: 'ms-2',
+    projectId: 'proj-1',
+    title: 'UI design & prototype',
+    progress: 100,
+    dueDate: '2026-05-18',
+    amount: 25000,
+    currency: CURRENCY,
+    status: 'approved',
+  },
+  {
+    id: 'ms-3',
+    projectId: 'proj-1',
+    title: 'Frontend development',
+    progress: 55,
+    dueDate: '2026-06-05',
+    amount: 30000,
+    currency: CURRENCY,
+    status: 'in_review',
+  },
+  {
+    id: 'ms-4',
+    projectId: 'proj-1',
+    title: 'Launch & handoff',
+    progress: 0,
+    dueDate: '2026-06-12',
+    amount: 10000,
+    currency: CURRENCY,
+    status: 'pending',
+  },
+];
+
+export function getClientProjectDetail(id: string): ClientProjectDetail | null {
+  const project = demoProjects.find((p) => p.id === id);
+  if (!project) return null;
+  return {
+    ...project,
+    description:
+      'Full-stack e-commerce build with Next.js 15, Supabase, bKash payments, and admin dashboard. Includes product catalog, cart, and seller onboarding flows.',
+    milestones: demoMilestones.filter((m) => m.projectId === id),
+    activities: demoActivities,
+    invoices: demoInvoices.filter((i) => i.id.startsWith('inv')),
+    transactions: demoTransactions.slice(0, 4),
+  };
+}
+
+export const demoTransactions: ClientTransaction[] = [
+  {
+    id: 'tx-1',
+    type: 'milestone',
+    label: 'Milestone — UI design',
+    amount: -25000,
+    currency: CURRENCY,
+    date: '2026-05-18',
+    status: 'paid',
+  },
+  {
+    id: 'tx-2',
+    type: 'deposit',
+    label: 'Wallet top-up — bKash',
+    amount: 50000,
+    currency: CURRENCY,
+    date: '2026-05-15',
+    status: 'paid',
+  },
+  {
+    id: 'tx-3',
+    type: 'purchase',
+    label: 'Logitech MX Master 3S',
+    amount: -12500,
+    currency: CURRENCY,
+    date: '2026-05-08',
+    status: 'paid',
+  },
+  {
+    id: 'tx-4',
+    type: 'refund',
+    label: 'Partial refund — Order DF-2026-0998',
+    amount: 3500,
+    currency: CURRENCY,
+    date: '2026-05-02',
+    status: 'paid',
+  },
+  {
+    id: 'tx-5',
+    type: 'payment',
+    label: 'Service — API Integration',
+    amount: -55000,
+    currency: CURRENCY,
+    date: '2026-04-28',
+    status: 'paid',
+  },
+];
+
+export const demoInvoices: ClientInvoice[] = [
+  {
+    id: 'inv-1',
+    invoiceNumber: 'INV-2026-0892',
+    sellerName: 'Rahim Tech Studio',
+    amount: 25000,
+    currency: CURRENCY,
+    status: 'paid',
+    issuedAt: '2026-05-18',
+    dueAt: '2026-05-25',
+  },
+  {
+    id: 'inv-2',
+    invoiceNumber: 'INV-2026-0876',
+    sellerName: 'Nusrat Creative',
+    amount: 15000,
+    currency: CURRENCY,
+    status: 'pending',
+    issuedAt: '2026-05-20',
+    dueAt: '2026-05-27',
+  },
+  {
+    id: 'inv-3',
+    invoiceNumber: 'INV-2026-0854',
+    sellerName: 'FinDev Bangladesh',
+    amount: 55000,
+    currency: CURRENCY,
+    status: 'paid',
+    issuedAt: '2026-04-28',
+    dueAt: '2026-05-05',
+  },
+  {
+    id: 'inv-4',
+    invoiceNumber: 'INV-2026-0821',
+    sellerName: 'Dhaka UX Lab',
+    amount: 40000,
+    currency: CURRENCY,
+    status: 'overdue',
+    issuedAt: '2026-04-15',
+    dueAt: '2026-04-22',
+  },
+];
+
+export const demoSellers: ClientSeller[] = [
+  {
+    id: 's1',
+    name: 'Rahim Tech Studio',
+    rating: 4.9,
+    activeProjects: 2,
+    responseTime: '~1 hour',
+    isOnline: true,
+  },
+  {
+    id: 's2',
+    name: 'Nusrat Creative',
+    rating: 4.8,
+    activeProjects: 1,
+    responseTime: '~2 hours',
+    isOnline: true,
+  },
+  {
+    id: 's3',
+    name: 'Dhaka UX Lab',
+    rating: 5.0,
+    activeProjects: 1,
+    responseTime: '~30 min',
+    isOnline: false,
+  },
+  {
+    id: 's4',
+    name: 'GrowthBD Agency',
+    rating: 4.7,
+    activeProjects: 1,
+    responseTime: '~4 hours',
+    isOnline: false,
+  },
+  {
+    id: 's5',
+    name: 'FinDev Bangladesh',
+    rating: 4.9,
+    activeProjects: 1,
+    responseTime: '~1 hour',
+    isOnline: true,
+  },
+  {
+    id: 's6',
+    name: 'TechMart BD',
+    rating: 4.6,
+    activeProjects: 0,
+    responseTime: '~6 hours',
+    isOnline: false,
+  },
+];
+
+export const demoMessages: ClientMessage[] = [
+  {
+    id: 'msg-1',
+    sellerId: 's1',
+    sellerName: 'Rahim Tech Studio',
+    lastMessage: 'Homepage mockups v3 are ready for your review.',
+    lastAt: '2026-05-23T10:30:00',
+    unread: 2,
+    isOnline: true,
+  },
+  {
+    id: 'msg-2',
+    sellerId: 's2',
+    sellerName: 'Nusrat Creative',
+    lastMessage: 'Attached 3 logo concepts — let me know your favorite.',
+    lastAt: '2026-05-22T19:30:00',
+    unread: 1,
+    isOnline: true,
+  },
+  {
+    id: 'msg-3',
+    sellerId: 's3',
+    sellerName: 'Dhaka UX Lab',
+    lastMessage: 'Final Figma file shared. Thanks for the quick feedback!',
+    lastAt: '2026-05-21T14:00:00',
+    unread: 0,
+    isOnline: false,
+  },
+];
+
+export const demoProducts: ClientPurchasedProduct[] = [
+  {
+    id: 'pp-1',
+    name: 'Logitech MX Master 3S',
+    vendor: 'TechMart BD',
+    orderStatus: 'delivered',
+    warrantyUntil: '2027-05-22',
+    trackingId: 'BD-TRK-882910',
+  },
+  {
+    id: 'pp-2',
+    name: 'Adobe Creative Cloud — 1 Year',
+    vendor: 'SoftwareHub BD',
+    orderStatus: 'delivered',
+    licenseKey: 'XXXX-XXXX-XXXX-ADBE',
+  },
+  {
+    id: 'pp-3',
+    name: 'Samsung 27" 4K Monitor',
+    vendor: 'TechMart BD',
+    orderStatus: 'active',
+    trackingId: 'BD-TRK-991204',
+  },
+];
+
+export const demoServices: ClientPurchasedService[] = [
+  {
+    id: 'ps-1',
+    title: 'WordPress Business Site',
+    sellerName: 'Rahim Tech Studio',
+    revisionsLeft: 2,
+    status: 'active',
+    deliveryFiles: 4,
+    dueDate: '2026-05-25',
+  },
+  {
+    id: 'ps-2',
+    title: 'Logo Animation Pack',
+    sellerName: 'Nusrat Creative',
+    revisionsLeft: 3,
+    status: 'active',
+    deliveryFiles: 2,
+    dueDate: '2026-05-30',
+  },
+  {
+    id: 'ps-3',
+    title: 'API Integration — bKash',
+    sellerName: 'FinDev Bangladesh',
+    revisionsLeft: 1,
+    status: 'active',
+    deliveryFiles: 6,
+    dueDate: '2026-06-05',
+  },
+];
+
+export const demoTickets: SupportTicket[] = [
+  {
+    id: 'tk-441',
+    subject: 'Payment not reflecting in wallet',
+    priority: 'high',
+    status: 'in_progress',
+    updatedAt: '2026-05-21T11:20:00',
+    messages: 4,
+  },
+  {
+    id: 'tk-438',
+    subject: 'Request invoice correction',
+    priority: 'medium',
+    status: 'open',
+    updatedAt: '2026-05-19T09:00:00',
+    messages: 2,
+  },
+  {
+    id: 'tk-420',
+    subject: 'Delivery delay — monitor order',
+    priority: 'low',
+    status: 'resolved',
+    updatedAt: '2026-05-10T16:00:00',
+    messages: 8,
+  },
+];

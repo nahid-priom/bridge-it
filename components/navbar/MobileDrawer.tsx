@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -11,15 +12,20 @@ import {
   Store,
 } from 'lucide-react';
 import { ROUTES, isNavActive } from '@/lib/routes';
-import { BridgeLogo } from '@/components/brand/BridgeLogo';
+import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
 import { NavbarSearch } from '@/components/navbar/NavbarSearch';
 import {
   MAIN_NAV_LINKS,
-  NAV_CATEGORY_ITEMS,
-  categoryProductsHref,
+  NAV_PRODUCT_ITEMS,
+  NAV_SERVICE_ITEMS,
+  productCategoryHref,
+  serviceCategoryHref,
 } from '@/components/navbar/constants';
 import type { AuthProfile } from '@/lib/auth/types';
 import { becomeSellerPath } from '@/lib/auth/become-seller';
+import { useAuthProfile } from '@/components/auth/AuthProfileContext';
+import { resolveDashboardHref } from '@/lib/auth/dashboard-routes';
+import { useDashboardModeStore } from '@/store/dashboardModeStore';
 import { cn } from '@/lib/cn';
 
 type MobileDrawerProps = {
@@ -74,21 +80,18 @@ export function MobileDrawer({
 }: MobileDrawerProps) {
   const pathname = usePathname();
   const isActive = (href: string) => isNavActive(pathname, href);
-  const isLoggedIn = Boolean(authProfile);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const contextProfile = useAuthProfile();
+  const profile = contextProfile ?? authProfile;
+  const mode = useDashboardModeStore((s) => s.mode);
+  const isLoggedIn = Boolean(profile);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
-  const becomeSellerHref = becomeSellerPath(authProfile);
-  const showBecomeSellerCard =
-    !authProfile || authProfile.role === 'buyer';
+  const becomeSellerHref = becomeSellerPath(profile);
+  const showBecomeSellerCard = !profile || profile.role === 'buyer';
+  const dashboardHref = resolveDashboardHref(profile?.role, mode);
 
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) return;
@@ -101,11 +104,15 @@ export function MobileDrawer({
 
   useEffect(() => {
     onClose();
-    setCategoriesOpen(false);
+    setProductsOpen(false);
+    setServicesOpen(false);
   }, [pathname, onClose]);
 
   useEffect(() => {
-    if (!open) setCategoriesOpen(false);
+    if (!open) {
+      setProductsOpen(false);
+      setServicesOpen(false);
+    }
   }, [open]);
 
   if (!open) return null;
@@ -123,15 +130,10 @@ export function MobileDrawer({
     ? [
         {
           label: 'Dashboard',
-          href:
-            authProfile?.role === 'admin'
-              ? ROUTES.admin
-              : authProfile?.role === 'seller'
-                ? ROUTES.sellerDashboard
-                : ROUTES.dashboard,
+          href: dashboardHref,
         },
         { label: 'Messages', href: ROUTES.messages, badge: messageBadge },
-        { label: 'Orders', href: ROUTES.dashboard },
+        { label: 'Orders', href: ROUTES.clientOrders },
         { label: 'Wishlist', href: ROUTES.products },
       ]
     : [
@@ -161,7 +163,7 @@ export function MobileDrawer({
       >
         <div className="flex items-center justify-between mb-5">
           <Link href={ROUTES.home} onClick={closeAndNavigate} className="shrink-0">
-            <BridgeLogo textVisibility="always" iconSize="nav" />
+            <DeshiFiverrLogo size="nav" />
           </Link>
           <button
             type="button"
@@ -189,34 +191,34 @@ export function MobileDrawer({
             <div>
               <button
                 type="button"
-                onClick={() => setCategoriesOpen((v) => !v)}
-                aria-expanded={categoriesOpen}
+                onClick={() => setProductsOpen((v) => !v)}
+                aria-expanded={productsOpen}
                 className={cn(
                   'w-full flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors',
-                  isActive(ROUTES.categories) || pathname.startsWith('/products')
+                  isActive(ROUTES.products) || pathname.startsWith('/products')
                     ? 'bg-bridge-primary/10 text-bridge-primary font-semibold'
                     : 'text-slate-600 hover:bg-slate-50 dark:text-white/85'
                 )}
               >
-                <span>Categories</span>
+                <span>Categories (Products)</span>
                 <ChevronDown
-                  className={cn('w-4 h-4 transition-transform', categoriesOpen && 'rotate-180')}
+                  className={cn('w-4 h-4 transition-transform', productsOpen && 'rotate-180')}
                   aria-hidden
                 />
               </button>
-              {categoriesOpen && (
+              {productsOpen && (
                 <div className="mt-1 ml-2 pl-2 border-l-2 border-bridge-primary/20 space-y-0.5">
                   <Link
-                    href={ROUTES.categories}
+                    href={ROUTES.products}
                     onClick={closeAndNavigate}
                     className="block px-3 py-2 text-sm text-bridge-primary font-medium"
                   >
-                    All Categories
+                    All products
                   </Link>
-                  {NAV_CATEGORY_ITEMS.map((cat) => (
+                  {NAV_PRODUCT_ITEMS.map((cat) => (
                     <Link
-                      key={cat.key}
-                      href={categoryProductsHref(cat.key)}
+                      key={cat.slug}
+                      href={productCategoryHref(cat.slug)}
                       onClick={closeAndNavigate}
                       className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-white/80 hover:text-bridge-primary"
                     >
@@ -227,7 +229,48 @@ export function MobileDrawer({
                 </div>
               )}
             </div>
-            {MAIN_NAV_LINKS.filter((l) => l.label !== 'Home').map((link) => (
+            <div>
+              <button
+                type="button"
+                onClick={() => setServicesOpen((v) => !v)}
+                aria-expanded={servicesOpen}
+                className={cn(
+                  'w-full flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors',
+                  isActive(ROUTES.search) || pathname.startsWith('/search')
+                    ? 'bg-bridge-primary/10 text-bridge-primary font-semibold'
+                    : 'text-slate-600 hover:bg-slate-50 dark:text-white/85'
+                )}
+              >
+                <span>Services</span>
+                <ChevronDown
+                  className={cn('w-4 h-4 transition-transform', servicesOpen && 'rotate-180')}
+                  aria-hidden
+                />
+              </button>
+              {servicesOpen && (
+                <div className="mt-1 ml-2 pl-2 border-l-2 border-deshi-green/30 space-y-0.5">
+                  <Link
+                    href={ROUTES.search}
+                    onClick={closeAndNavigate}
+                    className="block px-3 py-2 text-sm text-deshi-green font-medium"
+                  >
+                    All services
+                  </Link>
+                  {NAV_SERVICE_ITEMS.map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      href={serviceCategoryHref(cat.slug)}
+                      onClick={closeAndNavigate}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-white/80 hover:text-deshi-green"
+                    >
+                      <span aria-hidden>{cat.icon}</span>
+                      {cat.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            {MAIN_NAV_LINKS.map((link) => (
               <DrawerNavLink
                 key={link.href}
                 href={link.href}
@@ -277,7 +320,7 @@ export function MobileDrawer({
             <div className="flex-1 min-w-0">
               <p className="font-bold text-text-primary text-sm">Become a Seller</p>
               <p className="text-xs text-slate-500 dark:text-white/60 mt-0.5 leading-snug">
-                Join Bridge IT Park and start growing your business today.
+                Join Deshi Fiverr and start growing your business today.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-bridge-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />

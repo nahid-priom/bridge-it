@@ -6,7 +6,7 @@ import { safeNextPath } from '@/lib/auth/redirect';
 
 export const metadata = buildPageMetadata({
   title: 'Sign in',
-  description: 'Sign in to Bridge Smart IT Park',
+  description: 'Sign in to Deshi Fiverr',
   path: '/login',
   noIndex: true,
 });
@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: Props) {
   return (
     <AuthCard
       title="Welcome back"
-      subtitle="Sign in to your Bridge account"
+      subtitle="Sign in to your Deshi Fiverr account"
       footer={
         <>
           New here?{' '}

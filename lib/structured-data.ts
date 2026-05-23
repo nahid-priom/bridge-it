@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site';
+import { SITE_BRAND, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site';
 import type { Service } from '@/types';
 import type { Product, ProductReview } from '@/types/product';
 
@@ -7,6 +7,7 @@ export function organizationJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: SITE_NAME,
+    alternateName: SITE_BRAND,
     url: SITE_URL,
     logo: `${SITE_URL}/favicon.ico`,
     description: SITE_DESCRIPTION,
@@ -23,9 +24,11 @@ export function websiteJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: SITE_NAME,
+    name: SITE_BRAND,
+    alternateName: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
+    inLanguage: ['en', 'bn'],
     potentialAction: {
       '@type': 'SearchAction',
       target: {

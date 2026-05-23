@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
     title: `${category.name} Services`,
     description: category.description,
     path: `/categories/${slug}`,
-    keywords: [category.name, category.nameBn, 'Bridge marketplace'],
+    keywords: [category.name, category.nameBn, 'Deshi Fiverr marketplace'],
   });
 }
 

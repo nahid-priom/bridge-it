@@ -11,15 +11,20 @@ import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { Notification } from '@/components/Notification';
 import { SiteBreadcrumb } from '@/components/layout/SiteBreadcrumb';
 import { AuthProfileProvider } from '@/components/auth/AuthProfileContext';
+import { SellerActivationListener } from '@/components/seller/SellerActivationListener';
+import { unlockBodyScroll } from '@/hooks/useBodyScrollLock';
+import { useStore } from '@/store/useStore';
 
 /** Public chrome hidden; admin keeps its own dark UI (see app/admin/layout.tsx). */
-const NO_SHELL_PREFIXES = ['/admin'];
+const NO_SHELL_PREFIXES = ['/admin', '/dashboard'];
 const NO_BREADCRUMB_PREFIXES = [
   '/login',
   '/signup',
   '/forgot-password',
   '/reset-password',
   '/unauthorized',
+  '/search',
+  '/seller',
 ];
 
 export function AppShell({
@@ -35,7 +40,9 @@ export function AppShell({
   const hideShell = NO_SHELL_PREFIXES.some((p) => pathname.startsWith(p));
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    useStore.getState().closeSearchModal();
+    unlockBodyScroll();
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [pathname]);
 
   if (hideShell) {
@@ -47,6 +54,7 @@ export function AppShell({
 
   return (
     <AuthProfileProvider profile={authProfile}>
+    <SellerActivationListener />
     <div className="min-h-screen bg-background text-text-primary">
       <Navbar categories={categories} authProfile={authProfile} />
       <main
@@ -58,7 +66,7 @@ export function AppShell({
         {!hideBreadcrumb && <SiteBreadcrumb />}
         {children}
       </main>
-      <Footer categories={categories} />
+      <Footer />
       <ChatWidget />
       <GlobalSearchModal />
       <Notification />

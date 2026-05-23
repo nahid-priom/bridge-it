@@ -1,25 +1,34 @@
 'use client';
 
-import { ROUTES, isNavActive } from '@/lib/routes';
 import { usePathname } from 'next/navigation';
 import { DesktopNavLink } from '@/components/navbar/DesktopNavLink';
-import { CategoryDropdown } from '@/components/navbar/CategoryDropdown';
+import { ServiceCategoryDropdown } from '@/components/navbar/ServiceCategoryDropdown';
+import { ProductCategoryDropdown } from '@/components/navbar/ProductCategoryDropdown';
 import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
+import { ROUTES, isNavActive } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 
 type DesktopNavProps = {
-  categoriesOpen: boolean;
-  onCategoriesOpen: () => void;
-  onCategoriesToggle: () => void;
-  onCategoriesClose: () => void;
+  servicesOpen: boolean;
+  productsOpen: boolean;
+  onServicesOpen: () => void;
+  onServicesToggle: () => void;
+  onServicesClose: () => void;
+  onProductsOpen: () => void;
+  onProductsToggle: () => void;
+  onProductsClose: () => void;
   className?: string;
 };
 
 export function DesktopNav({
-  categoriesOpen,
-  onCategoriesOpen,
-  onCategoriesToggle,
-  onCategoriesClose,
+  servicesOpen,
+  productsOpen,
+  onServicesOpen,
+  onServicesToggle,
+  onServicesClose,
+  onProductsOpen,
+  onProductsToggle,
+  onProductsClose,
   className,
 }: DesktopNavProps) {
   const pathname = usePathname();
@@ -27,17 +36,23 @@ export function DesktopNav({
 
   return (
     <div className={cn('hidden xl:flex items-center gap-0.5 shrink-0', className)}>
-      <DesktopNavLink label="Home" href={ROUTES.home} active={isActive(ROUTES.home)} />
-
-      <CategoryDropdown
-        active={isActive(ROUTES.categories) || pathname.startsWith('/products')}
-        open={categoriesOpen}
-        onOpen={onCategoriesOpen}
-        onToggle={onCategoriesToggle}
-        onClose={onCategoriesClose}
+      <ProductCategoryDropdown
+        active={isActive(ROUTES.products) || pathname.startsWith('/products')}
+        open={productsOpen}
+        onOpen={onProductsOpen}
+        onToggle={onProductsToggle}
+        onClose={onProductsClose}
       />
 
-      {MAIN_NAV_LINKS.filter((l) => l.label !== 'Home').map((link) => (
+      <ServiceCategoryDropdown
+        active={isActive(ROUTES.search) || pathname.startsWith('/search')}
+        open={servicesOpen}
+        onOpen={onServicesOpen}
+        onToggle={onServicesToggle}
+        onClose={onServicesClose}
+      />
+
+      {MAIN_NAV_LINKS.map((link) => (
         <DesktopNavLink
           key={link.href}
           label={link.label}

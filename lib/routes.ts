@@ -7,7 +7,39 @@ export const ROUTES = {
   about: '/about',
   search: '/search',
   dashboard: '/dashboard',
-  sellerDashboard: '/dashboard/seller',
+  clientOrders: '/dashboard/orders',
+  clientProjects: '/dashboard/projects',
+  clientProject: (id: string) => `/dashboard/projects/${id}`,
+  clientMessages: '/dashboard/messages',
+  clientPayments: '/dashboard/payments',
+  clientWallet: '/dashboard/wallet',
+  clientInvoices: '/dashboard/invoices',
+  clientProducts: '/dashboard/products',
+  clientServices: '/dashboard/services',
+  clientSettings: '/dashboard/settings',
+  clientSupport: '/dashboard/support',
+  sellerDashboard: '/seller-dashboard',
+  sellerDashboardOrders: '/seller-dashboard/orders',
+  sellerDashboardServices: '/seller-dashboard/services',
+  sellerDashboardProducts: '/seller-dashboard/products',
+  sellerDashboardEarnings: '/seller-dashboard/earnings',
+  sellerDashboardMessages: '/seller-dashboard/messages',
+  sellerDashboardAnalytics: '/seller-dashboard/analytics',
+  sellerDashboardReviews: '/seller-dashboard/reviews',
+  sellerDashboardClients: '/seller-dashboard/clients',
+  sellerDashboardWallet: '/seller-dashboard/wallet',
+  sellerDashboardPayouts: '/seller-dashboard/payouts',
+  sellerDashboardProfile: '/seller-dashboard/profile',
+  sellerDashboardSettings: '/seller-dashboard/settings',
+  sellerDashboardSettingsVerification: '/seller-dashboard/settings/verification',
+  sellerDashboardSettingsNotifications: '/seller-dashboard/settings/notifications',
+  sellerDashboardSettingsSecurity: '/seller-dashboard/settings/security',
+  sellerDashboardOnboarding: '/seller-dashboard/onboarding',
+  sellerDashboardServicesNew: '/seller-dashboard/services/new',
+  sellerDashboardProductsNew: '/seller-dashboard/products/new',
+  /** @deprecated Use sellerDashboard */
+  legacySellerDashboard: '/dashboard/seller',
+  /** @deprecated Use sellerDashboardOnboarding */
   sellerOnboarding: '/seller/onboarding',
   login: '/login',
   signup: '/signup',
@@ -15,12 +47,32 @@ export const ROUTES = {
   cart: '/cart',
   messages: '/messages',
   service: (slug: string) => `/services/${slug}`,
+  /** Legacy sellers route — prefer marketplaceSeller */
   seller: (slug: string) => `/sellers/${slug}`,
+  marketplaceSeller: (slug: string) => `/seller/${slug}`,
 } as const;
 
-export function searchUrl(query?: string): string {
-  if (!query?.trim()) return ROUTES.search;
-  return `${ROUTES.search}?q=${encodeURIComponent(query.trim())}`;
+export function searchUrl(query?: string, extra?: Record<string, string>): string {
+  const params = new URLSearchParams();
+  const trimmed = query?.trim();
+  if (trimmed) params.set('q', trimmed);
+  if (extra) {
+    for (const [key, value] of Object.entries(extra)) {
+      if (value) params.set(key, value);
+    }
+  }
+  const qs = params.toString();
+  return qs ? `${ROUTES.search}?${qs}` : ROUTES.search;
+}
+
+/** Marketplace category filter on search */
+export function marketplaceCategorySearchUrl(slug: string): string {
+  return `${ROUTES.search}?category=${encodeURIComponent(slug)}`;
+}
+
+/** Product marketplace category on /products */
+export function marketplaceProductCategoryUrl(slug: string): string {
+  return `${ROUTES.products}?category=${encodeURIComponent(slug)}`;
 }
 
 /** Products listing with optional marketplace category filter */

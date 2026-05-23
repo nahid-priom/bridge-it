@@ -48,7 +48,7 @@ export async function getHomeTestimonials(limit = 6): Promise<PlatformTestimonia
   return data.map((review, i) => ({
     id: review.id,
     name: review.reviewer_name,
-    role: (review.products as { title?: string } | null)?.title ?? 'Bridge Customer',
+    role: (review.products as { title?: string } | null)?.title ?? 'Deshi Fiverr Customer',
     comment: review.comment,
     rating: Number(review.rating),
     accentColor: accents[i % accents.length],

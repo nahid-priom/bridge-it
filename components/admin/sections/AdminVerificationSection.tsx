@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Eye, Check, X, ShieldCheck } from 'lucide-react';
 import { AdminFilterBar } from '../../../components/admin/AdminFilterBar';
@@ -10,14 +11,17 @@ import { AdminConfirmationModal } from '../../../components/admin/AdminConfirmat
 import type { VerificationRequest } from '@/types/admin';
 import { useAdminData } from '@/components/admin/AdminDataContext';
 import { useStore } from '@/store/useStore';
+import { verifyMarketplaceSellerAction } from '@/app/actions/admin-marketplace';
 
 export const AdminVerificationSection: React.FC = () => {
+  const router = useRouter();
   const { setNotification } = useStore();
   const { verificationQueue } = useAdminData();
   const [queue, setQueue] = useState(verificationQueue);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [modal, setModal] = useState<{ open: boolean; action: 'approve' | 'reject'; id: string } | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     return queue.filter((v) => {
@@ -29,10 +33,25 @@ export const AdminVerificationSection: React.FC = () => {
     });
   }, [queue, search, filter]);
 
-  const handleAction = (id: string, status: 'approved' | 'rejected') => {
-    setQueue((prev) => prev.map((v) => (v.id === id ? { ...v, status } : v)));
-    setNotification(`Seller ${status === 'approved' ? 'approved' : 'rejected'} successfully`);
+  const handleAction = async (id: string, status: 'approved' | 'rejected') => {
+    setLoadingId(id);
+    const result = await verifyMarketplaceSellerAction({
+      sellerId: id,
+      verified: status === 'approved',
+    });
+    setLoadingId(null);
+    if (result && 'error' in result) {
+      setNotification(result.error ?? 'Action failed');
+      return;
+    }
+    setQueue((prev) => prev.filter((v) => v.id !== id));
+    setNotification(
+      status === 'approved'
+        ? 'Seller verified on marketplace'
+        : 'Verification declined — seller remains unverified'
+    );
     setModal(null);
+    router.refresh();
   };
 
   return (
@@ -81,7 +100,7 @@ export const AdminVerificationSection: React.FC = () => {
           }
           confirmLabel={modal.action === 'approve' ? 'Approve' : 'Reject'}
           variant={modal.action === 'reject' ? 'danger' : 'primary'}
-          onConfirm={() => handleAction(modal.id, modal.action === 'approve' ? 'approved' : 'rejected')}
+          onConfirm={() => void handleAction(modal.id, modal.action === 'approve' ? 'approved' : 'rejected')}
           onCancel={() => setModal(null)}
         />
       )}

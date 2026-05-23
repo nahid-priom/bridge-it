@@ -11,7 +11,7 @@ export function productToService(product: Product): Service {
     title: product.title,
     description: product.shortDescription,
     price: product.price,
-    currency: 'USD',
+    currency: 'BDT',
     deliveryTime: product.deliveryTime,
     thumbnail: product.image,
     category: 'digital-products',
@@ -28,6 +28,6 @@ export function productToService(product: Product): Service {
     isVerified: product.sellerLevel === 'Top Rated',
     isFeatured: product.isFeatured,
     instantDelivery: product.deliveryTime.toLowerCase().includes('instant'),
-    resultType: 'service',
+    resultType: 'digital-product',
   };
 }

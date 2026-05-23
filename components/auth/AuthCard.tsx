@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { BridgeLogo } from '@/components/brand/BridgeLogo';
+import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
 
 export function AuthCard({
   title,
@@ -17,7 +17,7 @@ export function AuthCard({
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex justify-center mb-4">
-            <BridgeLogo textVisibility="always" />
+            <DeshiFiverrLogo size="md" />
           </div>
           <h1 className="text-2xl font-black font-display text-text-primary">{title}</h1>
           {subtitle && <p className="text-sm text-text-secondary mt-2">{subtitle}</p>}

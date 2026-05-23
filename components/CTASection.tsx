@@ -33,13 +33,13 @@ export const CTASection: React.FC = () => {
             </div>
 
             <h2 className="text-3xl md:text-5xl font-black font-display text-text-primary mb-4 leading-tight">
-              Start Your Journey on
+              Ready to hire or sell on
               <br />
-              <span className="gradient-text">Bridge</span> Today
+              <span className="gradient-text">Deshi Fiverr</span>?
             </h2>
 
             <p className="text-sm md:text-base text-text-muted max-w-xl mx-auto mb-8 leading-relaxed">
-              Whether you're a buyer looking for quality digital services or a seller wanting to grow your business — Bridge is built for you.
+              Join thousands of buyers and sellers building Bangladesh&apos;s digital economy on Deshi Fiverr.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">

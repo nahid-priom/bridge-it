@@ -34,13 +34,28 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
   }));
 
   const pendingActions: AdminPendingAction[] = [
-    {
-      id: 'pa1',
-      label: 'Seller verifications pending',
-      count: stats.pendingVerification,
-      section: 'seller-verification',
-      priority: 'high',
-    },
+    ...(stats.pendingSellerApplications > 0
+      ? [
+          {
+            id: 'pa-applications',
+            label: 'Seller applications pending review',
+            count: stats.pendingSellerApplications,
+            section: 'seller-applications' as const,
+            priority: 'high' as const,
+          },
+        ]
+      : []),
+    ...(stats.pendingVerification > 0
+      ? [
+          {
+            id: 'pa-verification',
+            label: 'Seller verifications pending',
+            count: stats.pendingVerification,
+            section: 'seller-verification' as const,
+            priority: 'medium' as const,
+          },
+        ]
+      : []),
   ];
 
   const topCategories = categories.slice(0, 4).map((c) => ({

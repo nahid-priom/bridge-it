@@ -18,6 +18,8 @@ import { AdminChartCard } from '../../../components/admin/AdminChartCard';
 import { AdminActivityFeed } from '../../../components/admin/AdminActivityFeed';
 import { formatCurrency, type AdminSection } from '@/types/admin';
 import { useAdminData } from '@/components/admin/AdminDataContext';
+import { DashboardPageHero } from '@/components/dashboard/DashboardPageHero';
+import { PAGE_HEROES } from '@/lib/config/page-heroes';
 
 const monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 
@@ -61,6 +63,12 @@ export const AdminOverviewSection: React.FC<AdminOverviewSectionProps> = ({ onNa
       exit={{ opacity: 0 }}
       className="space-y-6"
     >
+      <DashboardPageHero
+        title={PAGE_HEROES.admin.title}
+        highlightedText={PAGE_HEROES.admin.highlightedText}
+        subtitle={PAGE_HEROES.admin.subtitle}
+        compact
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {statCards.map((card) => (
           <AdminStatCard key={card.label} {...card} loading={loading} />
