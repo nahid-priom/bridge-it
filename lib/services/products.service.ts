@@ -67,6 +67,29 @@ export async function getPublishedProducts(filters: ProductSearchFilters = {}): 
   return (data ?? []) as BitpProduct[];
 }
 
+export type ProductSitemapEntry = {
+  slug: string;
+  updated_at: string;
+};
+
+export async function getPublishedProductSitemapEntries(): Promise<ProductSitemapEntry[]> {
+  const supabase = await getServerClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('slug, updated_at')
+    .eq('status', 'published')
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('[products.service] getPublishedProductSitemapEntries', error.message);
+    return [];
+  }
+
+  return (data ?? []) as ProductSitemapEntry[];
+}
+
 export async function getProductBySlug(slug: string): Promise<BitpProductDetail | null> {
   const supabase = await getServerClient();
   if (!supabase) return null;

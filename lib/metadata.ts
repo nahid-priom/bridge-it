@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { BRANDING } from '@/lib/config/branding';
-import { BRAND_ASSETS, BRAND_COLORS } from '@/lib/config/brand-assets';
+import { BRAND_ASSETS } from '@/lib/config/brand-assets';
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/site';
 
-const OG_IMAGE = {
+const DEFAULT_OG_IMAGE = {
   url: '/opengraph-image',
   width: 1200,
   height: 630,
@@ -16,7 +16,48 @@ type PageMetaInput = {
   path: string;
   keywords?: string[];
   noIndex?: boolean;
+  image?: string | null;
+  ogType?: 'website' | 'article';
 };
+
+function resolveTitle(title: string, path: string): Metadata['title'] {
+  if (path === '/') return { absolute: title };
+  const suffix = ` | ${SITE_NAME}`;
+  if (title.endsWith(suffix) || title.includes(` | ${SITE_NAME}`)) {
+    return { absolute: title };
+  }
+  return title;
+}
+
+function toDisplayTitle(title: string, path: string): string {
+  if (path === '/') return title;
+  const suffix = ` | ${SITE_NAME}`;
+  if (title.endsWith(suffix) || title.includes(` | ${SITE_NAME}`)) return title;
+  return `${title}${suffix}`;
+}
+
+function resolveOgImage(image?: string | null) {
+  if (!image?.trim()) return [DEFAULT_OG_IMAGE];
+  const url = image.startsWith('http') ? image : image.startsWith('/') ? image : `/${image}`;
+  return [{ url, width: 1200, height: 630, alt: SITE_NAME }];
+}
+
+function buildRobots(noIndex: boolean): Metadata['robots'] {
+  if (noIndex) {
+    return { index: false, follow: false, nocache: true };
+  }
+  return {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  };
+}
 
 export function buildPageMetadata({
   title,
@@ -24,30 +65,41 @@ export function buildPageMetadata({
   path,
   keywords,
   noIndex = false,
+  image,
+  ogType = 'website',
 }: PageMetaInput): Metadata {
-  const url = `${SITE_URL}${path}`;
-  const fullTitle = path === '/' ? title : `${title} | ${SITE_NAME}`;
+  const url = `${SITE_URL.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
+  const resolvedTitle = resolveTitle(title, path);
+  const displayTitle = toDisplayTitle(title, path);
+  const ogImages = resolveOgImage(image);
 
   return {
-    title: fullTitle,
+    title: resolvedTitle,
     description,
     keywords: keywords ?? SITE_KEYWORDS,
     alternates: { canonical: url },
-    robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
+    robots: buildRobots(noIndex),
+    category: 'technology',
+    formatDetection: {
+      telephone: false,
+      email: false,
+      address: false,
+    },
     openGraph: {
-      type: 'website',
+      type: ogType,
       locale: 'en_US',
+      alternateLocale: ['bn_BD'],
       url,
       siteName: SITE_NAME,
-      title: fullTitle,
+      title: displayTitle,
       description,
-      images: [OG_IMAGE],
+      images: ogImages,
     },
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
+      title: displayTitle,
       description,
-      images: [OG_IMAGE.url],
+      images: ogImages.map((img) => img.url),
     },
   };
 }
@@ -61,10 +113,17 @@ export const rootMetadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
-  authors: [{ name: BRANDING.appName }],
+  authors: [{ name: BRANDING.appName, url: SITE_URL }],
   creator: BRANDING.appName,
   publisher: BRANDING.legalName,
-  robots: { index: true, follow: true },
+  referrer: 'origin-when-cross-origin',
+  category: 'technology',
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
+  robots: buildRobots(false),
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
@@ -77,23 +136,20 @@ export const rootMetadata: Metadata = {
     apple: [{ url: BRAND_ASSETS.icons.appleTouch, sizes: '180x180', type: 'image/png' }],
     shortcut: [BRAND_ASSETS.icons.faviconIco],
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: BRAND_COLORS.themeColor },
-    { media: '(prefers-color-scheme: dark)', color: BRAND_COLORS.themeColor },
-  ],
   openGraph: {
     type: 'website',
     locale: 'en_US',
+    alternateLocale: ['bn_BD'],
     url: SITE_URL,
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [OG_IMAGE],
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [OG_IMAGE.url],
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };

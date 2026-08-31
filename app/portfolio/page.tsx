@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { buildPageMetadata } from '@/lib/metadata';
-import { SITE_NAME } from '@/lib/site';
 import { PageHero } from '@/components/ui/PageHero';
+import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { PAGE_HEROES } from '@/lib/config/page-heroes';
 import { getPublishedPortfolio } from '@/lib/services/portfolio.service';
 
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: `Portfolio | ${SITE_NAME}`,
+  title: 'Portfolio',
+  description: 'Explore completed software, website, and digital marketing projects delivered by Bridge IT Park.',
   path: '/portfolio',
 });
 
@@ -18,6 +19,7 @@ export default async function PortfolioPage() {
 
   return (
     <div className="pb-16">
+      <PageBreadcrumbJsonLd path="/portfolio" />
       <PageHero
         variant="marketing"
         title={PAGE_HEROES.portfolio.title}

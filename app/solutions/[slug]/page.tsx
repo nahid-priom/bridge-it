@@ -6,6 +6,8 @@ import { buildPageMetadata } from '@/lib/metadata';
 import { getProductBySlug, getRelatedProducts } from '@/lib/services/products.service';
 import { PackageComparison } from '@/components/solutions/PackageComparison';
 import { SolutionCard } from '@/components/solutions/SolutionCard';
+import { JsonLd } from '@/components/layout/JsonLd';
+import { bitpSolutionBreadcrumbJsonLd, bitpSolutionJsonLd } from '@/lib/structured-data';
 import { ROUTES } from '@/lib/routes';
 import { formatBdt } from '@/lib/services/client';
 
@@ -18,9 +20,11 @@ export async function generateMetadata({ params }: PageProps) {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   return buildPageMetadata({
-    title: product.seo_title ?? `${product.name} | Bridge IT Park`,
+    title: product.seo_title ?? product.name,
     description: product.seo_description ?? product.short_description ?? undefined,
     path: ROUTES.solution(slug),
+    keywords: product.keywords?.length ? product.keywords : undefined,
+    image: product.cover_image ?? product.thumbnail,
   });
 }
 
@@ -33,6 +37,7 @@ export default async function SolutionDetailPage({ params }: PageProps) {
 
   return (
     <div className="pb-16">
+      <JsonLd data={[bitpSolutionJsonLd(product), bitpSolutionBreadcrumbJsonLd(product)]} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <nav className="text-sm text-text-secondary mb-6">
           <Link href={ROUTES.solutions} className="hover:text-deshi-green">Solutions</Link>

@@ -1,6 +1,10 @@
 import { SITE_BRAND, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site';
 import type { Service } from '@/types';
 import type { Product, ProductReview } from '@/types/product';
+import type { BitpProductDetail } from '@/types/bitp';
+import { ROUTES } from '@/lib/routes';
+
+import { BRANDING } from '@/lib/config/branding';
 
 export function organizationJsonLd() {
   return {
@@ -11,6 +15,16 @@ export function organizationJsonLd() {
     url: SITE_URL,
     logo: `${SITE_URL}/brand/bridge-it-park-logo-full.png`,
     description: SITE_DESCRIPTION,
+    email: BRANDING.supportEmail,
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: BRANDING.supportEmail,
+        availableLanguage: ['English', 'Bengali'],
+        areaServed: 'BD',
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'BD',
@@ -33,7 +47,7 @@ export function websiteJsonLd() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+        urlTemplate: `${SITE_URL}${ROUTES.solutions}?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
@@ -141,4 +155,62 @@ export function serviceJsonLd(service: Service, slug: string) {
       reviewCount: service.reviewCount,
     },
   };
+}
+
+export function bitpSolutionJsonLd(product: BitpProductDetail) {
+  const url = `${SITE_URL}${ROUTES.solution(product.slug)}`;
+  const image = product.cover_image ?? product.thumbnail ?? `${SITE_URL}/brand/bridge-it-park-logo-full.png`;
+  const price =
+    product.pricing_type === 'custom_quote' ? undefined : Number(product.starting_price);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: product.name,
+    description: product.seo_description ?? product.short_description ?? product.full_description,
+    image,
+    url,
+    category: product.category?.name,
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Bangladesh',
+    },
+    ...(price !== undefined && Number.isFinite(price)
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price,
+            priceCurrency: product.currency || 'BDT',
+            availability: 'https://schema.org/InStock',
+            url,
+          },
+        }
+      : {}),
+  };
+}
+
+export function bitpSolutionBreadcrumbJsonLd(product: BitpProductDetail) {
+  const items = [
+    { name: 'Home', url: SITE_URL },
+    { name: 'Solutions', url: `${SITE_URL}${ROUTES.solutions}` },
+  ];
+
+  if (product.category) {
+    items.push({
+      name: product.category.name,
+      url: `${SITE_URL}${ROUTES.solutions}?category=${product.category.slug}`,
+    });
+  }
+
+  items.push({
+    name: product.name,
+    url: `${SITE_URL}${ROUTES.solution(product.slug)}`,
+  });
+
+  return breadcrumbJsonLd(items);
 }

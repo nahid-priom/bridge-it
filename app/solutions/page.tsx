@@ -1,13 +1,14 @@
 import { buildPageMetadata } from '@/lib/metadata';
-import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/site';
+import { SITE_DESCRIPTION } from '@/lib/site';
 import { SolutionsPageClient } from '@/components/solutions/SolutionsPageClient';
+import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { getActiveCategories } from '@/lib/services/categories.service';
 import { getPublishedProducts } from '@/lib/services/products.service';
 
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: `Solutions | ${SITE_NAME}`,
+  title: 'Solutions',
   description: SITE_DESCRIPTION,
   path: '/solutions',
 });
@@ -29,11 +30,14 @@ export default async function SolutionsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <SolutionsPageClient
-      categories={categories}
-      products={products}
-      initialQuery={params.q ?? ''}
-      initialCategory={params.category ?? ''}
-    />
+    <>
+      <PageBreadcrumbJsonLd path="/solutions" />
+      <SolutionsPageClient
+        categories={categories}
+        products={products}
+        initialQuery={params.q ?? ''}
+        initialCategory={params.category ?? ''}
+      />
+    </>
   );
 }

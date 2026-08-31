@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/metadata';
-import { SITE_NAME } from '@/lib/site';
 import { PageHero } from '@/components/ui/PageHero';
+import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { PAGE_HEROES } from '@/lib/config/page-heroes';
 import { getActiveCategories } from '@/lib/services/categories.service';
 import { getPublishedProducts } from '@/lib/services/products.service';
@@ -11,7 +11,8 @@ import { formatBdt } from '@/lib/services/client';
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: `Pricing | ${SITE_NAME}`,
+  title: 'Pricing',
+  description: 'Transparent pricing for software, website, marketing, and creative solutions from Bridge IT Park.',
   path: '/pricing',
 });
 
@@ -26,6 +27,7 @@ export default async function PricingPage() {
 
   return (
     <div className="pb-16">
+      <PageBreadcrumbJsonLd path="/pricing" />
       <PageHero
         variant="marketing"
         title={PAGE_HEROES.pricing.title}

@@ -13,8 +13,9 @@ export async function generateMetadata({ params }: PageProps) {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   return buildPageMetadata({
-    title: `Order ${product.name} | Bridge IT Park`,
+    title: `Order ${product.name}`,
     path: `/solutions/${slug}/order`,
+    noIndex: true,
   });
 }
 
