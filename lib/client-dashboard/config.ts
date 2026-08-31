@@ -2,14 +2,12 @@ import {
   LayoutDashboard,
   ShoppingBag,
   FolderKanban,
-  Package,
-  Briefcase,
   MessageSquare,
-  Wallet,
-  FileText,
   CreditCard,
+  FileText,
   Settings,
   LifeBuoy,
+  FileQuestion,
   type LucideIcon,
 } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
@@ -23,17 +21,23 @@ export type ClientNavItem = {
 };
 
 export const clientNavItems: ClientNavItem[] = [
-  { id: 'overview', label: 'Dashboard Overview', href: ROUTES.dashboard, icon: LayoutDashboard },
+  { id: 'overview', label: 'Dashboard', href: ROUTES.dashboard, icon: LayoutDashboard },
   { id: 'orders', label: 'Orders', href: ROUTES.clientOrders, icon: ShoppingBag },
-  { id: 'projects', label: 'Active Projects', href: ROUTES.clientProjects, icon: FolderKanban },
-  { id: 'products', label: 'Purchased Products', href: ROUTES.clientProducts, icon: Package },
-  { id: 'services', label: 'Purchased Services', href: ROUTES.clientServices, icon: Briefcase },
-  { id: 'messages', label: 'Messages', href: ROUTES.clientMessages, icon: MessageSquare, badge: 3 },
-  { id: 'wallet', label: 'Wallet & Balance', href: ROUTES.clientWallet, icon: Wallet },
-  { id: 'invoices', label: 'Invoices', href: ROUTES.clientInvoices, icon: FileText },
+  { id: 'projects', label: 'Projects', href: ROUTES.clientProjects, icon: FolderKanban },
+  { id: 'quotations', label: 'Quotations', href: ROUTES.clientQuotations, icon: FileQuestion },
   { id: 'payments', label: 'Payments', href: ROUTES.clientPayments, icon: CreditCard },
-  { id: 'support', label: 'Support Tickets', href: ROUTES.clientSupport, icon: LifeBuoy },
-  { id: 'settings', label: 'Settings', href: ROUTES.clientSettings, icon: Settings },
+  { id: 'files', label: 'Files', href: ROUTES.clientFiles, icon: FileText },
+  { id: 'messages', label: 'Support', href: ROUTES.clientMessages, icon: MessageSquare },
+  { id: 'support', label: 'Help', href: ROUTES.clientSupport, icon: LifeBuoy },
+  { id: 'settings', label: 'Profile', href: ROUTES.clientSettings, icon: Settings },
+];
+
+export const clientMobileNavItems = [
+  { id: 'home', label: 'Home', href: ROUTES.dashboard, icon: LayoutDashboard },
+  { id: 'orders', label: 'Orders', href: ROUTES.clientOrders, icon: ShoppingBag },
+  { id: 'projects', label: 'Projects', href: ROUTES.clientProjects, icon: FolderKanban },
+  { id: 'support', label: 'Support', href: ROUTES.clientSupport, icon: LifeBuoy },
+  { id: 'more', label: 'More', href: ROUTES.clientSettings, icon: Settings },
 ];
 
 export function getClientNavItem(pathname: string): ClientNavItem | undefined {

@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import { buildPageMetadata } from '@/lib/metadata';
+import { BRANDING } from '@/lib/config/branding';
 import { PageLoading } from '@/components/PageLoading';
 import { getAdminDashboardData } from '@/lib/catalog/admin';
 import { getAdminSellerApplications } from '@/lib/catalog/admin-seller-applications';
@@ -9,7 +10,7 @@ export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
   title: 'Admin Control Center',
-  description: 'Deshi Fiverr marketplace administration.',
+  description: `${BRANDING.adminName} — platform administration.`,
   path: '/admin',
   noIndex: true,
 });

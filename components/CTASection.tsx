@@ -6,6 +6,7 @@ import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { useAuthProfile } from '@/components/auth/AuthProfileContext';
 import { useBecomeSeller } from '@/hooks/useBecomeSeller';
 import { ArrowRight, Sparkles, Shield, Globe, Rocket, Users, TrendingUp } from 'lucide-react';
+import { BRANDING } from '@/lib/config/branding';
 
 export const CTASection: React.FC = () => {
   const { goToCategories } = useAppNavigation();
@@ -33,13 +34,13 @@ export const CTASection: React.FC = () => {
             </div>
 
             <h2 className="text-3xl md:text-5xl font-black font-display text-text-primary mb-4 leading-tight">
-              Ready to hire or sell on
+              Ready to grow with
               <br />
-              <span className="gradient-text">Deshi Fiverr</span>?
+              <span className="gradient-text">{BRANDING.appName}</span>?
             </h2>
 
             <p className="text-sm md:text-base text-text-muted max-w-xl mx-auto mb-8 leading-relaxed">
-              Join thousands of buyers and sellers building Bangladesh&apos;s digital economy on Deshi Fiverr.
+              {BRANDING.tagline} — everything your business needs to go digital.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">

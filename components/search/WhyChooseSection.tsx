@@ -2,6 +2,7 @@
 
 import { Headphones, ShieldCheck, Truck, UserCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { BRANDING } from '@/lib/config/branding';
 
 const BENEFITS = [
   {
@@ -38,7 +39,7 @@ export function WhyChooseSection() {
           id="why-choose-heading"
           className="text-2xl md:text-3xl font-black font-display text-text-primary text-center mb-10 md:mb-12"
         >
-          Why Choose <span className="text-deshi-green">Deshi Fiverr</span>
+          Why Choose <span className="text-deshi-green">{BRANDING.appName}</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

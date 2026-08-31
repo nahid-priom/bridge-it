@@ -3,16 +3,16 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import NextTopLoader from 'nextjs-toploader';
+import { BRAND_COLORS } from '@/lib/config/brand-assets';
 
 const PRIMARY_LOADER = {
-  color: '#6C3CE1',
-  shadow: '0 0 12px rgba(108, 60, 225, 0.45)',
+  color: BRAND_COLORS.emerald,
+  shadow: '0 0 12px rgba(16, 185, 129, 0.45)',
 } as const;
 
-/** ~40% lighter than #5121C9 (mix toward white for dark backgrounds). */
 const DARK_THEME_LOADER = {
-  color: '#9779DF',
-  shadow: '0 0 12px rgba(151, 121, 223, 0.5)',
+  color: '#34d399',
+  shadow: '0 0 12px rgba(52, 211, 153, 0.5)',
 } as const;
 
 /** Route progress bar — primary in light theme, softened purple in dark. */

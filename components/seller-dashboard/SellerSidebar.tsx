@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { SellerModeSwitcher } from '@/components/seller-dashboard/SellerModeSwitcher';
 import { sellerNavItems, isSellerNavActive } from '@/lib/seller-dashboard/config';
 import { ROUTES } from '@/lib/routes';
@@ -39,7 +39,12 @@ export function SellerSidebar({
       >
         {!collapsed && (
           <Link href={ROUTES.sellerDashboard} className="shrink-0" onClick={onMobileClose}>
-            <DeshiFiverrLogo size="nav" showText />
+            <BridgeLogo variant="nav" />
+          </Link>
+        )}
+        {collapsed && (
+          <Link href={ROUTES.sellerDashboard} className="shrink-0 mx-auto" onClick={onMobileClose}>
+            <BridgeLogo variant="mark" />
           </Link>
         )}
         <button

@@ -1,40 +1,47 @@
 /**
- * Central brand configuration — single source of truth for Deshi Fiverr.
+ * Central brand configuration — Bridge IT Park.
  */
 export const BRANDING = {
-  appName: 'Deshi Fiverr',
-  shortName: 'Deshi Fiverr',
-  legalName: 'Deshi Fiverr Marketplace',
-  tagline: 'Bangladesh Marketplace',
+  appName: 'Bridge IT Park',
+  shortName: 'Bridge IT Park',
+  legalName: 'Bridge IT Park',
+  tagline: 'Build. Market. Grow.',
   description:
-    "Bangladesh's trusted freelance marketplace for services and products.",
-  primaryColor: '#00A85A',
-  accentColor: '#7C3AED',
-  supportEmail: 'support@deshifiverr.com',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://deshifiverr.com',
-  sellerHub: 'Deshi Fiverr Seller Hub',
-  clientWorkspace: 'Deshi Fiverr Client Workspace',
-  adminName: 'Deshi Fiverr Admin',
-  aiName: 'Deshi Fiverr AI',
+    'Software, Website, Digital Marketing & Creative Solutions for Growing Businesses.',
+  primaryColor: '#0f2744',
+  accentColor: '#10B981',
+  navyColor: '#0f2744',
+  blueColor: '#2563eb',
+  emeraldColor: '#10B981',
+  supportEmail: 'support@bridgeitpark.com',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://bridgeitpark.com',
+  clientWorkspace: 'Bridge IT Park Client Dashboard',
+  adminName: 'Bridge IT Park Admin',
+  aiName: 'Bridge IT Park Assistant',
 } as const;
 
 export const BRAND_KEYWORDS = [
-  'freelance marketplace Bangladesh',
-  'hire freelancers Bangladesh',
-  'Fiverr alternative Bangladesh',
-  'digital services Bangladesh',
-  'Bangladeshi freelancers',
-  'Deshi Fiverr',
+  'digital solutions Bangladesh',
+  'custom software development',
+  'ecommerce website Bangladesh',
+  'digital marketing Bangladesh',
+  'business website development',
+  'ERP software Bangladesh',
+  'Bridge IT Park',
   'web development Bangladesh',
-  'graphic design freelancer BD',
-  'marketplace Bangladesh',
+  'logo design Bangladesh',
+  'business solutions',
 ] as const;
 
 export const HOME_SEO_TITLE =
-  'Deshi Fiverr | Find the Right Talent. Get Work Done. Grow Your Business.';
+  'Bridge IT Park | Build. Market. Grow. Your Business, All in One Place.';
 
-/** Public seller profile URL shown in dashboards (host + path). */
+export function solutionUrl(slug: string): string {
+  return `/solutions/${slug}`;
+}
+
+/** @deprecated */
 export function sellerCustomUrl(slug: string): string {
   const host = BRANDING.siteUrl.replace(/^https?:\/\//, '');
-  return `${host}/s/${slug}`;
+  return `${host}/solutions/${slug}`;
 }

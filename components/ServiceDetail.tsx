@@ -6,6 +6,7 @@ import { PageFallback } from './PageFallback';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { Star, Clock, ShoppingCart, Shield, CheckCircle, MessageCircle, Phone, ArrowLeft, Copy, Eye, Lock } from 'lucide-react';
 import type { Category, Review, Service } from '@/types';
+import { BRANDING } from '@/lib/config/branding';
 
 type ServiceDetailProps = {
   service: Service;
@@ -35,7 +36,7 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({
     goToMessages();
   };
 
-  const shareUrl = `deshifiverr.com/services/${slug}`;
+  const shareUrl = `${BRANDING.siteUrl.replace(/^https?:\/\//, '')}/solutions/${slug}`;
   const sellerSlug = service.sellerSlug;
 
   return (

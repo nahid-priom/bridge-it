@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { BRANDING } from '@/lib/config/branding';
 import { usePathname } from 'next/navigation';
 import { SellerSidebar } from '@/components/seller-dashboard/SellerSidebar';
 import { SellerTopbar } from '@/components/seller-dashboard/SellerTopbar';
@@ -46,7 +47,7 @@ export function SellerDashboardLayout({
       >
         <SellerTopbar
           title={nav?.label ?? 'Seller Hub'}
-          subtitle="Deshi Fiverr — Seller workspace"
+          subtitle={`${BRANDING.appName} — Seller workspace`}
           authProfile={authProfile}
           onMenuClick={() => setMobileOpen(true)}
         />

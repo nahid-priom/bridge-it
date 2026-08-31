@@ -22,7 +22,7 @@ CREATE INDEX IF NOT EXISTS idx_marketplace_services_tags_gin ON marketplace_serv
 
 -- Software
 INSERT INTO marketplace_services (category_id, slug, title, short_description, seller_name, seller_level, price_from, delivery_days, rating, review_count, tags, row_group, is_popular, is_featured, sort_order)
-SELECT c.id, v.slug, v.title, v.desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
+SELECT c.id, v.slug, v.title, v.short_desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
 FROM marketplace_categories c
 CROSS JOIN (VALUES
   ('erp-system-development', 'ERP System Development', 'Enterprise ERP for Bangladeshi SMEs.', 'CodeBridge BD', 'Top Rated Seller', 180000, 45, 4.9, 88, '{erp,software,enterprise,sme}', 'software_development', false, true, 1),
@@ -33,13 +33,13 @@ CROSS JOIN (VALUES
   ('inventory-management', 'Inventory Management', 'Stock and warehouse management.', 'Studio 71 Digital', 'Pro Seller', 55000, 28, 4.7, 58, '{inventory,warehouse,stock}', 'software_development', false, false, 6),
   ('distribution-erp', 'Distribution ERP', 'Field sales and distribution ERP.', 'GreenCode Labs', 'Top Rated Seller', 200000, 55, 4.9, 44, '{erp,distribution,sales}', 'software_development', false, true, 7),
   ('hrm-software', 'HRM Software', 'HR and payroll management system.', 'ByteForge BD', 'Level 2 Seller', 90000, 35, 4.8, 49, '{hrm,hr,payroll}', 'software_development', false, false, 8)
-) AS v(slug, title, desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
+) AS v(slug, title, short_desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
 WHERE c.slug = 'software-development'
 ON CONFLICT (slug) DO UPDATE SET category_id = EXCLUDED.category_id, title = EXCLUDED.title, price_from = EXCLUDED.price_from, tags = EXCLUDED.tags, row_group = EXCLUDED.row_group, sort_order = EXCLUDED.sort_order;
 
 -- Web
 INSERT INTO marketplace_services (category_id, slug, title, short_description, seller_name, seller_level, price_from, delivery_days, rating, review_count, tags, row_group, is_popular, is_featured, sort_order)
-SELECT c.id, v.slug, v.title, v.desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
+SELECT c.id, v.slug, v.title, v.short_desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
 FROM marketplace_categories c
 CROSS JOIN (VALUES
   ('business-website', 'Business Website', 'Corporate business website.', 'CodeBridge BD', 'Top Rated Seller', 12000, 10, 4.9, 120, '{website,business,corporate}', 'web_development', true, false, 1),
@@ -50,13 +50,13 @@ CROSS JOIN (VALUES
   ('portfolio-website', 'Portfolio Website', 'Creative portfolio website.', 'Studio 71 Digital', 'Pro Seller', 8000, 5, 4.7, 52, '{portfolio,website,personal}', 'web_development', false, false, 6),
   ('shopify-store', 'Shopify Store', 'Shopify ecommerce setup.', 'GreenCode Labs', 'Top Rated Seller', 18000, 10, 4.8, 76, '{shopify,ecommerce,store}', 'web_development', false, false, 7),
   ('website-optimization', 'Website Optimization', 'Speed and Core Web Vitals.', 'ByteForge BD', 'Level 2 Seller', 5000, 3, 4.8, 41, '{website,speed,performance}', 'web_development', false, false, 8)
-) AS v(slug, title, desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
+) AS v(slug, title, short_desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
 WHERE c.slug = 'web-development'
 ON CONFLICT (slug) DO UPDATE SET category_id = EXCLUDED.category_id, title = EXCLUDED.title, price_from = EXCLUDED.price_from, tags = EXCLUDED.tags, row_group = EXCLUDED.row_group, sort_order = EXCLUDED.sort_order;
 
 -- App
 INSERT INTO marketplace_services (category_id, slug, title, short_description, seller_name, seller_level, price_from, delivery_days, rating, review_count, tags, row_group, is_popular, is_featured, sort_order)
-SELECT c.id, v.slug, v.title, v.desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
+SELECT c.id, v.slug, v.title, v.short_desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
 FROM marketplace_categories c
 CROSS JOIN (VALUES
   ('android-app', 'Android App', 'Native Android application.', 'CodeBridge BD', 'Top Rated Seller', 45000, 21, 4.9, 89, '{android,mobile-app,app}', 'app_development', true, false, 1),
@@ -67,13 +67,13 @@ CROSS JOIN (VALUES
   ('ecommerce-app', 'Ecommerce App', 'Mobile ecommerce marketplace app.', 'Studio 71 Digital', 'Pro Seller', 95000, 40, 4.8, 37, '{ecommerce,mobile-app,marketplace}', 'app_development', false, false, 6),
   ('booking-app', 'Booking App', 'Appointment and booking app.', 'GreenCode Labs', 'Top Rated Seller', 85000, 35, 4.9, 51, '{booking,appointment,app}', 'app_development', true, false, 7),
   ('lms-app', 'LMS App', 'Learning management mobile app.', 'ByteForge BD', 'Level 2 Seller', 110000, 42, 4.7, 93, '{lms,education,app}', 'app_development', false, false, 8)
-) AS v(slug, title, desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
+) AS v(slug, title, short_desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord)
 WHERE c.slug = 'app-development'
 ON CONFLICT (slug) DO UPDATE SET category_id = EXCLUDED.category_id, title = EXCLUDED.title, price_from = EXCLUDED.price_from, tags = EXCLUDED.tags, row_group = EXCLUDED.row_group, sort_order = EXCLUDED.sort_order;
 
 -- Digital marketing + AI (popular row)
 INSERT INTO marketplace_services (category_id, slug, title, short_description, seller_name, seller_level, price_from, delivery_days, rating, review_count, tags, row_group, is_popular, is_featured, sort_order)
-SELECT c.id, v.slug, v.title, v.desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
+SELECT c.id, v.slug, v.title, v.short_desc, v.seller, v.level, v.price, v.days, v.rating, v.reviews, v.tags::text[], v.row_group, v.popular, v.featured, v.ord
 FROM marketplace_categories c
 INNER JOIN (VALUES
   ('facebook-ads', 'Facebook Ads', 'Facebook ads campaign setup.', 'Studio 71 Digital', 'Top Rated Seller', 5000, 3, 4.9, 156, '{facebook-ads,social-media,marketing}', 'popular', true, false, 1, 'digital-marketing'),
@@ -92,6 +92,6 @@ INNER JOIN (VALUES
   ('ai-lead-qualification', 'AI Lead Qualification', 'Automated lead scoring.', 'Studio 71 Digital', 'Pro Seller', 22000, 14, 4.8, 36, '{ai,leads,qualification}', 'popular', false, false, 14, 'ai-automations'),
   ('ai-workflow-system', 'AI Workflow System', 'End-to-end AI workflows.', 'GreenCode Labs', 'Top Rated Seller', 30000, 18, 4.9, 28, '{ai,workflow,automation}', 'popular', false, true, 15, 'ai-automations'),
   ('ai-voice-assistant', 'AI Voice Assistant', 'Voice AI for call centers.', 'ByteForge BD', 'Level 2 Seller', 35000, 21, 4.7, 24, '{ai,voice,assistant}', 'popular', false, false, 16, 'ai-automations')
-) AS v(slug, title, desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord, cat_slug)
+) AS v(slug, title, short_desc, seller, level, price, days, rating, reviews, tags, row_group, popular, featured, ord, cat_slug)
   ON c.slug = v.cat_slug
 ON CONFLICT (slug) DO UPDATE SET category_id = EXCLUDED.category_id, title = EXCLUDED.title, price_from = EXCLUDED.price_from, tags = EXCLUDED.tags, row_group = EXCLUDED.row_group, sort_order = EXCLUDED.sort_order;

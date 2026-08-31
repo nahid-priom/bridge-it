@@ -1,19 +1,17 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { safeNextPath } from '@/lib/auth/redirect';
-import {
-  loadMarketplaceAccessFromSupabase,
-} from '@/lib/auth/load-marketplace-access';
-import {
-  isSellerFullyActivated,
-  resolveAuthLandingPath,
-  resolveDashboardRoute,
-  resolveSellerAccess,
-} from '@/lib/auth/resolveMarketplaceAccess';
+import { loadMarketplaceAccessFromSupabase } from '@/lib/auth/load-marketplace-access';
+import { resolveAuthLandingPath, resolveDashboardRoute } from '@/lib/auth/resolveMarketplaceAccess';
 import { ROUTES } from '@/lib/routes';
-import type { UserRole } from '@/types/database.types';
 
 const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/reset-password'];
+
+const DEPRECATED_SELLER_PREFIXES = [
+  '/seller-dashboard',
+  '/seller/onboarding',
+  '/dashboard/seller',
+];
 
 export function isPublicPath(pathname: string): boolean {
   if (AUTH_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))) return true;
@@ -22,35 +20,40 @@ export function isPublicPath(pathname: string): boolean {
   if (pathname.startsWith('/_next')) return true;
   if (pathname.startsWith('/api/')) return false;
   if (pathname === '/robots.txt' || pathname === '/sitemap.xml') return true;
-  if (
-    pathname === '/' ||
-    pathname.startsWith('/categories') ||
-    pathname.startsWith('/products') ||
-    pathname.startsWith('/services') ||
-    pathname.startsWith('/sellers') ||
-    (pathname.startsWith('/seller/') && !pathname.startsWith(ROUTES.sellerOnboarding)) ||
-    pathname.startsWith('/search') ||
-    pathname.startsWith('/about') ||
-    pathname.startsWith('/cart') ||
-    pathname.startsWith('/messages')
-  ) {
-    return true;
-  }
+
+  const publicPrefixes = [
+    '/',
+    '/solutions',
+    '/pricing',
+    '/portfolio',
+    '/consultation',
+    '/about',
+    '/categories',
+    '/products',
+    '/services',
+    '/search',
+  ];
+
+  if (publicPrefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return true;
+
+  // Redirect deprecated seller profile routes
+  if (pathname.startsWith('/seller/') || pathname.startsWith('/sellers/')) return true;
+
   return false;
 }
 
 export function isProtectedMarketplacePath(pathname: string): boolean {
-  return (
-    pathname.startsWith('/admin') ||
-    pathname === '/dashboard' ||
-    pathname.startsWith('/dashboard/') ||
-    pathname.startsWith('/seller/onboarding') ||
-    pathname === '/seller-dashboard' ||
-    pathname.startsWith('/seller-dashboard/')
-  );
+  if (pathname.startsWith('/admin')) return true;
+  if (pathname === '/dashboard' || pathname.startsWith('/dashboard/')) return true;
+  return DEPRECATED_SELLER_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
 type SessionSupabase = Parameters<typeof loadMarketplaceAccessFromSupabase>[0];
+
+function normalizeRole(role: string | undefined): string {
+  if (role === 'buyer') return 'client';
+  return role ?? 'client';
+}
 
 export async function handleMarketplaceMiddleware(
   request: NextRequest,
@@ -59,17 +62,39 @@ export async function handleMarketplaceMiddleware(
   supabaseResponse: NextResponse
 ): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
+
+  // Block deprecated seller routes
+  if (DEPRECATED_SELLER_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    if (!user) {
+      const login = new URL('/login', request.url);
+      login.searchParams.set('next', safeNextPath(pathname));
+      return NextResponse.redirect(login);
+    }
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+    const role = normalizeRole(profile?.role);
+    if (role === 'admin' || role === 'super_admin') {
+      return NextResponse.redirect(new URL(ROUTES.admin, request.url));
+    }
+    return NextResponse.redirect(new URL(ROUTES.dashboard, request.url));
+  }
+
+  // Redirect legacy seller profiles to solutions
+  if (pathname.startsWith('/seller/') || pathname.startsWith('/sellers/')) {
+    return NextResponse.redirect(new URL(ROUTES.solutions, request.url));
+  }
+
+  // Redirect cart to solutions
+  if (pathname === '/cart') {
+    return NextResponse.redirect(new URL(ROUTES.solutions, request.url));
+  }
+
   const protectedPath = isProtectedMarketplacePath(pathname);
 
   if (!protectedPath && isPublicPath(pathname)) {
     if (user && AUTH_ROUTES.includes(pathname)) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .maybeSingle();
-      const role = (profile?.role as UserRole | undefined) ?? 'buyer';
-      return NextResponse.redirect(new URL(resolveAuthLandingPath(role), request.url));
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+      const role = normalizeRole(profile?.role);
+      return NextResponse.redirect(new URL(resolveAuthLandingPath(role as import('@/types/database.types').UserRole), request.url));
     }
     return supabaseResponse;
   }
@@ -80,38 +105,17 @@ export async function handleMarketplaceMiddleware(
     return NextResponse.redirect(login);
   }
 
-  if (!user || !protectedPath) {
-    return supabaseResponse;
-  }
+  if (!user || !protectedPath) return supabaseResponse;
 
   const ctx = await loadMarketplaceAccessFromSupabase(supabase, user.id);
-  const role = ctx.profile?.role ?? 'buyer';
+  const role = normalizeRole(ctx.profile?.role);
 
-  if (pathname.startsWith('/admin') && role !== 'admin') {
+  if (pathname.startsWith('/admin') && role !== 'admin' && role !== 'super_admin') {
     return NextResponse.redirect(new URL('/unauthorized', request.url));
   }
 
-  const sellerPaths =
-    pathname === ROUTES.sellerDashboard || pathname.startsWith(`${ROUTES.sellerDashboard}/`);
-
-  if (sellerPaths) {
-    const seller = resolveSellerAccess(ctx);
-    if (!seller.canAccessSellerDashboard && seller.redirectTo) {
-      return NextResponse.redirect(new URL(seller.redirectTo, request.url));
-    }
-  }
-
-  if (pathname.startsWith(ROUTES.sellerOnboarding)) {
-    if (isSellerFullyActivated(ctx)) {
-      return NextResponse.redirect(new URL(ROUTES.sellerDashboard, request.url));
-    }
-  }
-
-  if (
-    pathname === ROUTES.dashboard ||
-    (pathname.startsWith(`${ROUTES.dashboard}/`) && !pathname.startsWith('/dashboard/seller'))
-  ) {
-    if (!['buyer', 'seller', 'admin'].includes(role)) {
+  if (pathname.startsWith('/dashboard')) {
+    if (!['client', 'buyer', 'seller', 'admin', 'super_admin'].includes(role)) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }

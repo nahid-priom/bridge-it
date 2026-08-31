@@ -3,15 +3,13 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { useAuthProfile } from '@/components/auth/AuthProfileContext';
-import { useBecomeSeller } from '@/hooks/useBecomeSeller';
+import Link from 'next/link';
 import { HeroStatsCard } from '@/components/hero/HeroStatsCard';
 import { HeroSearchInput } from '@/components/hero/HeroSearchInput';
 import { PageHero } from '@/components/ui/PageHero';
 import { PAGE_HEROES } from '@/lib/config/page-heroes';
 import { HERO_DESCRIPTION } from '@/data/homeContent';
-import { buildSearchUrl } from '@/lib/search/searchHelpers';
+import { ROUTES, solutionsSearchUrl } from '@/lib/routes';
 import { useStore } from '@/store/useStore';
 import { Search, ArrowRight, ShieldCheck } from 'lucide-react';
 import { heroMotion } from '@/lib/styles/design-tokens';
@@ -19,15 +17,12 @@ import { heroMotion } from '@/lib/styles/design-tokens';
 const ease = heroMotion.ease;
 
 export const Hero: React.FC = () => {
-  const { goToCategories } = useAppNavigation();
-  const authProfile = useAuthProfile();
-  const goBecomeSeller = useBecomeSeller(authProfile);
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const q = useStore.getState().searchQuery.trim();
-    router.push(buildSearchUrl({ q, category: 'all', page: 1 }));
+    router.push(solutionsSearchUrl(q));
   };
 
   return (
@@ -37,7 +32,7 @@ export const Hero: React.FC = () => {
           id="hero-heading"
           variant="marketing"
           eyebrow={
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-white/5 border border-slate-200/90 dark:border-white/15 shadow-sm text-sm font-semibold text-[#00A85A] dark:text-emerald-400">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-white/5 border border-slate-200/90 dark:border-white/15 shadow-sm text-sm font-semibold text-[#10B981] dark:text-emerald-400">
               <ShieldCheck className="w-4 h-4 shrink-0" aria-hidden />
               {PAGE_HEROES.home.eyebrow}
             </span>
@@ -50,7 +45,6 @@ export const Hero: React.FC = () => {
         />
 
         <div className="relative z-[1] w-full">
-          {/* Search + actions — below paragraph */}
           <motion.div
             className="mx-auto w-full"
             initial={{ opacity: 0, y: 24 }}
@@ -61,9 +55,9 @@ export const Hero: React.FC = () => {
               onSubmit={handleSearch}
               role="search"
               className="mb-4 mx-auto w-full max-w-[44.8rem]"
-              aria-label="Search marketplace services"
+              aria-label="Search digital solutions"
             >
-              <div className="hero-search-bar group flex flex-row items-stretch w-full bg-white dark:bg-surface/95 border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(8,11,22,0.06)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.35)] overflow-hidden transition-shadow hover:shadow-[0_14px_48px_rgba(0,168,90,0.1)]">
+              <div className="hero-search-bar group flex flex-row items-stretch w-full bg-white dark:bg-surface/95 border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(8,11,22,0.06)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.35)] overflow-hidden transition-shadow hover:shadow-[0_14px_48px_rgba(16,185,129,0.1)]">
                 <div className="flex-1 min-w-0">
                   <HeroSearchInput />
                 </div>
@@ -79,21 +73,19 @@ export const Hero: React.FC = () => {
             </form>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 md:mb-10 mt-6 md:mt-8">
-              <button
-                type="button"
-                onClick={goToCategories}
-                className="deshi-btn-primary w-full sm:w-auto px-8 py-3.5 text-sm md:text-base gap-2"
+              <Link
+                href={ROUTES.solutions}
+                className="deshi-btn-primary w-full sm:w-auto px-8 py-3.5 text-sm md:text-base gap-2 inline-flex items-center justify-center"
               >
-                Explore Services
+                Explore Solutions
                 <ArrowRight className="w-4 h-4" aria-hidden />
-              </button>
-              <button
-                type="button"
-                onClick={goBecomeSeller}
-                className="deshi-btn-outline w-full sm:w-auto px-8 py-3.5 text-sm md:text-base bg-white dark:bg-transparent"
+              </Link>
+              <Link
+                href={ROUTES.consultation}
+                className="deshi-btn-outline w-full sm:w-auto px-8 py-3.5 text-sm md:text-base bg-white dark:bg-transparent inline-flex items-center justify-center"
               >
-                Become a Seller
-              </button>
+                Get Free Consultation
+              </Link>
             </div>
 
             <HeroStatsCard />

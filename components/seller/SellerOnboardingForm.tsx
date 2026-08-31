@@ -7,10 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { sellerApplicationSchema, type SellerApplicationInput } from '@/lib/validations/seller';
 import { submitSellerApplicationAction } from '@/app/actions/seller';
 import { AuthField, authInputClass } from '@/components/auth/AuthField';
+import { BRANDING } from '@/lib/config/branding';
 
 const PRINCIPLES = [
   'Submit authentic documents and a real portfolio.',
-  'Ads must follow Deshi Fiverr quality and trust policy.',
+  `Ads must follow ${BRANDING.appName} quality and trust policy.`,
   'No misleading claims, copied work, or spam promotions.',
   'Promoted listings require admin approval before going live.',
 ];
@@ -118,7 +119,7 @@ export function SellerOnboardingForm({ defaultFullName }: { defaultFullName?: st
       <label className="flex items-start gap-3 cursor-pointer">
         <input type="checkbox" className="mt-1" {...register('adInterest')} />
         <span className="text-sm text-text-secondary">
-          I want to run promoted services on Deshi Fiverr (subject to admin approval).
+          I want to run promoted services on {BRANDING.appName} (subject to admin approval).
         </span>
       </label>
 

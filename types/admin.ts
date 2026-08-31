@@ -2,6 +2,18 @@ import type { LucideIcon } from 'lucide-react';
 
 export type AdminSection =
   | 'overview'
+  | 'bitp-products'
+  | 'bitp-categories'
+  | 'bitp-orders'
+  | 'bitp-projects'
+  | 'bitp-quotations'
+  | 'bitp-clients'
+  | 'bitp-payments'
+  | 'bitp-consultations'
+  | 'bitp-portfolio'
+  | 'bitp-reviews'
+  | 'bitp-messages'
+  | 'bitp-content'
   | 'seller-applications'
   | 'seller-verification'
   | 'sellers'

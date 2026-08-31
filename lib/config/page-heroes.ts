@@ -3,41 +3,56 @@ import { BRANDING } from '@/lib/config/branding';
 /** Shared hero copy — keep in sync with PageHero usage across the app. */
 export const PAGE_HEROES = {
   home: {
-    eyebrow: "Bangladesh's Trusted Freelance Marketplace",
-    title: 'Find the Right Talent.',
-    highlightedText: 'Get Work Done.',
-    accentLine: 'Grow Your Business.',
+    eyebrow: 'Your Complete Digital Business Partner',
+    title: 'Build. Market. Grow.',
+    highlightedText: 'Your Business,',
+    accentLine: 'All in One Place.',
   },
   search: {
     title: 'Find the Best',
-    highlightedText: 'Web Development',
-    accentLine: 'Services.',
-    subtitle: `Search ${BRANDING.appName} for verified freelancers, digital products, and business services.`,
+    highlightedText: 'Digital Solutions',
+    accentLine: 'for Your Business.',
+    subtitle: `Search ${BRANDING.appName} for software, websites, marketing, and creative services.`,
   },
   products: {
-    title: 'Discover Premium',
-    highlightedText: 'Business Products.',
-    subtitle: `Shop trusted services and digital products from verified ${BRANDING.appName} sellers.`,
+    title: 'Explore Our',
+    highlightedText: 'Digital Solutions.',
+    subtitle: 'Software, websites, marketing, and creative services for growing businesses.',
   },
-  sellerLanding: {
-    title: 'Build Better',
-    highlightedText: 'Digital Solutions',
-    accentLine: '.',
-    subtitle: `Showcase your skills and grow on ${BRANDING.sellerHub}.`,
+  solutions: {
+    title: 'Explore Our',
+    highlightedText: 'Digital Solutions.',
+    subtitle: 'Software, websites, marketing, and creative services for growing businesses.',
+  },
+  pricing: {
+    title: 'Transparent',
+    highlightedText: 'Service Pricing.',
+    subtitle: 'Browse packages by solution or request a custom quote.',
+  },
+  portfolio: {
+    title: 'Featured',
+    highlightedText: 'Projects.',
+    subtitle: 'See how we help businesses grow digitally.',
   },
   clientDashboard: {
     title: 'Manage Your',
     highlightedText: 'Projects Easily.',
     subtitle: BRANDING.clientWorkspace,
   },
-  sellerDashboard: {
-    title: 'Grow Your',
-    highlightedText: 'Marketplace Business.',
-    subtitle: BRANDING.sellerHub,
-  },
   admin: {
-    title: 'Manage The',
-    highlightedText: 'Marketplace System.',
+    title: 'Manage',
+    highlightedText: 'Bridge IT Park.',
+    subtitle: BRANDING.adminName,
+  },
+  sellerLanding: {
+    title: 'Build Better',
+    highlightedText: 'Digital Solutions',
+    accentLine: '.',
+    subtitle: `Get started with ${BRANDING.appName}.`,
+  },
+  sellerDashboard: {
+    title: 'Admin',
+    highlightedText: 'Operations.',
     subtitle: BRANDING.adminName,
   },
 } as const;

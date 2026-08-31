@@ -148,7 +148,7 @@ export function CategoryIconGrid({ categories }: CategoryIconGridProps) {
         {/* Mobile & tablet: 3×2 grid (two rows) */}
         <div className="grid grid-cols-3 gap-2.5 sm:gap-3 lg:hidden">
           {HOME_CATEGORY_GRID.map((cat, i) => {
-            const count = cat.categoryId ? countById.get(cat.categoryId) : undefined;
+            const count = cat.categoryId ? countById.get(cat.categoryId as import('@/types').CategoryType) : undefined;
             return (
               <motion.div
                 key={cat.id}
@@ -215,7 +215,7 @@ export function CategoryIconGrid({ categories }: CategoryIconGridProps) {
             )}
           >
             {HOME_CATEGORY_GRID.map((cat, i) => {
-              const count = cat.categoryId ? countById.get(cat.categoryId) : undefined;
+              const count = cat.categoryId ? countById.get(cat.categoryId as import('@/types').CategoryType) : undefined;
               return (
                 <motion.div
                   key={cat.id}

@@ -7,6 +7,7 @@ import { CheckCircle2, Sparkles, Store, Wallet, LayoutDashboard, X } from 'lucid
 import { ROUTES } from '@/lib/routes';
 import { useSellerActivationStore } from '@/store/sellerActivationStore';
 import { cn } from '@/lib/cn';
+import { BRANDING } from '@/lib/config/branding';
 
 const perks = [
   { icon: Store, label: 'Seller account approved' },
@@ -86,7 +87,7 @@ export function SellerActivationModal() {
               id="seller-activation-title"
               className="text-center text-2xl sm:text-3xl font-black font-display text-text-primary"
             >
-              Welcome to Deshi Fiverr Seller Hub
+              Welcome to {BRANDING.appName} Partner Hub
             </h2>
             <p className="text-center text-sm text-text-secondary mt-3 max-w-md mx-auto">
               Your seller account is now active. You can list services, sell products, and

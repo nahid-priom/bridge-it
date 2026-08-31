@@ -12,7 +12,7 @@ import {
   Store,
 } from 'lucide-react';
 import { ROUTES, isNavActive } from '@/lib/routes';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { NavbarSearch } from '@/components/navbar/NavbarSearch';
 import {
   MAIN_NAV_LINKS,
@@ -27,6 +27,7 @@ import { useAuthProfile } from '@/components/auth/AuthProfileContext';
 import { resolveDashboardHref } from '@/lib/auth/dashboard-routes';
 import { useDashboardModeStore } from '@/store/dashboardModeStore';
 import { cn } from '@/lib/cn';
+import { BRANDING } from '@/lib/config/branding';
 
 type MobileDrawerProps = {
   open: boolean;
@@ -163,7 +164,7 @@ export function MobileDrawer({
       >
         <div className="flex items-center justify-between mb-5">
           <Link href={ROUTES.home} onClick={closeAndNavigate} className="shrink-0">
-            <DeshiFiverrLogo size="nav" />
+            <BridgeLogo variant="nav" />
           </Link>
           <button
             type="button"
@@ -320,7 +321,7 @@ export function MobileDrawer({
             <div className="flex-1 min-w-0">
               <p className="font-bold text-text-primary text-sm">Become a Seller</p>
               <p className="text-xs text-slate-500 dark:text-white/60 mt-0.5 leading-snug">
-                Join Deshi Fiverr and start growing your business today.
+                Join {BRANDING.appName} and start growing your business today.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-bridge-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />

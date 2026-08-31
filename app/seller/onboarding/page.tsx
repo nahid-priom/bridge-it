@@ -9,10 +9,11 @@ import { SellerOnboardingStatusPanel } from '@/components/seller/SellerOnboardin
 import { PageHero } from '@/components/ui/PageHero';
 import { PAGE_HEROES } from '@/lib/config/page-heroes';
 import { buildPageMetadata } from '@/lib/metadata';
+import { BRANDING } from '@/lib/config/branding';
 
 export const metadata = buildPageMetadata({
   title: 'Become a Seller',
-  description: 'Apply to sell on Deshi Fiverr',
+  description: `Apply to partner with ${BRANDING.appName}`,
   path: '/seller/onboarding',
   noIndex: true,
 });
@@ -36,7 +37,7 @@ export default async function SellerOnboardingPage() {
         className="max-w-3xl mx-auto"
         title={PAGE_HEROES.sellerLanding.title}
         highlightedText={PAGE_HEROES.sellerLanding.highlightedText}
-        subtitle="Join Deshi Fiverr Seller Hub with verified documents and quality services. Admin reviews every application before you can publish promoted listings."
+        subtitle={`Partner with ${BRANDING.appName} — submit verified documents and quality services. Admin reviews every application before listings go live.`}
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 md:pb-14">

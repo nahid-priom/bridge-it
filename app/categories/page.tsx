@@ -1,22 +1,15 @@
-import { buildPageMetadata } from '@/lib/metadata';
-import { CategoriesPage } from '@/components/CategoriesPage';
-import { getProductCategoriesForCategoriesPage } from '@/lib/catalog/productCategoriesUi';
-import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/lib/routes';
 
-export const revalidate = 60;
-
-export const metadata = buildPageMetadata({
-  title: 'Service Categories',
-  description: 'Browse all Deshi Fiverr service categories.',
-  path: '/categories',
-});
-
-export default async function CategoriesRoute() {
-  const categories = getProductCategoriesForCategoriesPage();
-  return (
-    <>
-      <PageBreadcrumbJsonLd path="/categories" />
-      <CategoriesPage categories={categories} />
-    </>
-  );
+export default async function CategoriesRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; q?: string }>;
+}) {
+  const params = await searchParams;
+  const qs = new URLSearchParams();
+  if (params.category) qs.set('category', params.category);
+  if (params.q) qs.set('q', params.q);
+  const query = qs.toString();
+  redirect(query ? `${ROUTES.solutions}?${query}` : ROUTES.solutions);
 }

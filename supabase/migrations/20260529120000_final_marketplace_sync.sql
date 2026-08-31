@@ -28,9 +28,18 @@ where p.seller_id is not null
     select 1 from public.marketplace_sellers ms where ms.id = p.seller_id
   );
 
-alter table public.profiles
-  add constraint profiles_seller_id_fkey
-  foreign key (seller_id) references public.marketplace_sellers (id) on delete set null;
+alter table public.profiles drop constraint if exists profiles_seller_id_fkey;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_seller_id_fkey'
+  ) then
+    alter table public.profiles
+      add constraint profiles_seller_id_fkey
+      foreign key (seller_id) references public.marketplace_sellers (id) on delete set null;
+  end if;
+end $$;
 
 -- Approved applications → seller role + active marketplace_seller
 update public.profiles p

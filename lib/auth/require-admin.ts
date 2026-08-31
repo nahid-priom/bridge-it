@@ -6,7 +6,7 @@ export async function requireAdmin() {
   if (!profile) {
     redirect('/login?next=%2Fadmin');
   }
-  if (profile.role !== 'admin') {
+  if (profile.role !== 'admin' && profile.role !== 'super_admin') {
     redirect('/unauthorized');
   }
   return profile;

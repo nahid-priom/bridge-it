@@ -17,6 +17,7 @@ import { SearchBreadcrumb, buildSearchBreadcrumbItems } from '@/components/searc
 import { SearchCategoryChips } from '@/components/search/SearchCategoryChips';
 import { CompactMarketplaceSearch } from '@/components/search/CompactMarketplaceSearch';
 import { cn } from '@/lib/cn';
+import { BRANDING } from '@/lib/config/branding';
 
 type SearchCategoryHeroProps = {
   queryLabel: string;
@@ -118,7 +119,7 @@ export function SearchCategoryHero({
             className="inline-flex items-center gap-1.5 shrink-0 text-sm font-semibold text-deshi-green hover:underline mt-1 lg:mt-2"
           >
             <Play className="w-3.5 h-3.5 fill-current" aria-hidden />
-            How Deshi Fiverr Works
+            How {BRANDING.appName} Works
           </Link>
         </div>
 

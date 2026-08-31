@@ -1,6 +1,6 @@
-# Deshi Fiverr — Bangladesh Marketplace
+# Bridge IT Park — Digital Business Solutions
 
-A Next.js marketplace demo for buying and selling digital services (animations, software, courses, and more). Built with Next.js 15, React 19, Tailwind CSS 4, and Zustand.
+A Next.js platform for software, websites, digital marketing, and creative solutions. Built with Next.js 15, React 19, Tailwind CSS 4, Supabase, and Zustand.
 
 ## Requirements
 
@@ -18,29 +18,27 @@ Open http://localhost:3000.
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start the Next.js development server |
-| `npm run build` | Production build (output in `.next/`) |
-| `npm run start` | Serve the production build locally |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | Run TypeScript without emitting files |
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run typecheck` | TypeScript check |
+| `npm run lint` | ESLint |
 
-## Project structure
+## Brand assets
 
-- `app/` - App Router pages and layouts
-- `components/` - UI sections and pages
-- `lib/` - Utilities, metadata, Supabase clients
-- `data/` - Sample categories, services, and sellers
+Official logo and favicon assets live under:
 
-## Deploy on Vercel
+- `public/brand/` — full logo variants
+- `public/icons/` — favicons and PWA icons
+- `lib/config/brand-assets.ts` — centralized asset paths
 
-1. Framework Preset: Next.js
-2. Build Command: `npm run build` (default)
-3. Output Directory: leave empty (do not use `dist`)
-4. Set Supabase env vars if using the database.
+## Environment
 
-## Notes
+Copy `.env.example` to `.env.local` and set:
 
-- Front-end demo with mock data; Supabase is optional.
-- Images load from Pexels CDN.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXT_PUBLIC_SITE_URL`

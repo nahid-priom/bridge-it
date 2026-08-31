@@ -151,7 +151,7 @@ export function ProductDetailHero({ product, backHref }: ProductDetailHeroProps)
               <span className="text-lg text-text-muted line-through">${product.oldPrice}</span>
             )}
           </div>
-          <p className="text-xs text-text-muted mt-1">Secure checkout on Deshi Fiverr</p>
+          <p className="text-xs text-text-muted mt-1">Secure checkout on Bridge IT Park</p>
         </div>
 
         <div className="flex flex-wrap gap-3">

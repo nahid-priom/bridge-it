@@ -5,22 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { useFloatingNavbar } from '@/hooks/useFloatingNavbar';
 import { ROUTES } from '@/lib/routes';
-import { becomeSellerPath } from '@/lib/auth/become-seller';
 import type { Category } from '@/types';
 import type { AuthProfile } from '@/lib/auth/types';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
-import { ServicesMegaMenu } from '@/components/navbar/ServicesMegaMenu';
-import { ProductsMegaMenu } from '@/components/navbar/ProductsMegaMenu';
-import { ExploreDropdown } from '@/components/navbar/ExploreDropdown';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
+import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
 import { NavbarQuickActions } from '@/components/navbar/NavbarQuickActions';
 import { NavbarProfileMenu } from '@/components/navbar/NavbarProfileMenu';
 import { MobileMarketplaceNavbar } from '@/components/navbar/mobile/MobileMarketplaceNavbar';
 import { cn } from '@/lib/cn';
-
-type OpenMenu = 'services' | 'products' | 'explore' | null;
+import { isNavActive } from '@/lib/routes';
 
 const navEase = [0.22, 1, 0.36, 1] as const;
 
@@ -32,20 +27,10 @@ export function FloatingNavbar({
   authProfile?: AuthProfile | null;
 }) {
   void _categories;
-  const cart = useStore((s) => s.cart);
   const openSearchModal = useStore((s) => s.openSearchModal);
-  const { goToCart } = useAppNavigation();
   const pathname = usePathname();
   const { isHeroMode, isScrolled } = useFloatingNavbar();
-
-  const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const navRef = useRef<HTMLDivElement>(null);
-
-  const closeDropdowns = useCallback(() => setOpenMenu(null), []);
-
-  const isServicesActive =
-    pathname.startsWith('/search') || pathname.startsWith('/services');
-  const isProductsActive = pathname.startsWith('/products');
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -59,25 +44,8 @@ export function FloatingNavbar({
   }, [openSearchModal]);
 
   useEffect(() => {
-    setOpenMenu(null);
     useStore.setState({ isMenuOpen: false });
   }, [pathname]);
-
-  useEffect(() => {
-    const close = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setOpenMenu(null);
-      }
-    };
-    document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
-  }, []);
-
-  const onlyOneOpen = (id: OpenMenu) => {
-    setOpenMenu((current) => (current === id ? null : id));
-  };
-
-  const showBecomeSeller = !authProfile || authProfile.role === 'buyer';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
@@ -90,19 +58,17 @@ export function FloatingNavbar({
       />
 
       <div ref={navRef} className="pointer-events-auto w-full min-w-0">
-        {/* Mobile: compact premium marketplace header */}
         <div className="lg:hidden">
           <MobileMarketplaceNavbar
             authProfile={authProfile}
-            cartCount={cart.length}
-            notificationCount={3}
+            cartCount={0}
+            notificationCount={0}
             messageCount={0}
             isScrolled={isScrolled}
             isHeroMode={isHeroMode}
           />
         </div>
 
-        {/* Desktop / tablet landscape */}
         <motion.nav
           layout
           transition={{ duration: 0.32, ease: navEase }}
@@ -123,71 +89,66 @@ export function FloatingNavbar({
               isHeroMode ? 'gap-3 lg:gap-5' : 'gap-2 lg:gap-3'
             )}
           >
-          <div className="flex items-center gap-3 lg:gap-6 shrink-0 min-w-0">
-            <Link
-              href={ROUTES.home}
-              className="shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-xl"
-              aria-label="Deshi Fiverr — home"
-            >
-              <DeshiFiverrLogo size="nav-lg" showText />
-            </Link>
+            <div className="flex items-center gap-6 shrink-0 min-w-0">
+              <Link
+                href={ROUTES.home}
+                className="shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-xl"
+                aria-label="Bridge IT Park — home"
+              >
+                <BridgeLogo iconSize="nav" textVisibility="always" />
+              </Link>
 
-            <div className="flex items-center gap-0.5 xl:gap-1">
-              <ServicesMegaMenu
-                open={openMenu === 'services'}
-                active={isServicesActive}
-                onToggle={() => onlyOneOpen('services')}
-                onClose={closeDropdowns}
+              <div className="flex items-center gap-1">
+                {MAIN_NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'px-3 py-2 rounded-xl text-sm font-semibold transition-colors',
+                      isNavActive(pathname, link.href)
+                        ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
+                        : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0" aria-hidden />
+
+            <div className="flex items-center gap-2 shrink-0 ml-auto">
+              <NavbarQuickActions
+                cartCount={0}
+                notificationCount={0}
+                messageCount={0}
+                onCartClick={() => openSearchModal()}
+                onSearchClick={openSearchModal}
+                hideCart
               />
-              <ProductsMegaMenu
-                open={openMenu === 'products'}
-                active={isProductsActive}
-                onToggle={() => onlyOneOpen('products')}
-                onClose={closeDropdowns}
-              />
-              <ExploreDropdown
-                open={openMenu === 'explore'}
-                active={pathname === ROUTES.about}
-                onToggle={() => onlyOneOpen('explore')}
-                onClose={closeDropdowns}
+
+              {!authProfile ? (
+                <Link
+                  href={ROUTES.login}
+                  className={cn(
+                    'inline-flex items-center rounded-xl text-sm font-semibold',
+                    'text-deshi-green border border-deshi-green/35 bg-emerald-50/50 dark:bg-emerald-500/10',
+                    'hover:bg-emerald-100/80 dark:hover:bg-emerald-500/15',
+                    isHeroMode ? 'px-4 py-2.5' : 'px-3.5 py-2'
+                  )}
+                >
+                  Login
+                </Link>
+              ) : null}
+
+              <NavbarProfileMenu
+                authProfile={authProfile}
+                onNavigate={() => useStore.setState({ isMenuOpen: false })}
+                compact
+                className="lg:[&_button]:pr-2"
               />
             </div>
-          </div>
-
-          <div className="flex-1 min-w-0" aria-hidden />
-
-          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-2.5 shrink-0 ml-auto">
-            <NavbarQuickActions
-              cartCount={cart.length}
-              notificationCount={3}
-              messageCount={0}
-              onCartClick={goToCart}
-              onSearchClick={openSearchModal}
-            />
-
-            {showBecomeSeller && (
-              <Link
-                href={becomeSellerPath(authProfile)}
-                className={cn(
-                  'inline-flex items-center rounded-xl text-sm font-semibold',
-                  'text-deshi-green border border-deshi-green/35 bg-emerald-50/50 dark:bg-emerald-500/10',
-                  'hover:bg-emerald-100/80 dark:hover:bg-emerald-500/15 hover:border-deshi-green/50',
-                  'transition-all duration-200 hover:-translate-y-0.5',
-                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40',
-                  isHeroMode ? 'px-4 py-2.5' : 'px-3.5 py-2'
-                )}
-              >
-                Start Selling
-              </Link>
-            )}
-
-            <NavbarProfileMenu
-              authProfile={authProfile}
-              onNavigate={() => useStore.setState({ isMenuOpen: false })}
-              compact
-              className="lg:[&_button]:pr-2"
-            />
-          </div>
           </div>
         </motion.nav>
       </div>

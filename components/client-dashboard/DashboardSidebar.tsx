@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Crown, LifeBuoy, X } from 'lucide-react';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { clientNavItems } from '@/lib/client-dashboard/config';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
@@ -37,7 +37,12 @@ export function DashboardSidebar({
       >
         {!collapsed && (
           <Link href={ROUTES.home} className="shrink-0">
-            <DeshiFiverrLogo size="nav" showText />
+            <BridgeLogo variant="nav" />
+          </Link>
+        )}
+        {collapsed && (
+          <Link href={ROUTES.home} className="shrink-0 mx-auto">
+            <BridgeLogo variant="mark" />
           </Link>
         )}
         <button

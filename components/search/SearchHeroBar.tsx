@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
+import { BRANDING } from '@/lib/config/branding';
 
 interface SearchHeroBarProps {
   query: string;
@@ -28,7 +29,7 @@ export const SearchHeroBar: React.FC<SearchHeroBarProps> = ({
 
         <div className="relative">
           <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary mb-1">
-            Search <span className="gradient-text">Deshi Fiverr</span>
+            Search <span className="gradient-text">{BRANDING.appName}</span>
           </h1>
           <p className="text-sm text-text-muted mb-5 max-w-2xl">
             Find verified services, digital products, sellers, and virtual offices.

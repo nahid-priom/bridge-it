@@ -9,7 +9,7 @@ export function organizationJsonLd() {
     name: SITE_NAME,
     alternateName: SITE_BRAND,
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.ico`,
+    logo: `${SITE_URL}/brand/bridge-it-park-logo-full.png`,
     description: SITE_DESCRIPTION,
     address: {
       '@type': 'PostalAddress',

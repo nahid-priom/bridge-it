@@ -1,11 +1,11 @@
 import { buildPageMetadata } from '@/lib/metadata';
 import { AboutPage } from '@/components/AboutPage';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
+import { BRANDING } from '@/lib/config/branding';
 
 export const metadata = buildPageMetadata({
-  title: 'About Deshi Fiverr',
-  description:
-    'Learn about Deshi Fiverr — Bangladesh\'s trusted freelance marketplace for digital services, creators, and businesses.',
+  title: `About ${BRANDING.appName}`,
+  description: `Learn about ${BRANDING.appName} — ${BRANDING.description}`,
   path: '/about',
 });
 

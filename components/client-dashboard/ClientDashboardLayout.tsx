@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { BRANDING } from '@/lib/config/branding';
 import { usePathname } from 'next/navigation';
 import { DashboardSidebar } from '@/components/client-dashboard/DashboardSidebar';
 import { DashboardTopbar } from '@/components/client-dashboard/DashboardTopbar';
@@ -52,7 +53,7 @@ export function ClientDashboardLayout({
       >
         <DashboardTopbar
           title={nav?.label ?? 'Client Dashboard'}
-          subtitle="Deshi Fiverr — Your workspace"
+          subtitle={BRANDING.clientWorkspace}
           authProfile={authProfile}
           notifications={demoNotifications}
           onMenuClick={() => setMobileOpen(true)}

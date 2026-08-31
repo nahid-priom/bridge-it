@@ -1,68 +1,51 @@
 import { buildPageMetadata } from '@/lib/metadata';
-import { DashboardCard } from '@/components/client-dashboard/ui/DashboardCard';
-import { StatusBadge } from '@/components/client-dashboard/ui/StatusBadge';
-import { getClientTransactionsData } from '@/lib/db/client-dashboard';
+import { getBitpClientPayments } from '@/lib/services/dashboard.service';
+import { formatBdt } from '@/lib/services/client';
 
 export const metadata = buildPageMetadata({
-  title: 'Payments',
-  description: 'Payment history and methods.',
+  title: 'Payments | Bridge IT Park',
   path: '/dashboard/payments',
   noIndex: true,
 });
 
-const methods = [
-  { name: 'bKash', desc: 'Mobile wallet' },
-  { name: 'Nagad', desc: 'Mobile wallet' },
-  { name: 'SSLCommerz', desc: 'Cards & banking' },
-  { name: 'Visa / Mastercard', desc: 'International cards' },
-];
-
 export default async function ClientPaymentsPage() {
-  const transactions = await getClientTransactionsData();
+  const payments = await getBitpClientPayments();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-text-primary">Payments</h1>
-        <p className="text-sm text-text-muted mt-1">History, receipts, and payment methods.</p>
+        <h1 className="text-2xl font-bold">Payments</h1>
+        <p className="text-sm text-text-secondary mt-1">Track payment requests and verification status.</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {methods.map((m) => (
-          <DashboardCard key={m.name} className="p-4">
-            <p className="font-semibold text-sm">{m.name}</p>
-            <p className="text-xs text-text-muted">{m.desc}</p>
-          </DashboardCard>
-        ))}
-      </div>
-
-      <DashboardCard className="overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100 dark:border-white/10">
-          <h2 className="font-bold">Payment History</h2>
+      {payments.length === 0 ? (
+        <div className="rounded-2xl border border-slate-200 dark:border-white/10 p-12 text-center">
+          <p className="text-text-secondary">No payment records yet.</p>
         </div>
-        {transactions.length === 0 ? (
-          <p className="p-6 text-sm text-text-muted">No transactions yet.</p>
-        ) : (
-          <ul className="divide-y divide-slate-100 dark:divide-white/10">
-            {transactions.map((tx) => (
-              <li key={tx.id} className="flex items-center justify-between px-5 py-4">
-                <div>
-                  <p className="text-sm font-semibold">{tx.label}</p>
-                  <p className="text-xs text-text-muted">
-                    TX-{tx.id.slice(0, 8).toUpperCase()} · {tx.date}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold tabular-nums">
-                    ৳{Math.abs(tx.amount).toLocaleString()}
-                  </p>
-                  <StatusBadge status={tx.status} />
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </DashboardCard>
+      ) : (
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 dark:border-white/10">
+                <th className="text-left p-4">Amount</th>
+                <th className="text-left p-4">Method</th>
+                <th className="text-left p-4">Status</th>
+                <th className="text-left p-4">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p.id} className="border-b border-slate-100 dark:border-white/5">
+                  <td className="p-4 font-semibold">{formatBdt(Number(p.amount))}</td>
+                  <td className="p-4">{p.payment_method ?? '—'}</td>
+                  <td className="p-4 capitalize">{p.payment_status}</td>
+                  <td className="p-4 text-text-secondary">{new Date(p.created_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

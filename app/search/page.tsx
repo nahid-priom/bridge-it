@@ -6,6 +6,7 @@ import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { formatQueryLabel } from '@/lib/search/searchHelpers';
 import { getMarketplaceHomeData } from '@/lib/marketplace/getMarketplaceData';
 import { getTopMarketplaceSellers } from '@/lib/marketplace/getSeller';
+import { BRANDING } from '@/lib/config/branding';
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -26,8 +27,8 @@ export async function generateMetadata({ searchParams }: Props) {
   return buildPageMetadata({
     title: q ? `Results for "${label}"` : 'Search Services',
     description: q
-      ? `Explore verified freelancers and agencies for ${label} on Deshi Fiverr — Bangladesh's trusted freelance marketplace.`
-      : 'Search software, web, app, marketing and AI services on Deshi Fiverr.',
+      ? `Explore digital solutions for ${label} on ${BRANDING.appName} — ${BRANDING.description}`
+      : `Search software, web, marketing and creative solutions on ${BRANDING.appName}.`,
     path: q ? `/search?q=${encodeURIComponent(q)}` : '/search',
     keywords: [label, 'freelance', 'Bangladesh', 'marketplace'],
   });

@@ -6,6 +6,7 @@ import { DashboardCard } from '@/components/client-dashboard/ui/DashboardCard';
 import { StatusBadge } from '@/components/client-dashboard/ui/StatusBadge';
 import { createSupportTicketAction } from '@/app/actions/client-dashboard';
 import type { SupportTicket } from '@/types/client-dashboard';
+import { BRANDING } from '@/lib/config/branding';
 
 export function SupportTicketsPanel({ tickets }: { tickets: SupportTicket[] }) {
   const router = useRouter();
@@ -33,7 +34,7 @@ export function SupportTicketsPanel({ tickets }: { tickets: SupportTicket[] }) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Support Tickets</h1>
-          <p className="text-sm text-text-muted mt-1">Get help from the Deshi Fiverr team.</p>
+          <p className="text-sm text-text-muted mt-1">Get help from the {BRANDING.appName} team.</p>
         </div>
         <button
           type="button"

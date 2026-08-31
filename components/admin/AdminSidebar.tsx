@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Shield, ArrowLeft } from 'lucide-react';
+import { X, ArrowLeft } from 'lucide-react';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
+import { BRANDING } from '@/lib/config/branding';
 import { cn } from '@/lib/cn';
 import { adminNavItems } from '@/lib/admin/config';
 import type { AdminSection } from '@/types/admin';
@@ -28,15 +30,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-white/10">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10">
-              <div className="absolute inset-0 bg-gradient-to-br from-bridge-primary to-bridge-secondary rounded-xl rotate-6" />
-              <div className="absolute inset-0 bg-bridge-dark rounded-xl flex items-center justify-center">
-                <Shield className="w-5 h-5 text-bridge-primary-light" />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-white font-display">Deshi Fiverr Admin</h2>
+          <div className="flex items-center gap-3 min-w-0">
+            <BridgeLogo variant="mark" href={false} className="shrink-0" />
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold text-white font-display truncate">{BRANDING.adminName}</h2>
               <p className="text-[10px] text-bridge-gray">Control Center</p>
             </div>
           </div>
@@ -83,7 +80,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm text-bridge-gray hover:text-white glass border border-white/10 hover:border-bridge-primary/30 transition-all cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Deshi Fiverr
+          Back to Bridge IT Park
         </button>
       </div>
     </div>

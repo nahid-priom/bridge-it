@@ -1,3 +1,5 @@
+import { BRANDING } from '@/lib/config/branding';
+
 export type HeroCtaPage = 'home' | 'categories' | 'products' | 'about' | 'dashboard' | 'search';
 
 export interface HeroSlide {
@@ -41,28 +43,28 @@ export const heroSlides: HeroSlide[] = [
     id: 'slide-1',
     image:
       'https://images.pexels.com/photos/20043053/pexels-photo-20043053.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600',
-    badge: 'Smart Virtual IT Park',
-    title: "Bangladesh's #1 Smart",
-    highlight: 'Virtual IT Park',
+    badge: 'Bridge IT Park',
+    title: 'Everything Your Business',
+    highlight: 'Needs to Go Digital',
     subtitle:
-      'Buy, sell & discover premium digital services — animations, software, video ads, courses and more.',
-    primaryCta: 'Explore Services',
+      'Software, websites, digital marketing, and creative solutions — build, market, and grow with one trusted partner.',
+    primaryCta: 'Explore Solutions',
     primaryCtaPage: 'categories',
-    secondaryCta: 'Become a Seller',
-    secondaryCtaPage: 'dashboard',
+    secondaryCta: 'Get a Quote',
+    secondaryCtaPage: 'about',
   },
   {
     id: 'slide-2',
     image:
       'https://images.pexels.com/photos/8728284/pexels-photo-8728284.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600',
-    badge: 'Bangladesh Marketplace',
-    title: 'Grow Your Business',
-    highlight: 'With Deshi Fiverr',
+    badge: BRANDING.tagline,
+    title: 'Build. Market.',
+    highlight: 'Grow.',
     subtitle:
-      'Get your own custom URL, piracy-protected gallery & direct customer access from any platform.',
-    primaryCta: 'Become a Seller',
-    primaryCtaPage: 'dashboard',
-    secondaryCta: 'Explore Services',
+      'From custom software to ecommerce and branding — scalable solutions for growing businesses in Bangladesh.',
+    primaryCta: 'View Pricing',
+    primaryCtaPage: 'about',
+    secondaryCta: 'Explore Solutions',
     secondaryCtaPage: 'categories',
   },
 ];

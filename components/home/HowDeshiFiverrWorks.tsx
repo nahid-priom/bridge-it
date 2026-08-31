@@ -1,6 +1,7 @@
 'use client';
 
 import { HOW_IT_WORKS_STEPS } from '@/data/homeContent';
+import { BRANDING } from '@/lib/config/branding';
 
 export function HowDeshiFiverrWorks() {
   return (
@@ -14,7 +15,7 @@ export function HowDeshiFiverrWorks() {
           id="how-it-works-heading"
           className="text-2xl md:text-3xl font-black font-display text-text-primary text-center mb-10 md:mb-14"
         >
-          How Deshi Fiverr Works
+          How {BRANDING.appName} Works
         </h2>
 
         <div className="relative max-w-5xl mx-auto">

@@ -4,6 +4,7 @@ import React from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { ArrowLeft, Shield, Globe, Heart, Users, Award, Lock, MessageCircle, CreditCard, TrendingUp, CheckCircle } from 'lucide-react';
+import { BRANDING } from '@/lib/config/branding';
 
 export const AboutPage: React.FC = () => {
   const { goHome, goToDashboard, goToCategories } = useAppNavigation();
@@ -65,7 +66,7 @@ export const AboutPage: React.FC = () => {
         <header className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-bridge-primary/10 border border-bridge-primary/20 rounded-full mb-6">
             <Heart className="w-4 h-4 text-bridge-accent" />
-            <span className="text-sm text-bridge-primary-light">About Deshi Fiverr</span>
+            <span className="text-sm text-bridge-primary-light">About {BRANDING.appName}</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black font-display text-text-primary mb-6">
             Building the Future of
@@ -73,9 +74,8 @@ export const AboutPage: React.FC = () => {
             <span className="gradient-text">Digital Commerce</span>
           </h1>
           <p className="text-lg text-text-muted max-w-3xl mx-auto leading-relaxed">
-            Deshi Fiverr is Bangladesh&apos;s trusted freelance marketplace — where digital service
-            providers and customers connect seamlessly. We&apos;re building the largest ecosystem for
-            digital products, creative services, and IT solutions.
+            {BRANDING.appName} delivers software, websites, digital marketing, and creative solutions
+            for growing businesses. We help you build, market, and grow — all in one trusted partner.
           </p>
         </header>
 
@@ -97,7 +97,7 @@ export const AboutPage: React.FC = () => {
         {/* Features */}
         <div className="mb-20">
           <h2 className="text-3xl md:text-4xl font-black font-display text-text-primary text-center mb-12">
-            What Makes <span className="gradient-text">Deshi Fiverr</span> Special
+            What Makes <span className="gradient-text">{BRANDING.appName}</span> Special
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, i) => (
@@ -119,7 +119,7 @@ export const AboutPage: React.FC = () => {
               <span className="inline-block px-3 py-1 bg-bridge-secondary/10 text-bridge-secondary text-sm font-medium rounded-full mb-4">
                 For Sellers
               </span>
-              <h2 className="text-3xl font-bold text-text-primary mb-4">Grow Your Business with Deshi Fiverr</h2>
+              <h2 className="text-3xl font-bold text-text-primary mb-4">Grow Your Business with {BRANDING.appName}</h2>
               <p className="text-text-muted mb-6 leading-relaxed">
                 Set up your shop, showcase your portfolio with piracy-protected demos, and reach thousands 
                 of potential customers. Get your own custom URL to share anywhere — Facebook, Instagram, 
@@ -168,7 +168,7 @@ export const AboutPage: React.FC = () => {
           <div className="inline-block glass rounded-2xl p-8 md:p-12 border border-bridge-primary/20 bg-gradient-to-r from-bridge-primary/5 to-bridge-secondary/5">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">Ready to Get Started?</h2>
             <p className="text-text-muted mb-6 max-w-lg mx-auto">
-              Join thousands of buyers and sellers on Bangladesh's smartest digital marketplace.
+              Join businesses across Bangladesh who trust {BRANDING.appName} for digital solutions.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <button 

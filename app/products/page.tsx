@@ -1,51 +1,15 @@
-import { Suspense } from 'react';
-import { ProductsListing } from '@/components/products/ProductsListing';
-import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd';
-import { BreadcrumbOverrideProvider } from '@/components/seo/BreadcrumbOverride';
-import { PageLoading } from '@/components/PageLoading';
-import { buildProductsPageMetadata } from '@/lib/products/page-meta';
-import { buildProductsBreadcrumbItems } from '@/lib/products/breadcrumbs';
-import { parseProductsSearchParams } from '@/lib/products/url';
-import { queryProductsListing, getProductCategoriesForUi, getProductCategoryCounts } from '@/lib/catalog/products';
+import { redirect } from 'next/navigation';
+import { ROUTES, solutionsUrl } from '@/lib/routes';
 
-export const revalidate = 60;
-
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-export async function generateMetadata({ searchParams }: Props) {
+export default async function ProductsRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; q?: string }>;
+}) {
   const params = await searchParams;
-  const state = parseProductsSearchParams(params);
-  return buildProductsPageMetadata(state);
-}
-
-export default async function ProductsRoute({ searchParams }: Props) {
-  const params = await searchParams;
-  const state = parseProductsSearchParams(params);
-
-  const [{ products, total }, categories, categoryCounts] = await Promise.all([
-    queryProductsListing(state),
-    getProductCategoriesForUi(),
-    getProductCategoryCounts(),
-  ]);
-
-  const breadcrumbItems = buildProductsBreadcrumbItems(state.categoryKey, categories);
-
-  return (
-    <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
-      <BreadcrumbOverrideProvider items={breadcrumbItems}>
-        <Suspense fallback={<PageLoading />}>
-          <ProductsListing
-            initialState={state}
-            products={products}
-            resultCount={total}
-            categories={categories}
-            categoryCounts={categoryCounts}
-          />
-        </Suspense>
-      </BreadcrumbOverrideProvider>
-    </>
-  );
+  const qs = new URLSearchParams();
+  if (params.category) qs.set('category', params.category);
+  if (params.q) qs.set('q', params.q);
+  const query = qs.toString();
+  redirect(query ? `${ROUTES.solutions}?${query}` : ROUTES.solutions);
 }

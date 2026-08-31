@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:supabase": "tsx scripts/seed-supabase.ts",
-    "admin:promote": "tsx scripts/promote-super-admin.ts",
+    "admin:seed": "tsx scripts/seed-admin-user.ts",
+    "admin:promote": "tsx scripts/seed-admin-user.ts",
     "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts"
   },
   "dependencies": {

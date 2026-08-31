@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, LayoutDashboard, Store, X } from 'lucide-react';
 import { ROUTES, isNavActive } from '@/lib/routes';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import {
   NAV_PRODUCT_ITEMS,
   NAV_SERVICE_ITEMS,
@@ -146,7 +146,7 @@ export function MobileDrawerMenu({
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100/90 dark:border-white/10">
               <Link href={ROUTES.home} onClick={closeAndNavigate}>
-                <DeshiFiverrLogo size="mobile" showText />
+                <BridgeLogo variant="navSm" />
               </Link>
               <button
                 type="button"

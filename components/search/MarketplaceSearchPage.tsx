@@ -25,6 +25,7 @@ import { SidebarWidgets } from '@/components/search/SidebarWidgets';
 import { SearchPagination } from '@/components/search/SearchPagination';
 import { FreelancerCarousel } from '@/components/search/FreelancerCarousel';
 import { WhyChooseSection } from '@/components/search/WhyChooseSection';
+import { BRANDING } from '@/lib/config/branding';
 
 type MarketplaceSearchPageProps = {
   services: MarketplaceService[];
@@ -93,8 +94,8 @@ export function MarketplaceSearchPage({
 
   useEffect(() => {
     document.title = urlState.q
-      ? `Results for "${queryLabel}" | Deshi Fiverr`
-      : 'Search Services | Deshi Fiverr';
+      ? `Results for "${queryLabel}" | ${BRANDING.appName}`
+      : `Search Solutions | ${BRANDING.appName}`;
   }, [queryLabel, urlState.q]);
 
   const filtered = useMemo(() => {

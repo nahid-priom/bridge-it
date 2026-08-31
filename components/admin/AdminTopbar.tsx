@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Menu, Search, Bell, Plus, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import type { AdminNotification } from '@/types/admin';
+import { BRANDING } from '@/lib/config/branding';
 
 interface AdminTopbarProps {
   title: string;
@@ -138,7 +139,7 @@ export const AdminTopbar: React.FC<AdminTopbarProps> = ({
               <div className="absolute right-0 top-full mt-2 w-48 glass-strong rounded-xl border border-white/10 py-1 shadow-xl">
                 <div className="px-4 py-3 border-b border-white/10">
                   <p className="text-sm font-medium text-white">Admin User</p>
-                  <p className="text-xs text-bridge-gray">admin@deshifiverr.com</p>
+                  <p className="text-xs text-bridge-gray">{BRANDING.supportEmail}</p>
                 </div>
                 <button type="button" className="w-full text-left px-4 py-2 text-sm text-bridge-gray hover:text-white hover:bg-white/5 cursor-pointer">
                   Profile Settings

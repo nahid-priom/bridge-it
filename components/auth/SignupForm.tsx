@@ -26,6 +26,7 @@ export function SignupForm() {
         email: data.email,
         password: data.password,
         fullName: data.fullName,
+        phone: data.phone,
       });
       if (result && 'error' in result) setServerError(result.error ?? 'Sign up failed');
       if (result && 'needsConfirmation' in result) setNeedsConfirmation(true);
@@ -48,6 +49,9 @@ export function SignupForm() {
     <form onSubmit={onSubmit} className="space-y-4">
       <AuthField label="Full name" error={errors.fullName}>
         <input type="text" className={authInputClass} autoComplete="name" {...register('fullName')} />
+      </AuthField>
+      <AuthField label="Phone" error={errors.phone}>
+        <input type="tel" className={authInputClass} autoComplete="tel" {...register('phone')} />
       </AuthField>
       <AuthField label="Email" error={errors.email}>
         <input type="email" className={authInputClass} autoComplete="email" {...register('email')} />

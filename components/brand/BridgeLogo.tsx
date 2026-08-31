@@ -1,66 +1,79 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import { cn } from '@/lib/cn';
+import { BRAND_ASSETS } from '@/lib/config/brand-assets';
+import { ROUTES } from '@/lib/routes';
 
-interface BridgeLogoProps {
+export type BridgeLogoVariant = 'nav' | 'navSm' | 'footer' | 'full' | 'mark' | 'auth';
+
+type BridgeLogoProps = {
+  /** @deprecated Text is baked into logo image */
   showText?: boolean;
-  /** When to show Bridge + Smart IT Park labels (`always` = including mobile) */
+  /** @deprecated Use variant instead */
   textVisibility?: 'always' | 'sm' | 'never';
   className?: string;
+  /** @deprecated Use variant instead */
   iconSize?: 'sm' | 'md' | 'nav';
+  variant?: BridgeLogoVariant;
+  href?: string | false;
+  priority?: boolean;
+};
+
+const VARIANT_CONFIG: Record<
+  BridgeLogoVariant,
+  { src: string; width: number; height: number; className?: string }
+> = {
+  nav: { src: BRAND_ASSETS.logo.nav, width: 200, height: 56, className: 'h-10 sm:h-11 md:h-12 w-auto' },
+  navSm: { src: BRAND_ASSETS.logo.navSm, width: 160, height: 44, className: 'h-9 w-auto' },
+  footer: { src: BRAND_ASSETS.logo.footer, width: 220, height: 64, className: 'h-14 w-auto' },
+  full: { src: BRAND_ASSETS.logo.transparent, width: 280, height: 280, className: 'h-32 w-auto max-w-[280px]' },
+  mark: { src: BRAND_ASSETS.icons.markTransparent, width: 48, height: 48, className: 'h-10 w-10' },
+  auth: { src: BRAND_ASSETS.logo.transparent, width: 200, height: 200, className: 'h-24 sm:h-28 w-auto' },
+};
+
+function resolveVariant(iconSize?: BridgeLogoProps['iconSize'], variant?: BridgeLogoVariant): BridgeLogoVariant {
+  if (variant) return variant;
+  if (iconSize === 'nav') return 'nav';
+  if (iconSize === 'sm') return 'navSm';
+  return 'nav';
 }
 
 export function BridgeLogo({
-  showText = true,
-  textVisibility = 'sm',
   className,
-  iconSize = 'md',
+  iconSize,
+  variant,
+  href = ROUTES.home,
+  priority = false,
 }: BridgeLogoProps) {
-  const iconBox =
-    iconSize === 'nav'
-      ? 'w-12 h-12'
-      : iconSize === 'sm'
-        ? 'w-9 h-9'
-        : 'w-9 h-9 md:w-10 md:h-10';
-  const iconRadius = iconSize === 'nav' ? 'rounded-2xl' : 'rounded-xl';
-  const letterSize =
-    iconSize === 'nav' ? 'text-xl' : iconSize === 'sm' ? 'text-lg' : 'text-lg md:text-xl';
+  const resolved = resolveVariant(iconSize, variant);
+  const config = VARIANT_CONFIG[resolved];
+
+  const image = (
+    <Image
+      src={config.src}
+      alt="Bridge IT Park — Build. Market. Grow."
+      width={config.width}
+      height={config.height}
+      priority={priority}
+      className={cn('object-contain object-left shrink-0', config.className)}
+      style={{ maxHeight: '100%' }}
+    />
+  );
+
+  if (href === false) {
+    return <div className={cn('inline-flex items-center min-w-0', className)}>{image}</div>;
+  }
 
   return (
-    <div className={cn('flex items-center gap-2 min-w-0', className)}>
-      <div className={cn('relative shrink-0', iconBox)}>
-        <div
-          className={cn(
-            'absolute inset-0 bg-gradient-to-br from-bridge-primary to-bridge-secondary rotate-6 transition-transform duration-300 group-hover:rotate-12',
-            iconRadius
-          )}
-        />
-        <div
-          className={cn(
-            'absolute inset-0 bg-white dark:bg-background flex items-center justify-center border border-border-subtle',
-            iconRadius
-          )}
-        >
-          <span className={cn('font-black gradient-text font-display', letterSize)}>B</span>
-        </div>
-      </div>
-      {showText && (
-        <div
-          className={cn(
-            'text-left min-w-0',
-            textVisibility === 'always'
-              ? 'block'
-              : textVisibility === 'never'
-                ? 'hidden'
-                : 'hidden sm:block'
-          )}
-        >
-          <span className="text-sm sm:text-base md:text-lg font-black font-display gradient-text dark:text-white dark:[background-image:none] dark:[-webkit-text-fill-color:currentColor] leading-none block">
-            Bridge
-          </span>
-          <span className="text-[9px] md:text-[10px] text-slate-500 dark:text-white/70 tracking-[0.22em] uppercase block whitespace-nowrap font-semibold">
-            Smart IT Park
-          </span>
-        </div>
+    <Link
+      href={href}
+      className={cn(
+        'inline-flex items-center min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 rounded-lg',
+        className
       )}
-    </div>
+      aria-label="Bridge IT Park — home"
+    >
+      {image}
+    </Link>
   );
 }

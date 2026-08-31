@@ -5,6 +5,7 @@ import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd';
 import { BreadcrumbOverrideProvider } from '@/components/seo/BreadcrumbOverride';
 import { fetchCategoryBySlug, fetchCategoryServices } from '@/lib/catalog/categories';
 import type { BreadcrumbItem } from '@/lib/seo/breadcrumbs';
+import { BRANDING } from '@/lib/config/branding';
 
 export const revalidate = 60;
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
     title: `${category.name} Services`,
     description: category.description,
     path: `/categories/${slug}`,
-    keywords: [category.name, category.nameBn, 'Deshi Fiverr marketplace'],
+    keywords: [category.name, category.nameBn, BRANDING.appName],
   });
 }
 

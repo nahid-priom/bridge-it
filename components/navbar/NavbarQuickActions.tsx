@@ -12,6 +12,7 @@ type NavbarQuickActionsProps = {
   messageCount?: number;
   onCartClick: () => void;
   onSearchClick?: () => void;
+  hideCart?: boolean;
   className?: string;
 };
 
@@ -64,10 +65,11 @@ function ActionButton({
 
 export function NavbarQuickActions({
   cartCount,
-  notificationCount = 3,
+  notificationCount = 0,
   messageCount = 0,
   onCartClick,
   onSearchClick,
+  hideCart = false,
   className,
 }: NavbarQuickActionsProps) {
   return (
@@ -85,22 +87,24 @@ export function NavbarQuickActions({
           <Search className="w-[18px] h-[18px]" aria-hidden />
         </ActionButton>
       ) : null}
-      <ActionButton label="Wishlist" href={ROUTES.products}>
+      <ActionButton label="Wishlist" href={ROUTES.solutions}>
         <Heart className="w-[18px] h-[18px]" aria-hidden />
       </ActionButton>
-      <ActionButton label="Messages" href={ROUTES.messages} badge={messageCount}>
+      <ActionButton label="Messages" href={ROUTES.clientMessages} badge={messageCount}>
         <MessageCircle className="w-[18px] h-[18px]" aria-hidden />
       </ActionButton>
       <ActionButton label="Notifications" onClick={() => {}} badge={notificationCount}>
         <Bell className="w-[18px] h-[18px]" aria-hidden />
       </ActionButton>
-      <ActionButton
-        label={cartCount ? `Cart, ${cartCount} items` : 'Cart'}
-        onClick={onCartClick}
-        badge={cartCount}
-      >
-        <ShoppingCart className="w-[18px] h-[18px]" aria-hidden />
-      </ActionButton>
+      {!hideCart ? (
+        <ActionButton
+          label={cartCount ? `Cart, ${cartCount} items` : 'Cart'}
+          onClick={onCartClick}
+          badge={cartCount}
+        >
+          <ShoppingCart className="w-[18px] h-[18px]" aria-hidden />
+        </ActionButton>
+      ) : null}
     </div>
   );
 }

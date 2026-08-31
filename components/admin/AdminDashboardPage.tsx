@@ -7,16 +7,14 @@ import { AdminDataProvider } from '@/components/admin/AdminDataContext';
 import type { AdminSection } from '@/types/admin';
 import type { AdminDashboardData } from '@/types/admin';
 import { AdminOverviewSection } from './sections/AdminOverviewSection';
-import { AdminVerificationSection } from './sections/AdminVerificationSection';
-import { AdminSellersSection } from './sections/AdminSellersSection';
-import { AdminCustomersSection } from './sections/AdminCustomersSection';
-import { AdminOrdersSection } from './sections/AdminOrdersSection';
-import { AdminDisputesSection } from './sections/AdminDisputesSection';
-import { AdminCategoriesSection } from './sections/AdminCategoriesSection';
-import { AdminFeaturedSection } from './sections/AdminFeaturedSection';
-import { AdminReportsSection } from './sections/AdminReportsSection';
-import { AdminSettingsSection } from './sections/AdminSettingsSection';
-import { AdminSellerApplicationsSection } from './sections/AdminSellerApplicationsSection';
+import {
+  AdminBitpProductsSection,
+  AdminBitpOrdersSection,
+  AdminBitpCategoriesSection,
+  AdminBitpConsultationsSection,
+  AdminBitpContentSection,
+  AdminBitpGenericSection,
+} from './sections/AdminBitpSections';
 import type { SellerApplicationRow } from '@/lib/db/seller-applications';
 
 type AdminDashboardPageProps = {
@@ -26,34 +24,39 @@ type AdminDashboardPageProps = {
 
 export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   data,
-  sellerApplications = [],
+  sellerApplications: _sellerApplications = [],
 }) => {
+  void _sellerApplications;
   const [activeSection, setActiveSection] = useState<AdminSection>('overview');
 
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':
         return <AdminOverviewSection onNavigate={setActiveSection} />;
-      case 'seller-applications':
-        return <AdminSellerApplicationsSection applications={sellerApplications} />;
-      case 'seller-verification':
-        return <AdminVerificationSection />;
-      case 'sellers':
-        return <AdminSellersSection />;
-      case 'customers':
-        return <AdminCustomersSection />;
-      case 'orders':
-        return <AdminOrdersSection />;
-      case 'disputes':
-        return <AdminDisputesSection />;
-      case 'categories':
-        return <AdminCategoriesSection />;
-      case 'featured':
-        return <AdminFeaturedSection />;
-      case 'reports':
-        return <AdminReportsSection />;
-      case 'settings':
-        return <AdminSettingsSection />;
+      case 'bitp-products':
+        return <AdminBitpProductsSection />;
+      case 'bitp-categories':
+        return <AdminBitpCategoriesSection />;
+      case 'bitp-orders':
+        return <AdminBitpOrdersSection />;
+      case 'bitp-projects':
+        return <AdminBitpGenericSection title="Projects" endpoint="/api/admin/bitp/projects" />;
+      case 'bitp-quotations':
+        return <AdminBitpGenericSection title="Quotations" endpoint="/api/admin/bitp/quotations" />;
+      case 'bitp-clients':
+        return <AdminBitpGenericSection title="Clients" endpoint="/api/admin/bitp/clients" />;
+      case 'bitp-payments':
+        return <AdminBitpGenericSection title="Payments" endpoint="/api/admin/bitp/payments" />;
+      case 'bitp-consultations':
+        return <AdminBitpConsultationsSection />;
+      case 'bitp-portfolio':
+        return <AdminBitpGenericSection title="Portfolio" endpoint="/api/admin/bitp/portfolio" />;
+      case 'bitp-reviews':
+        return <AdminBitpGenericSection title="Reviews" endpoint="/api/admin/bitp/reviews" />;
+      case 'bitp-messages':
+        return <AdminBitpGenericSection title="Messages" endpoint="/api/admin/bitp/messages" />;
+      case 'bitp-content':
+        return <AdminBitpContentSection />;
       default:
         return <AdminOverviewSection onNavigate={setActiveSection} />;
     }

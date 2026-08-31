@@ -1,23 +1,44 @@
 export const ROUTES = {
   home: '/',
+  solutions: '/solutions',
+  solution: (slug: string) => `/solutions/${slug}`,
+  solutionOrder: (slug: string) => `/solutions/${slug}/order`,
+  solutionQuote: (slug: string) => `/solutions/${slug}/quote`,
+  pricing: '/pricing',
+  portfolio: '/portfolio',
+  about: '/about',
+  consultation: '/consultation',
+  search: '/search',
+  /** @deprecated Use solutions */
   categories: '/categories',
   category: (slug: string) => `/categories/${slug}`,
+  /** @deprecated Use solutions */
   products: '/products',
   product: (slug: string) => `/products/${slug}`,
-  about: '/about',
-  search: '/search',
   dashboard: '/dashboard',
   clientOrders: '/dashboard/orders',
+  clientOrder: (id: string) => `/dashboard/orders/${id}`,
   clientProjects: '/dashboard/projects',
   clientProject: (id: string) => `/dashboard/projects/${id}`,
   clientMessages: '/dashboard/messages',
   clientPayments: '/dashboard/payments',
-  clientWallet: '/dashboard/wallet',
-  clientInvoices: '/dashboard/invoices',
-  clientProducts: '/dashboard/products',
-  clientServices: '/dashboard/services',
+  clientQuotations: '/dashboard/quotations',
+  clientFiles: '/dashboard/files',
+  clientProfile: '/dashboard/profile',
   clientSettings: '/dashboard/settings',
   clientSupport: '/dashboard/support',
+  /** @deprecated */
+  clientWallet: '/dashboard/wallet',
+  /** @deprecated */
+  clientInvoices: '/dashboard/invoices',
+  /** @deprecated */
+  clientProducts: '/dashboard/products',
+  /** @deprecated */
+  clientServices: '/dashboard/services',
+  login: '/login',
+  signup: '/signup',
+  admin: '/admin',
+  /** @deprecated Seller hub removed — redirects via middleware */
   sellerDashboard: '/seller-dashboard',
   sellerDashboardOrders: '/seller-dashboard/orders',
   sellerDashboardServices: '/seller-dashboard/services',
@@ -37,19 +58,16 @@ export const ROUTES = {
   sellerDashboardOnboarding: '/seller-dashboard/onboarding',
   sellerDashboardServicesNew: '/seller-dashboard/services/new',
   sellerDashboardProductsNew: '/seller-dashboard/products/new',
-  /** @deprecated Use sellerDashboard */
-  legacySellerDashboard: '/dashboard/seller',
-  /** @deprecated Use sellerDashboardOnboarding */
   sellerOnboarding: '/seller/onboarding',
-  login: '/login',
-  signup: '/signup',
-  admin: '/admin',
-  cart: '/cart',
-  messages: '/messages',
-  service: (slug: string) => `/services/${slug}`,
-  /** Legacy sellers route — prefer marketplaceSeller */
+  legacySellerDashboard: '/dashboard/seller',
+  /** @deprecated */
   seller: (slug: string) => `/sellers/${slug}`,
   marketplaceSeller: (slug: string) => `/seller/${slug}`,
+  /** @deprecated Redirect to solutions */
+  cart: '/cart',
+  messages: '/messages',
+  /** @deprecated Use solutions */
+  service: (slug: string) => `/services/${slug}`,
 } as const;
 
 export function searchUrl(query?: string, extra?: Record<string, string>): string {
@@ -62,21 +80,10 @@ export function searchUrl(query?: string, extra?: Record<string, string>): strin
     }
   }
   const qs = params.toString();
-  return qs ? `${ROUTES.search}?${qs}` : ROUTES.search;
+  return qs ? `${ROUTES.solutions}?${qs}` : ROUTES.solutions;
 }
 
-/** Marketplace category filter on search */
-export function marketplaceCategorySearchUrl(slug: string): string {
-  return `${ROUTES.search}?category=${encodeURIComponent(slug)}`;
-}
-
-/** Product marketplace category on /products */
-export function marketplaceProductCategoryUrl(slug: string): string {
-  return `${ROUTES.products}?category=${encodeURIComponent(slug)}`;
-}
-
-/** Products listing with optional marketplace category filter */
-export function productsUrl(category?: string, extra?: Record<string, string>): string {
+export function solutionsUrl(category?: string, extra?: Record<string, string>): string {
   const params = new URLSearchParams();
   if (category?.trim()) params.set('category', category.trim());
   if (extra) {
@@ -85,27 +92,48 @@ export function productsUrl(category?: string, extra?: Record<string, string>): 
     }
   }
   const qs = params.toString();
-  return qs ? `${ROUTES.products}?${qs}` : ROUTES.products;
+  return qs ? `${ROUTES.solutions}?${qs}` : ROUTES.solutions;
 }
 
-/** Products listing search — URL is the source of truth for navbar search. */
-export function productsSearchUrl(query?: string): string {
+export function solutionsSearchUrl(query?: string): string {
   const trimmed = query?.trim();
-  if (!trimmed) return ROUTES.products;
-  return productsUrl(undefined, { q: trimmed });
+  if (!trimmed) return ROUTES.solutions;
+  return solutionsUrl(undefined, { q: trimmed });
 }
 
-/** Map legacy page keys to paths for hero CTAs etc. */
+/** @deprecated Use solutionsUrl */
+export function marketplaceCategorySearchUrl(slug: string): string {
+  return solutionsUrl(slug);
+}
+
+/** @deprecated Use solutionsUrl */
+export function marketplaceProductCategoryUrl(slug: string): string {
+  return solutionsUrl(slug);
+}
+
+/** @deprecated Use solutionsUrl */
+export function productsUrl(category?: string, extra?: Record<string, string>): string {
+  return solutionsUrl(category, extra);
+}
+
+/** @deprecated Use solutionsSearchUrl */
+export function productsSearchUrl(query?: string): string {
+  return solutionsSearchUrl(query);
+}
+
 export function pathFromPageKey(
-  page: 'home' | 'categories' | 'products' | 'about' | 'dashboard' | 'search'
+  page: 'home' | 'categories' | 'products' | 'about' | 'dashboard' | 'search' | 'solutions' | 'pricing' | 'portfolio'
 ): string {
   const map: Record<string, string> = {
     home: ROUTES.home,
-    categories: ROUTES.categories,
-    products: ROUTES.products,
+    categories: ROUTES.solutions,
+    products: ROUTES.solutions,
+    solutions: ROUTES.solutions,
+    pricing: ROUTES.pricing,
+    portfolio: ROUTES.portfolio,
     about: ROUTES.about,
     dashboard: ROUTES.dashboard,
-    search: ROUTES.search,
+    search: ROUTES.solutions,
   };
   return map[page] ?? ROUTES.home;
 }

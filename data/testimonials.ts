@@ -1,12 +1,13 @@
 import type { PlatformTestimonial, TestimonialsSectionContent } from '@/types';
+import { BRANDING } from '@/lib/config/branding';
 
 /** Home page “What Our Users Say” section copy */
 export const testimonialsSectionContent: TestimonialsSectionContent = {
   badgeEmoji: '💬',
   badgeLabel: 'Testimonials',
   title: 'What Our',
-  titleHighlight: 'Users Say',
-  subtitle: 'Real feedback from buyers and sellers on Deshi Fiverr',
+  titleHighlight: 'Clients Say',
+  subtitle: `Real feedback from businesses working with ${BRANDING.appName}`,
   autoRotateMs: 6000,
 };
 
@@ -16,7 +17,7 @@ export const platformTestimonials: PlatformTestimonial[] = [
     name: 'Rahim Ahmed',
     role: 'Business Owner',
     comment:
-      'Deshi Fiverr transformed how I find digital services. The quality of sellers and the anti-piracy protection gave me confidence to invest in premium animations for my brand.',
+      `${BRANDING.appName} transformed how we go digital. Their team delivered a polished website and marketing setup that gave us confidence to invest in our brand online.`,
     rating: 5,
     accentColor: '#6C3CE1',
   },
@@ -25,16 +26,16 @@ export const platformTestimonials: PlatformTestimonial[] = [
     name: 'Fatima Khan',
     role: 'Marketing Manager',
     comment:
-      'The custom URL feature is a game-changer! I share my seller link on Facebook ads and customers land directly on my Deshi Fiverr profile. Sales increased by 300%.',
+      'The digital marketing package was a game-changer. Our campaigns are now managed professionally and leads increased significantly within the first quarter.',
     rating: 5,
     accentColor: '#06D6A0',
   },
   {
     id: 't3',
     name: 'Karim Hassan',
-    role: 'Freelancer',
+    role: 'Operations Director',
     comment:
-      'As a video editor, Deshi Fiverr gives me the perfect platform to showcase my work with watermark protection. The messaging system makes client communication so easy.',
+      `${BRANDING.appName} built our custom ERP module on time. The project dashboard and clear communication made the entire process smooth and transparent.`,
     rating: 5,
     accentColor: '#F59E0B',
   },
@@ -43,7 +44,7 @@ export const platformTestimonials: PlatformTestimonial[] = [
     name: 'Nusrat Jahan',
     role: 'Startup Founder',
     comment:
-      'We got our entire website and app built through Deshi Fiverr. The escrow payment system ensured quality delivery. Highly recommend for any digital project!',
+      `We got our entire website and app built through ${BRANDING.appName}. Milestone-based delivery and secure payments ensured quality at every stage. Highly recommend!`,
     rating: 5,
     accentColor: '#EC4899',
   },

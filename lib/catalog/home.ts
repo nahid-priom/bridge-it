@@ -10,6 +10,7 @@ import {
 } from '@/lib/db/mappers';
 import type { Category, Service, Seller } from '@/types';
 import type { PlatformTestimonial } from '@/types';
+import { BRANDING } from '@/lib/config/branding';
 
 export async function getHomeCategories(limit = 12): Promise<Category[]> {
   const { data } = await listActiveCategories();
@@ -48,7 +49,7 @@ export async function getHomeTestimonials(limit = 6): Promise<PlatformTestimonia
   return data.map((review, i) => ({
     id: review.id,
     name: review.reviewer_name,
-    role: (review.products as { title?: string } | null)?.title ?? 'Deshi Fiverr Customer',
+    role: (review.products as { title?: string } | null)?.title ?? `${BRANDING.appName} Client`,
     comment: review.comment,
     rating: Number(review.rating),
     accentColor: accents[i % accents.length],

@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { X, Send, Headphones, MessageCircle, Bot } from 'lucide-react';
+import { BRANDING } from '@/lib/config/branding';
 
 export const ChatWidget: React.FC = () => {
   const { isChatOpen, toggleChat } = useStore();
   const { goToCategories, goToMessages, goToDashboard, goToAbout } = useAppNavigation();
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([
-    { id: 1, sender: 'bot', text: 'Welcome to Deshi Fiverr! 👋 How can I help you today?', time: 'Just now' },
+    { id: 1, sender: 'bot', text: `Welcome to ${BRANDING.appName}! 👋 How can I help you today?`, time: 'Just now' },
   ]);
 
   const quickActions = [
@@ -56,7 +57,7 @@ export const ChatWidget: React.FC = () => {
             <Headphones className="w-5 h-5 text-white" aria-hidden />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white">Deshi Fiverr Support</h3>
+            <h3 className="text-sm font-bold text-white">{BRANDING.appName} Support</h3>
             <p className="text-xs text-white/80 flex items-center gap-1">
               <span className="w-2 h-2 bg-bridge-secondary rounded-full" aria-hidden />
               Online
@@ -87,7 +88,7 @@ export const ChatWidget: React.FC = () => {
               {msg.sender === 'bot' && (
                 <div className="flex items-center gap-1 mb-1">
                   <Bot className="w-3 h-3 text-bridge-primary" aria-hidden />
-                  <span className="text-xs text-text-muted font-medium">Deshi Fiverr Bot</span>
+                  <span className="text-xs text-text-muted font-medium">{BRANDING.aiName}</span>
                 </div>
               )}
               <p className="text-sm">{msg.text}</p>

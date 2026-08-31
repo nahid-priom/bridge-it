@@ -30,6 +30,7 @@ export async function signUpAction(input: {
   email: string;
   password: string;
   fullName: string;
+  phone?: string;
 }) {
   const supabase = await createServerSupabaseClient();
   if (!supabase) return { error: 'Supabase is not configured.' };
@@ -38,7 +39,7 @@ export async function signUpAction(input: {
     email: input.email,
     password: input.password,
     options: {
-      data: { full_name: input.fullName },
+      data: { full_name: input.fullName, phone: input.phone ?? '' },
       emailRedirectTo: `${siteUrl()}/auth/callback?next=/dashboard`,
     },
   });

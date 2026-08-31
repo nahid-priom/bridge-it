@@ -7,6 +7,8 @@ export async function assertAdminAction(): Promise<
 > {
   const profile = await getCurrentProfile();
   if (!profile) return { error: 'You must be signed in as an admin.' };
-  if (profile.role !== 'admin') return { error: 'Admin access required.' };
+  if (profile.role !== 'admin' && profile.role !== 'super_admin') {
+    return { error: 'Admin access required.' };
+  }
   return { userId: profile.id, email: profile.email };
 }

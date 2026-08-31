@@ -1,16 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { Briefcase, ArrowRight } from 'lucide-react';
-import { useAuthProfile } from '@/components/auth/AuthProfileContext';
-import { useBecomeSeller } from '@/hooks/useBecomeSeller';
-import { useAppNavigation } from '@/hooks/useAppNavigation';
+import { ROUTES } from '@/lib/routes';
 import { HOME_CTA } from '@/data/homeContent';
 
 export function HomeCtaBanner() {
-  const authProfile = useAuthProfile();
-  const goBecomeSeller = useBecomeSeller(authProfile);
-  const { goToCategories } = useAppNavigation();
-
   return (
     <section className="py-10 md:py-12" aria-labelledby="home-cta-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,21 +25,19 @@ export function HomeCtaBanner() {
             </h2>
             <p className="text-sm md:text-base text-white/90 mb-6">{HOME_CTA.subtitle}</p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={goToCategories}
+              <Link
+                href={ROUTES.solutions}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-deshi-green-dark font-bold rounded-xl hover:bg-white/95 transition-colors"
               >
-                Explore Services
+                Explore Solutions
                 <ArrowRight className="w-4 h-4" aria-hidden />
-              </button>
-              <button
-                type="button"
-                onClick={goBecomeSeller}
+              </Link>
+              <Link
+                href={ROUTES.consultation}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-white text-white font-bold rounded-xl hover:bg-white/10 transition-colors"
               >
-                Become a Seller
-              </button>
+                Get Free Consultation
+              </Link>
             </div>
           </div>
         </div>

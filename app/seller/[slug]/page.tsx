@@ -6,6 +6,7 @@ import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd';
 import { BreadcrumbOverrideProvider } from '@/components/seo/BreadcrumbOverride';
 import type { BreadcrumbItem } from '@/lib/seo/breadcrumbs';
 import { ROUTES } from '@/lib/routes';
+import { BRANDING } from '@/lib/config/branding';
 
 export const revalidate = 60;
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
   const { seller } = profile;
   return buildPageMetadata({
     title: `${seller.fullName} — ${seller.title}`,
-    description: seller.shortBio ?? seller.about ?? `Hire ${seller.fullName} on Deshi Fiverr`,
+    description: seller.shortBio ?? seller.about ?? `${seller.fullName} — ${BRANDING.appName}`,
     path: ROUTES.marketplaceSeller(slug),
     keywords: [seller.fullName, seller.title, seller.city ?? 'Bangladesh', 'freelancer'],
   });

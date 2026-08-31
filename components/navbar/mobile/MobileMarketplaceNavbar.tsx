@@ -7,7 +7,7 @@ import { Bell, Menu, Search, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { ROUTES } from '@/lib/routes';
 import type { AuthProfile } from '@/lib/auth/types';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { SellerAvatar } from '@/components/search/SellerAvatar';
 import { MobileDrawerMenu } from '@/components/navbar/mobile/MobileDrawerMenu';
 import { MobileProfileSheet } from '@/components/navbar/mobile/MobileProfileSheet';
@@ -186,9 +186,9 @@ export function MobileMarketplaceNavbar({
           <Link
             href={ROUTES.home}
             className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-lg"
-            aria-label="Deshi Fiverr — home"
+            aria-label="Bridge IT Park — home"
           >
-            <DeshiFiverrLogo size="mobile" showText />
+            <BridgeLogo iconSize="sm" textVisibility="always" />
           </Link>
         </div>
 

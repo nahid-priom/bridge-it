@@ -21,10 +21,9 @@ export function isSellerFullyActivated(ctx: MarketplaceAccessContext): boolean {
   return ctx.profile?.role === 'seller' && ctx.sellerStatus === 'active';
 }
 
-/** Role → primary dashboard (no mode switcher). */
-export function resolveDashboardRoute(role: UserRole | null | undefined): string {
-  if (role === 'admin') return ROUTES.admin;
-  if (role === 'seller') return ROUTES.sellerDashboard;
+/** Role → primary dashboard (Bridge IT Park). */
+export function resolveDashboardRoute(role: UserRole | string | null | undefined): string {
+  if (role === 'admin' || role === 'super_admin') return ROUTES.admin;
   return ROUTES.dashboard;
 }
 
@@ -32,7 +31,8 @@ export function resolveAdminAccess(ctx: MarketplaceAccessContext): {
   canAccess: boolean;
   redirectTo: string | null;
 } {
-  if (ctx.profile?.role === 'admin') {
+  const role = ctx.profile?.role;
+  if (role === 'admin' || role === 'super_admin') {
     return { canAccess: true, redirectTo: null };
   }
   return { canAccess: false, redirectTo: '/unauthorized' };
@@ -43,7 +43,7 @@ export function resolveClientAccess(ctx: MarketplaceAccessContext): {
   redirectTo: string | null;
 } {
   const role = ctx.profile?.role;
-  if (role === 'buyer' || role === 'seller' || role === 'admin') {
+  if (role === 'buyer' || role === 'client' || role === 'seller' || role === 'admin' || role === 'super_admin') {
     return { canAccess: true, redirectTo: null };
   }
   return { canAccess: false, redirectTo: '/unauthorized' };
@@ -105,12 +105,11 @@ export function resolveSellerOnboardingRedirect(ctx: MarketplaceAccessContext): 
   return null;
 }
 
-/** Navbar / CTA path for "become a seller" or seller hub. */
+/** @deprecated Seller onboarding removed */
 export function resolveBecomeSellerPath(ctx: MarketplaceAccessContext): string {
-  if (!ctx.profile) return `/login?next=${encodeURIComponent(ROUTES.sellerOnboarding)}`;
-  if (ctx.profile.role === 'admin') return ROUTES.admin;
-  if (isSellerFullyActivated(ctx)) return ROUTES.sellerDashboard;
-  return ROUTES.sellerOnboarding;
+  if (!ctx.profile) return `/login?next=${encodeURIComponent(ROUTES.consultation)}`;
+  if (ctx.profile.role === 'admin' || ctx.profile.role === 'super_admin') return ROUTES.admin;
+  return ROUTES.consultation;
 }
 
 export function resolveAuthLandingPath(role: UserRole | null | undefined): string {

@@ -5,6 +5,7 @@ import { useStore } from '@/store/useStore';
 import { useAppNavigation } from '@/hooks/useAppNavigation';
 import { ArrowLeft, Package, Star, DollarSign, BarChart3, TrendingUp, ShoppingBag, CheckCircle, AlertCircle, Eye, Settings, Bell, Plus, ExternalLink, Copy } from 'lucide-react';
 import type { DashboardOrderView, DashboardPageData } from '@/types/dashboard';
+import { BRANDING } from '@/lib/config/branding';
 
 const STAT_ICONS = [
   <DollarSign key="rev" className="w-5 h-5" />,
@@ -45,7 +46,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   }));
 
   const recentOrders = data?.recentOrders?.length ? data.recentOrders : FALLBACK_ORDERS;
-  const customUrl = data?.customUrl ?? 'deshifiverr.com/s/your-shop';
+  const customUrl = data?.customUrl ?? `${BRANDING.siteUrl.replace(/^https?:\/\//, '')}/solutions/your-brand`;
 
   const getStatusColor = (status: string) => {
     switch (status) {

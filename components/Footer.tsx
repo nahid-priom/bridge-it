@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { DeshiFiverrLogo } from '@/components/brand/DeshiFiverrLogo';
+import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { FOOTER_BRAND_DESCRIPTION, FOOTER_COLUMNS } from '@/data/homeContent';
 
 const SOCIAL = [
@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
         {/* 5 columns: brand (2) + buyers + sellers + categories */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-10">
           <div className="sm:col-span-2">
-            <DeshiFiverrLogo className="mb-4 [&_span]:text-white [&_span_span]:text-deshi-green" />
+            <BridgeLogo variant="footer" className="mb-4" />
             <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-xs">
               {FOOTER_BRAND_DESCRIPTION}
             </p>
@@ -57,9 +57,9 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <FooterColumn title="For Buyers" links={FOOTER_COLUMNS.buyers} />
-          <FooterColumn title="For Sellers" links={FOOTER_COLUMNS.sellers} />
-          <FooterColumn title="Categories" links={FOOTER_COLUMNS.categories} />
+          <FooterColumn title="Solutions" links={FOOTER_COLUMNS.solutions} />
+          <FooterColumn title="Support" links={FOOTER_COLUMNS.support} />
+          <FooterColumn title="Popular" links={FOOTER_COLUMNS.categories} />
         </div>
 
         {/* Company links + copyright — single row */}
@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
               </nav>
             </div>
             <p className="text-xs text-slate-500 shrink-0 lg:text-right">
-              © 2026 Deshi Fiverr. All rights reserved.
+              © {new Date().getFullYear()} Bridge IT Park. All rights reserved.
             </p>
           </div>
         </div>

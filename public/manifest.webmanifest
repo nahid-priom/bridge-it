@@ -1,0 +1,30 @@
+{
+  "name": "Bridge IT Park",
+  "short_name": "Bridge IT Park",
+  "description": "Everything Your Business Needs to Go Digital.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f2744",
+  "theme_color": "#0f2744",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

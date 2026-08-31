@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { BRANDING } from '@/lib/config/branding';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 import { AdminSearchModal } from './AdminSearchModal';
@@ -50,7 +51,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
       <div className="lg:pl-64 xl:pl-72 flex flex-col min-h-screen min-w-0">
         <AdminTopbar
           title={navItem?.label ?? 'Admin'}
-          subtitle="Deshi Fiverr Admin — Platform Control"
+          subtitle={`${BRANDING.adminName} — Platform Control`}
           onMenuClick={() => setMobileOpen(true)}
           onSearchOpen={() => setSearchOpen(true)}
           onQuickAction={() => setNotification('Quick action panel — demo mode')}
