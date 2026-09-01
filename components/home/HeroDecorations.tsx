@@ -66,7 +66,7 @@ export function HeroDecorations() {
         <FourPointStar className="w-4 h-4 md:w-5 md:h-5" color="#00A85A" />
       </motion.div>
 
-      {/* Paper plane + dashed flight path */}
+     
       <motion.svg
         className="absolute right-[2%] sm:right-[4%] md:right-[8%] top-[8%] sm:top-[10%] w-36 h-40 sm:w-44 sm:h-48 md:w-56 md:h-60 opacity-70 sm:opacity-90 md:opacity-100"
         viewBox="0 0 220 240"
