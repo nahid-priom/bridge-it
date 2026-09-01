@@ -70,6 +70,8 @@ export async function getPublishedProducts(filters: ProductSearchFilters = {}): 
 export type ProductSitemapEntry = {
   slug: string;
   updated_at: string;
+  showroom_featured?: boolean;
+  category?: { slug: string } | null;
 };
 
 export async function getPublishedProductSitemapEntries(): Promise<ProductSitemapEntry[]> {
@@ -78,7 +80,7 @@ export async function getPublishedProductSitemapEntries(): Promise<ProductSitema
 
   const { data, error } = await supabase
     .from('products')
-    .select('slug, updated_at')
+    .select('slug, updated_at, showroom_featured, category:categories(slug)')
     .eq('status', 'published')
     .order('sort_order', { ascending: true });
 
@@ -87,7 +89,12 @@ export async function getPublishedProductSitemapEntries(): Promise<ProductSitema
     return [];
   }
 
-  return (data ?? []) as ProductSitemapEntry[];
+  return (data ?? []).map((row) => ({
+    slug: row.slug as string,
+    updated_at: row.updated_at as string,
+    showroom_featured: Boolean(row.showroom_featured),
+    category: Array.isArray(row.category) ? row.category[0] : row.category,
+  })) as ProductSitemapEntry[];
 }
 
 export async function getProductBySlug(slug: string): Promise<BitpProductDetail | null> {
@@ -103,7 +110,7 @@ export async function getProductBySlug(slug: string): Promise<BitpProductDetail 
 
   if (error || !product) return null;
 
-  const [packagesRes, fieldsRes] = await Promise.all([
+  const [packagesRes, fieldsRes, faqsRes, stageLinkRes] = await Promise.all([
     supabase
       .from('product_packages')
       .select('*')
@@ -116,6 +123,17 @@ export async function getProductBySlug(slug: string): Promise<BitpProductDetail 
       .eq('product_id', product.id)
       .eq('active', true)
       .order('sort_order', { ascending: true }),
+    supabase
+      .from('product_faqs')
+      .select('*')
+      .eq('product_id', product.id)
+      .eq('active', true)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('product_stage_templates')
+      .select('template_id')
+      .eq('product_id', product.id)
+      .maybeSingle(),
   ]);
 
   const packages = (packagesRes.data ?? []) as BitpProductPackage[];
@@ -144,10 +162,22 @@ export async function getProductBySlug(slug: string): Promise<BitpProductDetail 
     options: Array.isArray(f.options) ? f.options : [],
   }));
 
+  let stage_steps: { id: string; title: string; description: string | null; duration_days: number | null; sort_order: number }[] = [];
+  if (stageLinkRes.data?.template_id) {
+    const { data: steps } = await supabase
+      .from('project_stage_template_steps')
+      .select('id, title, description, sort_order')
+      .eq('template_id', stageLinkRes.data.template_id)
+      .order('sort_order');
+    stage_steps = (steps ?? []).map((s) => ({ ...s, duration_days: null }));
+  }
+
   return {
     ...(product as BitpProduct),
     packages,
     requirement_fields,
+    faqs: faqsRes.data ?? [],
+    stage_steps,
   };
 }
 
@@ -265,6 +295,8 @@ export async function upsertProductAdmin(
     cover_image: nullIfEmpty(input.cover_image as string | undefined),
     demo_url: nullIfEmpty(input.demo_url as string | undefined),
     preview_url: nullIfEmpty(input.preview_url as string | undefined),
+    internal_demo_slug: nullIfEmpty(input.internal_demo_slug as string | undefined),
+    target_customer: nullIfEmpty(input.target_customer as string | undefined),
     updated_at: new Date().toISOString(),
   };
 

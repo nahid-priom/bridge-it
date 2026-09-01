@@ -2,13 +2,13 @@
 
 import type { ReactNode } from 'react';
 import {
-  BookOpen,
   HelpCircle,
+  Palette,
+  ShoppingBag,
   Sparkles,
   Star,
-  TrendingUp,
-  Users,
-  Package,
+  Globe,
+  Code,
 } from 'lucide-react';
 import {
   MegaMenuShell,
@@ -19,22 +19,22 @@ import { NavDropdownItem } from '@/components/navbar/navShared';
 import { EXPLORE_MOBILE_LINKS } from '@/components/navbar/exploreLinks';
 
 const EXPLORE_ICONS: Record<string, ReactNode> = {
-  'Top Freelancers': <Users className="w-4 h-4 text-deshi-green" />,
-  'Popular Services': <TrendingUp className="w-4 h-4 text-violet-500" />,
-  'Popular Products': <Package className="w-4 h-4 text-sky-500" />,
+  'Software Showroom': <Code className="w-4 h-4 text-emerald-500" />,
+  'E-commerce Showroom': <ShoppingBag className="w-4 h-4 text-teal-500" />,
+  'Web & App Solutions': <Globe className="w-4 h-4 text-blue-500" />,
+  'Digital Marketing': <Sparkles className="w-4 h-4 text-amber-500" />,
+  'Graphics & Creative': <Palette className="w-4 h-4 text-violet-500" />,
   'Success Stories': <Star className="w-4 h-4 text-amber-500" />,
-  Community: <Sparkles className="w-4 h-4 text-fuchsia-500" />,
-  Blog: <BookOpen className="w-4 h-4 text-slate-500" />,
   'Help Center': <HelpCircle className="w-4 h-4 text-slate-500" />,
 };
 
 const EXPLORE_DESCRIPTIONS: Record<string, string> = {
-  'Top Freelancers': 'Highest rated talent',
-  'Popular Services': 'Trending this week',
-  'Popular Products': 'Best-selling items',
+  'Software Showroom': 'Live ERP demos',
+  'E-commerce Showroom': 'Store demos & packages',
+  'Web & App Solutions': 'Websites & mobile apps',
+  'Digital Marketing': 'Ads, SEO & growth',
+  'Graphics & Creative': 'Design & branding',
   'Success Stories': 'Client wins',
-  Community: 'Connect & learn',
-  Blog: 'Tips & insights',
   'Help Center': 'Support & guides',
 };
 

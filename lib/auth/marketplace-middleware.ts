@@ -27,6 +27,7 @@ export function isPublicPath(pathname: string): boolean {
     '/pricing',
     '/portfolio',
     '/consultation',
+    '/demo',
     '/about',
     '/categories',
     '/products',
@@ -92,6 +93,13 @@ export async function handleMarketplaceMiddleware(
 
   if (!protectedPath && isPublicPath(pathname)) {
     if (user && AUTH_ROUTES.includes(pathname)) {
+      const next = request.nextUrl.searchParams.get('next');
+      if (next) {
+        const safe = safeNextPath(next);
+        if (safe !== '/') {
+          return NextResponse.redirect(new URL(safe, request.url));
+        }
+      }
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
       const role = normalizeRole(profile?.role);
       return NextResponse.redirect(new URL(resolveAuthLandingPath(role as import('@/types/database.types').UserRole), request.url));

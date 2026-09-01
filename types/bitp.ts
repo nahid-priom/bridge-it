@@ -76,6 +76,11 @@ export interface BitpProduct {
   seo_title: string | null;
   seo_description: string | null;
   keywords: string[];
+  target_customer?: string | null;
+  promotional_price?: number | null;
+  internal_demo_slug?: string | null;
+  showroom_featured?: boolean;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
   category?: BitpCategory;
@@ -129,6 +134,284 @@ export interface BitpRequirementField {
 export interface BitpProductDetail extends BitpProduct {
   packages: BitpProductPackage[];
   requirement_fields: BitpRequirementField[];
+  faqs?: BitpProductFaq[];
+  stage_steps?: { id: string; title: string; description: string | null; duration_days: number | null; sort_order: number }[];
+  demo_config?: EcommerceDemoConfig;
+  software_demo_config?: SoftwareDemoConfig;
+}
+
+export interface BitpProductFaq {
+  id: string;
+  product_id: string;
+  question: string;
+  answer: string;
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+}
+
+export interface DemoFeatureFlags {
+  landingOnly?: boolean;
+  catalog?: boolean;
+  cart?: boolean;
+  checkout?: boolean;
+  customerAccount?: boolean;
+  wishlist?: boolean;
+  coupon?: boolean;
+  variants?: boolean;
+  stock?: boolean;
+  courierFlow?: boolean;
+  paymentGatewayUi?: boolean;
+  fraudCheckerUi?: boolean;
+  analytics?: boolean;
+  adminPreview?: boolean;
+  search?: boolean;
+  returns?: boolean;
+  purchaseStock?: boolean;
+  roleAdmin?: boolean;
+  seo?: boolean;
+  pixelTracking?: boolean;
+  advancedReports?: boolean;
+}
+
+export interface SoftwareFeatureFlags {
+  dashboard?: boolean;
+  products?: boolean;
+  purchase?: boolean;
+  sales?: boolean;
+  stock?: boolean;
+  reports?: boolean;
+  parties?: boolean;
+  ledger?: boolean;
+  payments?: boolean;
+  expenses?: boolean;
+  transfer?: boolean;
+  returns?: boolean;
+  accounts?: boolean;
+  employees?: boolean;
+  roles?: boolean;
+  bom?: boolean;
+  production?: boolean;
+  costing?: boolean;
+  wastage?: boolean;
+  requisition?: boolean;
+  approval?: boolean;
+  salesOrders?: boolean;
+  delivery?: boolean;
+  audit?: boolean;
+}
+
+export interface SoftwareDemoConfig {
+  id: string;
+  product_id: string;
+  internal_demo_slug: string;
+  demo_title: string;
+  business_type: string;
+  demo_description: string | null;
+  package_level: number;
+  theme_config: Record<string, unknown>;
+  feature_flags: SoftwareFeatureFlags;
+  workflow_config: string[];
+  active: boolean;
+  product?: BitpProduct;
+  modules?: SoftwareDemoModule[];
+}
+
+export interface SoftwareDemoModule {
+  id: string;
+  demo_config_id: string;
+  module_key: string;
+  label: string;
+  icon: string | null;
+  sort_order: number;
+  route_key: string;
+  permissions: Record<string, unknown>;
+  active: boolean;
+}
+
+export interface SoftwareDemoProduct {
+  id: string;
+  demo_config_id: string;
+  session_id: string;
+  sku: string;
+  name: string;
+  product_type: string;
+  unit: string;
+  opening_qty: number;
+  current_qty: number;
+  unit_cost: number;
+  sale_price: number;
+}
+
+export interface SoftwareDemoParty {
+  id: string;
+  demo_config_id: string;
+  session_id: string;
+  party_type: string;
+  name: string;
+  phone: string | null;
+  balance: number;
+}
+
+export interface SoftwareDemoPurchase {
+  id: string;
+  reference_no: string;
+  supplier_id: string | null;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  lines?: { product_id: string; quantity: number; unit_cost: number; line_total: number }[];
+}
+
+export interface SoftwareDemoSale {
+  id: string;
+  reference_no: string;
+  customer_id: string | null;
+  total_amount: number;
+  paid_amount: number;
+  due_amount: number;
+  status: string;
+  created_at: string;
+}
+
+export interface SoftwareDemoBom {
+  id: string;
+  name: string;
+  finished_product_id: string;
+  batch_size: number;
+  lines?: { raw_product_id: string; quantity_per_batch: number }[];
+}
+
+export interface SoftwareDemoProductionOrder {
+  id: string;
+  reference_no: string;
+  bom_id: string | null;
+  batch_count: number;
+  status: string;
+  total_cost: number;
+  wastage_qty: number;
+  created_at: string;
+}
+
+export interface SoftwareDemoSessionSnapshot {
+  products: SoftwareDemoProduct[];
+  parties: SoftwareDemoParty[];
+  purchases: SoftwareDemoPurchase[];
+  sales: SoftwareDemoSale[];
+  payments: { id: string; payment_type: string; amount: number; created_at: string }[];
+  expenses: { id: string; category: string; amount: number; created_at: string }[];
+  boms: SoftwareDemoBom[];
+  productionOrders: SoftwareDemoProductionOrder[];
+  requisitions: { id: string; reference_no: string; department: string; amount: number; status: string }[];
+  salesOrders: { id: string; reference_no: string; total_amount: number; status: string }[];
+  activity: { id: string; action_type: string; summary: string; created_at: string }[];
+  metrics: SoftwareDemoMetrics;
+}
+
+export interface SoftwareDemoMetrics {
+  totalProducts: number;
+  totalStockValue: number;
+  totalSales: number;
+  totalPurchases: number;
+  totalDue: number;
+  totalExpenses: number;
+  lowStockCount: number;
+  profitEstimate: number;
+}
+
+export interface EcommerceDemoConfig {
+  id: string;
+  product_id: string;
+  package_type: string;
+  feature_flags: DemoFeatureFlags;
+  theme: Record<string, unknown>;
+  admin_modules: string[];
+  product_limit: number;
+  industry: string | null;
+  active: boolean;
+  product?: BitpProduct;
+  categories?: DemoStoreCategory[];
+  products?: DemoStoreProduct[];
+}
+
+export interface DemoStoreCategory {
+  id: string;
+  demo_config_id: string;
+  name: string;
+  slug: string;
+  icon: string | null;
+  sort_order: number;
+}
+
+export interface DemoStoreProduct {
+  id: string;
+  demo_config_id: string;
+  category_id: string | null;
+  name: string;
+  slug: string;
+  description: string | null;
+  price: number;
+  compare_at_price: number | null;
+  image_url: string | null;
+  vertical: string | null;
+  variants: DemoProductVariant[];
+  stock: number;
+  featured: boolean;
+  sort_order: number;
+  active: boolean;
+}
+
+export interface DemoProductVariant {
+  id: string;
+  label: string;
+  price?: number;
+  stock?: number;
+}
+
+export interface DemoOrder {
+  id: string;
+  demo_config_id: string;
+  session_id: string;
+  order_number: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_address: string | null;
+  subtotal: number;
+  total: number;
+  currency: string;
+  payment_method: string;
+  status: string;
+  courier_status: string | null;
+  is_demo: boolean;
+  created_at: string;
+  items?: DemoOrderItem[];
+}
+
+export interface DemoOrderItem {
+  id: string;
+  demo_order_id: string;
+  product_name: string;
+  product_slug: string | null;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  variant_label: string | null;
+}
+
+export interface ProjectStageTemplate {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  steps?: ProjectStageTemplateStep[];
+}
+
+export interface ProjectStageTemplateStep {
+  id: string;
+  template_id: string;
+  title: string;
+  description: string | null;
+  sort_order: number;
 }
 
 export interface BitpOrder {
@@ -150,6 +433,8 @@ export interface BitpOrder {
   updated_at: string;
   product?: BitpProduct;
   package?: BitpProductPackage;
+  client?: { id: string; full_name?: string | null; email?: string | null; phone?: string | null };
+  requirements?: BitpOrderRequirement[];
 }
 
 export interface BitpOrderRequirement {
@@ -186,6 +471,7 @@ export interface BitpProjectStage {
   description: string | null;
   status: ProjectStageStatus;
   sort_order: number;
+  admin_note: string | null;
   started_at: string | null;
   completed_at: string | null;
   created_at: string;
@@ -330,6 +616,7 @@ export interface ProductSearchFilters {
   pricing_type?: PricingType;
   featured?: boolean;
   popular?: boolean;
+  showroom_featured?: boolean;
   sort?: 'popular' | 'price_asc' | 'price_desc' | 'newest';
   limit?: number;
   offset?: number;

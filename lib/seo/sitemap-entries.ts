@@ -56,13 +56,31 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  const solutionEntries = products.map((product) =>
-    entry(ROUTES.solution(product.slug), {
+  const solutionEntries = products.map((product) => {
+    const cat = product.category as { slug: string } | { slug: string }[] | null | undefined;
+    const catSlug = Array.isArray(cat) ? cat[0]?.slug : cat?.slug;
+    const path =
+      catSlug === 'ecommerce-solutions'
+        ? ROUTES.ecommerceSolution(product.slug)
+        : catSlug === 'software-solutions' && product.showroom_featured
+          ? ROUTES.softwareSolution(product.slug)
+          : ROUTES.solution(product.slug);
+    return entry(path, {
       lastModified: product.updated_at,
       changeFrequency: 'weekly',
       priority: SOLUTION_DETAIL_PRIORITY,
-    })
-  );
+    });
+  });
 
-  return [...staticEntries, ...categoryFilterEntries, ...solutionEntries];
+  const ecommerceShowroom = entry(ROUTES.ecommerceShowroom, {
+    changeFrequency: 'daily',
+    priority: 0.92,
+  });
+
+  const softwareShowroom = entry(ROUTES.softwareShowroom, {
+    changeFrequency: 'daily',
+    priority: 0.91,
+  });
+
+  return [...staticEntries, ecommerceShowroom, softwareShowroom, ...categoryFilterEntries, ...solutionEntries];
 }

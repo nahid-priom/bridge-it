@@ -31,16 +31,19 @@ export async function signUpAction(input: {
   password: string;
   fullName: string;
   phone?: string;
+  next?: string;
 }) {
   const supabase = await createServerSupabaseClient();
   if (!supabase) return { error: 'Supabase is not configured.' };
+
+  const nextPath = safeNextPath(input.next, '/dashboard');
 
   const { data, error } = await supabase.auth.signUp({
     email: input.email,
     password: input.password,
     options: {
       data: { full_name: input.fullName, phone: input.phone ?? '' },
-      emailRedirectTo: `${siteUrl()}/auth/callback?next=/dashboard`,
+      emailRedirectTo: `${siteUrl()}/auth/callback?next=${encodeURIComponent(nextPath)}`,
     },
   });
 
@@ -50,7 +53,7 @@ export async function signUpAction(input: {
     return { needsConfirmation: true as const };
   }
 
-  redirect('/dashboard');
+  redirect(nextPath);
 }
 
 export async function signOutAction() {

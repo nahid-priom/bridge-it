@@ -54,7 +54,7 @@ export function DashboardTopbar({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
             <input
               type="search"
-              placeholder="Search projects, services, sellers..."
+              placeholder="Search orders, projects..."
               onFocus={() => setSearchOpen(true)}
               onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
               className="w-full h-10 pl-10 pr-4 rounded-full border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 text-sm focus:outline-none focus:border-deshi-green/40"

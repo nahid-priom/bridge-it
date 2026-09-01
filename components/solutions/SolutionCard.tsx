@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Play } from 'lucide-react';
 import type { BitpProduct } from '@/types/bitp';
-import { ROUTES } from '@/lib/routes';
-import { formatBdt } from '@/lib/format/currency';
+import { formatProductPrice } from '@/lib/format/currency';
+import { getSolutionDetailPath, getSolutionDemoPath, getSolutionOrderPath } from '@/lib/solutions/product-routes';
 import { cn } from '@/lib/cn';
 
 type SolutionCardProps = {
@@ -12,9 +12,14 @@ type SolutionCardProps = {
 };
 
 export function SolutionCard({ product, className }: SolutionCardProps) {
-  const href = ROUTES.solution(product.slug);
+  const href = getSolutionDetailPath(product);
+  const demoPath = getSolutionDemoPath(product);
   const categoryName = product.category?.name ?? 'Solution';
   const badge = product.featured ? 'Featured' : product.popular ? 'Popular' : null;
+  const isQuote = product.pricing_type === 'custom_quote';
+  const price = formatProductPrice(Number(product.starting_price), product.pricing_type, {
+    promotionalPrice: product.promotional_price,
+  });
 
   return (
     <article
@@ -67,13 +72,14 @@ export function SolutionCard({ product, className }: SolutionCardProps) {
           <div className="flex items-center justify-between pt-2 mt-auto border-t border-slate-100 dark:border-white/5">
             <div>
               <p className="text-xs text-text-secondary">
-                {product.pricing_type === 'custom_quote' ? 'Custom Quote' : 'Starting from'}
+                {isQuote ? 'Custom Quote' : price.secondary ?? 'Starting from'}
               </p>
               <p className="text-lg font-black text-text-primary">
-                {product.pricing_type === 'custom_quote'
-                  ? 'Contact Us'
-                  : formatBdt(Number(product.starting_price))}
+                {isQuote ? 'Contact Us' : price.primary}
               </p>
+              {price.strikethrough && (
+                <p className="text-xs text-text-secondary line-through">{price.strikethrough}</p>
+              )}
             </div>
             {product.delivery_time && (
               <span className="inline-flex items-center gap-1 text-xs text-text-secondary">
@@ -85,24 +91,40 @@ export function SolutionCard({ product, className }: SolutionCardProps) {
         </div>
       </Link>
 
-      <div className="px-4 pb-4 md:px-5 md:pb-5 flex gap-2">
+      <div className="px-4 pb-4 md:px-5 md:pb-5 flex flex-wrap gap-2">
         <Link
           href={href}
-          className="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-white/10 hover:border-deshi-green/40 transition-colors"
+          className="flex-1 min-w-[100px] text-center py-2.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-white/10 hover:border-deshi-green/40 transition-colors"
         >
           View Details
         </Link>
-        <Link
-          href={
-            product.pricing_type === 'custom_quote'
-              ? ROUTES.solutionQuote(product.slug)
-              : ROUTES.solutionOrder(product.slug)
-          }
-          className="flex-1 inline-flex items-center justify-center gap-1 py-2.5 rounded-xl text-sm font-semibold deshi-btn-primary"
-        >
-          {product.pricing_type === 'custom_quote' ? 'Get Quote' : 'Order Now'}
-          <ArrowRight className="w-3.5 h-3.5" aria-hidden />
-        </Link>
+        {demoPath && (
+          <Link
+            href={demoPath}
+            className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl text-sm font-semibold border border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10 transition-colors"
+          >
+            <Play className="w-3.5 h-3.5" aria-hidden />
+            Live Demo
+          </Link>
+        )}
+        {!isQuote && (
+          <Link
+            href={getSolutionOrderPath(product)}
+            className="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1 py-2.5 rounded-xl text-sm font-semibold deshi-btn-primary"
+          >
+            Order Now
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden />
+          </Link>
+        )}
+        {isQuote && (
+          <Link
+            href={getSolutionOrderPath(product)}
+            className="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1 py-2.5 rounded-xl text-sm font-semibold deshi-btn-primary"
+          >
+            Get Quote
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden />
+          </Link>
+        )}
       </div>
     </article>
   );

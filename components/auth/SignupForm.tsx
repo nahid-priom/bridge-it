@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +9,8 @@ import { signUpAction } from '@/app/actions/auth';
 import { AuthField, authInputClass } from '@/components/auth/AuthField';
 
 export function SignupForm() {
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get('next') ?? undefined;
   const [serverError, setServerError] = useState<string | null>(null);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,6 +30,7 @@ export function SignupForm() {
         password: data.password,
         fullName: data.fullName,
         phone: data.phone,
+        next: nextPath,
       });
       if (result && 'error' in result) setServerError(result.error ?? 'Sign up failed');
       if (result && 'needsConfirmation' in result) setNeedsConfirmation(true);

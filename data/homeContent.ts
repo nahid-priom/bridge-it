@@ -245,7 +245,56 @@ export type HomeCategoryItem = {
   subtitle?: string;
 };
 
-export const HOME_CATEGORY_GRID: HomeCategoryItem[] = [];
+export const HOME_CATEGORY_GRID: HomeCategoryItem[] = [
+  {
+    id: 'software',
+    name: 'Software Solutions',
+    icon: 'software',
+    color: '#10B981',
+    href: ROUTES.softwareShowroom,
+    subtitle: 'Stock to enterprise ERP — live demos',
+  },
+  {
+    id: 'web',
+    name: 'E-commerce Solutions',
+    icon: 'web',
+    color: '#0d9488',
+    href: ROUTES.ecommerceShowroom,
+    subtitle: 'Online stores from ৳2K to ৳50K',
+  },
+  {
+    id: 'app',
+    name: 'Web & App',
+    icon: 'app',
+    color: '#2563eb',
+    href: solutionsUrl('web-app-solutions'),
+    subtitle: 'Websites and mobile apps',
+  },
+  {
+    id: 'marketing',
+    name: 'Digital Marketing',
+    icon: 'marketing',
+    color: '#f59e0b',
+    href: solutionsUrl('digital-marketing'),
+    subtitle: 'Ads, SEO, and growth',
+  },
+  {
+    id: 'ai',
+    name: 'Graphics & Creative',
+    icon: 'ai',
+    color: '#8b5cf6',
+    href: solutionsUrl('graphics-creative'),
+    subtitle: 'Design and brand identity',
+  },
+  {
+    id: 'more',
+    name: 'All Solutions',
+    icon: 'more',
+    color: '#64748b',
+    href: ROUTES.solutions,
+    subtitle: 'Browse full catalog',
+  },
+];
 
 export type HomeFreelancerCard = {
   id: string;

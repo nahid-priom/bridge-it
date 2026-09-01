@@ -128,17 +128,17 @@ export function CategoryIconGrid({ categories }: CategoryIconGridProps) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 md:mb-10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-deshi-green mb-2">
-              Explore the marketplace
+              Explore our solutions
             </p>
             <h2
               id="category-grid-heading"
               className="text-2xl md:text-3xl font-black font-display text-text-primary"
             >
-              Browse Popular <span className="text-deshi-green">Categories</span>
+              Browse Solution <span className="text-deshi-green">Categories</span>
             </h2>
           </div>
           <Link
-            href={ROUTES.categories}
+            href={ROUTES.solutions}
             className="inline-flex items-center gap-1 text-sm font-semibold text-deshi-green hover:text-deshi-green-dark shrink-0"
           >
             View all categories <ArrowRight className="w-4 h-4" />

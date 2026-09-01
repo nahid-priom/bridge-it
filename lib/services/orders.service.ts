@@ -4,7 +4,9 @@ import { getServerClient, getAdminClient } from '@/lib/services/client';
 const ORDER_SELECT = `
   *,
   product:products(id, name, slug, thumbnail, starting_price, currency),
-  package:product_packages(id, name, price, currency, delivery_days)
+  package:product_packages(id, name, price, currency, delivery_days),
+  client:profiles(id, full_name, email, phone),
+  requirements:order_requirements(id, field_key, label, value)
 `;
 
 export async function getClientOrders(clientId: string): Promise<BitpOrder[]> {

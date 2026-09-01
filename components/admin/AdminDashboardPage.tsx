@@ -7,6 +7,7 @@ import { AdminDataProvider } from '@/components/admin/AdminDataContext';
 import type { AdminSection } from '@/types/admin';
 import type { AdminDashboardData } from '@/types/admin';
 import { AdminOverviewSection } from './sections/AdminOverviewSection';
+import { AdminBitpOverviewSection } from './sections/AdminBitpOverviewSection';
 import {
   AdminBitpProductsSection,
   AdminBitpOrdersSection,
@@ -14,6 +15,10 @@ import {
   AdminBitpConsultationsSection,
   AdminBitpContentSection,
   AdminBitpGenericSection,
+  AdminBitpProjectsSection,
+  AdminBitpPaymentsSection,
+  AdminBitpSoftwareSection,
+  AdminBitpEcommerceDemoSection,
 } from './sections/AdminBitpSections';
 import type { SellerApplicationRow } from '@/lib/db/seller-applications';
 
@@ -32,7 +37,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':
-        return <AdminOverviewSection onNavigate={setActiveSection} />;
+        return <AdminBitpOverviewSection onNavigate={setActiveSection} />;
       case 'bitp-products':
         return <AdminBitpProductsSection />;
       case 'bitp-categories':
@@ -40,13 +45,13 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
       case 'bitp-orders':
         return <AdminBitpOrdersSection />;
       case 'bitp-projects':
-        return <AdminBitpGenericSection title="Projects" endpoint="/api/admin/bitp/projects" />;
+        return <AdminBitpProjectsSection />;
       case 'bitp-quotations':
         return <AdminBitpGenericSection title="Quotations" endpoint="/api/admin/bitp/quotations" />;
       case 'bitp-clients':
         return <AdminBitpGenericSection title="Clients" endpoint="/api/admin/bitp/clients" />;
       case 'bitp-payments':
-        return <AdminBitpGenericSection title="Payments" endpoint="/api/admin/bitp/payments" />;
+        return <AdminBitpPaymentsSection />;
       case 'bitp-consultations':
         return <AdminBitpConsultationsSection />;
       case 'bitp-portfolio':
@@ -57,6 +62,13 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         return <AdminBitpGenericSection title="Messages" endpoint="/api/admin/bitp/messages" />;
       case 'bitp-content':
         return <AdminBitpContentSection />;
+      case 'bitp-software':
+        return (
+          <div className="space-y-8">
+            <AdminBitpSoftwareSection />
+            <AdminBitpEcommerceDemoSection />
+          </div>
+        );
       default:
         return <AdminOverviewSection onNavigate={setActiveSection} />;
     }

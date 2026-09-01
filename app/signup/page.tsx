@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { AuthCard } from '@/components/auth/AuthCard';
 import { SignupForm } from '@/components/auth/SignupForm';
 import { buildPageMetadata } from '@/lib/metadata';
@@ -25,7 +26,9 @@ export default function SignupPage() {
         </>
       }
     >
-      <SignupForm />
+      <Suspense fallback={<p className="text-sm text-text-secondary text-center">Loading…</p>}>
+        <SignupForm />
+      </Suspense>
     </AuthCard>
   );
 }

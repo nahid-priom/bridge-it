@@ -487,7 +487,57 @@ export function BitpProductEditor({
                   />
                   Popular
                 </label>
+                <label className="flex items-center gap-2 text-sm text-white/80">
+                  <input
+                    type="checkbox"
+                    checked={form.showroom_featured ?? false}
+                    onChange={(e) => setForm({ ...form, showroom_featured: e.target.checked })}
+                  />
+                  Showroom featured
+                </label>
               </div>
+              <label className="block text-xs text-white/60 sm:col-span-2">
+                Target customer (best for)
+                <input
+                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white"
+                  value={form.target_customer ?? ''}
+                  onChange={(e) => setForm({ ...form, target_customer: e.target.value })}
+                />
+              </label>
+              <label className="block text-xs text-white/60">
+                Internal demo slug
+                <input
+                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white font-mono text-sm"
+                  value={form.internal_demo_slug ?? ''}
+                  onChange={(e) => setForm({ ...form, internal_demo_slug: e.target.value })}
+                  placeholder="e.g. basic-stock"
+                />
+              </label>
+              <label className="block text-xs text-white/60">
+                Promotional price (BDT)
+                <input
+                  type="number"
+                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white"
+                  value={form.promotional_price ?? ''}
+                  onChange={(e) => setForm({ ...form, promotional_price: e.target.value ? Number(e.target.value) : null })}
+                />
+              </label>
+              <label className="block text-xs text-white/60">
+                Demo URL
+                <input
+                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white"
+                  value={form.demo_url ?? ''}
+                  onChange={(e) => setForm({ ...form, demo_url: e.target.value })}
+                />
+              </label>
+              <label className="block text-xs text-white/60">
+                Preview URL
+                <input
+                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white"
+                  value={form.preview_url ?? ''}
+                  onChange={(e) => setForm({ ...form, preview_url: e.target.value })}
+                />
+              </label>
               <div className="sm:col-span-2 grid sm:grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-white/60 mb-1">Thumbnail</p>

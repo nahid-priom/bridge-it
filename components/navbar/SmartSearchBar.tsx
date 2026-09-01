@@ -13,10 +13,10 @@ import { cn } from '@/lib/cn';
 
 const RECENT_KEY = 'deshi-recent-searches';
 const PLACEHOLDERS = [
-  'Search websites...',
-  'Search products...',
-  'Search freelancers...',
+  'Search solutions...',
+  'Search e-commerce packages...',
   'Search software...',
+  'Search digital marketing...',
 ] as const;
 
 export type SmartSearchBarProps = {
@@ -70,7 +70,7 @@ function SmartSearchBarInner({
   }, []);
 
   useEffect(() => {
-    if (pathname === '/search' || pathname.startsWith('/search?')) {
+    if (pathname === '/solutions' || pathname.startsWith('/solutions?')) {
       setQ(urlState.q);
     }
   }, [pathname, urlState.q]);
@@ -112,7 +112,7 @@ function SmartSearchBarInner({
       router.push(
         buildSearchUrl({
           q: trimmed,
-          category: pathname.startsWith('/search') ? urlState.category : 'all',
+          category: pathname.startsWith('/solutions') ? urlState.category : 'all',
           page: 1,
         })
       );
@@ -129,7 +129,7 @@ function SmartSearchBarInner({
   const clear = () => {
     setQ('');
     setSearchQuery('');
-    if (pathname.startsWith('/search')) {
+    if (pathname.startsWith('/solutions')) {
       router.push(buildSearchUrl({ q: '', category: 'all', page: 1 }));
     }
   };
@@ -138,9 +138,9 @@ function SmartSearchBarInner({
   const showPanel = focused;
 
   const quickFilters = [
-    { label: 'Services', href: ROUTES.search, icon: Briefcase },
-    { label: 'Products', href: ROUTES.products, icon: Package },
-    { label: 'Sellers', href: `${ROUTES.search}?q=freelancer`, icon: Store },
+    { label: 'All Solutions', href: ROUTES.solutions, icon: Store },
+    { label: 'Software', href: ROUTES.softwareShowroom, icon: Briefcase },
+    { label: 'E-commerce', href: ROUTES.ecommerceShowroom, icon: Package },
   ] as const;
 
   return (
@@ -173,7 +173,7 @@ function SmartSearchBarInner({
             onFocus={() => setFocused(true)}
             placeholder={placeholder}
             suppressHydrationWarning
-            aria-label="Search marketplace"
+            aria-label="Search solutions"
             aria-expanded={showPanel}
             aria-controls="smart-search-panel"
             className={cn(

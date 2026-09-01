@@ -6,6 +6,11 @@ import { formatBdt } from '@/lib/format/currency';
 import { deleteBitpProductAction } from '@/app/actions/bitp-admin';
 import { BitpCategoryForm } from '@/components/admin/bitp/BitpCategoryForm';
 import { BitpProductEditor } from '@/components/admin/bitp/BitpProductEditor';
+import { BitpOrderManager } from '@/components/admin/bitp/BitpOrderManager';
+import { BitpProjectManager } from '@/components/admin/bitp/BitpProjectManager';
+import { BitpPaymentManager } from '@/components/admin/bitp/BitpPaymentManager';
+import { BitpSoftwareDemoEditor } from '@/components/admin/bitp/BitpSoftwareDemoEditor';
+import { AdminBitpConsultationsSection } from '@/components/admin/sections/AdminBitpConsultationsSection';
 import type { BitpProduct, BitpOrder, BitpCategory } from '@/types/bitp';
 import { cn } from '@/lib/cn';
 
@@ -242,63 +247,29 @@ export function AdminBitpOrdersSection() {
   const [orders, setOrders] = useState<BitpOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
     fetch('/api/admin/bitp/orders')
       .then((r) => r.json())
       .then((d) => setOrders(d.orders ?? []))
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    load();
+  }, [load]);
+
   if (loading) return <p className="text-text-secondary">Loading orders...</p>;
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-white">Orders</h2>
-      {orders.length === 0 ? (
-        <p className="text-text-secondary">No orders yet.</p>
-      ) : (
-        <div className="space-y-3">
-          {orders.map((o) => (
-            <div key={o.id} className="rounded-xl border border-white/10 p-4 flex justify-between gap-4">
-              <div>
-                <p className="font-mono text-xs text-white/60">{o.order_number}</p>
-                <p className="font-medium text-white">{o.product?.name}</p>
-                <p className="text-sm text-white/60 capitalize">{o.order_status.replace(/_/g, ' ')}</p>
-              </div>
-              <p className="font-bold text-white">{formatBdt(Number(o.total))}</p>
-            </div>
-          ))}
-        </div>
-      )}
+      <h2 className="text-xl font-bold text-white">Order Management</h2>
+      <BitpOrderManager orders={orders} onRefresh={load} />
     </div>
   );
 }
 
-export function AdminBitpConsultationsSection() {
-  const [items, setItems] = useState<{ id: string; name: string; phone: string; status: string; service_interested: string | null }[]>([]);
-
-  useEffect(() => {
-    fetch('/api/admin/bitp/consultations').then((r) => r.json()).then((d) => setItems(d.items ?? []));
-  }, []);
-
-  return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold text-white">Consultation Requests</h2>
-      {items.length === 0 ? (
-        <p className="text-text-secondary">No consultation requests.</p>
-      ) : (
-        items.map((item) => (
-          <div key={item.id} className="rounded-xl border border-white/10 p-4">
-            <p className="font-bold text-white">{item.name}</p>
-            <p className="text-sm text-white/70">{item.phone}</p>
-            <p className="text-sm text-white/60">{item.service_interested}</p>
-            <p className="text-xs capitalize mt-1 text-emerald-400">{item.status}</p>
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
+export { AdminBitpConsultationsSection };
 
 export function AdminBitpContentSection() {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -318,6 +289,98 @@ export function AdminBitpContentSection() {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+export function AdminBitpProjectsSection() {
+  const [projects, setProjects] = useState<import('@/types/bitp').BitpProject[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    fetch('/api/admin/bitp/projects')
+      .then((r) => r.json())
+      .then((d) => setProjects(d.projects ?? []))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  if (loading) return <p className="text-text-secondary">Loading projects...</p>;
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold text-white">Project Management</h2>
+      <BitpProjectManager projects={projects} onRefresh={load} />
+    </div>
+  );
+}
+
+export function AdminBitpPaymentsSection() {
+  const [payments, setPayments] = useState<import('@/types/bitp').BitpPayment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    fetch('/api/admin/bitp/payments')
+      .then((r) => r.json())
+      .then((d) => setPayments(d.payments ?? []))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  if (loading) return <p className="text-text-secondary">Loading payments...</p>;
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold text-white">Payment Verification</h2>
+      <BitpPaymentManager payments={payments} onRefresh={load} />
+    </div>
+  );
+}
+
+export function AdminBitpSoftwareSection() {
+  return (
+    <div className="space-y-4">
+      <BitpSoftwareDemoEditor />
+    </div>
+  );
+}
+
+export function AdminBitpEcommerceDemoSection() {
+  const [configs, setConfigs] = useState<{ id: string; demo_slug: string; active: boolean; products: { slug: string; name: string } | null }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/admin/bitp/ecommerce-demos').then((r) => r.json()).then((d) => setConfigs(d.configs ?? []));
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold text-white">E-commerce Demo Configs</h2>
+      <p className="text-sm text-white/60">Read-only list. Edit product showroom fields in Products & Services.</p>
+      {configs.length === 0 ? (
+        <p className="text-text-secondary">No demo configs found.</p>
+      ) : (
+        <ul className="space-y-2">
+          {configs.map((c) => (
+            <li key={c.id} className="rounded-xl border border-white/10 p-4 flex justify-between items-center gap-3">
+              <div>
+                <p className="font-semibold text-white">{c.demo_slug}</p>
+                <p className="text-sm text-white/60">{c.products?.name ?? 'Unlinked product'}</p>
+              </div>
+              <span className={cn('text-xs font-bold uppercase', c.active ? 'text-emerald-400' : 'text-white/40')}>
+                {c.active ? 'Active' : 'Inactive'}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

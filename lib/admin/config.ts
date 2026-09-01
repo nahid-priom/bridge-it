@@ -28,4 +28,5 @@ export const adminNavItems: AdminNavItem[] = [
   { id: 'bitp-reviews', label: 'Reviews', icon: Star },
   { id: 'bitp-messages', label: 'Messages', icon: MessageSquare },
   { id: 'bitp-content', label: 'Site Content', icon: Settings },
+  { id: 'bitp-software', label: 'Software Demos', icon: Settings },
 ];

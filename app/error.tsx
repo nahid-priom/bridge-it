@@ -20,7 +20,7 @@ export default function Error({
       <div className="glass-card rounded-2xl p-10 text-center max-w-md border border-border-subtle">
         <h1 className="text-2xl font-bold text-text-primary mb-2">Something went wrong</h1>
         <p className="text-text-muted text-sm mb-6">
-          We could not load this page. Please try again or return to the marketplace home.
+          We could not load this page. Please try again or return to the home page.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button

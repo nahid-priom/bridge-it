@@ -8,11 +8,9 @@ import {
   LogOut,
   Package,
   Settings,
-  Star,
-  Store,
+  Sparkles,
 } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
-import { becomeSellerPath } from '@/lib/auth/become-seller';
 import type { AuthProfile } from '@/lib/auth/types';
 import { SellerAvatar } from '@/components/search/SellerAvatar';
 import { signOutAction } from '@/app/actions/auth';
@@ -52,11 +50,7 @@ export function UserProfileDropdown({
   const dashboardHref =
     authProfile?.role === 'admin'
       ? ROUTES.admin
-      : authProfile?.role === 'seller'
-        ? ROUTES.sellerDashboard
-        : ROUTES.dashboard;
-
-  const showBecomeSeller = !authProfile || authProfile.role === 'buyer';
+      : ROUTES.dashboard;
 
   return (
     <div ref={ref} className={cn('relative', className)}>
@@ -112,16 +106,16 @@ export function UserProfileDropdown({
                     label="My Dashboard"
                   />
                   <NavDropdownItem
-                    href={ROUTES.dashboard}
+                    href={ROUTES.clientOrders}
                     onClick={close}
                     icon={<Package className="w-4 h-4 text-sky-500" />}
-                    label="Orders"
+                    label="My Orders"
                   />
                   <NavDropdownItem
-                    href={ROUTES.search}
+                    href={ROUTES.solutions}
                     onClick={close}
-                    icon={<Star className="w-4 h-4 text-amber-500" />}
-                    label="Saved Sellers"
+                    icon={<Sparkles className="w-4 h-4 text-amber-500" />}
+                    label="Browse Solutions"
                   />
                   <NavDropdownItem
                     href={ROUTES.dashboard}
@@ -130,20 +124,6 @@ export function UserProfileDropdown({
                     label="Settings"
                   />
                 </NavDropdownSection>
-
-                {showBecomeSeller && (
-                  <>
-                    <div className="h-px bg-slate-100 dark:bg-white/10 mx-2 my-1" />
-                    <Link
-                      href={becomeSellerPath(authProfile)}
-                      onClick={close}
-                      className="flex items-center gap-2 mx-2 px-3 py-2 rounded-xl text-xs font-semibold text-deshi-green hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors"
-                    >
-                      <Store className="w-3.5 h-3.5" aria-hidden />
-                      Become a Seller
-                    </Link>
-                  </>
-                )}
 
                 <div className="h-px bg-slate-100 dark:bg-white/10 mx-2 my-1" />
                 <form action={signOutAction}>
@@ -174,16 +154,6 @@ export function UserProfileDropdown({
                     Join Now
                   </Link>
                 </div>
-                {showBecomeSeller && (
-                  <Link
-                    href={becomeSellerPath(null)}
-                    onClick={close}
-                    className="flex items-center justify-center gap-1.5 mx-2 mb-2 px-3 py-2 text-xs font-medium text-text-muted hover:text-deshi-green transition-colors"
-                  >
-                    <Store className="w-3.5 h-3.5" aria-hidden />
-                    Become a Seller
-                  </Link>
-                )}
               </>
             )}
           </motion.div>

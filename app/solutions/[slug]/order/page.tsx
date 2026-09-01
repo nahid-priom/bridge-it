@@ -26,5 +26,12 @@ export default async function SolutionOrderPage({ params, searchParams }: PagePr
 
   if (!product || product.pricing_type === 'custom_quote') notFound();
 
-  return <OrderPageClient product={product} selectedPackageId={packageId} />;
+  return (
+    <OrderPageClient
+      product={product}
+      selectedPackageId={packageId}
+      solutionBasePath={`/solutions/${slug}`}
+      returnPath={`/solutions/${slug}/order${packageId ? `?package=${packageId}` : ''}`}
+    />
+  );
 }

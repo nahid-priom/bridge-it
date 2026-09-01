@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, FolderKanban, CreditCard, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, FolderKanban, CreditCard, MessageSquare, Sparkles } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { formatBdt } from '@/lib/format/currency';
 import type { BitpOrder } from '@/types/bitp';
@@ -10,6 +10,7 @@ type BitpDashboardOverviewProps = {
   pendingPayments: number;
   completedProjects: number;
   recentOrders: BitpOrder[];
+  userName?: string;
 };
 
 export function BitpDashboardOverview({
@@ -18,6 +19,7 @@ export function BitpDashboardOverview({
   pendingPayments,
   completedProjects,
   recentOrders,
+  userName,
 }: BitpDashboardOverviewProps) {
   const stats = [
     { label: 'Total Orders', value: totalOrders, icon: ShoppingBag },
@@ -29,7 +31,9 @@ export function BitpDashboardOverview({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Welcome to Bridge IT Park</h1>
+        <h1 className="text-2xl font-bold">
+          {userName ? `Welcome, ${userName.split(' ')[0]}` : 'Welcome to Bridge IT Park'}
+        </h1>
         <p className="text-sm text-text-secondary mt-1">Track your orders, projects, and payments.</p>
       </div>
 
@@ -44,9 +48,11 @@ export function BitpDashboardOverview({
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Link href={ROUTES.solutions} className="deshi-btn-primary py-3 text-sm text-center">New Order</Link>
-        <Link href={ROUTES.consultation} className="deshi-btn-outline py-3 text-sm text-center">Request Quote</Link>
-        <Link href={ROUTES.clientProjects} className="deshi-btn-outline py-3 text-sm text-center">View Projects</Link>
+        <Link href={ROUTES.solutions} className="deshi-btn-primary py-3 text-sm text-center">Browse Solutions</Link>
+        <Link href={ROUTES.solutions} className="deshi-btn-outline py-3 text-sm text-center">New Order</Link>
+        <Link href={`${ROUTES.consultation}`} className="deshi-btn-outline py-3 text-sm text-center inline-flex items-center justify-center gap-2">
+          <Sparkles className="w-4 h-4" aria-hidden /> Request Customization
+        </Link>
         <Link href={ROUTES.clientSupport} className="deshi-btn-outline py-3 text-sm text-center inline-flex items-center justify-center gap-2">
           <MessageSquare className="w-4 h-4" aria-hidden /> Contact Support
         </Link>
@@ -62,12 +68,17 @@ export function BitpDashboardOverview({
         ) : (
           <ul className="space-y-3">
             {recentOrders.map((order) => (
-              <li key={order.id} className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-white/5 last:border-0">
-                <div>
-                  <p className="text-sm font-semibold">{order.product?.name}</p>
-                  <p className="text-xs text-text-secondary font-mono">{order.order_number}</p>
-                </div>
-                <p className="text-sm font-bold">{formatBdt(Number(order.total))}</p>
+              <li key={order.id}>
+                <Link
+                  href={ROUTES.clientOrder(order.id)}
+                  className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 -mx-2 px-2 rounded-lg transition-colors"
+                >
+                  <div>
+                    <p className="text-sm font-semibold">{order.product?.name}</p>
+                    <p className="text-xs text-text-secondary font-mono">{order.order_number}</p>
+                  </div>
+                  <p className="text-sm font-bold">{formatBdt(Number(order.total))}</p>
+                </Link>
               </li>
             ))}
           </ul>

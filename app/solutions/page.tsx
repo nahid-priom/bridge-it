@@ -37,6 +37,7 @@ export default async function SolutionsPage({ searchParams }: PageProps) {
         products={products}
         initialQuery={params.q ?? ''}
         initialCategory={params.category ?? ''}
+        initialSort={(params.sort as 'popular' | 'price_asc' | 'price_desc' | 'newest') ?? 'popular'}
       />
     </>
   );

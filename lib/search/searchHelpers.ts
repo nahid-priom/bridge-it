@@ -96,7 +96,7 @@ export function buildSearchUrl(state: Partial<MarketplaceSearchParams>): string 
   if (merged.page > 1) params.set('page', String(merged.page));
 
   const qs = params.toString();
-  return qs ? `${ROUTES.search}?${qs}` : ROUTES.search;
+  return qs ? `${ROUTES.solutions}?${qs}` : ROUTES.solutions;
 }
 
 const WEBSITE_QUERY =

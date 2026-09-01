@@ -14,6 +14,7 @@ export type AdminSection =
   | 'bitp-reviews'
   | 'bitp-messages'
   | 'bitp-content'
+  | 'bitp-software'
   | 'seller-applications'
   | 'seller-verification'
   | 'sellers'

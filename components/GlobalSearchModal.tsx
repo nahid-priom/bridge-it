@@ -144,7 +144,7 @@ export const GlobalSearchModal: React.FC = () => {
           <kbd className="px-1.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/12">
             Enter
           </kbd>{' '}
-          to search {BRANDING.appName}. An empty search shows featured marketplace results.
+          to search {BRANDING.appName}. Press Enter with an empty query to browse all solutions.
         </p>
       </div>
     </div>

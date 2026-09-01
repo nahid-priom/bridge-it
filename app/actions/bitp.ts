@@ -9,15 +9,19 @@ import { createNotification } from '@/lib/services/messages.service';
 import { ROUTES } from '@/lib/routes';
 import type { CreateConsultationInput } from '@/types/bitp';
 
+import { safeNextPath } from '@/lib/auth/redirect';
+
 export async function submitOrderAction(input: {
   product_id: string;
   package_id?: string | null;
   requirements: { field_key: string; label: string; value: string; field_id?: string }[];
   notes?: string;
+  return_path?: string;
 }) {
   const user = await getCurrentUser();
+  const returnPath = safeNextPath(input.return_path ?? ROUTES.dashboard);
   if (!user) {
-    redirect(`${ROUTES.login}?next=${ROUTES.dashboard}`);
+    redirect(`${ROUTES.login}?next=${encodeURIComponent(returnPath)}`);
   }
 
   const { order, error } = await createOrder(user.id, {

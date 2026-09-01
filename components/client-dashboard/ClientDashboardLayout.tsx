@@ -6,9 +6,7 @@ import { usePathname } from 'next/navigation';
 import { DashboardSidebar } from '@/components/client-dashboard/DashboardSidebar';
 import { DashboardTopbar } from '@/components/client-dashboard/DashboardTopbar';
 import { DashboardMobileNav } from '@/components/client-dashboard/DashboardMobileNav';
-import { ActivityTimeline } from '@/components/client-dashboard/ActivityTimeline';
 import { getClientNavItem } from '@/lib/client-dashboard/config';
-import { demoActivities, demoNotifications } from '@/lib/client-dashboard/demo-data';
 import type { AuthProfile } from '@/lib/auth/types';
 import { cn } from '@/lib/cn';
 
@@ -23,8 +21,6 @@ export function ClientDashboardLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const nav = getClientNavItem(pathname);
-  const showActivityPanel =
-    pathname === '/dashboard' || pathname.startsWith('/dashboard/projects');
 
   return (
     <div className="min-h-screen bg-[#F4F7FB] dark:bg-[#0a0f1a]">
@@ -55,19 +51,13 @@ export function ClientDashboardLayout({
           title={nav?.label ?? 'Client Dashboard'}
           subtitle={BRANDING.clientWorkspace}
           authProfile={authProfile}
-          notifications={demoNotifications}
+          notifications={[]}
           onMenuClick={() => setMobileOpen(true)}
         />
 
         <div className="flex-1 flex min-w-0 px-3 sm:px-4 lg:px-6 gap-4 lg:gap-6 max-w-[1800px] w-full mx-auto">
           <main className="flex-1 min-w-0 py-2 lg:py-4 pb-8">{children}</main>
-
-          {showActivityPanel && (
-            <aside className="hidden xl:block w-80 shrink-0 py-4">
-              <ActivityTimeline activities={demoActivities} compact />
-            </aside>
-          )}
-        </div>
+      </div>
       </div>
 
       <DashboardMobileNav onMenuOpen={() => setMobileOpen(true)} />

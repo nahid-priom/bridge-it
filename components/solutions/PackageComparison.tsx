@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { Check, Clock, ArrowRight } from 'lucide-react';
 import type { BitpProductDetail, BitpProductPackage } from '@/types/bitp';
 import { ROUTES } from '@/lib/routes';
-import { formatBdt } from '@/lib/format/currency';
+import { formatBdt, formatPackagePrice } from '@/lib/format/currency';
 import { cn } from '@/lib/cn';
 
 type PackageComparisonProps = {
   product: BitpProductDetail;
+  orderBasePath?: string;
 };
 
-export function PackageComparison({ product }: PackageComparisonProps) {
+export function PackageComparison({ product, orderBasePath }: PackageComparisonProps) {
   const [selectedId, setSelectedId] = useState<string | null>(
     product.packages.find((p) => p.highlighted)?.id ?? product.packages[0]?.id ?? null
   );
@@ -29,7 +30,7 @@ export function PackageComparison({ product }: PackageComparisonProps) {
           href={
             product.pricing_type === 'custom_quote'
               ? ROUTES.solutionQuote(product.slug)
-              : ROUTES.solutionOrder(product.slug)
+              : `${orderBasePath ?? ROUTES.solution(product.slug)}/order`
           }
           className="deshi-btn-primary inline-flex items-center gap-2 px-6 py-3"
         >
@@ -50,6 +51,7 @@ export function PackageComparison({ product }: PackageComparisonProps) {
             selected={selectedId === pkg.id}
             onSelect={() => setSelectedId(pkg.id)}
             productSlug={product.slug}
+            orderBasePath={orderBasePath}
           />
         ))}
       </div>
@@ -62,11 +64,13 @@ function PackageCard({
   selected,
   onSelect,
   productSlug,
+  orderBasePath,
 }: {
   pkg: BitpProductPackage;
   selected: boolean;
   onSelect: () => void;
   productSlug: string;
+  orderBasePath?: string;
 }) {
   return (
     <div
@@ -94,8 +98,13 @@ function PackageCard({
             {formatBdt(Number(pkg.old_price))}
           </span>
         )}
-        <span className="text-2xl font-black text-text-primary">{formatBdt(Number(pkg.price))}</span>
+        <span className="text-2xl font-black text-text-primary">{formatPackagePrice(Number(pkg.price), pkg.billing_type)}</span>
       </div>
+      {pkg.billing_type && (
+        <p className="text-xs text-text-secondary -mt-2 mb-2 capitalize">
+          {pkg.billing_type === 'monthly' ? 'Monthly billing' : pkg.billing_type === 'one_time' ? 'One-time payment' : pkg.billing_type}
+        </p>
+      )}
       {pkg.delivery_days && (
         <p className="inline-flex items-center gap-1 text-xs text-text-secondary mb-4">
           <Clock className="w-3.5 h-3.5" aria-hidden />
@@ -116,7 +125,7 @@ function PackageCard({
         ))}
       </ul>
       <Link
-        href={`${ROUTES.solutionOrder(productSlug)}?package=${pkg.id}`}
+        href={`${orderBasePath ?? ROUTES.solution(productSlug)}/order?package=${pkg.id}`}
         className={cn(
           'w-full text-center py-3 rounded-xl text-sm font-bold transition-colors',
           selected ? 'deshi-btn-primary' : 'border border-slate-200 dark:border-white/10 hover:border-deshi-green/40'

@@ -25,13 +25,13 @@ export const AboutPage: React.FC = () => {
     {
       icon: <Lock className="w-8 h-8" />,
       title: 'Secure Payments',
-      description: 'Escrow-based payment system ensures sellers get paid and buyers get quality work.',
+      description: 'Transparent pricing and milestone-based project delivery with secure payment options.',
       color: 'from-bridge-gold to-orange-500',
     },
     {
       icon: <MessageCircle className="w-8 h-8" />,
-      title: 'Real-time Communication',
-      description: 'Built-in messaging and calling features for seamless buyer-seller interaction.',
+      title: 'Dedicated Support',
+      description: 'Direct communication with Bridge IT Park from consultation through delivery and launch.',
       color: 'from-bridge-primary to-purple-500',
     },
     {
@@ -42,14 +42,14 @@ export const AboutPage: React.FC = () => {
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
-      title: 'Custom URLs & Advertising',
-      description: 'Each seller gets a unique URL for sharing on Facebook, Instagram, or any platform.',
+      title: 'Live Solution Demos',
+      description: 'Try interactive software and e-commerce demos before you commit to a package.',
       color: 'from-bridge-cyan to-blue-500',
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title: 'Verified Sellers',
-      description: 'All sellers go through a verification process to ensure quality and reliability.',
+      title: 'Expert Delivery',
+      description: 'In-house specialists across software, web, marketing, and design — no freelancer roulette.',
       color: 'from-bridge-accent to-red-600',
     },
     {
@@ -82,9 +82,9 @@ export const AboutPage: React.FC = () => {
         {/* Mission */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
           {[
-            { title: 'Our Mission', desc: 'To democratize access to quality digital services and empower every creator and business in Bangladesh.', icon: '🎯' },
-            { title: 'Our Vision', desc: 'To become the largest trusted marketplace for digital services in South Asia, connecting millions of buyers and sellers.', icon: '🌟' },
-            { title: 'Our Promise', desc: 'Guaranteed quality, secure transactions, piracy protection, and reliable customer support — every single time.', icon: '🤝' },
+            { title: 'Our Mission', desc: 'To give growing businesses in Bangladesh access to professional software, web, marketing, and creative solutions — delivered by one trusted partner.', icon: '🎯' },
+            { title: 'Our Vision', desc: 'To become the leading digital solutions partner for SMEs across South Asia — build, market, and grow in one place.', icon: '🌟' },
+            { title: 'Our Promise', desc: 'Clear pricing, live demos where available, secure delivery, and dedicated support from order to launch.', icon: '🤝' },
           ].map((item, i) => (
             <div key={i} className="glass rounded-2xl p-8 border border-border-subtle text-center">
               <span className="text-4xl block mb-4">{item.icon}</span>
