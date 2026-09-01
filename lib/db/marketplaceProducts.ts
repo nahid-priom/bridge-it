@@ -20,6 +20,10 @@ type DbProduct = {
   short_description: string | null;
   full_description: string | null;
   thumbnail_url: string | null;
+  cover_image_path: string | null;
+  cover_image_alt: string | null;
+  cover_image_prompt: string | null;
+  cover_image_updated_at: string | null;
   gallery: string[] | null;
   price: number;
   compare_price: number | null;
@@ -60,6 +64,10 @@ function mapProduct(row: DbProduct): MarketplaceProduct {
     shortDescription: row.short_description,
     fullDescription: row.full_description,
     thumbnailUrl: row.thumbnail_url,
+    coverImagePath: row.cover_image_path,
+    coverImageAlt: row.cover_image_alt,
+    coverImagePrompt: row.cover_image_prompt,
+    coverImageUpdatedAt: row.cover_image_updated_at,
     gallery: row.gallery ?? [],
     price: row.price,
     comparePrice: row.compare_price,

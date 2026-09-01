@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Clock, ArrowRight, Play } from 'lucide-react';
 import type { BitpProduct } from '@/types/bitp';
 import { formatProductPrice } from '@/lib/format/currency';
 import { getSolutionDetailPath, getSolutionDemoPath, getSolutionOrderPath } from '@/lib/solutions/product-routes';
+import { getProductCoverAlt, getProductCoverUrl } from '@/lib/solutions/getProductCoverUrl';
+import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 import { cn } from '@/lib/cn';
 
 type SolutionCardProps = {
@@ -20,6 +21,8 @@ export function SolutionCard({ product, className }: SolutionCardProps) {
   const price = formatProductPrice(Number(product.starting_price), product.pricing_type, {
     promotionalPrice: product.promotional_price,
   });
+  const coverUrl = getProductCoverUrl(product);
+  const coverAlt = getProductCoverAlt(product);
 
   return (
     <article
@@ -35,27 +38,21 @@ export function SolutionCard({ product, className }: SolutionCardProps) {
         href={href}
         className="flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/50 rounded-2xl"
       >
-        <div className="relative aspect-[16/10] overflow-hidden flex items-center justify-center bg-gradient-to-br from-emerald-600/20 to-teal-700/20 dark:from-emerald-900/30 dark:to-teal-900/30">
-          {product.thumbnail ? (
-            <Image
-              src={product.thumbnail}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 260px, 280px"
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <span className="text-4xl select-none" aria-hidden>
-              {product.category?.icon ?? '💼'}
-            </span>
-          )}
-          {badge && (
-            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-deshi-green text-white">
-              {badge}
-            </span>
-          )}
-        </div>
+        <SolutionCoverImage
+          src={coverUrl}
+          alt={coverAlt}
+          categorySlug={product.category?.slug}
+          sizes="(max-width: 640px) 260px, 280px"
+          className="group-hover:scale-105 transition-transform duration-500"
+          imageClassName="group-hover:scale-105 transition-transform duration-500"
+          badge={
+            badge ? (
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-deshi-green text-white z-10">
+                {badge}
+              </span>
+            ) : undefined
+          }
+        />
 
         <div className="flex flex-col flex-1 p-4 md:p-5 gap-2">
           <span className="text-[11px] font-semibold uppercase tracking-wide text-deshi-green">

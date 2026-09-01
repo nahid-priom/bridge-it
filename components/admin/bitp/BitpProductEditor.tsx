@@ -10,9 +10,9 @@ import {
   deleteBitpPackageAction,
   upsertBitpPackageFeatureAction,
   deleteBitpPackageFeatureAction,
-  uploadProductMediaAction,
   getBitpProductForEditAction,
 } from '@/app/actions/bitp-admin';
+import { ProductCoverSection } from '@/components/admin/bitp/ProductCoverSection';
 import type {
   BitpCategory,
   BitpProduct,
@@ -92,7 +92,8 @@ export function BitpProductEditor({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<'thumbnail' | 'cover_image' | null>(null);
+
+  const selectedCategory = categories.find((c) => c.id === form.category_id);
 
   const loadProduct = useCallback(async (id: string) => {
     setLoading(true);
@@ -116,26 +117,6 @@ export function BitpProductEditor({
   useEffect(() => {
     if (productId) loadProduct(productId);
   }, [productId, loadProduct]);
-
-  const handleImageUpload = async (field: 'thumbnail' | 'cover_image', file: File) => {
-    const id = form.id;
-    if (!id) {
-      setError('Save the product first before uploading images.');
-      return;
-    }
-    setUploading(field);
-    setError(null);
-    const fd = new FormData();
-    fd.set('file', file);
-    fd.set('productId', id);
-    const result = await uploadProductMediaAction(fd);
-    setUploading(null);
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    if (result.url) setForm((prev) => ({ ...prev, [field]: result.url }));
-  };
 
   const saveAll = async () => {
     setSaving(true);
@@ -538,41 +519,14 @@ export function BitpProductEditor({
                   onChange={(e) => setForm({ ...form, preview_url: e.target.value })}
                 />
               </label>
-              <div className="sm:col-span-2 grid sm:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs text-white/60 mb-1">Thumbnail</p>
-                  {form.thumbnail && (
-                    <img src={form.thumbnail} alt="" className="h-20 w-20 object-contain rounded-lg mb-2 bg-white/5" />
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    disabled={!form.id || uploading === 'thumbnail'}
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleImageUpload('thumbnail', f);
-                    }}
-                    className="text-xs text-white/70"
-                  />
-                  {!form.id && <p className="text-[10px] text-white/40 mt-1">Save product first to upload</p>}
-                </div>
-                <div>
-                  <p className="text-xs text-white/60 mb-1">Cover image</p>
-                  {form.cover_image && (
-                    <img src={form.cover_image} alt="" className="h-20 w-32 object-contain rounded-lg mb-2 bg-white/5" />
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    disabled={!form.id || uploading === 'cover_image'}
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleImageUpload('cover_image', f);
-                    }}
-                    className="text-xs text-white/70"
-                  />
-                </div>
-              </div>
+              <ProductCoverSection
+                form={form}
+                categoryName={selectedCategory?.name}
+                onUpdated={(updates) => {
+                  setForm((prev) => ({ ...prev, ...updates }));
+                  onSaved();
+                }}
+              />
             </div>
           )}
 

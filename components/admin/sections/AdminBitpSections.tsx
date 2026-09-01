@@ -6,6 +6,7 @@ import { formatBdt } from '@/lib/format/currency';
 import { deleteBitpProductAction } from '@/app/actions/bitp-admin';
 import { BitpCategoryForm } from '@/components/admin/bitp/BitpCategoryForm';
 import { BitpProductEditor } from '@/components/admin/bitp/BitpProductEditor';
+import { ProductCoverBulkPanel } from '@/components/admin/bitp/ProductCoverBulkPanel';
 import { BitpOrderManager } from '@/components/admin/bitp/BitpOrderManager';
 import { BitpProjectManager } from '@/components/admin/bitp/BitpProjectManager';
 import { BitpPaymentManager } from '@/components/admin/bitp/BitpPaymentManager';
@@ -109,6 +110,8 @@ export function AdminBitpProductsSection() {
           </button>
         ))}
       </div>
+
+      <ProductCoverBulkPanel onComplete={load} />
 
       {filtered.length === 0 ? (
         <p className="text-text-secondary">No products in this category.</p>

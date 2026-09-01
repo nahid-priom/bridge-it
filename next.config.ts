@@ -4,6 +4,18 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+function getSupabaseHostname(): string | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) return null;
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+}
+
+const supabaseHostname = getSupabaseHostname();
+
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   eslint: {
@@ -24,6 +36,15 @@ const nextConfig: NextConfig = {
         hostname: 'ui-avatars.com',
         pathname: '/api/**',
       },
+      ...(supabaseHostname
+        ? [
+            {
+              protocol: 'https' as const,
+              hostname: supabaseHostname,
+              pathname: '/storage/v1/object/public/**',
+            },
+          ]
+        : []),
     ],
   },
 };

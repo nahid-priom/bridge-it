@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Star, Clock } from 'lucide-react';
 import type { MarketplaceService } from '@/types/marketplace';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 import { formatBdtPrice, formatDeliveryDays } from '@/lib/marketplace/format';
-import { getMarketplaceThumbnailStyle } from '@/lib/marketplace/thumbnails';
+import { hasValidSolutionCover } from '@/lib/solutions/isLegacyCover';
+import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 
 function getServiceBadge(service: MarketplaceService): string | null {
   if (service.isFeatured) return 'Featured';
@@ -21,8 +21,13 @@ type MarketplaceServiceCardProps = {
 
 export function MarketplaceServiceCard({ service, className }: MarketplaceServiceCardProps) {
   const badge = getServiceBadge(service);
-  const thumb = getMarketplaceThumbnailStyle(service.categorySlug, service.rowGroup);
   const href = ROUTES.service(service.slug);
+  const hasCover =
+    service.thumbnailType === 'image' &&
+    hasValidSolutionCover(service.thumbnailUrl, service.coverImagePath);
+  const coverAlt =
+    service.coverImageAlt ??
+    `3D illustration of ${service.title} for ${service.categoryName}`;
 
   return (
     <article
@@ -39,41 +44,28 @@ export function MarketplaceServiceCard({ service, className }: MarketplaceServic
         className="flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/50 rounded-2xl"
         aria-label={`View ${service.title} by ${service.sellerName}`}
       >
-        <div
-          className={cn(
-            'relative aspect-[16/10] overflow-hidden flex items-center justify-center',
-            service.thumbnailType === 'image' && service.thumbnailUrl
-              ? 'bg-slate-100 dark:bg-slate-900'
-              : thumb.className
-          )}
-        >
-          {service.thumbnailType === 'image' && service.thumbnailUrl ? (
-            <Image
-              src={service.thumbnailUrl}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 260px, 280px"
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <span className="text-4xl drop-shadow-sm select-none" aria-hidden>
-              {thumb.icon}
-            </span>
-          )}
-          {badge && (
-            <span
-              className={cn(
-                'absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide text-white',
-                badge === 'Featured' && 'bg-deshi-purple',
-                badge === 'Popular' && 'bg-deshi-green',
-                badge === 'Top Rated' && 'bg-amber-500'
-              )}
-            >
-              {badge}
-            </span>
-          )}
-        </div>
+        <SolutionCoverImage
+          src={hasCover ? service.thumbnailUrl : null}
+          alt={coverAlt}
+          categorySlug={service.categorySlug}
+          aspectClassName="aspect-[16/9]"
+          sizes="(max-width: 640px) 260px, 280px"
+          imageClassName="group-hover:scale-105 transition-transform duration-500"
+          badge={
+            badge ? (
+              <span
+                className={cn(
+                  'absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide text-white',
+                  badge === 'Featured' && 'bg-deshi-purple',
+                  badge === 'Popular' && 'bg-deshi-green',
+                  badge === 'Top Rated' && 'bg-amber-500'
+                )}
+              >
+                {badge}
+              </span>
+            ) : undefined
+          }
+        />
 
         <div className="flex flex-col flex-1 p-3.5 sm:p-4">
           <p className="text-[11px] font-semibold text-deshi-green truncate mb-1">

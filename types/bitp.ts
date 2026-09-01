@@ -62,6 +62,10 @@ export interface BitpProduct {
   full_description: string | null;
   thumbnail: string | null;
   cover_image: string | null;
+  cover_image_path?: string | null;
+  cover_image_alt?: string | null;
+  cover_image_prompt?: string | null;
+  cover_image_updated_at?: string | null;
   product_type: ProductType;
   pricing_type: PricingType;
   starting_price: number;

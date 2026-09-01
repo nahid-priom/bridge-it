@@ -1,6 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight, Clock, MessageCircle } from 'lucide-react';
 import { buildPageMetadata } from '@/lib/metadata';
 import { getProductBySlug, getRelatedProducts } from '@/lib/services/products.service';
@@ -8,10 +7,12 @@ import { PackageComparison } from '@/components/solutions/PackageComparison';
 import { EcommerceDeliveryTimeline } from '@/components/solutions/EcommerceDeliveryTimeline';
 import { SolutionStickyMobileCta } from '@/components/solutions/SolutionStickyMobileCta';
 import { SolutionCard } from '@/components/solutions/SolutionCard';
+import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { bitpSolutionBreadcrumbJsonLd, bitpSolutionJsonLd } from '@/lib/structured-data';
 import { ROUTES } from '@/lib/routes';
 import { formatProductPrice } from '@/lib/format/currency';
+import { getProductCoverAlt, getProductCoverUrl } from '@/lib/solutions/getProductCoverUrl';
 import { getSolutionOrderPath } from '@/lib/solutions/product-routes';
 
 export const revalidate = 60;
@@ -80,20 +81,14 @@ export default async function SolutionDetailPage({ params }: PageProps) {
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-600/20 to-teal-700/20">
-            {product.cover_image || product.thumbnail ? (
-              <Image
-                src={product.cover_image ?? product.thumbnail!}
-                alt={product.name}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-6xl">{product.category?.icon ?? '💼'}</div>
-            )}
-          </div>
+          <SolutionCoverImage
+            src={getProductCoverUrl(product) ?? product.cover_image ?? product.thumbnail}
+            alt={getProductCoverAlt(product)}
+            categorySlug={product.category?.slug}
+            aspectClassName="aspect-video rounded-2xl"
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
 
           <div>
             <span className="text-sm font-semibold text-deshi-green uppercase tracking-wide">

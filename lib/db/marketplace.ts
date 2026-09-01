@@ -27,6 +27,10 @@ type DbMarketplaceService = {
   seller_avatar_url: string | null;
   thumbnail_type: string;
   thumbnail_url: string | null;
+  cover_image_path: string | null;
+  cover_image_alt: string | null;
+  cover_image_prompt: string | null;
+  cover_image_updated_at: string | null;
   price_from: number;
   currency: string;
   delivery_days: number | null;
@@ -76,6 +80,10 @@ function mapService(row: DbMarketplaceService): MarketplaceService {
     sellerCity: row.marketplace_sellers?.city ?? null,
     thumbnailType: row.thumbnail_type === 'image' ? 'image' : 'gradient',
     thumbnailUrl: row.thumbnail_url,
+    coverImagePath: row.cover_image_path,
+    coverImageAlt: row.cover_image_alt,
+    coverImagePrompt: row.cover_image_prompt,
+    coverImageUpdatedAt: row.cover_image_updated_at,
     priceFrom: row.price_from,
     currency: row.currency,
     deliveryDays: row.delivery_days,

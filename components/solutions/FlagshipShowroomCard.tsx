@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Play, ArrowRight, Check, ShoppingCart, Clock, Sparkles } from 'lucide-react';
 import type { BitpProduct } from '@/types/bitp';
 import { ROUTES } from '@/lib/routes';
 import { formatProductPrice } from '@/lib/format/currency';
+import { getProductCoverAlt, getProductCoverUrl } from '@/lib/solutions/getProductCoverUrl';
+import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 import { cn } from '@/lib/cn';
 
 type FlagshipShowroomCardProps = {
@@ -15,7 +16,8 @@ type FlagshipShowroomCardProps = {
 };
 
 export function FlagshipShowroomCard({ product, topFeatures = [], className }: FlagshipShowroomCardProps) {
-  const cover = product.cover_image ?? product.thumbnail ?? `/showroom/covers/${product.slug}.svg`;
+  const coverUrl = getProductCoverUrl(product);
+  const coverAlt = getProductCoverAlt(product);
   const demoSlug = product.internal_demo_slug;
   const price = formatProductPrice(Number(product.starting_price), product.pricing_type ?? 'fixed', {
     promotionalPrice: product.promotional_price,
@@ -31,27 +33,30 @@ export function FlagshipShowroomCard({ product, topFeatures = [], className }: F
         className
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[#0f2744] to-[#132f52]">
-        <Image
-          src={cover}
-          alt={product.name}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="(max-width: 640px) 100vw, 400px"
-        />
-        {product.showroom_featured && (
-          <div className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-black">
-            <Sparkles className="w-3 h-3" aria-hidden />
-            Featured
-          </div>
-        )}
-        {product.delivery_time && (
-          <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 text-white text-xs font-semibold backdrop-blur-sm">
-            <Clock className="w-3 h-3" aria-hidden />
-            {product.delivery_time}
-          </div>
-        )}
-      </div>
+      <SolutionCoverImage
+        src={coverUrl}
+        alt={coverAlt}
+        categorySlug={product.category?.slug ?? 'ecommerce-solutions'}
+        aspectClassName="aspect-[16/9]"
+        sizes="(max-width: 640px) 100vw, 400px"
+        imageClassName="group-hover:scale-105 transition-transform duration-500"
+        badge={
+          product.showroom_featured ? (
+            <div className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-black">
+              <Sparkles className="w-3 h-3" aria-hidden />
+              Featured
+            </div>
+          ) : undefined
+        }
+        overlay={
+          product.delivery_time ? (
+            <div className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 text-white text-xs font-semibold backdrop-blur-sm">
+              <Clock className="w-3 h-3" aria-hidden />
+              {product.delivery_time}
+            </div>
+          ) : undefined
+        }
+      />
 
       <div className="flex flex-col flex-1 p-5">
         <div className="mb-3">

@@ -12,6 +12,7 @@
     "admin:promote": "tsx scripts/seed-admin-user.ts",
     "covers:generate": "tsx scripts/generate-flagship-covers.ts",
     "covers:software": "tsx scripts/generate-flagship-covers.ts",
+    "covers:backfill": "tsx scripts/backfill-solution-covers.ts",
     "logos:dark": "tsx scripts/generate-dark-logos.ts",
     "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts"
   },
@@ -29,6 +30,8 @@
     "react-dom": "19.2.6",
     "react-hook-form": "^7.76.0",
     "recharts": "^3.8.1",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.4",
     "tailwind-merge": "3.4.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"

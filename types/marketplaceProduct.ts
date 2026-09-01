@@ -18,6 +18,10 @@ export interface MarketplaceProduct {
   shortDescription: string | null;
   fullDescription: string | null;
   thumbnailUrl: string | null;
+  coverImagePath?: string | null;
+  coverImageAlt?: string | null;
+  coverImagePrompt?: string | null;
+  coverImageUpdatedAt?: string | null;
   gallery: string[];
   price: number;
   comparePrice: number | null;

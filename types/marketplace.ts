@@ -35,6 +35,10 @@ export interface MarketplaceService {
   sellerCity: string | null;
   thumbnailType: MarketplaceThumbnailType;
   thumbnailUrl: string | null;
+  coverImagePath?: string | null;
+  coverImageAlt?: string | null;
+  coverImagePrompt?: string | null;
+  coverImageUpdatedAt?: string | null;
   priceFrom: number;
   currency: string;
   deliveryDays: number | null;

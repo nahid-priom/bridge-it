@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Star, ShoppingCart } from 'lucide-react';
 import type { MarketplaceProduct } from '@/types/marketplaceProduct';
 import { ROUTES } from '@/lib/routes';
 import { formatBdtPrice } from '@/lib/marketplace/format';
+import { hasValidSolutionCover } from '@/lib/solutions/isLegacyCover';
+import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 import { cn } from '@/lib/cn';
 
 type MarketplaceProductCardProps = {
@@ -25,6 +26,10 @@ export function MarketplaceProductCard({
     product.comparePrice && product.comparePrice > product.price
       ? Math.round((1 - product.price / product.comparePrice) * 100)
       : null;
+  const hasCover = hasValidSolutionCover(product.thumbnailUrl, product.coverImagePath);
+  const coverAlt =
+    product.coverImageAlt ??
+    `3D illustration of ${product.name} for ${product.categoryName}`;
 
   return (
     <article
@@ -37,31 +42,31 @@ export function MarketplaceProductCard({
       )}
     >
       <Link href={href} className="flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/50 rounded-2xl">
-        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-          {product.thumbnailUrl ? (
-            <Image
-              src={product.thumbnailUrl}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 260px, 280px"
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : null}
-          <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-white/95 dark:bg-slate-900/95 text-[10px] font-bold text-deshi-green">
-            {product.categoryName}
-          </span>
-          {product.isFeatured && (
-            <span className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-violet-600 text-white text-[10px] font-bold">
-              Featured
-            </span>
-          )}
-          {discount != null && discount > 0 && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-bold">
-              -{discount}%
-            </span>
-          )}
-        </div>
+        <SolutionCoverImage
+          src={hasCover ? product.thumbnailUrl : null}
+          alt={coverAlt}
+          categorySlug={product.categorySlug}
+          aspectClassName="aspect-[4/3]"
+          sizes="(max-width: 640px) 260px, 280px"
+          imageClassName="group-hover:scale-105 transition-transform duration-500"
+          badge={
+            <>
+              <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md bg-white/95 dark:bg-slate-900/95 text-[10px] font-bold text-deshi-green">
+                {product.categoryName}
+              </span>
+              {product.isFeatured && (
+                <span className="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-md bg-violet-600 text-white text-[10px] font-bold">
+                  Featured
+                </span>
+              )}
+              {discount != null && discount > 0 && (
+                <span className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-bold">
+                  -{discount}%
+                </span>
+              )}
+            </>
+          }
+        />
 
         <div className="flex flex-col flex-1 p-3.5">
           <div className="flex items-center gap-1 text-xs mb-1.5">
