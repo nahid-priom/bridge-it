@@ -12,6 +12,7 @@
     "admin:promote": "tsx scripts/seed-admin-user.ts",
     "covers:generate": "tsx scripts/generate-flagship-covers.ts",
     "covers:software": "tsx scripts/generate-flagship-covers.ts",
+    "logos:dark": "tsx scripts/generate-dark-logos.ts",
     "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts"
   },
   "dependencies": {
