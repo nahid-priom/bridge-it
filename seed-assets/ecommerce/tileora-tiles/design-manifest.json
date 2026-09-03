@@ -1,0 +1,30 @@
+{
+  "brand": "TILEORA",
+  "industry": "Tiles & Sanitary",
+  "palette": [
+    "#f8fafc",
+    "#0f172a",
+    "#64748b"
+  ],
+  "typography": {
+    "display": "architectural sans",
+    "body": "technical sans"
+  },
+  "heroStyle": "A Split Hero",
+  "navigationStyle": "showroom sections",
+  "cardStyle": "swatch+room",
+  "buttonStyle": "slate filled",
+  "photographyDirection": "tiles basins faucets showroom",
+  "coverDevice": "desktop + phone marble surface",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "desktop + phone marble surface"
+  }
+}

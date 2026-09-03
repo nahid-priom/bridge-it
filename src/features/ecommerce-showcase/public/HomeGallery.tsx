@@ -1,45 +1,44 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
 import type { EcommerceProjectCard } from '../types';
-import { PageFilter } from './PageFilter';
 import { ProjectGrid } from './ProjectGrid';
+import { WebsiteTypeFilters } from './WebsiteTypeFilters';
 
 export function HomeGallery({ projects }: { projects: EcommerceProjectCard[] }) {
-  const featured = projects.filter((item) => item.featured);
-  const rest = projects.filter((item) => !item.featured);
+  const cards = projects.slice(0, 6);
 
   return (
-    <section className="pb-16 md:pb-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+    <section className="pb-12 md:pb-14">
+      <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10">
+        <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Design Gallery</p>
-            <h2 className="font-display text-2xl md:text-3xl font-black text-[#0f2744] dark:text-white mt-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2563eb] dark:text-[#60a5fa]">
+              Design Gallery
+            </p>
+            <h2 className="mt-1 font-display text-2xl font-black text-text-primary md:text-3xl dark:text-white">
               Explore E-commerce Designs
             </h2>
           </div>
-          <Link href="/websites" className="text-sm font-semibold text-emerald-700 hover:underline">
-            View all websites
+          <Link
+            href="/websites"
+            className="text-sm font-semibold text-[#2563eb] hover:underline dark:text-[#60a5fa]"
+          >
+            View all websites →
           </Link>
         </div>
-        <Suspense fallback={null}>
-          <PageFilter className="mb-8" basePath="/websites" />
-        </Suspense>
-        {featured.length > 0 ? (
-          <div className="mb-10">
-            <h3 className="font-display text-lg font-bold mb-4">Featured Designs</h3>
-            <ProjectGrid projects={featured.slice(0, 4)} eagerCount={4} priorityFirst />
-          </div>
-        ) : null}
-        {rest.length > 0 ? (
-          <ProjectGrid
-            projects={rest}
-            eagerCount={featured.length > 0 ? 0 : 4}
-            priorityFirst={featured.length === 0}
-          />
-        ) : featured.length === 0 ? (
-          <ProjectGrid projects={[]} />
-        ) : null}
+
+        <WebsiteTypeFilters className="mb-6 md:mb-7" />
+
+        <ProjectGrid
+          projects={cards}
+          eagerCount={0}
+          priorityFirst={false}
+          variant="home"
+          columns="home"
+          emptyTitle="No website designs yet"
+          emptyDescription="Published e-commerce projects will appear here."
+          emptyActionHref="/websites"
+          emptyActionLabel="Browse websites"
+        />
       </div>
     </section>
   );

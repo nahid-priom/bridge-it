@@ -101,7 +101,7 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
             Ready design থেকে পছন্দ করুন অথবা আপনার Brand অনুযায়ী Customize করুন।
           </p>
           <p className="mt-3 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-            Starting from ৳10,000
+            Starting from ৳5,000
           </p>
         </header>
 

@@ -1,0 +1,30 @@
+{
+  "brand": "SOUNDORA",
+  "industry": "Audio",
+  "palette": [
+    "#161412",
+    "#f2ebe3",
+    "#d4a373"
+  ],
+  "typography": {
+    "display": "minimal geometric",
+    "body": "light sans"
+  },
+  "heroStyle": "C Product Spotlight",
+  "navigationStyle": "ultra minimal top",
+  "cardStyle": "large image quiet text",
+  "buttonStyle": "warm outline",
+  "photographyDirection": "headphones speakers warm product light",
+  "coverDevice": "laptop + phone dark warm desk",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone dark warm desk"
+  }
+}

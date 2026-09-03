@@ -1,0 +1,30 @@
+{
+  "brand": "TRAVELORA",
+  "industry": "Travel Gear",
+  "palette": [
+    "#f7f3ee",
+    "#1e293b",
+    "#0ea5e9"
+  ],
+  "typography": {
+    "display": "travel sans",
+    "body": "friendly sans"
+  },
+  "heroStyle": "H Lifestyle Story",
+  "navigationStyle": "destination-inspired",
+  "cardStyle": "soft travel cards",
+  "buttonStyle": "sky blue",
+  "photographyDirection": "luggage backpacks travel lifestyle",
+  "coverDevice": "laptop + phone suitcase scene",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone suitcase scene"
+  }
+}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { cn } from '@/lib/cn';
 import type { EcommerceProjectCard } from '../types';
 import { ProjectCard } from './ProjectCard';
 
@@ -13,6 +14,8 @@ export function ProjectGrid({
   emptyActionHref = '/websites',
   emptyActionLabel = 'Clear filters',
   busy = false,
+  variant = 'default',
+  columns = 'listing',
 }: {
   projects: EcommerceProjectCard[];
   eagerCount?: number;
@@ -23,6 +26,8 @@ export function ProjectGrid({
   emptyActionHref?: string;
   emptyActionLabel?: string;
   busy?: boolean;
+  variant?: 'default' | 'home';
+  columns?: 'listing' | 'home';
 }) {
   if (projects.length === 0) {
     return (
@@ -38,7 +43,10 @@ export function ProjectGrid({
 
   return (
     <div
-      className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
+      className={cn(
+        'grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6',
+        columns === 'home' ? 'lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-3'
+      )}
       aria-busy={busy || undefined}
     >
       {projects.map((project, index) => (
@@ -47,6 +55,7 @@ export function ProjectGrid({
           project={project}
           eager={index < eagerCount}
           priority={priorityFirst && index === 0}
+          variant={variant}
         />
       ))}
     </div>

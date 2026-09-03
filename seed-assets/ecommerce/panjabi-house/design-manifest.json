@@ -1,0 +1,30 @@
+{
+  "brand": "PANJABI HOUSE",
+  "industry": "Bangladeshi Men's Fashion",
+  "palette": [
+    "#f8f5ef",
+    "#1a1a1a",
+    "#b45309"
+  ],
+  "typography": {
+    "display": "festive serif",
+    "body": "clean sans"
+  },
+  "heroStyle": "B Full-bleed Editorial",
+  "navigationStyle": "festive collection nav",
+  "cardStyle": "lookbook large",
+  "buttonStyle": "amber filled",
+  "photographyDirection": "realistic South Asian male fashion",
+  "coverDevice": "desktop + phone festive set",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "desktop + phone festive set"
+  }
+}

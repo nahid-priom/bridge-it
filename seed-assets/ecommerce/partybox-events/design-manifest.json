@@ -1,0 +1,30 @@
+{
+  "brand": "PARTYBOX",
+  "industry": "Party & Events",
+  "palette": [
+    "#fff1f2",
+    "#831843",
+    "#f472b6"
+  ],
+  "typography": {
+    "display": "playful premium",
+    "body": "event sans"
+  },
+  "heroStyle": "K Bento / J Offer-first",
+  "navigationStyle": "occasion first",
+  "cardStyle": "colorful premium tiles",
+  "buttonStyle": "magenta filled",
+  "photographyDirection": "decor balloons packaging not childish clutter",
+  "coverDevice": "laptop + phone pastel party",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone pastel party"
+  }
+}

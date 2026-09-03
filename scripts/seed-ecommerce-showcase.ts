@@ -15,7 +15,7 @@ import sharp from 'sharp';
 import {
   assertSeedBrandForm,
   BITP_ECOMMERCE_SOLUTIONS_SLUG,
-  DEFAULT_PACKAGES,
+  resolveSeedPackages,
   SEED_BRANDS,
 } from '../src/features/ecommerce-showcase/seed/brands';
 import {
@@ -119,6 +119,72 @@ async function main() {
     );
   }
 
+  const categorySeeds = [
+    {
+      slug: 'lifestyle',
+      name: 'Lifestyle',
+      description: 'Pets, baby, automotive, gifts, books, travel, and lifestyle commerce.',
+      icon: '🌿',
+      sort_order: 14,
+    },
+    {
+      slug: 'sports',
+      name: 'Sports',
+      description: 'Cycling, sports equipment, and athletic commerce.',
+      icon: '🏅',
+      sort_order: 15,
+    },
+    {
+      slug: 'specialty',
+      name: 'Specialty',
+      description: 'Hardware, tiles, agriculture, health, and specialty commerce.',
+      icon: '🛠️',
+      sort_order: 16,
+    },
+    {
+      slug: 'grocery',
+      name: 'Food',
+      description: 'Grocery, nutrition, and everyday food commerce.',
+      icon: '🛒',
+      sort_order: 3,
+    },
+    {
+      slug: 'furniture',
+      name: 'Home',
+      description: 'Furniture, stationery, and home commerce.',
+      icon: '🛋️',
+      sort_order: 5,
+    },
+  ];
+
+  for (const cat of categorySeeds) {
+    const { data: existingCat } = await supabase
+      .from('ecommerce_categories')
+      .select('id')
+      .eq('slug', cat.slug)
+      .maybeSingle();
+    if (existingCat?.id) {
+      await supabase
+        .from('ecommerce_categories')
+        .update({
+          name: cat.name,
+          description: cat.description,
+          icon: cat.icon,
+          sort_order: cat.sort_order,
+          active: true,
+          deleted_at: null,
+        })
+        .eq('id', existingCat.id);
+    } else {
+      const { error: insertCatError } = await supabase.from('ecommerce_categories').insert({
+        ...cat,
+        active: true,
+        deleted_at: null,
+      });
+      if (insertCatError) console.warn(`Category ${cat.slug} insert warning:`, insertCatError.message);
+    }
+  }
+
   const { data: categories, error: catError } = await supabase.from('ecommerce_categories').select('id, slug');
   if (catError) {
     console.error('Showcase tables are missing. Apply supabase/migrations/20260906120000_ecommerce_showcase.sql first.');
@@ -127,12 +193,31 @@ async function main() {
   const categoryBySlug = new Map((categories ?? []).map((row) => [String(row.slug), String(row.id)]));
 
   const seeded: Array<{ id: string; slug: string; title: string; pages: number; coverPath: string | null }> = [];
+  const skippedMissingAssets: string[] = [];
 
   for (const brand of SEED_BRANDS) {
     const categoryId = categoryBySlug.get(brand.categorySlug);
     if (!categoryId) {
       console.warn(`Skipping ${brand.slug}: ecommerce category ${brand.categorySlug} missing`);
       continue;
+    }
+
+    const assets = getSeedAssetEntry(brand.slug);
+    const requiredPageSlugs = brand.pages.map((page) => page.slug);
+    if (brand.packages?.length && assets) {
+      const coverLocal = await resolveSeedCoverPath(assets);
+      const missingPages: string[] = [];
+      for (const pageSlug of requiredPageSlugs) {
+        const local = await resolveSeedPagePath(assets, pageSlug);
+        if (!local) missingPages.push(pageSlug);
+      }
+      if (!coverLocal || missingPages.length) {
+        skippedMissingAssets.push(
+          `${brand.slug}: missing ${[!coverLocal && 'cover', ...missingPages].filter(Boolean).join(', ')}`
+        );
+        console.warn(`Skipping publish seed for ${brand.slug} until required assets exist.`);
+        continue;
+      }
     }
 
     assertSeedBrandForm(brand, categoryId);
@@ -169,7 +254,6 @@ async function main() {
     }
 
     console.log(`Project ${brand.title} → ${brand.slug} (${projectId})`);
-    const assets = getSeedAssetEntry(brand.slug);
     let pagesSeeded = 0;
 
     if (!coversOnly) {
@@ -278,7 +362,8 @@ async function main() {
         );
     }
 
-    const keepPkgNames = new Set(DEFAULT_PACKAGES.map((pkg) => pkg.name));
+    const packages = resolveSeedPackages(brand);
+    const keepPkgNames = new Set(packages.map((pkg) => pkg.name));
     const { data: extraPkgs } = await supabase
       .from('ecommerce_packages')
       .select('id, name')
@@ -295,8 +380,7 @@ async function main() {
         );
     }
 
-    for (const [index, pkg] of DEFAULT_PACKAGES.entries()) {
-      const price = brand.starting_price + pkg.priceOffset;
+    for (const pkg of packages) {
       const { data: existingPkg } = await supabase
         .from('ecommerce_packages')
         .select('id')
@@ -307,12 +391,12 @@ async function main() {
       const row = {
         project_id: projectId,
         name: pkg.name,
-        price,
+        price: pkg.price,
         currency: 'BDT',
         short_description: pkg.short_description,
         features: pkg.features,
         is_popular: pkg.is_popular,
-        sort_order: index,
+        sort_order: pkg.sort_order,
         active: true,
         deleted_at: null,
       };
@@ -329,6 +413,10 @@ async function main() {
   console.log('\nSeed summary');
   for (const item of seeded) {
     console.log(`- ${item.title} | ${item.slug} | ${item.id} | pages=${item.pages} | cover=${item.coverPath ?? 'none'}`);
+  }
+  if (skippedMissingAssets.length) {
+    console.warn('\nSkipped (missing assets):');
+    for (const item of skippedMissingAssets) console.warn(`- ${item}`);
   }
   console.log('Ecommerce showcase seed complete.');
 }

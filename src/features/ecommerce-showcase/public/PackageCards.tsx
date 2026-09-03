@@ -5,6 +5,12 @@ import { formatBdt } from '@/lib/format/currency';
 import { cn } from '@/lib/cn';
 import type { EcommercePackage } from '../types';
 
+export function formatShowcasePackagePrice(pkg: Pick<EcommercePackage, 'name' | 'price'>): string {
+  const base = formatBdt(pkg.price);
+  if (pkg.name === 'Premium Custom') return `${base}+`;
+  return base;
+}
+
 export function PackageCards({
   packages,
   selectedId,
@@ -44,7 +50,9 @@ export function PackageCards({
                 <span className="text-[10px] uppercase tracking-wide font-bold text-emerald-700">Popular</span>
               ) : null}
             </div>
-            <p className="mt-2 text-xl font-black text-[#0f2744] dark:text-white">{formatBdt(pkg.price)}</p>
+            <p className="mt-2 text-xl font-black text-[#0f2744] dark:text-white">
+              {formatShowcasePackagePrice(pkg)}
+            </p>
             {pkg.short_description ? (
               <p className="mt-1 text-sm text-text-secondary">{pkg.short_description}</p>
             ) : null}

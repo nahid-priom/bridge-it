@@ -1,0 +1,30 @@
+{
+  "brand": "TOOLMATE",
+  "industry": "Hardware & Tools",
+  "palette": [
+    "#f4f4f5",
+    "#18181b",
+    "#ea580c"
+  ],
+  "typography": {
+    "display": "industrial sans",
+    "body": "utilitarian"
+  },
+  "heroStyle": "I Category-first",
+  "navigationStyle": "tool category strip",
+  "cardStyle": "bordered industrial",
+  "buttonStyle": "orange square",
+  "photographyDirection": "drills kits safety gear clean",
+  "coverDevice": "laptop + phone concrete desk",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone concrete desk"
+  }
+}

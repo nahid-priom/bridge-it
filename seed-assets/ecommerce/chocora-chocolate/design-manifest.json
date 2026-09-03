@@ -1,0 +1,30 @@
+{
+  "brand": "CHOCORA",
+  "industry": "Chocolate & Gifts",
+  "palette": [
+    "#1a0f0a",
+    "#f5e6d3",
+    "#92400e"
+  ],
+  "typography": {
+    "display": "luxury serif",
+    "body": "warm sans"
+  },
+  "heroStyle": "C Product Spotlight",
+  "navigationStyle": "gift-led",
+  "cardStyle": "dark luxury",
+  "buttonStyle": "cocoa gold",
+  "photographyDirection": "premium chocolates truffles",
+  "coverDevice": "laptop + phone dark cocoa desk",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone dark cocoa desk"
+  }
+}

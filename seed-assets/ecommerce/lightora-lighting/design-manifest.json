@@ -1,0 +1,30 @@
+{
+  "brand": "LIGHTORA",
+  "industry": "Lighting",
+  "palette": [
+    "#0a0a0a",
+    "#f5f5f4",
+    "#fbbf24"
+  ],
+  "typography": {
+    "display": "thin geometric",
+    "body": "quiet sans"
+  },
+  "heroStyle": "G Dark Cinematic",
+  "navigationStyle": "dark minimal",
+  "cardStyle": "glow product cards",
+  "buttonStyle": "gold text",
+  "photographyDirection": "dramatic pendant lamps interiors",
+  "coverDevice": "laptop + phone dark room glow",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone dark room glow"
+  }
+}

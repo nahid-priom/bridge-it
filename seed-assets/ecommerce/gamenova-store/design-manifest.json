@@ -1,0 +1,30 @@
+{
+  "brand": "GAMENOVA",
+  "industry": "Gaming",
+  "palette": [
+    "#12151c",
+    "#e8eef7",
+    "#3d7eff"
+  ],
+  "typography": {
+    "display": "geometric bold sans",
+    "body": "tech sans"
+  },
+  "heroStyle": "G Dark Cinematic",
+  "navigationStyle": "dense utility bar",
+  "cardStyle": "dark image-dominant",
+  "buttonStyle": "electric blue sharp",
+  "photographyDirection": "cinematic gear lighting restrained accent",
+  "coverDevice": "monitor + phone graphite desk",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "monitor + phone graphite desk"
+  }
+}

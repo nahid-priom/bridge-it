@@ -1,0 +1,30 @@
+{
+  "brand": "FISHMART",
+  "industry": "Fresh Fish & Seafood",
+  "palette": [
+    "#f0f9ff",
+    "#0c4a6e",
+    "#0284c7"
+  ],
+  "typography": {
+    "display": "fresh sans",
+    "body": "clean sans"
+  },
+  "heroStyle": "I Category-first",
+  "navigationStyle": "catch-of-day",
+  "cardStyle": "fresh ice-clean",
+  "buttonStyle": "ocean blue",
+  "photographyDirection": "clean seafood not grocery clone",
+  "coverDevice": "laptop + phone cool blue",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone cool blue"
+  }
+}

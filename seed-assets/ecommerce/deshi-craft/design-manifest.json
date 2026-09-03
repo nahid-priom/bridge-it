@@ -1,0 +1,30 @@
+{
+  "brand": "DESHI CRAFT",
+  "industry": "Handicraft",
+  "palette": [
+    "#f5efe4",
+    "#3f2e1e",
+    "#a16207"
+  ],
+  "typography": {
+    "display": "artisan serif",
+    "body": "warm sans"
+  },
+  "heroStyle": "E Collection Mosaic",
+  "navigationStyle": "maker marketplace",
+  "cardStyle": "craft mosaic tiles",
+  "buttonStyle": "jute brown",
+  "photographyDirection": "jute handmade decor realistic",
+  "coverDevice": "browser + phone craft table",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "browser + phone craft table"
+  }
+}

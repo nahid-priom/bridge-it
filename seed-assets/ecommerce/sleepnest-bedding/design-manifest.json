@@ -1,0 +1,30 @@
+{
+  "brand": "SLEEPNEST",
+  "industry": "Bedding",
+  "palette": [
+    "#ffffff",
+    "#f0e6d8",
+    "#8c735b"
+  ],
+  "typography": {
+    "display": "soft serif",
+    "body": "light sans"
+  },
+  "heroStyle": "H Lifestyle Story",
+  "navigationStyle": "quiet text links",
+  "cardStyle": "soft bordered beige",
+  "buttonStyle": "taupe filled",
+  "photographyDirection": "warm bedroom linens",
+  "coverDevice": "laptop + phone soft beige",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone soft beige"
+  }
+}

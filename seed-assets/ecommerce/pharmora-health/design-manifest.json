@@ -1,0 +1,30 @@
+{
+  "brand": "PHARMORA",
+  "industry": "OTC Health",
+  "palette": [
+    "#ffffff",
+    "#065f46",
+    "#0f766e"
+  ],
+  "typography": {
+    "display": "trust sans",
+    "body": "medical-clean sans"
+  },
+  "heroStyle": "F Minimal Luxury clean",
+  "navigationStyle": "care categories",
+  "cardStyle": "trust bordered",
+  "buttonStyle": "teal filled",
+  "photographyDirection": "personal care OTC no Rx",
+  "coverDevice": "laptop + phone clinic white",
+  "pages": {
+    "homepage": "complete storefront matching Design DNA",
+    "landing": "conversion Meta-ads landing distinct from homepage",
+    "collection": "filters sort product grid",
+    "product": "gallery variants ATC related",
+    "cart": "line items subtotal checkout CTA",
+    "checkout": "BD COD + mobile banking",
+    "about": "brand story",
+    "mobile": "true 390px mobile UI",
+    "cover": "laptop + phone clinic white"
+  }
+}

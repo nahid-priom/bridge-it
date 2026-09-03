@@ -8,8 +8,24 @@ export type EcommerceSeedAsset = {
   pages: Record<string, string>;
 };
 
+const STANDARD_NEW_PAGES: Record<string, string> = {
+  homepage: 'homepage.png',
+  landing: 'landing.png',
+  collection: 'collection.png',
+  product: 'product.png',
+  cart: 'cart.png',
+  checkout: 'checkout.png',
+  about: 'about.png',
+  mobile: 'mobile.png',
+};
+
+const STANDARD_WITH_CONTACT: Record<string, string> = {
+  ...STANDARD_NEW_PAGES,
+  contact: 'contact.png',
+};
+
 /**
- * Prepared local assets for the five canonical showcase projects.
+ * Prepared local assets for showcase projects.
  * Primary root: seed-assets/ecommerce/{folder}/
  * Also checks generated Cursor assets and the legacy showcase tree.
  */
@@ -88,6 +104,133 @@ export const ECOMMERCE_SEED_PROJECTS: EcommerceSeedAsset[] = [
       mobile: 'mobile.png',
     },
   },
+  {
+    slug: 'urbano-menswear',
+    folder: 'urbano-menswear',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'littleloom-kids',
+    folder: 'littleloom-kids',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'stepora-footwear',
+    folder: 'stepora-footwear',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'veloura-bags',
+    folder: 'veloura-bags',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'gleamora-jewellery',
+    folder: 'gleamora-jewellery',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'timevault-watches',
+    folder: 'timevault-watches',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'fitcore-activewear',
+    folder: 'fitcore-activewear',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'nutriva-foods',
+    folder: 'nutriva-foods',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'petora',
+    folder: 'petora',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'babynest-store',
+    folder: 'babynest-store',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'motogear-auto',
+    folder: 'motogear-auto',
+    cover: 'cover.png',
+    pages: { ...STANDARD_WITH_CONTACT },
+  },
+  {
+    slug: 'mobilehub-store',
+    folder: 'mobilehub-store',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'homeapply-appliances',
+    folder: 'homeapply-appliances',
+    cover: 'cover.png',
+    pages: { ...STANDARD_WITH_CONTACT },
+  },
+  {
+    slug: 'craftdesk-stationery',
+    folder: 'craftdesk-stationery',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  {
+    slug: 'bloomora-gifts',
+    folder: 'bloomora-gifts',
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  },
+  ...[
+    'lumera-perfume',
+    'beanora-coffee',
+    'greenroot-organic',
+    'gamenova-store',
+    'soundora-audio',
+    'camerix-photography',
+    'bookora-books',
+    'techdesk-office',
+    'sleepnest-bedding',
+    'kitchora-kitchen',
+    'toolmate-hardware',
+    'ridevault-cycling',
+    'travelora-gear',
+    'hijabe-modest-fashion',
+    'panjabi-house',
+    'sareeva',
+    'deshi-craft',
+    'furnova-furniture',
+    'lightora-lighting',
+    'tileora-tiles',
+    'skinlab-care',
+    'hairora-care',
+    'chocora-chocolate',
+    'sweetbox-bakery',
+    'fishmart-seafood',
+    'meatmart-premium',
+    'pharmora-health',
+    'sportiva-sports',
+    'agrimart-store',
+    'partybox-events',
+  ].map((slug) => ({
+    slug,
+    folder: slug,
+    cover: 'cover.png',
+    pages: { ...STANDARD_NEW_PAGES },
+  })),
 ];
 
 const PRIMARY_ROOT = path.join(process.cwd(), 'seed-assets/ecommerce');

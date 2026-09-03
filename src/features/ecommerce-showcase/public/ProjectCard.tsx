@@ -12,10 +12,12 @@ export function ProjectCard({
   project,
   eager = false,
   priority = false,
+  variant = 'default',
 }: {
   project: EcommerceProjectCard;
   eager?: boolean;
   priority?: boolean;
+  variant?: 'default' | 'home';
 }) {
   const router = useRouter();
   const href = websiteDetailUrl(project.slug);
@@ -23,6 +25,76 @@ export function ProjectCard({
   const prefetchDetail = () => {
     router.prefetch(href);
   };
+
+  if (variant === 'home') {
+    return (
+      <article
+        className={cn(
+          'group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface',
+          'transition-[transform,border-color] duration-300 ease-out',
+          'hover:-translate-y-0.5 hover:border-[#2563eb]/40',
+          'motion-reduce:transition-none motion-reduce:hover:translate-y-0'
+        )}
+      >
+        <Link
+          href={href}
+          className="relative block aspect-[16/10] overflow-hidden bg-background-soft"
+          prefetch={false}
+          onMouseEnter={prefetchDetail}
+          onFocus={prefetchDetail}
+        >
+          <ShowcaseImage
+            src={project.cover_image_url}
+            fallbackSrc={project.cover_fallback_url}
+            alt={`${project.title} cover`}
+            width={1600}
+            height={1000}
+            eager={eager || priority}
+            priority={priority}
+            fit="cover"
+            className="h-full w-full"
+            imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          />
+        </Link>
+        <div className="flex items-end justify-between gap-3 p-3.5 sm:p-4">
+          <div className="min-w-0">
+            <h3 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
+              <Link
+                href={href}
+                className="hover:text-[#2563eb] dark:hover:text-[#60a5fa]"
+                prefetch={false}
+                onMouseEnter={prefetchDetail}
+                onFocus={prefetchDetail}
+              >
+                {project.title}
+              </Link>
+            </h3>
+            <p className="mt-0.5 text-sm text-text-secondary">
+              {project.category_name ?? project.industry ?? 'E-commerce'}
+            </p>
+            <p className="mt-1.5 text-sm font-semibold text-text-primary">
+              {formatStartingPrice(project.starting_price, project.currency)}
+            </p>
+          </div>
+          <Link
+            href={href}
+            prefetch={false}
+            onMouseEnter={prefetchDetail}
+            onFocus={prefetchDetail}
+            aria-label={`View ${project.title}`}
+            className={cn(
+              'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
+              'transition-colors hover:border-[#2563eb]/50 hover:bg-[#2563eb] hover:text-white',
+              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
+            )}
+          >
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface">
