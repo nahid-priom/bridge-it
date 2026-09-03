@@ -21,7 +21,7 @@ export function HeroSearch({ className }: { className?: string }) {
       role="search"
       className={cn('w-full max-w-[540px]', className)}
     >
-      <div className="flex h-[52px] items-stretch overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#0c1520] sm:h-14">
+      <div className="flex h-[52px] items-stretch overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#0c1520]">
         <label htmlFor="hero-website-search" className="sr-only">
           Search Fashion, Electronics, Grocery
         </label>

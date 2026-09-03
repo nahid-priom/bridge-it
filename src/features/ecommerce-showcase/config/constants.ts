@@ -6,6 +6,45 @@ export const SHOWCASE_CURRENCY = 'BDT';
 
 export const GALLERY_PAGE_SIZE = 12;
 
+export const HOMEPAGE_SECTION_MAX = 6;
+
+export const HOMEPAGE_SECTIONS = [
+  {
+    key: 'popular',
+    title: 'Popular E-commerce Designs',
+    eyebrow: 'Curated',
+    description: 'Hand-picked storefronts for Bangladesh businesses.',
+    viewAllHref: '/websites',
+    viewAllLabel: 'View all websites',
+  },
+  {
+    key: 'fashion_lifestyle',
+    title: 'Fashion & Lifestyle',
+    eyebrow: 'Fashion',
+    description: 'Apparel, jewellery, beauty and lifestyle stores.',
+    viewAllHref: '/websites?category=fashion',
+    viewAllLabel: 'View fashion',
+  },
+  {
+    key: 'electronics_gadgets',
+    title: 'Electronics & Gadgets',
+    eyebrow: 'Electronics',
+    description: 'Mobile, gadgets and appliance storefronts.',
+    viewAllHref: '/websites?category=electronics',
+    viewAllLabel: 'View electronics',
+  },
+  {
+    key: 'food_home_specialty',
+    title: 'Food, Home & Specialty',
+    eyebrow: 'Specialty',
+    description: 'Grocery, home and niche commerce designs.',
+    viewAllHref: '/websites',
+    viewAllLabel: 'View all websites',
+  },
+] as const;
+
+export type HomepageSectionKey = (typeof HOMEPAGE_SECTIONS)[number]['key'];
+
 /** Compact page tabs for /websites listing and homepage Design Gallery. */
 export const LISTING_VIEW_TABS = [
   { id: 'all', label: 'All' },

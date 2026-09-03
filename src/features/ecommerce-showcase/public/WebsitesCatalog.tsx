@@ -1,21 +1,20 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState, useTransition, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { FieldSelect } from '@/components/ui/FieldSelect';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { ProjectCardSkeleton } from '@/src/components/skeletons/ProjectCardSkeleton';
 import { ProjectGridError } from '@/src/components/skeletons/section-errors';
 import { useDelayedLoading } from '@/src/components/skeletons/useDelayedLoading';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
-import { LISTING_CATEGORIES, LISTING_VIEW_TABS } from '../config/constants';
 import type { ShowcaseListResult } from '../types';
 import { ProjectGrid } from './ProjectGrid';
+import { WebsiteFilterToolbar } from './WebsiteFilterToolbar';
+import { WebsiteSearch } from './WebsiteSearch';
 import { LISTING_LIMIT } from './websites-listing';
 
 async function fetchListing(params: {
@@ -38,9 +37,11 @@ async function fetchListing(params: {
 type ListingFilters = { q: string; category: string; view: string };
 
 export function WebsitesCatalog({
+  header,
   initialFilters,
   initialData,
 }: {
+  header: ReactNode;
   initialFilters: ListingFilters;
   initialData: ShowcaseListResult;
 }) {
@@ -55,14 +56,16 @@ export function WebsitesCatalog({
   const [extraItems, setExtraItems] = useState<ShowcaseListResult['items']>([]);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Sync when RSC re-renders with new searchParams (soft nav / shared URL)
   useEffect(() => {
     setView(initialFilters.view);
     setCategory(initialFilters.category);
     setQ(initialFilters.q);
     setSearchInput(initialFilters.q);
-    setExtraItems([]);
   }, [initialFilters.view, initialFilters.category, initialFilters.q]);
+
+  useEffect(() => {
+    setExtraItems([]);
+  }, [view, category, q]);
 
   useEffect(() => {
     const handle = window.setTimeout(() => {
@@ -114,115 +117,47 @@ export function WebsitesCatalog({
   const showGridSkeleton = useDelayedLoading(isPending && !data, 150);
   const busy = (isFetching && isPlaceholderData) || loadingMore;
   const remaining = total - items.length;
+  const showingFrom = items.length === 0 ? 0 : 1;
+  const showingTo = items.length;
+
+  const setViewAndReset = (next: string) => {
+    setView(next);
+    setExtraItems([]);
+  };
+
+  const setCategoryAndReset = (next: string) => {
+    setCategory(next);
+    setExtraItems([]);
+  };
 
   return (
     <>
-      <div className="mt-6 md:hidden">
-        <label className="sr-only" htmlFor="websites-search-mobile">
-          Search website designs
-        </label>
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-          <input
-            id="websites-search-mobile"
-            type="search"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Search website designs..."
-            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-text-primary outline-none ring-emerald-600/30 placeholder:text-text-muted focus:ring-2 dark:border-white/10 dark:bg-white/5"
-          />
+      <div className="grid grid-cols-1 items-end gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)] lg:gap-8">
+        {header}
+        <div className="flex min-w-0 w-full flex-col gap-2 lg:items-end">
+          <WebsiteSearch id="websites-search" value={searchInput} onChange={setSearchInput} />
+          {total > 0 ? (
+            <p className="text-sm font-medium text-text-muted lg:text-right">
+              {total} Website Design{total === 1 ? '' : 's'}
+            </p>
+          ) : null}
         </div>
       </div>
 
-      <div className="mt-6 space-y-4">
-        <div className="-mx-4 overflow-x-auto px-4 scrollbar-none">
-          <div className="flex w-max gap-2">
-            {LISTING_VIEW_TABS.map((tab) => {
-              const active = view === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setView(tab.id)}
-                  className={cn(
-                    'shrink-0 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors',
-                    active
-                      ? 'bg-[#0f2744] text-white dark:bg-emerald-600'
-                      : 'bg-slate-100 text-text-secondary hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10'
-                  )}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="md:hidden">
-            <label className="sr-only" htmlFor="websites-category">
-              Category
-            </label>
-            <FieldSelect
-              id="websites-category"
-              value={category}
-              onChange={(event) => setCategory(event.target.value)}
-              className="py-2.5 font-medium"
-            >
-              {LISTING_CATEGORIES.map((item) => (
-                <option key={item.id} value={item.slug ?? 'all'}>
-                  {item.label}
-                </option>
-              ))}
-            </FieldSelect>
-          </div>
-
-          <div className="hidden md:flex md:flex-wrap md:gap-1.5">
-            {LISTING_CATEGORIES.map((item) => {
-              const value = item.slug ?? 'all';
-              const active = category === value;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setCategory(value)}
-                  className={cn(
-                    'rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors',
-                    active
-                      ? 'bg-emerald-700 text-white'
-                      : 'text-text-secondary hover:bg-slate-100 dark:hover:bg-white/5'
-                  )}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="hidden md:block md:w-72 lg:w-80">
-            <label className="sr-only" htmlFor="websites-search">
-              Search website designs
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-              <input
-                id="websites-search"
-                type="search"
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-                placeholder="Search website designs..."
-                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-text-primary outline-none ring-emerald-600/30 placeholder:text-text-muted focus:ring-2 dark:border-white/10 dark:bg-white/5"
-              />
-            </div>
-          </div>
-        </div>
+      <div className="mt-5 md:mt-6">
+        <WebsiteFilterToolbar
+          view={view}
+          category={category}
+          onViewChange={setViewAndReset}
+          onCategoryChange={setCategoryAndReset}
+        />
       </div>
 
-      <div className={cn('mt-8', busy && 'opacity-80 transition-opacity')}>
+      <div className={cn('mt-6 md:mt-8', busy && 'opacity-80 transition-opacity')}>
         {isError && !data ? (
           <ProjectGridError onRetry={() => void refetch()} />
         ) : showGridSkeleton ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <ProjectCardSkeleton key={i} />
             ))}
@@ -247,27 +182,28 @@ export function WebsitesCatalog({
         {hasFilters && items.length === 0 && data ? (
           <p className="mt-4 text-center text-sm text-text-secondary">
             Need something custom?{' '}
-            <Link href={ROUTES.consultation} className="font-semibold text-emerald-700 hover:underline">
+            <Link href={ROUTES.consultation} className="font-semibold text-[#2563eb] hover:underline">
               Book a free consultation
             </Link>
           </p>
         ) : null}
 
-        {remaining > 0 ? (
-          <div className="mt-8 space-y-6">
-            {loadingMore ? (
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-                {Array.from({ length: Math.min(3, remaining) }).map((_, i) => (
-                  <ProjectCardSkeleton key={`more-${i}`} />
-                ))}
-              </div>
-            ) : null}
-            <div className="text-center">
+        {remaining > 0 || items.length > 0 ? (
+          <nav
+            className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row"
+            aria-label="Catalog pagination"
+          >
+            <p className="text-sm text-text-muted">
+              {items.length === 0
+                ? 'Showing 0 designs'
+                : `Showing ${showingFrom}–${showingTo} of ${total}`}
+            </p>
+            {remaining > 0 ? (
               <button
                 type="button"
                 disabled={loadingMore}
                 aria-busy={loadingMore || undefined}
-                className="inline-flex min-w-[10.5rem] items-center justify-center gap-2 rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold disabled:opacity-60 dark:border-white/15"
+                className="inline-flex min-w-[10.5rem] items-center justify-center gap-2 rounded-xl border border-border-subtle px-6 py-3 text-sm font-semibold disabled:opacity-60"
                 onClick={async () => {
                   setLoadingMore(true);
                   try {
@@ -289,7 +225,15 @@ export function WebsitesCatalog({
                   `Load more (${remaining})`
                 )}
               </button>
-            </div>
+            ) : null}
+          </nav>
+        ) : null}
+
+        {loadingMore ? (
+          <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: Math.min(3, remaining) }).map((_, i) => (
+              <ProjectCardSkeleton key={`more-${i}`} />
+            ))}
           </div>
         ) : null}
       </div>

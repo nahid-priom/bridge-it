@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import { getAdminClient, getServerClient } from '@/lib/services/client';
-import { GALLERY_PAGE_SIZE, TECHNOLOGY_OPTIONS } from '../config/constants';
+import { GALLERY_PAGE_SIZE, HOMEPAGE_SECTIONS, TECHNOLOGY_OPTIONS } from '../config/constants';
 import type {
   EcommerceCategory,
   EcommercePackage,
@@ -11,6 +11,8 @@ import type {
   EcommerceProjectDetail,
   EcommerceProjectPage,
   EcommerceTechnology,
+  HomepageSectionKey,
+  HomepageSectionsResult,
   ShowcaseListFilters,
   ShowcaseListResult,
 } from '../types';
@@ -380,6 +382,72 @@ export async function getProjectById(id: string): Promise<EcommerceProjectDetail
     pages: (pages ?? []).map((row) => mapPage(row as Record<string, unknown>)),
     packages: (packages ?? []).map((row) => mapPackage(row as Record<string, unknown>)),
   };
+}
+
+function emptyHomepageSections(): HomepageSectionsResult {
+  return {
+    popular: [],
+    fashion_lifestyle: [],
+    electronics_gadgets: [],
+    food_home_specialty: [],
+  };
+}
+
+async function listHomepageSectionsUncached(): Promise<HomepageSectionsResult> {
+  const supabase = await getServerClient();
+  if (!supabase) return emptyHomepageSections();
+
+  const { data, error } = await supabase
+    .from('ecommerce_homepage_section_cards')
+    .select(
+      'section_key, sort_order, placement_id, id, title, slug, industry, cover_image_url, cover_fallback_url, starting_price, currency'
+    )
+    .order('section_key', { ascending: true })
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('[showcase] listHomepageSections', error.message);
+    return emptyHomepageSections();
+  }
+
+  const grouped = emptyHomepageSections();
+  for (const row of data ?? []) {
+    const key = String((row as { section_key: string }).section_key) as HomepageSectionKey;
+    if (!grouped[key] || grouped[key].length >= 6) continue;
+    grouped[key].push({
+      ...mapCard({
+        ...(row as Record<string, unknown>),
+        short_description: null,
+        category_id: null,
+        technology_stack: [],
+        website_type: null,
+        featured: false,
+        published: true,
+        sort_order: Number((row as { sort_order: number }).sort_order ?? 0),
+        created_at: '',
+        updated_at: '',
+        category_name: null,
+        category_slug: null,
+        page_count: 0,
+      }),
+    });
+  }
+  return grouped;
+}
+
+export const listHomepageSections = cache(listHomepageSectionsUncached);
+
+export async function listProjectHomepageSections(projectId: string): Promise<HomepageSectionKey[]> {
+  const supabase = await getAdminClient();
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('section_key')
+    .eq('project_id', projectId)
+    .eq('active', true);
+  return (data ?? [])
+    .map((row) => String((row as { section_key: string }).section_key) as HomepageSectionKey)
+    .filter((key) => HOMEPAGE_SECTIONS.some((section) => section.key === key));
 }
 
 export { mapProject, mapPage, mapPackage, mapCard };

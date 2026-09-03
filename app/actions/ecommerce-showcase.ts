@@ -12,6 +12,8 @@ import {
 import { leadFormSchema, projectFormSchema, slugifyTitle } from '@/src/features/ecommerce-showcase/schemas/project';
 import type { ProjectFormValues } from '@/src/features/ecommerce-showcase/schemas/project';
 import type { LeadStatus } from '@/src/features/ecommerce-showcase/config/constants';
+import { HOMEPAGE_SECTION_MAX, HOMEPAGE_SECTIONS } from '@/src/features/ecommerce-showcase/config/constants';
+import type { HomepageSectionKey } from '@/src/features/ecommerce-showcase/types';
 import { getPageType } from '@/src/features/ecommerce-showcase/config/page-types';
 
 function revalidateShowcase(slug?: string, projectId?: string) {
@@ -19,6 +21,7 @@ function revalidateShowcase(slug?: string, projectId?: string) {
   revalidatePath('/websites');
   revalidatePath('/ecommerce', 'layout');
   revalidatePath('/admin/ecommerce-projects');
+  revalidatePath('/admin/ecommerce-projects/homepage');
   if (projectId) revalidatePath(`/admin/ecommerce-projects/${projectId}`);
   if (slug) revalidatePath(`/websites/${slug}`);
 }
@@ -685,4 +688,144 @@ export async function updateLeadStatusAction(id: string, status: LeadStatus) {
   if (error) return { error: error.message };
   revalidatePath('/admin/ecommerce-leads');
   return { data: { id } };
+}
+
+const HOMEPAGE_KEYS = HOMEPAGE_SECTIONS.map((section) => section.key);
+
+function isHomepageKey(value: string): value is HomepageSectionKey {
+  return (HOMEPAGE_KEYS as readonly string[]).includes(value);
+}
+
+function placementLimitMessage(message: string) {
+  if (message.includes('already has 6')) {
+    return 'This homepage section already has 6 templates. Remove one before adding another.';
+  }
+  return message;
+}
+
+export async function setHomepagePlacementAction(sectionKey: string, projectId: string) {
+  const auth = await assertShowcaseEditor();
+  if ('error' in auth) return { error: auth.error };
+  if (!isHomepageKey(sectionKey)) return { error: 'Invalid homepage section' };
+  const supabase = await getAdminClient();
+  if (!supabase) return { error: 'Database is not configured' };
+
+  const { count } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('id', { count: 'exact', head: true })
+    .eq('section_key', sectionKey)
+    .eq('active', true);
+  if ((count ?? 0) >= HOMEPAGE_SECTION_MAX) {
+    return { error: 'This homepage section already has 6 templates. Remove one before adding another.' };
+  }
+
+  const { data: last } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('sort_order')
+    .eq('section_key', sectionKey)
+    .order('sort_order', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const { error } = await supabase.from('ecommerce_homepage_placements').upsert(
+    {
+      section_key: sectionKey,
+      project_id: projectId,
+      active: true,
+      sort_order: Number(last?.sort_order ?? -1) + 1,
+    },
+    { onConflict: 'section_key,project_id' }
+  );
+  if (error) return { error: placementLimitMessage(error.message) };
+  revalidateShowcase(undefined, projectId);
+  return { data: { ok: true } };
+}
+
+export async function removeHomepagePlacementAction(sectionKey: string, projectId: string) {
+  const auth = await assertShowcaseEditor();
+  if ('error' in auth) return { error: auth.error };
+  if (!isHomepageKey(sectionKey)) return { error: 'Invalid homepage section' };
+  const supabase = await getAdminClient();
+  if (!supabase) return { error: 'Database is not configured' };
+  const { error } = await supabase
+    .from('ecommerce_homepage_placements')
+    .delete()
+    .eq('section_key', sectionKey)
+    .eq('project_id', projectId);
+  if (error) return { error: error.message };
+  revalidateShowcase(undefined, projectId);
+  return { data: { ok: true } };
+}
+
+export async function reorderHomepagePlacementAction(placementId: string, direction: 'up' | 'down') {
+  const auth = await assertShowcaseEditor();
+  if ('error' in auth) return { error: auth.error };
+  const supabase = await getAdminClient();
+  if (!supabase) return { error: 'Database is not configured' };
+
+  const { data: current } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('id, section_key, sort_order')
+    .eq('id', placementId)
+    .maybeSingle();
+  if (!current) return { error: 'Placement not found' };
+
+  const query = supabase
+    .from('ecommerce_homepage_placements')
+    .select('id, sort_order')
+    .eq('section_key', current.section_key)
+    .eq('active', true);
+  const siblingQuery =
+    direction === 'up'
+      ? query.lt('sort_order', current.sort_order).order('sort_order', { ascending: false }).limit(1)
+      : query.gt('sort_order', current.sort_order).order('sort_order', { ascending: true }).limit(1);
+  const { data: sibling } = await siblingQuery.maybeSingle();
+  if (!sibling) return { data: { ok: true } };
+
+  const a = Number(current.sort_order);
+  const b = Number(sibling.sort_order);
+  const { error: firstError } = await supabase
+    .from('ecommerce_homepage_placements')
+    .update({ sort_order: b })
+    .eq('id', current.id);
+  if (firstError) return { error: firstError.message };
+  const { error: secondError } = await supabase
+    .from('ecommerce_homepage_placements')
+    .update({ sort_order: a })
+    .eq('id', sibling.id);
+  if (secondError) return { error: secondError.message };
+  revalidateShowcase();
+  return { data: { ok: true } };
+}
+
+export async function syncProjectHomepageSectionsAction(projectId: string, sectionKeys: string[]) {
+  const auth = await assertShowcaseEditor();
+  if ('error' in auth) return { error: auth.error };
+  const desired = Array.from(new Set(sectionKeys.filter(isHomepageKey)));
+  const supabase = await getAdminClient();
+  if (!supabase) return { error: 'Database is not configured' };
+
+  const { data: existing } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('section_key')
+    .eq('project_id', projectId)
+    .eq('active', true);
+  const current = new Set(
+    (existing ?? []).map((row) => String((row as { section_key: string }).section_key) as HomepageSectionKey)
+  );
+
+  for (const key of current) {
+    if (!desired.includes(key)) {
+      const removed = await removeHomepagePlacementAction(key, projectId);
+      if (removed.error) return removed;
+    }
+  }
+  for (const key of desired) {
+    if (!current.has(key)) {
+      const added = await setHomepagePlacementAction(key, projectId);
+      if (added.error) return added;
+    }
+  }
+  revalidateShowcase(undefined, projectId);
+  return { data: { ok: true } };
 }

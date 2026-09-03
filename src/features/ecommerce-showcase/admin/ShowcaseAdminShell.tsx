@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutGrid, MessageSquare, Plus } from 'lucide-react';
+import { LayoutGrid, MessageSquare, Plus, PanelsTopLeft } from 'lucide-react';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { BRANDING } from '@/lib/config/branding';
@@ -13,6 +13,7 @@ import { isShowcaseEditorRole } from '../config/roles';
 
 const LINKS = [
   { href: '/admin/ecommerce-projects', label: 'Projects', icon: LayoutGrid },
+  { href: '/admin/ecommerce-projects/homepage', label: 'Homepage Curation', icon: PanelsTopLeft },
   { href: '/admin/ecommerce-leads', label: 'Leads', icon: MessageSquare },
 ];
 
@@ -39,7 +40,11 @@ export function ShowcaseAdminShell({
         <nav className="p-3 space-y-1 flex-1">
           {LINKS.map((item) => {
             const Icon = item.icon;
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isHomepage = pathname.startsWith('/admin/ecommerce-projects/homepage');
+            const active =
+              item.href === '/admin/ecommerce-projects'
+                ? pathname.startsWith('/admin/ecommerce-projects') && !isHomepage
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}

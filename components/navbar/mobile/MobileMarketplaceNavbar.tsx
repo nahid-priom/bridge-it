@@ -157,7 +157,7 @@ export function MobileMarketplaceNavbar({
         transition={{ duration: 0.28, ease: tapEase }}
         className={cn(
           'mobile-premium-navbar-shell relative min-w-0 w-full',
-          'rounded-none border-x-0 py-2 min-h-[64px] max-h-[68px]',
+          'rounded-none border-0 py-2 min-h-[64px] max-h-[68px]',
           'transition-[box-shadow,backdrop-filter,transform] duration-300',
           isScrolled && 'mobile-premium-navbar-shell--scrolled',
           isHeroMode && 'mobile-premium-navbar-shell--hero'

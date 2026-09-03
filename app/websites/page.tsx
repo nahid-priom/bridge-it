@@ -5,6 +5,7 @@ import { SITE_URL } from '@/lib/site';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
+import { WebsitesPageHeader } from '@/src/features/ecommerce-showcase/public/WebsitesPageHeader';
 import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
 
 export const revalidate = 60;
@@ -19,7 +20,7 @@ function first(value: string | string[] | undefined): string {
 function parseListingFilters(sp: Record<string, string | string[] | undefined>) {
   const view = first(sp.view).trim() || first(sp.page).trim() || 'all';
   const category = first(sp.category).trim() || 'all';
-  const q = first(sp.q).trim();
+  const q = first(sp.q).trim() || first(sp.search).trim();
   return {
     view: view === 'all' ? undefined : view,
     category: category === 'all' ? undefined : category,
@@ -89,24 +90,10 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
   return (
     <>
       <JsonLd data={jsonLd} />
-      <div className="mx-auto max-w-[1440px] px-4 pb-16 pt-8">
-        <header className="max-w-3xl">
-          <h1 className="font-display text-3xl font-black tracking-tight text-[#0f2744] dark:text-white md:text-4xl">
-            E-commerce Website Designs
-          </h1>
-          <p className="mt-2 text-base text-text-secondary md:text-lg">
-            আপনার Business-এর জন্য Premium E-commerce Design বেছে নিন।
-          </p>
-          <p className="mt-1 text-sm text-text-muted">
-            Ready design থেকে পছন্দ করুন অথবা আপনার Brand অনুযায়ী Customize করুন।
-          </p>
-          <p className="mt-3 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-            Starting from ৳5,000
-          </p>
-        </header>
-
+      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <WebsitesCatalog
+            header={<WebsitesPageHeader />}
             initialFilters={{
               q: filters.q ?? '',
               category: filters.category ?? 'all',

@@ -1,9 +1,6 @@
 import { HomePage } from '@/components/home/HomePage';
 import { buildPageMetadata } from '@/lib/metadata';
-import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
-
-/** Homepage Design Gallery shows 4 featured-first cards (DB already sorts featured → sort_order). */
-const HOME_GALLERY_LIMIT = 4;
+import { listHomepageSections } from '@/src/features/ecommerce-showcase/api/projects';
 
 export const revalidate = 60;
 
@@ -21,6 +18,6 @@ export const metadata = buildPageMetadata({
 });
 
 export default async function Home() {
-  const { items } = await listProjectCards({ limit: HOME_GALLERY_LIMIT, offset: 0 });
-  return <HomePage projects={items} />;
+  const sections = await listHomepageSections();
+  return <HomePage sections={sections} />;
 }

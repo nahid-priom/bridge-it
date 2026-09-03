@@ -159,3 +159,24 @@ export type ShowcaseListResult = {
   items: EcommerceProjectCard[];
   total: number;
 };
+
+export type HomepageSectionKey =
+  | 'popular'
+  | 'fashion_lifestyle'
+  | 'electronics_gadgets'
+  | 'food_home_specialty';
+
+export type HomepagePlacement = {
+  id: string;
+  section_key: HomepageSectionKey;
+  project_id: string;
+  sort_order: number;
+  active: boolean;
+};
+
+export type HomepageSectionCard = EcommerceProjectCard & {
+  section_key: HomepageSectionKey;
+  placement_id: string;
+};
+
+export type HomepageSectionsResult = Record<HomepageSectionKey, EcommerceProjectCard[]>;

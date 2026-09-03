@@ -172,6 +172,13 @@ export function AdminBitpProductsSection() {
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-bold text-white">Products & Services</h2>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/admin/ecommerce-projects/homepage"
+            className="inline-flex items-center rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+          >
+            Homepage Curation
+          </Link>
           <button
             type="button"
             onClick={openCreate}
@@ -179,6 +186,7 @@ export function AdminBitpProductsSection() {
           >
             <Plus className="h-4 w-4" /> Add Product
           </button>
+        </div>
         </div>
         <DataTableSkeleton columns={6} rows={8} />
       </div>
@@ -189,13 +197,21 @@ export function AdminBitpProductsSection() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold text-white">Products & Services</h2>
-        <button
-          type="button"
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500"
-        >
-          <Plus className="w-4 h-4" /> Add Product
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/admin/ecommerce-projects/homepage"
+            className="inline-flex items-center rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+          >
+            Homepage Curation
+          </Link>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500"
+          >
+            <Plus className="w-4 h-4" /> Add Product
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">

@@ -33,7 +33,7 @@ export function productCategoryHref(slug: string): string {
 }
 
 export const NAVBAR_SHELL_CLASS =
-  'bg-white/90 dark:bg-deshi-navy/95 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_4px_24px_rgba(15,14,23,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]';
+  'bg-white/90 dark:bg-deshi-navy/95 backdrop-blur-xl border-0 shadow-[0_4px_24px_rgba(15,14,23,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]';
 
 /** @deprecated Use MAIN_NAV_LINKS */
 export const NAV_SERVICE_ITEMS: { slug: string; label: string; short: string; icon: string }[] = [];

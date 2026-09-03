@@ -9,7 +9,7 @@ import {
   originalObjectPath,
   pageObjectPath,
 } from '../utils/storage-paths';
-import type { EcommercePackage, EcommerceProject, EcommerceProjectPage, ProjectLead } from '../types';
+import type { EcommercePackage, EcommerceProject, EcommerceProjectPage, HomepageSectionKey, ProjectLead } from '../types';
 import { mapPackage, mapPage, mapProject } from './projects';
 
 export async function adminListProjects(options: { includeDeleted?: boolean } = {}) {
@@ -50,6 +50,68 @@ export async function adminGetPackages(projectId: string): Promise<EcommercePack
     .is('deleted_at', null)
     .order('sort_order', { ascending: true });
   return (data ?? []).map((row) => mapPackage(row as Record<string, unknown>));
+}
+
+export async function adminListHomepagePlacements() {
+  const supabase = await getAdminClient();
+  if (!supabase) return [];
+  const { data: rows } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('id, section_key, project_id, sort_order, active')
+    .eq('active', true)
+    .order('sort_order', { ascending: true });
+  if (!rows?.length) return [];
+  const ids = Array.from(new Set(rows.map((row) => String((row as { project_id: string }).project_id))));
+  const { data: projects } = await supabase
+    .from('ecommerce_projects')
+    .select('id, title, slug, industry, cover_image_url, cover_fallback_url, published, deleted_at')
+    .in('id', ids);
+  const byId = new Map((projects ?? []).map((project) => [String((project as { id: string }).id), project]));
+  return rows.map((row) => ({
+    ...(row as Record<string, unknown>),
+    ecommerce_projects: byId.get(String((row as { project_id: string }).project_id)) ?? null,
+  }));
+}
+
+export async function adminListPublishedProjectOptions() {
+  const supabase = await getAdminClient();
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from('ecommerce_projects')
+    .select('id, title, slug, industry, cover_image_url, cover_fallback_url')
+    .eq('published', true)
+    .is('deleted_at', null)
+    .order('title', { ascending: true });
+  return data ?? [];
+}
+
+export type HomepagePlacementRow = {
+  id: string;
+  section_key: HomepageSectionKey;
+  project_id: string;
+  sort_order: number;
+  title: string;
+  slug: string;
+  industry: string | null;
+  cover_image_url: string | null;
+  cover_fallback_url: string | null;
+};
+
+export function mapAdminPlacement(row: Record<string, unknown>): HomepagePlacementRow | null {
+  const project = row.ecommerce_projects as Record<string, unknown> | Record<string, unknown>[] | null;
+  const p = Array.isArray(project) ? project[0] : project;
+  if (!p || p.deleted_at) return null;
+  return {
+    id: String(row.id),
+    section_key: String(row.section_key) as HomepageSectionKey,
+    project_id: String(row.project_id),
+    sort_order: Number(row.sort_order ?? 0),
+    title: String(p.title ?? ''),
+    slug: String(p.slug ?? ''),
+    industry: (p.industry as string | null) ?? null,
+    cover_image_url: (p.cover_image_url as string | null) ?? null,
+    cover_fallback_url: (p.cover_fallback_url as string | null) ?? null,
+  };
 }
 
 export async function adminListLeads(): Promise<ProjectLead[]> {

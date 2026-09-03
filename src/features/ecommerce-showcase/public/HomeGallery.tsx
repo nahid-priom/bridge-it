@@ -1,45 +1,43 @@
 import Link from 'next/link';
-import type { EcommerceProjectCard } from '../types';
-import { ProjectGrid } from './ProjectGrid';
-import { WebsiteTypeFilters } from './WebsiteTypeFilters';
+import { HOMEPAGE_SECTIONS } from '../config/constants';
+import type { HomepageSectionsResult } from '../types';
+import { HomeShowcaseSection } from './HomeShowcaseSection';
 
-export function HomeGallery({ projects }: { projects: EcommerceProjectCard[] }) {
-  const cards = projects.slice(0, 6);
-
+export function HomeGallery({ sections }: { sections: HomepageSectionsResult }) {
   return (
-    <section className="pb-12 md:pb-14">
-      <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10">
-        <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2563eb] dark:text-[#60a5fa]">
-              Design Gallery
-            </p>
-            <h2 className="mt-1 font-display text-2xl font-black text-text-primary md:text-3xl dark:text-white">
-              Explore E-commerce Designs
-            </h2>
-          </div>
-          <Link
-            href="/websites"
-            className="text-sm font-semibold text-[#2563eb] hover:underline dark:text-[#60a5fa]"
-          >
-            View all websites →
-          </Link>
-        </div>
-
-        <WebsiteTypeFilters className="mb-6 md:mb-7" />
-
-        <ProjectGrid
-          projects={cards}
-          eagerCount={0}
-          priorityFirst={false}
-          variant="home"
-          columns="home"
-          emptyTitle="No website designs yet"
-          emptyDescription="Published e-commerce projects will appear here."
-          emptyActionHref="/websites"
-          emptyActionLabel="Browse websites"
+    <div className="mt-14 md:mt-16">
+      {HOMEPAGE_SECTIONS.map((section, index) => (
+        <HomeShowcaseSection
+          key={section.key}
+          eyebrow={section.eyebrow}
+          title={section.title}
+          description={section.description}
+          viewAllHref={section.viewAllHref}
+          viewAllLabel={section.viewAllLabel}
+          projects={sections[section.key] ?? []}
+          eagerCount={index === 0 ? 3 : 0}
         />
-      </div>
-    </section>
+      ))}
+      <section className="pb-14 md:pb-20">
+        <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border-subtle bg-surface px-6 py-8 md:flex-row md:items-center md:px-8">
+            <div>
+              <h2 className="font-display text-xl font-black text-text-primary md:text-2xl">
+                Need a custom storefront?
+              </h2>
+              <p className="mt-1 text-sm text-text-secondary">
+                Book a free demo and we will match a design to your brand.
+              </p>
+            </div>
+            <Link
+              href="/consultation"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-[#2563eb] px-6 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
+            >
+              Get Free Consultation
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

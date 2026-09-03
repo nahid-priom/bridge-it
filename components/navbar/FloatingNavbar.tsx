@@ -75,7 +75,7 @@ export function FloatingNavbar({
           transition={{ duration: 0.32, ease: navEase }}
           className={cn(
             'premium-navbar-shell relative hidden lg:block min-w-0 w-full',
-            'rounded-none border-x-0 transition-[height,box-shadow,transform,padding] duration-300',
+            'rounded-none border-0 transition-[height,box-shadow,transform,padding] duration-300',
             isHeroMode
               ? 'py-3.5 lg:py-4 h-[84px] lg:h-[88px] shadow-md'
               : 'py-2 lg:py-2.5 h-[76px] shadow-lg',

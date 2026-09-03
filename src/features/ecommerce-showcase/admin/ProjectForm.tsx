@@ -8,15 +8,22 @@ import { SHOWCASE_LISTING_KEY } from '@/lib/query/client';
 import {
   createProjectAction,
   ensureDraftProjectAction,
+  syncProjectHomepageSectionsAction,
   toggleProjectFlagAction,
   updateProjectAction,
 } from '@/app/actions/ecommerce-showcase';
 import { FieldSelect } from '@/components/ui/FieldSelect';
-import { INDUSTRIES, TECHNOLOGY_OPTIONS, WEBSITE_TYPES } from '../config/constants';
+import { HOMEPAGE_SECTIONS, INDUSTRIES, TECHNOLOGY_OPTIONS, WEBSITE_TYPES } from '../config/constants';
 import type { DeviceViewport } from '../config/constants';
 import { defaultPreviewPage, pageHasImage } from '../config/page-types';
 import { projectFormSchema, slugifyTitle, type ProjectFormValues } from '../schemas/project';
-import type { EcommerceCategory, EcommercePackage, EcommerceProjectDetail, EcommerceProjectPage } from '../types';
+import type {
+  EcommerceCategory,
+  EcommercePackage,
+  EcommerceProjectDetail,
+  EcommerceProjectPage,
+  HomepageSectionKey,
+} from '../types';
 import { isShowcaseEditorRole } from '../config/roles';
 import type { AuthProfile } from '@/lib/auth/types';
 import { AdminLivePreview } from './AdminLivePreview';
@@ -65,10 +72,12 @@ export function ProjectForm({
   profile,
   categories,
   project,
+  homepageSections = [],
 }: {
   profile: AuthProfile;
   categories: EcommerceCategory[];
   project?: EcommerceProjectDetail | null;
+  homepageSections?: HomepageSectionKey[];
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -103,6 +112,7 @@ export function ProjectForm({
     seo_keywords: project?.seo_keywords ?? [],
     sort_order: project?.sort_order ?? 0,
   });
+  const [homeSections, setHomeSections] = useState<HomepageSectionKey[]>(homepageSections);
 
   const patch = (next: Partial<ProjectFormValues>) => setValues((current) => ({ ...current, ...next }));
   const pages = applyPagePreviews(project?.pages ?? [], pagePreviews);
@@ -178,13 +188,25 @@ export function ProjectForm({
           setError(result.error);
           return;
         }
+        if (result.data?.id) {
+          const home = await syncProjectHomepageSectionsAction(result.data.id, homeSections);
+          if ('error' in home && home.error) {
+            setError(home.error);
+            return;
+          }
+        }
         router.push(`/admin/ecommerce-projects/${result.data?.id}`);
         return;
       }
       const id = project?.id ?? draftIdRef.current;
       if (!id) return;
       const result = await updateProjectAction(id, parsed.data);
-      if (result.error) setError(result.error);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      const home = await syncProjectHomepageSectionsAction(id, homeSections);
+      if ('error' in home && home.error) setError(home.error);
       else await onAssetComplete();
     });
   };
@@ -257,6 +279,35 @@ export function ProjectForm({
           />
           Featured
         </label>
+      </section>
+
+      <section className={cmsSection}>
+        <h2 className="font-display font-bold">Homepage Visibility</h2>
+        <p className="text-sm text-text-muted">
+          Show this template in curated homepage sections. Each section allows at most 6 templates.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {HOMEPAGE_SECTIONS.map((section) => {
+            const checked = homeSections.includes(section.key);
+            return (
+              <label key={section.key} className="text-sm inline-flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  disabled={!canEdit}
+                  onChange={(event) => {
+                    setHomeSections((current) =>
+                      event.target.checked
+                        ? [...current, section.key]
+                        : current.filter((key) => key !== section.key)
+                    );
+                  }}
+                />
+                {section.title}
+              </label>
+            );
+          })}
+        </div>
       </section>
 
       <section className={cmsSection}>

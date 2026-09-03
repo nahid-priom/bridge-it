@@ -851,37 +851,27 @@ html[data-admin-route] body {
 
 .premium-navbar-shell {
   background: color-mix(in srgb, var(--surface) 88%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
-  box-shadow:
-    0 4px 24px rgba(15, 23, 42, 0.06),
-    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  border: 0;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .dark .premium-navbar-shell {
   background: color-mix(in srgb, #0f1424 86%, transparent);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
 }
 
 html[data-nav-hero-mode='true'] .premium-navbar-shell {
   background: color-mix(in srgb, var(--surface) 72%, transparent);
-  border-color: color-mix(in srgb, var(--border-subtle) 55%, transparent);
   backdrop-filter: blur(16px) saturate(1.15);
   -webkit-backdrop-filter: blur(16px) saturate(1.15);
-  box-shadow:
-    0 2px 16px rgba(15, 23, 42, 0.04),
-    0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.04);
 }
 
 .dark html[data-nav-hero-mode='true'] .premium-navbar-shell {
   background: color-mix(in srgb, #0f1424 78%, transparent);
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.32),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.32);
 }
 
 html[data-nav-scrolled='true'] .premium-navbar-shell,
@@ -911,20 +901,15 @@ html[data-nav-scrolled='true'] .premium-navbar-shell,
 
 .mobile-premium-navbar-shell {
   background: color-mix(in srgb, var(--surface) 90%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-subtle) 70%, transparent);
-  box-shadow:
-    0 2px 16px rgba(15, 23, 42, 0.06),
-    0 0 0 1px rgba(255, 255, 255, 0.45) inset;
+  border: 0;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(18px) saturate(1.2);
   -webkit-backdrop-filter: blur(18px) saturate(1.2);
 }
 
 .dark .mobile-premium-navbar-shell {
   background: color-mix(in srgb, #0f1424 88%, transparent);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 6px 28px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
 }
 
 .mobile-premium-navbar-shell--hero {
