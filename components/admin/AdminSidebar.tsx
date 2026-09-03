@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowLeft } from 'lucide-react';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
@@ -48,6 +49,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       </div>
 
       <nav className="flex-1 overflow-y-auto p-3 space-y-0.5">
+        <Link
+          href="/admin/ecommerce-projects"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-emerald-300 hover:text-white hover:bg-white/5 border border-transparent"
+        >
+          E-commerce Projects
+        </Link>
         {adminNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeSection === item.id;

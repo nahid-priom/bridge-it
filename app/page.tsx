@@ -1,34 +1,24 @@
 import { HomePage } from '@/components/home/HomePage';
 import { buildPageMetadata } from '@/lib/metadata';
-import { HOME_SEO_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from '@/lib/site';
-import { getFeaturedProducts } from '@/lib/services/products.service';
-import { getFeaturedPortfolio } from '@/lib/services/portfolio.service';
-import { getApprovedReviews, reviewsToTestimonials } from '@/lib/services/reviews.service';
-import { mergeTestimonials } from '@/data/homeContent';
+import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
+import { GALLERY_PAGE_SIZE } from '@/src/features/ecommerce-showcase/config/constants';
 
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: HOME_SEO_TITLE,
-  description: SITE_DESCRIPTION,
-  keywords: SITE_KEYWORDS,
+  title: 'Premium Custom E-commerce Website Designs | Bridge IT Park',
+  description:
+    'Browse 100+ custom Next.js, React and Laravel e-commerce website designs. Preview pages, compare packages, and request a custom store.',
+  keywords: [
+    'custom ecommerce website Bangladesh',
+    'Next.js ecommerce website',
+    'React ecommerce website Bangladesh',
+    'Laravel ecommerce website',
+  ],
   path: '/',
 });
 
 export default async function Home() {
-  const [featuredProducts, portfolio, reviews] = await Promise.all([
-    getFeaturedProducts(12),
-    getFeaturedPortfolio(6),
-    getApprovedReviews(6),
-  ]);
-
-  const testimonials = mergeTestimonials(reviewsToTestimonials(reviews));
-
-  return (
-    <HomePage
-      featuredProducts={featuredProducts}
-      testimonials={testimonials}
-      portfolio={portfolio}
-    />
-  );
+  const { items } = await listProjectCards({ limit: GALLERY_PAGE_SIZE, offset: 0 });
+  return <HomePage projects={items} />;
 }

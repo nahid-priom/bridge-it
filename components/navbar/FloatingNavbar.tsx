@@ -13,6 +13,7 @@ import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
 import { NavbarQuickActions } from '@/components/navbar/NavbarQuickActions';
 import { NavbarProfileMenu } from '@/components/navbar/NavbarProfileMenu';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { MobileMarketplaceNavbar } from '@/components/navbar/mobile/MobileMarketplaceNavbar';
 import { cn } from '@/lib/cn';
 import { isNavActive } from '@/lib/routes';
@@ -95,7 +96,7 @@ export function FloatingNavbar({
                 className="shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-xl"
                 aria-label="Bridge IT Park — home"
               >
-                <BridgeLogo iconSize="nav" textVisibility="always" />
+                <BridgeLogo iconSize="nav" textVisibility="always" href={false} />
               </Link>
 
               <div className="flex items-center gap-1">
@@ -119,6 +120,7 @@ export function FloatingNavbar({
             <div className="flex-1 min-w-0" aria-hidden />
 
             <div className="flex items-center gap-2 shrink-0 ml-auto">
+              <ThemeSwitcher />
               <NavbarQuickActions
                 cartCount={0}
                 notificationCount={0}

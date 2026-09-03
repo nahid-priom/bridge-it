@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import type { AuthProfile } from '@/lib/auth/types';
 import type { UserRole } from '@/types/database.types';
@@ -15,7 +16,7 @@ export async function getCurrentUser() {
   return user;
 }
 
-export async function getCurrentProfile(): Promise<AuthProfile | null> {
+async function loadCurrentProfile(): Promise<AuthProfile | null> {
   const supabase = await createServerSupabaseClient();
   if (!supabase) return null;
 
@@ -43,6 +44,9 @@ export async function getCurrentProfile(): Promise<AuthProfile | null> {
 
   return profile as AuthProfile;
 }
+
+/** Deduped per-request — safe for layout + page + generateMetadata. */
+export const getCurrentProfile = cache(loadCurrentProfile);
 
 export async function getUserRole(): Promise<UserRole | null> {
   const profile = await getCurrentProfile();

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, Heart, MessageCircle, Search, ShoppingCart } from 'lucide-react';
+import { Bell, MessageCircle, Search, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
@@ -87,9 +87,6 @@ export function NavbarQuickActions({
           <Search className="w-[18px] h-[18px]" aria-hidden />
         </ActionButton>
       ) : null}
-      <ActionButton label="Wishlist" href={ROUTES.solutions}>
-        <Heart className="w-[18px] h-[18px]" aria-hidden />
-      </ActionButton>
       <ActionButton label="Messages" href={ROUTES.clientMessages} badge={messageCount}>
         <MessageCircle className="w-[18px] h-[18px]" aria-hidden />
       </ActionButton>

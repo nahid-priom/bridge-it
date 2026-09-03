@@ -12,7 +12,8 @@ export type BreadcrumbJsonLdItem = {
 
 /** Static segment → label for auto-generated trails */
 export const BREADCRUMB_SEGMENT_LABELS: Record<string, string> = {
-  solutions: 'Solutions',
+  websites: 'Websites',
+  ecommerce: 'E-commerce',
   pricing: 'Pricing',
   portfolio: 'Portfolio',
   consultation: 'Consultation',

@@ -1,26 +1,20 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect } from 'react';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, LayoutDashboard, Store, X } from 'lucide-react';
+import { LayoutDashboard, X } from 'lucide-react';
 import { ROUTES, isNavActive } from '@/lib/routes';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
-import {
-  NAV_PRODUCT_ITEMS,
-  NAV_SERVICE_ITEMS,
-  productCategoryHref,
-  serviceCategoryHref,
-} from '@/components/navbar/constants';
-import { EXPLORE_MOBILE_LINKS } from '@/components/navbar/exploreLinks';
+import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
 import { MobileQuickActions } from '@/components/navbar/mobile/MobileQuickActions';
 import type { AuthProfile } from '@/lib/auth/types';
-import { becomeSellerPath } from '@/lib/auth/become-seller';
 import { useAuthProfile } from '@/components/auth/AuthProfileContext';
 import { resolveDashboardHref } from '@/lib/auth/dashboard-routes';
 import { useDashboardModeStore } from '@/store/dashboardModeStore';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { cn } from '@/lib/cn';
 
 type MobileDrawerMenuProps = {
@@ -32,53 +26,6 @@ type MobileDrawerMenuProps = {
   messageCount?: number;
 };
 
-function AccordionSection({
-  title,
-  open,
-  onToggle,
-  children,
-  active,
-}: {
-  title: string;
-  open: boolean;
-  onToggle: () => void;
-  children: ReactNode;
-  active?: boolean;
-}) {
-  return (
-    <div className="border-b border-slate-100/90 dark:border-white/[0.08] last:border-0">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        className={cn(
-          'w-full flex items-center justify-between py-3 text-[15px] font-semibold',
-          active ? 'text-deshi-green' : 'text-text-primary'
-        )}
-      >
-        {title}
-        <ChevronDown
-          className={cn('w-4 h-4 text-text-muted transition-transform duration-200', open && 'rotate-180')}
-          aria-hidden
-        />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="pb-2.5 pl-0.5 space-y-0.5">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 export function MobileDrawerMenu({
   open,
   onClose,
@@ -89,9 +36,6 @@ export function MobileDrawerMenu({
 }: MobileDrawerMenuProps) {
   const pathname = usePathname();
   const isActive = (href: string) => isNavActive(pathname, href);
-  const [servicesOpen, setServicesOpen] = useState(true);
-  const [productsOpen, setProductsOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
 
   const contextProfile = useAuthProfile();
   const profile = contextProfile ?? authProfile;
@@ -146,7 +90,7 @@ export function MobileDrawerMenu({
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100/90 dark:border-white/10">
               <Link href={ROUTES.home} onClick={closeAndNavigate}>
-                <BridgeLogo variant="navSm" />
+                <BridgeLogo variant="navSm" href={false} />
               </Link>
               <button
                 type="button"
@@ -159,75 +103,20 @@ export function MobileDrawerMenu({
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-3">
-              <nav aria-label="Marketplace navigation">
-                <AccordionSection
-                  title="Services"
-                  open={servicesOpen}
-                  onToggle={() => setServicesOpen((v) => !v)}
-                  active={isActive(ROUTES.search)}
-                >
+              <nav aria-label="Main navigation">
+                {MAIN_NAV_LINKS.map((link) => (
                   <Link
-                    href={ROUTES.search}
+                    key={link.href}
+                    href={link.href}
                     onClick={closeAndNavigate}
-                    className="block py-2 text-sm font-medium text-deshi-green"
+                    className={cn(
+                      'block py-3 text-[15px] font-semibold border-b border-slate-100/90 dark:border-white/[0.08]',
+                      isActive(link.href) ? 'text-deshi-green' : 'text-text-primary'
+                    )}
                   >
-                    All services
+                    {link.label}
                   </Link>
-                  {NAV_SERVICE_ITEMS.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={serviceCategoryHref(cat.slug)}
-                      onClick={closeAndNavigate}
-                      className="flex items-center gap-2 py-2 text-sm text-text-secondary hover:text-deshi-green"
-                    >
-                      <span aria-hidden>{cat.icon}</span>
-                      {cat.label}
-                    </Link>
-                  ))}
-                </AccordionSection>
-
-                <AccordionSection
-                  title="Products"
-                  open={productsOpen}
-                  onToggle={() => setProductsOpen((v) => !v)}
-                  active={isActive(ROUTES.products)}
-                >
-                  <Link
-                    href={ROUTES.products}
-                    onClick={closeAndNavigate}
-                    className="block py-2 text-sm font-medium text-sky-600 dark:text-sky-400"
-                  >
-                    All products
-                  </Link>
-                  {NAV_PRODUCT_ITEMS.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={productCategoryHref(cat.slug)}
-                      onClick={closeAndNavigate}
-                      className="flex items-center gap-2 py-2 text-sm text-text-secondary hover:text-deshi-green"
-                    >
-                      <span aria-hidden>{cat.icon}</span>
-                      {cat.label}
-                    </Link>
-                  ))}
-                </AccordionSection>
-
-                <AccordionSection
-                  title="Explore"
-                  open={exploreOpen}
-                  onToggle={() => setExploreOpen((v) => !v)}
-                >
-                  {EXPLORE_MOBILE_LINKS.map((link) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={closeAndNavigate}
-                      className="block py-2 text-sm text-text-secondary hover:text-text-primary"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </AccordionSection>
+                ))}
               </nav>
 
               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted mt-5 mb-2">
@@ -262,16 +151,9 @@ export function MobileDrawerMenu({
                 </Link>
               )}
 
-              {(!authProfile || authProfile.role === 'buyer') && (
-                <Link
-                  href={becomeSellerPath(profile)}
-                  onClick={closeAndNavigate}
-                  className="mt-3 flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-bold text-deshi-green border border-deshi-green/35 bg-emerald-50/80 dark:bg-emerald-500/10"
-                >
-                  <Store className="w-4 h-4" aria-hidden />
-                  Start Selling
-                </Link>
-              )}
+              <div className="mt-6 pb-4">
+                <ThemeSwitcher variant="mobile" />
+              </div>
             </div>
           </motion.div>
         </div>

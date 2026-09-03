@@ -24,6 +24,7 @@ export function isSellerFullyActivated(ctx: MarketplaceAccessContext): boolean {
 /** Role → primary dashboard (Bridge IT Park). */
 export function resolveDashboardRoute(role: UserRole | string | null | undefined): string {
   if (role === 'admin' || role === 'super_admin') return ROUTES.admin;
+  if (role === 'marketing_manager' || role === 'viewer') return ROUTES.adminEcommerceProjects;
   return ROUTES.dashboard;
 }
 

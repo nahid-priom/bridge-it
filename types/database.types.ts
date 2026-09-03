@@ -10,7 +10,14 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export type UserRole = 'buyer' | 'seller' | 'admin' | 'client' | 'super_admin';
+export type UserRole =
+  | 'buyer'
+  | 'seller'
+  | 'admin'
+  | 'client'
+  | 'super_admin'
+  | 'marketing_manager'
+  | 'viewer';
 export type ProductStatus = 'active' | 'draft' | 'archived';
 export type ProductType =
   | 'product'

@@ -16,7 +16,7 @@ type BridgeLogoProps = {
   /** @deprecated Use variant instead */
   iconSize?: 'sm' | 'md' | 'nav';
   variant?: BridgeLogoVariant;
-  /** Force light (circular) or dark (wordmark) logo regardless of page theme */
+  /** Force light or dark logo, or follow the site theme switcher */
   theme?: BridgeLogoTheme;
   href?: string | false;
   priority?: boolean;
@@ -30,48 +30,40 @@ type VariantConfig = {
   className?: string;
 };
 
+const WORDMARK = {
+  src: BRAND_ASSETS.logo.light,
+  srcDark: BRAND_ASSETS.logo.dark,
+  width: 381,
+  height: 115,
+} as const;
+
 const VARIANT_CONFIG: Record<BridgeLogoVariant, VariantConfig> = {
   nav: {
-    src: BRAND_ASSETS.logo.nav,
-    srcDark: BRAND_ASSETS.logo.navDark,
-    width: 240,
-    height: 48,
+    ...WORDMARK,
     className: 'h-10 sm:h-11 md:h-12 w-auto',
   },
   navSm: {
-    src: BRAND_ASSETS.logo.navSm,
-    srcDark: BRAND_ASSETS.logo.navSmDark,
-    width: 180,
-    height: 36,
+    ...WORDMARK,
     className: 'h-9 w-auto',
   },
   footer: {
-    src: BRAND_ASSETS.logo.footer,
-    srcDark: BRAND_ASSETS.logo.footerDark,
-    width: 280,
-    height: 64,
+    ...WORDMARK,
     className: 'h-14 w-auto',
   },
   full: {
-    src: BRAND_ASSETS.logo.transparent,
-    srcDark: BRAND_ASSETS.logo.transparentDark,
-    width: 280,
-    height: 280,
-    className: 'h-32 w-auto max-w-[280px]',
+    ...WORDMARK,
+    className: 'h-20 w-auto max-w-[320px]',
   },
   mark: {
     src: BRAND_ASSETS.icons.markTransparent,
     srcDark: BRAND_ASSETS.icons.markDark,
-    width: 48,
-    height: 48,
+    width: 115,
+    height: 115,
     className: 'h-10 w-10',
   },
   auth: {
-    src: BRAND_ASSETS.logo.transparent,
-    srcDark: BRAND_ASSETS.logo.authDark,
-    width: 320,
-    height: 112,
-    className: 'h-24 sm:h-28 w-auto',
+    ...WORDMARK,
+    className: 'h-16 sm:h-20 w-auto',
   },
 };
 
@@ -103,7 +95,6 @@ function LogoImage({
       height={height}
       priority={priority}
       className={cn('object-contain object-left shrink-0', className)}
-      style={{ maxHeight: '100%' }}
     />
   );
 }
@@ -138,20 +129,24 @@ export function BridgeLogo({
       />
     ) : (
       <>
-        <LogoImage
-          src={config.src}
-          width={config.width}
-          height={config.height}
-          priority={priority}
-          className={cn(config.className, 'dark:hidden')}
-        />
-        <LogoImage
-          src={config.srcDark}
-          width={config.width}
-          height={config.height}
-          priority={priority}
-          className={cn(config.className, 'hidden dark:block')}
-        />
+        <span className="contents dark:hidden">
+          <LogoImage
+            src={config.src}
+            width={config.width}
+            height={config.height}
+            priority={priority}
+            className={config.className}
+          />
+        </span>
+        <span className="hidden dark:contents">
+          <LogoImage
+            src={config.srcDark}
+            width={config.width}
+            height={config.height}
+            priority={priority}
+            className={config.className}
+          />
+        </span>
       </>
     );
 

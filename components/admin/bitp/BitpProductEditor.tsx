@@ -13,6 +13,7 @@ import {
   getBitpProductForEditAction,
 } from '@/app/actions/bitp-admin';
 import { ProductCoverSection } from '@/components/admin/bitp/ProductCoverSection';
+import { FormSkeleton } from '@/src/components/skeletons/FormSkeleton';
 import type {
   BitpCategory,
   BitpProduct,
@@ -283,8 +284,11 @@ export function BitpProductEditor({
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60">
-        <p className="text-white">Loading product…</p>
+      <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-10 pb-10">
+        <div className="relative w-full max-w-3xl rounded-2xl border border-white/10 bg-bridge-dark p-6 shadow-2xl">
+          <h3 className="mb-6 text-lg font-bold text-white">{productId ? 'Edit Product' : 'Add Product'}</h3>
+          <FormSkeleton fields={6} />
+        </div>
       </div>
     );
   }

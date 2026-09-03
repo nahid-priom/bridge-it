@@ -1,16 +1,13 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import { ImageIcon, Loader2, RefreshCw, Trash2, Upload, Wand2 } from 'lucide-react';
-import {
-  generateSolutionCoverAction,
-  removeSolutionCoverAction,
-  uploadSolutionCoverAction,
-  updateCoverPromptAction,
-} from '@/app/actions/solution-cover';
-import { buildSolutionCoverPrompt } from '@/lib/solutions/buildCoverPrompt';
+import { useRef, useState } from 'react';
+import { ImageIcon, Loader2, Trash2, Upload } from 'lucide-react';
+import { removeSolutionCoverAction, uploadSolutionCoverAction } from '@/app/actions/solution-cover';
 import { SolutionCoverImage } from '@/components/solutions/SolutionCoverImage';
 import type { BitpProduct } from '@/types/bitp';
+import { cn } from '@/lib/cn';
+
+const ACCEPT = 'image/png,image/jpeg,image/webp,image/avif';
 
 type ProductCoverSectionProps = {
   form: Partial<BitpProduct>;
@@ -18,60 +15,15 @@ type ProductCoverSectionProps = {
   onUpdated: (updates: Partial<BitpProduct>) => void;
 };
 
-export function ProductCoverSection({ form, categoryName, onUpdated }: ProductCoverSectionProps) {
+export function ProductCoverSection({ form, onUpdated }: ProductCoverSectionProps) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [generating, setGenerating] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState(form.cover_image_prompt ?? '');
-
-  useEffect(() => {
-    setPrompt(form.cover_image_prompt ?? '');
-  }, [form.id, form.cover_image_prompt]);
+  const [dragOver, setDragOver] = useState(false);
 
   const coverSrc = form.cover_image ?? form.thumbnail ?? null;
   const canManage = Boolean(form.id);
-
-  const refreshPromptPreview = () => {
-    if (!form.name) return;
-    setPrompt(
-      buildSolutionCoverPrompt({
-        title: form.name,
-        category: categoryName,
-        shortDescription: form.short_description,
-        productType: form.product_type,
-        slug: form.slug,
-      })
-    );
-  };
-
-  const handleGenerate = async (regenerate = false) => {
-    if (!form.id) return;
-    setGenerating(true);
-    setError(null);
-    const result = await generateSolutionCoverAction({
-      productId: form.id,
-      customPrompt: prompt.trim() || undefined,
-    });
-    setGenerating(false);
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    if (result.data) {
-      onUpdated({
-        cover_image: result.data.publicUrl,
-        thumbnail: result.data.publicUrl,
-        cover_image_path: result.data.storagePath,
-        cover_image_alt: result.data.alt,
-        cover_image_prompt: result.data.prompt,
-        cover_image_updated_at: new Date().toISOString(),
-      });
-      setPrompt(result.data.prompt);
-    }
-    if (regenerate) return;
-  };
 
   const handleUpload = async (file: File) => {
     if (!form.id) return;
@@ -92,7 +44,7 @@ export function ProductCoverSection({ form, categoryName, onUpdated }: ProductCo
         thumbnail: result.data.publicUrl,
         cover_image_path: result.data.storagePath,
         cover_image_alt: result.data.alt,
-        cover_image_prompt: result.data.prompt,
+        cover_image_prompt: null,
         cover_image_updated_at: new Date().toISOString(),
       });
     }
@@ -117,12 +69,6 @@ export function ProductCoverSection({ form, categoryName, onUpdated }: ProductCo
       cover_image_prompt: null,
       cover_image_updated_at: null,
     });
-    setPrompt('');
-  };
-
-  const handleSavePrompt = async () => {
-    if (!form.id || !prompt.trim()) return;
-    await updateCoverPromptAction({ productId: form.id, prompt: prompt.trim() });
   };
 
   return (
@@ -132,46 +78,52 @@ export function ProductCoverSection({ form, categoryName, onUpdated }: ProductCo
         <h3 className="text-sm font-semibold text-white">Cover Image</h3>
       </div>
 
-      <div className="max-w-md rounded-xl overflow-hidden border border-white/10">
-        <SolutionCoverImage
-          src={coverSrc}
-          alt={form.cover_image_alt ?? form.name ?? 'Product cover'}
-          categorySlug={form.category?.slug}
-          className="group-hover:scale-100"
-        />
+      <div
+        className={cn(
+          'max-w-md rounded-xl overflow-hidden border border-white/10',
+          dragOver && 'ring-2 ring-emerald-500/60'
+        )}
+        onDragOver={(event) => {
+          event.preventDefault();
+          if (canManage) setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(event) => {
+          event.preventDefault();
+          setDragOver(false);
+          const file = event.dataTransfer.files[0];
+          if (file && canManage) void handleUpload(file);
+        }}
+      >
+        {coverSrc ? (
+          <SolutionCoverImage
+            src={coverSrc}
+            alt={form.cover_image_alt ?? form.name ?? 'Product cover'}
+            categorySlug={form.category?.slug}
+            className="group-hover:scale-100"
+          />
+        ) : (
+          <div className="aspect-[16/9] flex items-center justify-center bg-white/[0.03] text-sm text-white/50">
+            No cover uploaded
+          </div>
+        )}
       </div>
 
       {!canManage && (
-        <p className="text-xs text-white/40">Save the product first to manage cover images.</p>
+        <p className="text-xs text-white/40">Save the product first to upload a cover image.</p>
       )}
+
+      <p className="text-xs text-white/40">PNG, JPEG, WebP, or AVIF. Drag and drop onto the preview, or upload below.</p>
 
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          disabled={!canManage || generating}
-          onClick={() => handleGenerate(false)}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50"
-        >
-          {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
-          Generate Cover
-        </button>
-        <button
-          type="button"
-          disabled={!canManage || generating || !coverSrc}
-          onClick={() => handleGenerate(true)}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border border-white/10 text-white/80 hover:text-white disabled:opacity-50"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Regenerate
-        </button>
-        <button
-          type="button"
           disabled={!canManage || uploading}
           onClick={() => fileRef.current?.click()}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border border-white/10 text-white/80 hover:text-white disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50"
         >
           {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
-          Upload Custom
+          {coverSrc ? 'Replace cover' : 'Upload Cover'}
         </button>
         <button
           type="button"
@@ -185,33 +137,13 @@ export function ProductCoverSection({ form, categoryName, onUpdated }: ProductCo
         <input
           ref={fileRef}
           type="file"
-          accept="image/*"
+          accept={ACCEPT}
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) handleUpload(file);
+            if (file) void handleUpload(file);
             e.target.value = '';
           }}
-        />
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="text-xs text-white/60">AI Cover Prompt</label>
-          <button
-            type="button"
-            onClick={refreshPromptPreview}
-            className="text-[10px] text-emerald-400 hover:text-emerald-300"
-          >
-            Reset from product
-          </button>
-        </div>
-        <textarea
-          className="w-full min-h-[100px] rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-xs"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onBlur={handleSavePrompt}
-          placeholder="Prompt used for AI cover generation..."
         />
       </div>
 

@@ -5,9 +5,9 @@ export const BRANDING = {
   appName: 'Bridge IT Park',
   shortName: 'Bridge IT Park',
   legalName: 'Bridge IT Park',
-  tagline: 'Build. Market. Grow.',
+  tagline: 'Premium Custom E-commerce Websites',
   description:
-    'Software, Website, Digital Marketing & Creative Solutions for Growing Businesses.',
+    'Browse custom Next.js, React and Laravel e-commerce website designs. Preview pages, compare packages, and request a store built for your business.',
   primaryColor: '#0f2744',
   accentColor: '#10B981',
   navyColor: '#0f2744',
@@ -21,20 +21,18 @@ export const BRANDING = {
 } as const;
 
 export const BRAND_KEYWORDS = [
-  'digital solutions Bangladesh',
-  'custom software development',
-  'ecommerce website Bangladesh',
-  'digital marketing Bangladesh',
-  'business website development',
-  'ERP software Bangladesh',
+  'custom ecommerce website Bangladesh',
+  'Next.js ecommerce website',
+  'React ecommerce website Bangladesh',
+  'Laravel ecommerce website',
+  'ecommerce website development',
+  'premium ecommerce website',
+  'custom online shop',
   'Bridge IT Park',
-  'web development Bangladesh',
-  'logo design Bangladesh',
-  'business solutions',
 ] as const;
 
 export const HOME_SEO_TITLE =
-  'Bridge IT Park | Build. Market. Grow. Your Business, All in One Place.';
+  'Premium Custom E-commerce Website Designs | Bridge IT Park';
 
 export function solutionUrl(slug: string): string {
   return `/solutions/${slug}`;

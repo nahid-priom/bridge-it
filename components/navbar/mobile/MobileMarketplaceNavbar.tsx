@@ -188,7 +188,7 @@ export function MobileMarketplaceNavbar({
             className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-lg"
             aria-label="Bridge IT Park — home"
           >
-            <BridgeLogo iconSize="sm" textVisibility="always" />
+            <BridgeLogo iconSize="sm" textVisibility="always" href={false} />
           </Link>
         </div>
 

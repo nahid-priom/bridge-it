@@ -3,6 +3,8 @@ import { getDashboardPathForRole } from '@/lib/auth/dashboard-routes';
 
 const ALLOWED_PREFIXES = [
   '/',
+  '/websites',
+  '/ecommerce',
   '/categories',
   '/products',
   '/services',

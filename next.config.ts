@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -46,6 +47,20 @@ const nextConfig: NextConfig = {
           ]
         : []),
     ],
+  },
+  async redirects() {
+    return [
+      { source: '/solutions', destination: '/websites', permanent: false },
+      { source: '/solutions/:path*', destination: '/websites', permanent: false },
+      { source: '/products', destination: '/websites', permanent: false },
+      { source: '/products/:path*', destination: '/websites', permanent: false },
+      { source: '/services/:path*', destination: '/websites', permanent: false },
+      { source: '/search', destination: '/websites', permanent: false },
+      { source: '/search/:path*', destination: '/websites', permanent: false },
+      { source: '/services', destination: '/websites', permanent: false },
+      { source: '/categories', destination: '/websites', permanent: false },
+      { source: '/categories/:path*', destination: '/websites', permanent: false },
+    ];
   },
 };
 

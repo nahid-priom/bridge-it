@@ -49,9 +49,9 @@ export const AdminChartCard: React.FC<AdminChartCardProps> = ({
         )}
       </div>
       {loading ? (
-        <div className="h-40 flex items-end gap-2 animate-pulse">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="flex-1 bg-white/10 rounded-t-md" style={{ height: `${30 + Math.random() * 50}%` }} />
+        <div className="flex h-40 items-end gap-2 animate-pulse motion-reduce:animate-none">
+          {[40, 55, 35, 70, 45, 60, 50, 75, 42, 58, 48, 65].map((height, i) => (
+            <div key={i} className="flex-1 rounded-t-md bg-white/10" style={{ height: `${height}%` }} />
           ))}
         </div>
       ) : (

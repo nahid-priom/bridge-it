@@ -10,7 +10,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 export default async function TwitterImage() {
-  const logoPath = join(process.cwd(), 'public/brand/bridge-it-park-logo-transparent.png');
+  const logoPath = join(process.cwd(), 'public/brand/bridge-it-park-logo-dark.png');
   const logoData = await readFile(logoPath);
   const logoSrc = `data:image/png;base64,${logoData.toString('base64')}`;
 
@@ -30,8 +30,8 @@ export default async function TwitterImage() {
       >
         <img
           src={logoSrc}
-          width={320}
-          height={320}
+          width={640}
+          height={192}
           style={{ objectFit: 'contain', marginBottom: 24 }}
           alt=""
         />

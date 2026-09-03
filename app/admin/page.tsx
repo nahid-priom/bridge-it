@@ -1,10 +1,9 @@
-import dynamic from 'next/dynamic';
 import { buildPageMetadata } from '@/lib/metadata';
 import { BRANDING } from '@/lib/config/branding';
-import { PageLoading } from '@/components/PageLoading';
 import { getAdminDashboardData } from '@/lib/catalog/admin';
 import { getAdminSellerApplications } from '@/lib/catalog/admin-seller-applications';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { AdminDashboardPage } from '@/components/admin/AdminDashboardPage';
 
 export const revalidate = 60;
 
@@ -14,20 +13,6 @@ export const metadata = buildPageMetadata({
   path: '/admin',
   noIndex: true,
 });
-
-const AdminDashboardPage = dynamic(
-  () =>
-    import('@/components/admin/AdminDashboardPage').then((m) => ({
-      default: m.AdminDashboardPage,
-    })),
-  {
-    loading: () => (
-      <div className="min-h-screen bg-bridge-dark flex items-center justify-center">
-        <PageLoading variant="minimal" />
-      </div>
-    ),
-  }
-);
 
 export default async function AdminRoute() {
   await requireAdmin();

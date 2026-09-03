@@ -13,6 +13,13 @@ const DEPRECATED_SELLER_PREFIXES = [
   '/dashboard/seller',
 ];
 
+const SHOWCASE_ADMIN_PREFIXES = ['/admin/ecommerce-projects', '/admin/ecommerce-leads'];
+const SHOWCASE_STAFF_ROLES = ['admin', 'super_admin', 'marketing_manager', 'viewer'];
+
+function isShowcaseAdminPath(pathname: string): boolean {
+  return SHOWCASE_ADMIN_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
 export function isPublicPath(pathname: string): boolean {
   if (AUTH_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))) return true;
   if (pathname.startsWith('/auth/')) return true;
@@ -23,6 +30,8 @@ export function isPublicPath(pathname: string): boolean {
 
   const publicPrefixes = [
     '/',
+    '/websites',
+    '/ecommerce',
     '/solutions',
     '/pricing',
     '/portfolio',
@@ -79,14 +88,14 @@ export async function handleMarketplaceMiddleware(
     return NextResponse.redirect(new URL(ROUTES.dashboard, request.url));
   }
 
-  // Redirect legacy seller profiles to solutions
+  // Redirect legacy seller profiles to websites
   if (pathname.startsWith('/seller/') || pathname.startsWith('/sellers/')) {
-    return NextResponse.redirect(new URL(ROUTES.solutions, request.url));
+    return NextResponse.redirect(new URL(ROUTES.websites, request.url));
   }
 
-  // Redirect cart to solutions
+  // Redirect cart to websites
   if (pathname === '/cart') {
-    return NextResponse.redirect(new URL(ROUTES.solutions, request.url));
+    return NextResponse.redirect(new URL(ROUTES.websites, request.url));
   }
 
   const protectedPath = isProtectedMarketplacePath(pathname);
@@ -118,8 +127,16 @@ export async function handleMarketplaceMiddleware(
   const ctx = await loadMarketplaceAccessFromSupabase(supabase, user.id);
   const role = normalizeRole(ctx.profile?.role);
 
-  if (pathname.startsWith('/admin') && role !== 'admin' && role !== 'super_admin') {
-    return NextResponse.redirect(new URL('/unauthorized', request.url));
+  if (pathname.startsWith('/admin')) {
+    if (isShowcaseAdminPath(pathname)) {
+      if (!SHOWCASE_STAFF_ROLES.includes(role)) {
+        return NextResponse.redirect(new URL('/unauthorized', request.url));
+      }
+    } else if (role === 'marketing_manager' || role === 'viewer') {
+      return NextResponse.redirect(new URL(ROUTES.adminEcommerceProjects, request.url));
+    } else if (role !== 'admin' && role !== 'super_admin') {
+      return NextResponse.redirect(new URL('/unauthorized', request.url));
+    }
   }
 
   if (pathname.startsWith('/dashboard')) {

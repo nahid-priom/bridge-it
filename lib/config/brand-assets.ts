@@ -2,24 +2,32 @@
  * Centralized Bridge IT Park brand asset paths.
  * All logo/favicon references should use these constants.
  */
+const LOGO_LIGHT = '/brand/bridge-it-park-logo-light.png';
+const LOGO_DARK = '/brand/bridge-it-park-logo-dark.png';
+const MARK_LIGHT = '/icons/bridge-it-park-mark-transparent.png';
+const MARK_DARK = '/icons/bridge-it-park-mark-dark.png';
+
 export const BRAND_ASSETS = {
   logo: {
-    source: '/brand/bridge-it-park-logo-source.png',
+    source: LOGO_LIGHT,
+    sourceDark: LOGO_DARK,
     full: '/brand/bridge-it-park-logo-full.png',
-    transparent: '/brand/bridge-it-park-logo-transparent.png',
-    transparentDark: '/brand/bridge-it-park-logo-transparent-dark.png',
-    nav: '/brand/bridge-it-park-logo-nav.png',
-    navDark: '/brand/bridge-it-park-logo-nav-dark.png',
-    navSm: '/brand/bridge-it-park-logo-nav-sm.png',
-    navSmDark: '/brand/bridge-it-park-logo-nav-sm-dark.png',
-    footer: '/brand/bridge-it-park-logo-footer.png',
-    footerDark: '/brand/bridge-it-park-logo-footer-dark.png',
-    authDark: '/brand/bridge-it-park-logo-auth-dark.png',
+    light: LOGO_LIGHT,
+    dark: LOGO_DARK,
+    transparent: LOGO_LIGHT,
+    transparentDark: LOGO_DARK,
+    nav: LOGO_LIGHT,
+    navDark: LOGO_DARK,
+    navSm: LOGO_LIGHT,
+    navSmDark: LOGO_DARK,
+    footer: LOGO_LIGHT,
+    footerDark: LOGO_DARK,
+    authDark: LOGO_DARK,
     mark: '/brand/bridge-it-park-logo-mark.png',
   },
   icons: {
-    markTransparent: '/icons/bridge-it-park-mark-transparent.png',
-    markDark: '/icons/bridge-it-park-mark-dark.png',
+    markTransparent: MARK_LIGHT,
+    markDark: MARK_DARK,
     favicon16: '/icons/favicon-16x16.png',
     favicon32: '/icons/favicon-32x32.png',
     favicon48: '/icons/favicon-48x48.png',

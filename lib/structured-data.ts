@@ -47,7 +47,7 @@ export function websiteJsonLd() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}${ROUTES.solutions}?q={search_term_string}`,
+        urlTemplate: `${SITE_URL}${ROUTES.websites}?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

@@ -13,30 +13,13 @@ export type CoverRecord = {
   coverPath?: string | null;
 };
 
-export type CoverGenerationResult = {
+export type CoverUploadResult = {
   entityType: CoverEntityType;
   id: string;
   slug: string;
   publicUrl: string;
   storagePath: string;
   alt: string;
-  prompt: string;
-};
-
-export type CoverGenerationError = {
-  entityType: CoverEntityType;
-  id: string;
-  slug: string;
-  error: string;
-};
-
-export type BulkCoverProgress = {
-  total: number;
-  generated: number;
-  failed: number;
-  remaining: number;
-  results: CoverGenerationResult[];
-  errors: CoverGenerationError[];
 };
 
 export function getCoverStoragePath(entityType: CoverEntityType, id: string): string {

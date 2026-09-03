@@ -24,6 +24,6 @@ export function getProductCoverAlt(
   if (product.cover_image_alt?.trim()) return product.cover_image_alt;
   const category = product.category?.name;
   return category
-    ? `3D illustration of ${product.name ?? 'software solution'} for ${category}`
-    : `3D illustration of ${product.name ?? 'software solution'}`;
+    ? `${product.name ?? 'Product'} — ${category} cover image`
+    : `${product.name ?? 'Product'} cover image`;
 }

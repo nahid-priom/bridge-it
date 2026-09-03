@@ -10,16 +10,16 @@
     "typecheck": "tsc --noEmit",
     "admin:seed": "tsx scripts/seed-admin-user.ts",
     "admin:promote": "tsx scripts/seed-admin-user.ts",
-    "covers:generate": "tsx scripts/generate-flagship-covers.ts",
-    "covers:software": "tsx scripts/generate-flagship-covers.ts",
-    "covers:backfill": "tsx scripts/backfill-solution-covers.ts",
-    "logos:dark": "tsx scripts/generate-dark-logos.ts",
-    "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts"
+    "logos:process": "tsx scripts/process-brand-logos.ts",
+    "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts",
+    "seed:ecommerce-showcase": "tsx scripts/seed-ecommerce-showcase.ts",
+    "seed:ecommerce-projects": "tsx scripts/seed-ecommerce-projects.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
+    "@tanstack/react-query": "^5.102.8",
     "clsx": "2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^0.562.0",

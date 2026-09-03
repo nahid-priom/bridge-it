@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
         {/* 5 columns: brand (2) + buyers + sellers + categories */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-10">
           <div className="sm:col-span-2">
-            <BridgeLogo variant="footer" className="mb-4" />
+            <BridgeLogo variant="footer" theme="dark" className="mb-4" />
             <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-xs">
               {FOOTER_BRAND_DESCRIPTION}
             </p>
@@ -57,7 +57,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <FooterColumn title="Solutions" links={FOOTER_COLUMNS.solutions} />
+          <FooterColumn title="Websites" links={FOOTER_COLUMNS.solutions} />
           <FooterColumn title="Support" links={FOOTER_COLUMNS.support} />
           <FooterColumn title="Popular" links={FOOTER_COLUMNS.categories} />
         </div>

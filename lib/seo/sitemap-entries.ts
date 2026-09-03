@@ -1,13 +1,8 @@
 import type { MetadataRoute } from 'next';
-import { ROUTES, solutionsUrl } from '@/lib/routes';
+import { ROUTES } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site';
-import {
-  SOLUTION_CATEGORY_FILTER_PRIORITY,
-  SOLUTION_DETAIL_PRIORITY,
-  STATIC_SITEMAP_ROUTES,
-} from '@/lib/seo/config';
-import { getActiveCategories } from '@/lib/services/categories.service';
-import { getPublishedProductSitemapEntries } from '@/lib/services/products.service';
+import { STATIC_SITEMAP_ROUTES } from '@/lib/seo/config';
+import { listCategories, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 
 function toAbsoluteUrl(path: string): string {
   if (path.startsWith('http')) return path;
@@ -23,10 +18,7 @@ function entry(
     priority?: number;
   } = {}
 ): MetadataRoute.Sitemap[number] {
-  const lastModified = options.lastModified
-    ? new Date(options.lastModified)
-    : new Date();
-
+  const lastModified = options.lastModified ? new Date(options.lastModified) : new Date();
   return {
     url: toAbsoluteUrl(path),
     lastModified,
@@ -36,9 +28,9 @@ function entry(
 }
 
 export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
-  const [categories, products] = await Promise.all([
-    getActiveCategories(),
-    getPublishedProductSitemapEntries(),
+  const [categories, projects] = await Promise.all([
+    listCategories(),
+    listProjectCards({ limit: 100, offset: 0 }),
   ]);
 
   const staticEntries = STATIC_SITEMAP_ROUTES.map((route) =>
@@ -48,39 +40,21 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  const categoryFilterEntries = categories.map((category) =>
-    entry(solutionsUrl(category.slug), {
+  const categoryEntries = categories.map((category) =>
+    entry(ROUTES.ecommerceCategory(category.slug), {
       lastModified: category.updated_at,
       changeFrequency: 'weekly',
-      priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
+      priority: 0.88,
     })
   );
 
-  const solutionEntries = products.map((product) => {
-    const cat = product.category as { slug: string } | { slug: string }[] | null | undefined;
-    const catSlug = Array.isArray(cat) ? cat[0]?.slug : cat?.slug;
-    const path =
-      catSlug === 'ecommerce-solutions'
-        ? ROUTES.ecommerceSolution(product.slug)
-        : catSlug === 'software-solutions' && product.showroom_featured
-          ? ROUTES.softwareSolution(product.slug)
-          : ROUTES.solution(product.slug);
-    return entry(path, {
-      lastModified: product.updated_at,
+  const projectEntries = projects.items.map((project) =>
+    entry(ROUTES.website(project.slug), {
+      lastModified: project.updated_at,
       changeFrequency: 'weekly',
-      priority: SOLUTION_DETAIL_PRIORITY,
-    });
-  });
+      priority: 0.9,
+    })
+  );
 
-  const ecommerceShowroom = entry(ROUTES.ecommerceShowroom, {
-    changeFrequency: 'daily',
-    priority: 0.92,
-  });
-
-  const softwareShowroom = entry(ROUTES.softwareShowroom, {
-    changeFrequency: 'daily',
-    priority: 0.91,
-  });
-
-  return [...staticEntries, ecommerceShowroom, softwareShowroom, ...categoryFilterEntries, ...solutionEntries];
+  return [...staticEntries, ...categoryEntries, ...projectEntries];
 }

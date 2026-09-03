@@ -182,36 +182,32 @@ export const TRUST_SECURITY_ITEMS = [
 
 /* ─── Footer links ─── */
 export const FOOTER_BRAND_DESCRIPTION =
-  'Your complete digital business partner. Software, websites, marketing, and creative solutions for growing businesses.';
+  'Premium custom e-commerce website designs for growing Bangladeshi businesses — Next.js, React, and Laravel.';
 
 export const FOOTER_COLUMNS = {
   solutions: [
-    { label: 'All Solutions', href: ROUTES.solutions },
-    { label: 'Software Solutions', href: solutionsUrl('software-solutions') },
-    { label: 'Web & App', href: solutionsUrl('web-app-solutions') },
-    { label: 'Digital Marketing', href: solutionsUrl('digital-marketing') },
-    { label: 'Graphics & Creative', href: solutionsUrl('graphics-creative') },
+    { label: 'All Websites', href: ROUTES.websites },
+    { label: 'Fashion', href: '/ecommerce/fashion' },
+    { label: 'Electronics', href: '/ecommerce/electronics' },
+    { label: 'Grocery', href: '/ecommerce/grocery' },
+    { label: 'Cosmetics', href: '/ecommerce/cosmetics' },
   ],
   company: [
     { label: 'About Us', href: ROUTES.about },
-    { label: 'Portfolio', href: ROUTES.portfolio },
-    { label: 'Pricing', href: ROUTES.pricing },
     { label: 'Free Consultation', href: ROUTES.consultation },
     { label: 'Contact', href: ROUTES.about },
   ],
   support: [
-    { label: 'How It Works', href: `${ROUTES.home}#how-it-works` },
     { label: 'Client Dashboard', href: ROUTES.dashboard },
     { label: 'Help & Support', href: ROUTES.about },
     { label: 'Terms of Service', href: ROUTES.about },
     { label: 'Privacy Policy', href: ROUTES.about },
   ],
   categories: [
-    { label: 'Custom ERP Software', href: searchUrl('ERP') },
-    { label: 'E-commerce Website', href: searchUrl('ecommerce') },
-    { label: 'Meta Ads Management', href: searchUrl('Meta ads') },
-    { label: 'Logo & Brand Identity', href: searchUrl('logo') },
-    { label: 'Mobile App Development', href: searchUrl('mobile app') },
+    { label: 'Furniture', href: '/ecommerce/furniture' },
+    { label: 'Wholesale / B2B', href: '/ecommerce/wholesale' },
+    { label: 'Single Product', href: '/ecommerce/single-product' },
+    { label: 'Local Shop', href: '/ecommerce/local-shop' },
   ],
 } as const;
 

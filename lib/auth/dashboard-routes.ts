@@ -14,7 +14,8 @@ export function resolveDashboardHref(
   role: UserRole | null | undefined,
   mode: DashboardMode = 'seller'
 ): string {
-  if (role === 'admin') return ROUTES.admin;
+  if (role === 'admin' || role === 'super_admin') return ROUTES.admin;
+  if (role === 'marketing_manager' || role === 'viewer') return ROUTES.adminEcommerceProjects;
   if (role === 'seller') {
     return mode === 'buyer' ? ROUTES.dashboard : ROUTES.sellerDashboard;
   }

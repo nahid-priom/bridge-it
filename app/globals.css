@@ -4,6 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  color-scheme: light;
   /* Mobile compact navbar: pt-2 + ~64px shell */
   --header-offset: 5rem;
   /* Small gap between navbar and breadcrumb (pt-2) */
@@ -40,6 +41,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: #0F0E17;
   --background-soft: #1A1832;
   --surface: #1A1832;
@@ -100,8 +102,26 @@
   --color-icon-accent: var(--icon-accent);
   --color-badge-accent: var(--badge-accent);
   --color-border-subtle: var(--border-subtle);
+  --color-border: var(--border-subtle);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text-primary);
+  --color-accent: var(--background-soft);
+  --color-accent-foreground: var(--text-primary);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-inter), var(--font-noto-bengali), sans-serif;
   --font-display: var(--font-poppins), var(--font-noto-bengali), sans-serif;
+}
+
+.field-select {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+  color-scheme: inherit;
+}
+
+.field-select option {
+  background-color: var(--surface);
+  color: var(--text-primary);
 }
 
 * {
@@ -623,7 +643,7 @@ html[data-admin-route] body {
 }
 
 .hero-script-line {
-  font-family: var(--font-caveat), var(--font-display), cursive;
+  font-family: var(--font-display), var(--font-noto-bengali), sans-serif;
   font-weight: 700;
 }
 
@@ -926,6 +946,28 @@ html[data-nav-scrolled='true'] .mobile-premium-navbar-shell,
     animation: none;
     width: 100% !important;
   }
+
+  .animate-pulse {
+    animation: none !important;
+  }
+
+  .showcase-img-enter {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@keyframes showcase-img-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.showcase-img-enter {
+  animation: showcase-img-enter 280ms ease-out both;
 }
 
 /* ===== SLIDESHOW ===== */

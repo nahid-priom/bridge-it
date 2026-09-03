@@ -38,9 +38,7 @@ export type StaticSitemapRoute = {
 /** Public marketing pages for Bridge IT Park */
 export const STATIC_SITEMAP_ROUTES: StaticSitemapRoute[] = [
   { path: ROUTES.home, changeFrequency: 'daily', priority: 1 },
-  { path: ROUTES.solutions, changeFrequency: 'daily', priority: 0.95 },
-  { path: ROUTES.pricing, changeFrequency: 'weekly', priority: 0.9 },
-  { path: ROUTES.portfolio, changeFrequency: 'weekly', priority: 0.85 },
+  { path: ROUTES.websites, changeFrequency: 'daily', priority: 0.95 },
   { path: ROUTES.consultation, changeFrequency: 'monthly', priority: 0.85 },
   { path: ROUTES.about, changeFrequency: 'monthly', priority: 0.75 },
 ];

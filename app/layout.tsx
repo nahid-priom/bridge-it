@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Poppins, Noto_Sans_Bengali, Caveat } from 'next/font/google';
+import { Inter, Poppins, Noto_Sans_Bengali } from 'next/font/google';
 import { AppShell } from '@/components/layout/AppShell';
 import { getMainMarketplaceCategoriesForUi } from '@/lib/catalog/marketplaceNav';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { TopLoader } from '@/components/navigation/TopLoader';
 import { rootMetadata } from '@/lib/metadata';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/structured-data';
+import { ShowcaseQueryProvider } from '@/src/features/ecommerce-showcase/components/QueryProvider';
 import './globals.css';
 
 const inter = Inter({
@@ -30,13 +31,6 @@ const notoSansBengali = Noto_Sans_Bengali({
   display: 'swap',
 });
 
-const caveat = Caveat({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  variable: '--font-caveat',
-  display: 'swap',
-});
-
 export const metadata: Metadata = rootMetadata;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -49,15 +43,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${poppins.variable} ${notoSansBengali.variable} ${caveat.variable}`}
+      className={`${inter.variable} ${poppins.variable} ${notoSansBengali.variable}`}
     >
       <body className="font-sans antialiased bg-background text-text-primary">
         <ThemeProvider>
+          <ShowcaseQueryProvider>
           <TopLoader />
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <AppShell categories={categories} authProfile={authProfile}>
             {children}
           </AppShell>
+          </ShowcaseQueryProvider>
         </ThemeProvider>
       </body>
     </html>

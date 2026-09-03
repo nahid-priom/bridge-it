@@ -210,12 +210,13 @@ export async function searchProducts(q: string, limit = 12): Promise<BitpProduct
 }
 
 export async function getAllProductsAdmin(): Promise<BitpProduct[]> {
-  const supabase = await getServerClient();
+  const supabase = await getAdminClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
     .from('products')
     .select(PRODUCT_SELECT)
+    .neq('status', 'archived')
     .order('sort_order', { ascending: true });
 
   if (error) return [];

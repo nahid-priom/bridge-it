@@ -164,7 +164,7 @@ export function MobileDrawer({
       >
         <div className="flex items-center justify-between mb-5">
           <Link href={ROUTES.home} onClick={closeAndNavigate} className="shrink-0">
-            <BridgeLogo variant="nav" />
+            <BridgeLogo variant="nav" href={false} />
           </Link>
           <button
             type="button"
