@@ -111,32 +111,45 @@ export function CardTechIcons({
   count = ICON_COUNT,
   size = 'sm',
   showLabels = false,
+  scrollable = false,
 }: {
   seed: string;
   stack: string[];
   count?: number;
   size?: 'sm' | 'md';
   showLabels?: boolean;
+  scrollable?: boolean;
 }) {
   const visible = pickTechs(seed, stack, count);
   const box = size === 'md' ? 'h-9 w-9' : 'h-7 w-7';
   return (
-    <ul className={showLabels ? 'flex flex-wrap items-center gap-2' : 'flex items-center gap-1.5'} aria-label="Technologies">
+    <ul
+      className={
+        scrollable
+          ? 'flex max-w-full flex-nowrap items-center gap-1.5 overflow-x-auto overscroll-x-contain pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+          : showLabels
+            ? 'flex flex-wrap items-center gap-2'
+            : 'flex items-center gap-1.5'
+      }
+      aria-label="Technologies"
+    >
       {visible.map((name) => (
         <li
           key={name}
           title={name}
           className={
             showLabels
-              ? 'inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-background-soft py-1 pl-1 pr-2.5'
-              : `inline-flex ${box} items-center justify-center rounded-full border border-border-subtle bg-background-soft`
+              ? 'inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-subtle bg-background-soft py-0.5 pl-0.5 pr-2'
+              : `inline-flex ${box} shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft`
           }
         >
-          <span className={showLabels ? 'inline-flex h-7 w-7 items-center justify-center' : undefined}>
+          <span className={showLabels ? 'inline-flex h-6 w-6 items-center justify-center' : undefined}>
             <span className="sr-only">{name}</span>
             <TechGlyph name={name} />
           </span>
-          {showLabels ? <span className="text-xs font-medium text-text-secondary">{name}</span> : null}
+          {showLabels ? (
+            <span className="whitespace-nowrap text-[11px] font-medium text-text-secondary">{name}</span>
+          ) : null}
         </li>
       ))}
     </ul>

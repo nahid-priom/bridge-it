@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { BRANDING, HOME_SEO_TITLE } from '@/lib/config/branding';
 import { BRAND_ASSETS } from '@/lib/config/brand-assets';
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/site';
+import { GOOGLE_SITE_VERIFICATION } from '@/lib/seo/config';
 
 const DEFAULT_OG_IMAGE = {
   url: '/opengraph-image',
@@ -125,6 +126,9 @@ export const rootMetadata: Metadata = {
     address: false,
   },
   robots: buildRobots(false),
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION,
+  },
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [

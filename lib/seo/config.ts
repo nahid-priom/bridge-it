@@ -1,4 +1,4 @@
-import { ROUTES } from '@/lib/routes';
+export const GOOGLE_SITE_VERIFICATION = 'f2F2jc6bDCd4G1gsde7UfIW83Bnow_32Kfr2Sv6HUtw';
 
 /** Paths that must not appear in the sitemap */
 export const NON_INDEXABLE_PATH_PREFIXES = [
