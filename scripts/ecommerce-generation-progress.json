@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-03T04:41:52.198Z",
+  "updatedAt": "2026-09-03T06:36:51.688Z",
   "projects": {
     "agrimart-store": {
       "designManifest": true,
@@ -12,9 +12,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "beanora-coffee": {
@@ -28,9 +28,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "bookora-books": {
@@ -44,9 +44,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "camerix-photography": {
@@ -60,9 +60,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "chocora-chocolate": {
@@ -76,9 +76,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "deshi-craft": {
@@ -92,9 +92,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "fishmart-seafood": {
@@ -108,9 +108,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "furnova-furniture": {
@@ -124,9 +124,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "gamenova-store": {
@@ -140,9 +140,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "greenroot-organic": {
@@ -156,9 +156,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "hairora-care": {
@@ -172,9 +172,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "hijabe-modest-fashion": {
@@ -188,9 +188,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "kitchora-kitchen": {
@@ -204,9 +204,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "lightora-lighting": {
@@ -220,9 +220,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "lumera-perfume": {
@@ -236,9 +236,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "meatmart-premium": {
@@ -252,9 +252,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "panjabi-house": {
@@ -268,9 +268,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "partybox-events": {
@@ -284,9 +284,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "pharmora-health": {
@@ -300,9 +300,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "ridevault-cycling": {
@@ -316,9 +316,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "sareeva": {
@@ -332,9 +332,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "skinlab-care": {
@@ -348,9 +348,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "sleepnest-bedding": {
@@ -364,9 +364,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "soundora-audio": {
@@ -380,9 +380,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "sportiva-sports": {
@@ -396,9 +396,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "sweetbox-bakery": {
@@ -412,9 +412,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "techdesk-office": {
@@ -428,9 +428,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "tileora-tiles": {
@@ -444,9 +444,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "toolmate-hardware": {
@@ -460,9 +460,9 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     },
     "travelora-gear": {
@@ -476,10 +476,11 @@
       "checkout": true,
       "about": true,
       "mobile": true,
-      "optimized": false,
-      "uploaded": false,
-      "seeded": false,
+      "optimized": true,
+      "uploaded": true,
+      "seeded": true,
       "validated": true
     }
-  }
+  },
+  "finalCount": 50
 }
