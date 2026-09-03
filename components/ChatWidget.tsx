@@ -1,146 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useStore } from '@/store/useStore';
-import { useAppNavigation } from '@/hooks/useAppNavigation';
-import { X, Send, Headphones, MessageCircle, Bot } from 'lucide-react';
-import { BRANDING } from '@/lib/config/branding';
+import { BRANDING, whatsappUrl } from '@/lib/config/branding';
+
+const WHATSAPP_MESSAGE = `Hello ${BRANDING.appName}, I want to discuss an e-commerce website.`;
+
+function WhatsAppGlyph({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
 
 export const ChatWidget: React.FC = () => {
-  const { isChatOpen, toggleChat } = useStore();
-  const { goToCategories, goToMessages, goToDashboard, goToAbout } = useAppNavigation();
-  const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState([
-    { id: 1, sender: 'bot', text: `Welcome to ${BRANDING.appName}! 👋 How can I help you today?`, time: 'Just now' },
-  ]);
-
-  const quickActions = [
-    { label: '🔍 Find a Service', action: () => { toggleChat(); goToCategories(); } },
-    { label: '💬 Message Seller', action: () => { toggleChat(); goToMessages(); } },
-    { label: '📦 Track Order', action: () => { toggleChat(); goToDashboard(); } },
-    { label: '❓ How It Works', action: () => { toggleChat(); goToAbout(); } },
-  ];
-
-  const handleSend = () => {
-    if (!message.trim()) return;
-    setChatMessages(prev => [...prev, { id: Date.now(), sender: 'user', text: message, time: 'Just now' }]);
-    setMessage('');
-    setTimeout(() => {
-      setChatMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        sender: 'bot',
-        text: 'Thank you for reaching out! Our support team will get back to you shortly. In the meantime, you can browse our services or check the FAQ.',
-        time: 'Just now',
-      }]);
-    }, 1000);
-  };
-
-  if (!isChatOpen) {
-    return (
-      <button
-        type="button"
-        onClick={toggleChat}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-bridge-primary to-bridge-primary-light text-white rounded-full shadow-2xl shadow-bridge-primary/30 flex items-center justify-center hover:scale-110 transition-transform z-50 animate-pulse-glow cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/50"
-        aria-label="Open chat support"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </button>
-    );
-  }
-
   return (
-    <div className="fixed bottom-6 right-6 w-[360px] max-w-[calc(100vw-2rem)] glass-strong rounded-2xl shadow-2xl shadow-bridge-primary/20 z-50 overflow-hidden border border-border-subtle flex flex-col" style={{ maxHeight: 'calc(100vh - 6rem)' }}>
-      {/* Header */}
-      <div className="bg-gradient-to-r from-bridge-primary to-bridge-primary-light p-4 flex items-center justify-between flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <Headphones className="w-5 h-5 text-white" aria-hidden />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-white">{BRANDING.appName} Support</h3>
-            <p className="text-xs text-white/80 flex items-center gap-1">
-              <span className="w-2 h-2 bg-bridge-secondary rounded-full" aria-hidden />
-              Online
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={toggleChat}
-          className="p-1 text-white/80 hover:text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg"
-          aria-label="Close chat"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: '300px' }}>
-        {chatMessages.map(msg => (
-          <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-[80%] p-3 rounded-2xl ${
-                msg.sender === 'user'
-                  ? 'bg-bridge-primary text-white rounded-br-md'
-                  : 'bg-background-soft border border-border-subtle text-text-primary rounded-bl-md'
-              }`}
-            >
-              {msg.sender === 'bot' && (
-                <div className="flex items-center gap-1 mb-1">
-                  <Bot className="w-3 h-3 text-bridge-primary" aria-hidden />
-                  <span className="text-xs text-text-muted font-medium">{BRANDING.aiName}</span>
-                </div>
-              )}
-              <p className="text-sm">{msg.text}</p>
-              <p
-                className={`text-xs mt-1 ${
-                  msg.sender === 'user' ? 'text-white/70' : 'text-text-muted'
-                }`}
-              >
-                {msg.time}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Quick Actions */}
-      <div className="px-4 py-2 border-t border-border-subtle flex-shrink-0">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {quickActions.map((action, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={action.action}
-              className="px-3 py-1.5 bg-background-soft border border-border-subtle text-xs text-text-secondary rounded-full whitespace-nowrap hover:bg-bridge-primary/10 hover:text-text-primary hover:border-bridge-primary/30 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/30"
-            >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="p-3 border-t border-border-subtle flex-shrink-0">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-background-soft border border-border-subtle rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-bridge-primary focus:ring-2 focus:ring-bridge-primary/20"
-          />
-          <button
-            type="button"
-            onClick={handleSend}
-            className="p-2.5 bg-bridge-primary text-white rounded-xl hover:bg-bridge-primary-light transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-bridge-primary/40"
-            aria-label="Send message"
-          >
-            <Send className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-    </div>
+    <a
+      href={whatsappUrl(WHATSAPP_MESSAGE)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-[#25D366]/40 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#25D366]/50"
+      aria-label="Chat on WhatsApp"
+    >
+      <WhatsAppGlyph className="h-7 w-7" />
+    </a>
   );
 };

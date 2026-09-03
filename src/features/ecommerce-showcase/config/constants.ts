@@ -45,6 +45,88 @@ export const HOMEPAGE_SECTIONS = [
 
 export type HomepageSectionKey = (typeof HOMEPAGE_SECTIONS)[number]['key'];
 
+/** Public catalog pricing by feature set (landing / full store / custom). */
+export const CATALOG_PACKAGE_TIERS = [
+  {
+    key: 'landing',
+    name: 'Landing Page',
+    shortLabel: 'Landing',
+    price: 10000,
+    plus: false,
+    features: [
+      'Premium Landing Page',
+      'Product / Offer presentation',
+      'CTA / Order action',
+      'Mobile Responsive',
+      'Lead / Order Form',
+    ],
+  },
+  {
+    key: 'website',
+    name: 'E-commerce Website',
+    shortLabel: 'Website',
+    price: 30000,
+    plus: false,
+    features: [
+      'Homepage + Shop + Product + Cart + Checkout',
+      'Responsive Design',
+      'Product Management',
+      'Basic Admin',
+      'SEO Setup',
+    ],
+  },
+  {
+    key: 'premium',
+    name: 'Premium Custom',
+    shortLabel: 'Custom',
+    price: 70000,
+    plus: true,
+    features: [
+      'Fully Custom UI/UX',
+      'Inventory / Stock',
+      'Courier Automation',
+      'Advanced Checkout & Analytics',
+      'POS / ERP integrations where required',
+    ],
+  },
+] as const;
+
+/** Extra homepage rows loaded by category slug (not admin curation). */
+export const HOMEPAGE_LEGACY_CATEGORY_SECTIONS = [
+  {
+    slug: 'cosmetics',
+    title: 'Beauty & Cosmetics',
+    eyebrow: 'Popular',
+    description: 'Skincare, makeup and beauty storefronts.',
+    viewAllHref: '/ecommerce/cosmetics',
+    viewAllLabel: 'View beauty',
+  },
+  {
+    slug: 'furniture',
+    title: 'Furniture & Home',
+    eyebrow: 'Popular',
+    description: 'Furniture and home decor commerce designs.',
+    viewAllHref: '/ecommerce/furniture',
+    viewAllLabel: 'View home',
+  },
+  {
+    slug: 'grocery',
+    title: 'Food & Grocery',
+    eyebrow: 'Popular',
+    description: 'Organic shops, bakeries and local grocery storefronts.',
+    viewAllHref: '/ecommerce/grocery',
+    viewAllLabel: 'View grocery',
+  },
+  {
+    slug: 'sports',
+    title: 'Sports & Outdoor',
+    eyebrow: 'Popular',
+    description: 'Activewear, cycling and sports gear storefronts.',
+    viewAllHref: '/ecommerce/sports',
+    viewAllLabel: 'View sports',
+  },
+] as const;
+
 /** Compact page tabs for /websites listing and homepage Design Gallery. */
 export const LISTING_VIEW_TABS = [
   { id: 'all', label: 'All' },
@@ -103,6 +185,16 @@ export const LEAD_STATUSES = [
 ] as const;
 
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
+
+export const WEBSITE_ORDER_STATUSES = [
+  'pending',
+  'confirmed',
+  'in_progress',
+  'completed',
+  'cancelled',
+] as const;
+
+export type WebsiteOrderStatus = (typeof WEBSITE_ORDER_STATUSES)[number];
 
 export const SEO_KEYWORD_IDEAS = [
   'custom ecommerce website Bangladesh',

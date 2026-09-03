@@ -3,9 +3,10 @@ import { NAV_HOW_IT_WORKS_HREF } from '@/data/homeContent';
 
 export const MAIN_NAV_LINKS = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'Websites', href: ROUTES.websites },
   { label: 'Fashion', href: '/ecommerce/fashion' },
   { label: 'Electronics', href: '/ecommerce/electronics' },
+  { label: 'Beauty', href: '/ecommerce/cosmetics' },
+  { label: 'Furniture', href: '/ecommerce/furniture' },
   { label: 'Consultation', href: ROUTES.consultation },
 ] as const;
 

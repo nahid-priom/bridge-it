@@ -60,10 +60,9 @@ export function FloatingNavbar({
 
       <div ref={navRef} className="pointer-events-auto w-full min-w-0">
         <div className="lg:hidden">
-          <MobileMarketplaceNavbar
+            <MobileMarketplaceNavbar
             authProfile={authProfile}
             cartCount={0}
-            notificationCount={0}
             messageCount={0}
             isScrolled={isScrolled}
             isHeroMode={isHeroMode}

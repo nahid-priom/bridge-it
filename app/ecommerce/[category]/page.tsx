@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { getCategoryBySlug, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { ProjectGrid } from '@/src/features/ecommerce-showcase/public/ProjectGrid';
@@ -51,6 +52,13 @@ export default async function EcommerceCategoryPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <BreadcrumbJsonLd
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Websites', href: '/websites' },
+          { label: cat.name, href: `/ecommerce/${cat.slug}` },
+        ]}
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-16">
         <h1 className="font-display text-3xl md:text-4xl font-black text-[#0f2744] dark:text-white">
           {cat.name} e-commerce websites

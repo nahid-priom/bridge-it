@@ -6,6 +6,7 @@ import type { DemoStoreProduct, EcommerceDemoConfig } from '@/types/bitp';
 import { formatBdt } from '@/lib/format/currency';
 import { getDemoSessionId } from '@/lib/ecommerce-demo/demo-session';
 import { submitDemoOrderAction } from '@/app/actions/ecommerce-demo';
+import { whatsappUrl } from '@/lib/config/branding';
 
 type LandingDemoProps = {
   config: EcommerceDemoConfig;
@@ -56,7 +57,7 @@ export function LandingDemo({ config, productSlug }: LandingDemoProps) {
           This is a demo — no real order was created.
         </p>
         <a
-          href={`https://wa.me/8801000000000?text=Demo order ${orderNum}`}
+          href={whatsappUrl(`Demo order ${orderNum}`)}
           target="_blank"
           rel="noopener noreferrer"
           className="deshi-btn-outline inline-flex items-center gap-2 px-6 py-3"

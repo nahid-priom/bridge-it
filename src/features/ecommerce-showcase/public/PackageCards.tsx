@@ -1,14 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { formatBdt } from '@/lib/format/currency';
 import { cn } from '@/lib/cn';
 import type { EcommercePackage } from '../types';
+import { catalogTierForPackage, formatCatalogTierPrice } from '../utils/filters';
 
-export function formatShowcasePackagePrice(pkg: Pick<EcommercePackage, 'name' | 'price'>): string {
-  const base = formatBdt(pkg.price);
-  if (pkg.name === 'Premium Custom') return `${base}+`;
-  return base;
+export function formatShowcasePackagePrice(pkg: Pick<EcommercePackage, 'name' | 'price'>, index = 0): string {
+  return formatCatalogTierPrice(catalogTierForPackage(pkg, index));
 }
 
 export function PackageCards({
@@ -27,8 +25,10 @@ export function PackageCards({
 
   return (
     <div className="grid gap-3 sm:grid-cols-3">
-      {packages.map((pkg) => {
+      {packages.map((pkg, index) => {
         const selected = pkg.id === active;
+        const tier = catalogTierForPackage(pkg, index);
+        const features = pkg.features.length ? pkg.features : [...tier.features];
         return (
           <button
             key={pkg.id}
@@ -50,14 +50,12 @@ export function PackageCards({
                 <span className="text-[10px] uppercase tracking-wide font-bold text-emerald-700">Popular</span>
               ) : null}
             </div>
-            <p className="mt-2 text-xl font-black text-[#0f2744] dark:text-white">
-              {formatShowcasePackagePrice(pkg)}
-            </p>
+            <p className="mt-2 text-xl font-black text-[#0f2744] dark:text-white">{formatCatalogTierPrice(tier)}</p>
             {pkg.short_description ? (
               <p className="mt-1 text-sm text-text-secondary">{pkg.short_description}</p>
             ) : null}
             <ul className="mt-3 space-y-1.5 text-sm text-text-secondary">
-              {pkg.features.slice(0, 5).map((feature) => (
+              {features.slice(0, 5).map((feature) => (
                 <li key={feature}>• {feature}</li>
               ))}
             </ul>

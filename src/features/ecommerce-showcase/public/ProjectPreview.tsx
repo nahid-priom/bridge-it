@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { formatBdt } from '@/lib/format/currency';
+import Link from 'next/link';
 import { DevicePreview } from './DevicePreview';
 import { PackageCards } from './PackageCards';
+import { CardTechIcons } from './CardTechIcons';
 import { LeadForm } from './LeadForm';
 import type { EcommerceProjectDetail } from '../types';
 import { INDUSTRIES } from '../config/constants';
@@ -19,60 +20,100 @@ export function ProjectPreview({ project }: { project: EcommerceProjectDetail })
   );
   const [leadOpen, setLeadOpen] = useState(false);
   const category = project.category?.name ?? industryLabel(project.industry) ?? 'E-commerce Solutions';
+  const orderHref = `/websites/${project.slug}/order${packageId ? `?package=${packageId}` : ''}`;
 
-  return (
-    <div className="pb-24">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
-        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">{category}</p>
-        <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="min-w-0">
-            <h1 className="font-display text-3xl md:text-4xl font-black text-text-primary">{project.title}</h1>
-            <p className="mt-2 text-text-secondary max-w-2xl">{project.short_description}</p>
-            <p className="mt-3 text-lg font-semibold text-text-primary">Starting {formatBdt(project.starting_price)}</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setLeadOpen(true)}
-            className="shrink-0 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3"
-          >
-            Request Website
-          </button>
+  const info = (
+    <div className="flex min-w-0 flex-col">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] dark:text-[#60a5fa]">{category}</p>
+      <h1 className="mt-2 font-display text-[1.75rem] font-black leading-tight text-text-primary sm:text-3xl lg:text-[1.85rem] xl:text-3xl">
+        {project.title}
+      </h1>
+      {project.short_description ? (
+        <p className="mt-3 text-sm leading-relaxed text-text-secondary lg:text-[15px]">{project.short_description}</p>
+      ) : null}
+      <dl className="mt-5 space-y-4">
+        <div>
+          <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">Technology</dt>
+          <dd>
+            <CardTechIcons
+              seed={project.id}
+              stack={project.technology_stack}
+              count={4}
+              size="md"
+              showLabels
+            />
+          </dd>
         </div>
-      </header>
-
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-        <DevicePreview pages={project.pages} projectId={project.id} />
-      </section>
-
-      {project.packages.length > 0 ? (
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 max-w-4xl">
-          <h2 className="font-display text-xl font-black mb-4">Packages</h2>
-          <PackageCards packages={project.packages} selectedId={packageId} onSelect={setPackageId} />
-        </section>
-      ) : null}
-
-      {project.full_description ? (
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 max-w-3xl">
-          <h2 className="font-display text-2xl font-black mb-3">About this design</h2>
-          <p className="text-text-secondary leading-relaxed whitespace-pre-line">{project.full_description}</p>
-        </section>
-      ) : null}
-
-      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-border-subtle bg-background/95 backdrop-blur px-4 py-3 lg:hidden">
+        <div>
+          <dt className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">Delivery time</dt>
+          <dd className="text-sm font-semibold text-text-primary">3–7 Days</dd>
+        </div>
+      </dl>
+      <div className="mt-5 hidden flex-col gap-2.5 lg:flex">
+        <Link
+          href={orderHref}
+          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#2563eb] px-5 py-3 text-center font-semibold text-white hover:bg-[#1d4ed8]"
+        >
+          Order website
+        </Link>
         <button
           type="button"
           onClick={() => setLeadOpen(true)}
-          className="w-full rounded-xl bg-emerald-600 text-white font-semibold py-3"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 px-5 py-3 font-semibold text-text-primary hover:bg-slate-50 dark:border-white/20 dark:hover:bg-white/5"
         >
-          Request Website
+          Free consultation
         </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="pb-28 lg:pb-16">
+      <div className="mx-auto w-full max-w-[1480px] px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8 xl:px-10">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(280px,0.3fr)] lg:items-start lg:gap-8 xl:gap-10">
+          <aside className="min-w-0 lg:order-2 lg:sticky lg:top-[calc(var(--header-offset)+0.75rem)]">
+            {info}
+          </aside>
+          <section className="min-w-0 lg:order-1" aria-label="Live website preview">
+            <DevicePreview pages={project.pages} projectId={project.id} projectTitle={project.title} fillWidth />
+          </section>
+        </div>
+
+        {project.packages.length > 0 ? (
+          <section className="mt-10 lg:mt-14">
+            <h2 className="mb-4 font-display text-xl font-black">Packages</h2>
+            <PackageCards packages={project.packages} selectedId={packageId} onSelect={setPackageId} />
+          </section>
+        ) : null}
+
+        {project.full_description ? (
+          <section className="mt-10 max-w-3xl lg:mt-14">
+            <h2 className="mb-3 font-display text-2xl font-black">About this design</h2>
+            <p className="whitespace-pre-line leading-relaxed text-text-secondary">{project.full_description}</p>
+          </section>
+        ) : null}
+      </div>
+
+      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-border-subtle bg-background/95 px-4 py-3 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-lg gap-2">
+          <Link href={orderHref} className="flex-1 rounded-xl bg-[#2563eb] py-3 text-center font-semibold text-white">
+            Order website
+          </Link>
+          <button
+            type="button"
+            onClick={() => setLeadOpen(true)}
+            className="flex-1 rounded-xl border border-slate-300 py-3 font-semibold dark:border-white/20"
+          >
+            Consult
+          </button>
+        </div>
       </div>
 
       {leadOpen ? (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl bg-surface border border-border-subtle p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-display font-bold text-lg">Free Consultation</h3>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
+          <div className="w-full max-w-md rounded-2xl border border-border-subtle bg-surface p-5">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-display text-lg font-bold">Free Consultation</h3>
               <button type="button" onClick={() => setLeadOpen(false)} className="text-sm text-text-muted">
                 Close
               </button>

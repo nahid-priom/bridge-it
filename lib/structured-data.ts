@@ -214,3 +214,77 @@ export function bitpSolutionBreadcrumbJsonLd(product: BitpProductDetail) {
 
   return breadcrumbJsonLd(items);
 }
+
+export function customEcommerceServiceJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Custom E-commerce Website',
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    serviceType: 'E-commerce website design',
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Bangladesh',
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'BDT',
+      lowPrice: 10000,
+      highPrice: 70000,
+      offerCount: 3,
+    },
+  };
+}
+
+export function showcaseTemplateServiceJsonLd(project: {
+  title: string;
+  slug: string;
+  short_description: string | null;
+  cover_image_url: string | null;
+  cover_fallback_url: string | null;
+  currency: string;
+  starting_price: number;
+  category?: { name: string } | null;
+}) {
+  const url = `${SITE_URL}${ROUTES.website(project.slug)}`;
+  const image = project.cover_image_url || project.cover_fallback_url;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: project.title,
+    description: project.short_description,
+    image,
+    url,
+    category: project.category?.name ?? 'Custom e-commerce website',
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Bangladesh',
+    },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: project.currency || 'BDT',
+      price: 10000,
+      availability: 'https://schema.org/InStock',
+      url,
+    },
+  };
+}
+
+export function showcaseTemplateBreadcrumbJsonLd(title: string, slug: string) {
+  return breadcrumbJsonLd([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Websites', url: `${SITE_URL}${ROUTES.websites}` },
+    { name: title, url: `${SITE_URL}${ROUTES.website(slug)}` },
+  ]);
+}

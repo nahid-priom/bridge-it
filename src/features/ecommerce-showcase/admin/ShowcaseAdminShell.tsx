@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutGrid, MessageSquare, Plus, PanelsTopLeft } from 'lucide-react';
+import { LayoutGrid, MessageSquare, Plus, PanelsTopLeft, ShoppingBag } from 'lucide-react';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { BRANDING } from '@/lib/config/branding';
@@ -15,6 +15,7 @@ const LINKS = [
   { href: '/admin/ecommerce-projects', label: 'Projects', icon: LayoutGrid },
   { href: '/admin/ecommerce-projects/homepage', label: 'Homepage Curation', icon: PanelsTopLeft },
   { href: '/admin/ecommerce-leads', label: 'Leads', icon: MessageSquare },
+  { href: '/admin/ecommerce-orders', label: 'Orders', icon: ShoppingBag },
 ];
 
 export function ShowcaseAdminShell({

@@ -21,7 +21,7 @@ export function ProjectCardSkeleton({ className }: { className?: string }) {
           <Skeleton className="mt-1 h-5 w-3/4" />
           <Skeleton className="mt-1.5 h-4 w-full" />
         </div>
-        <Skeleton className="mt-auto h-4 w-28" />
+        <Skeleton className="mt-auto h-7 w-full" />
         <Skeleton className="h-10 w-full" rounded="xl" />
       </div>
     </div>

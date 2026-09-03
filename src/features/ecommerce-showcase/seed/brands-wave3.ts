@@ -26,7 +26,7 @@ function brand(
 ): SeedBrand {
   return {
     previousSlugs: [],
-    starting_price: 5000,
+    starting_price: 10000,
     currency: 'BDT',
     published: true,
     packages: pkgs,

@@ -2,10 +2,13 @@ import { ROUTES } from '@/lib/routes';
 
 /** Paths that must not appear in the sitemap */
 export const NON_INDEXABLE_PATH_PREFIXES = [
+  '/admin/',
   '/admin',
+  '/dashboard/',
   '/dashboard',
   '/login',
   '/signup',
+  '/account/',
   '/seller-dashboard',
   '/seller/',
   '/sellers/',
@@ -14,7 +17,6 @@ export const NON_INDEXABLE_PATH_PREFIXES = [
   '/messages',
   '/unauthorized',
   '/auth/',
-  '/_next/',
 ] as const;
 
 /** Transactional flows — noindex via metadata; also blocked in robots.txt */

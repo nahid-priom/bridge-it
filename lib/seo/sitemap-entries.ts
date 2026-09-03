@@ -1,13 +1,14 @@
 import type { MetadataRoute } from 'next';
 import { ROUTES } from '@/lib/routes';
-import { SITE_URL } from '@/lib/site';
 import { STATIC_SITEMAP_ROUTES } from '@/lib/seo/config';
 import { listCategories, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
+
+const CANONICAL_ORIGIN = 'https://www.bridgeitpark.com';
 
 function toAbsoluteUrl(path: string): string {
   if (path.startsWith('http')) return path;
   const normalized = path.startsWith('/') ? path : `/${path}`;
-  return `${SITE_URL.replace(/\/$/, '')}${normalized}`;
+  return `${CANONICAL_ORIGIN}${normalized}`;
 }
 
 function entry(
@@ -27,11 +28,25 @@ function entry(
   };
 }
 
+async function listAllPublishedProjectCards() {
+  const pageSize = 100;
+  let offset = 0;
+  const items: Awaited<ReturnType<typeof listProjectCards>>['items'] = [];
+  let total = Infinity;
+
+  while (offset < total) {
+    const result = await listProjectCards({ limit: pageSize, offset });
+    total = result.total;
+    items.push(...result.items);
+    if (result.items.length < pageSize) break;
+    offset += pageSize;
+  }
+
+  return items;
+}
+
 export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
-  const [categories, projects] = await Promise.all([
-    listCategories(),
-    listProjectCards({ limit: 100, offset: 0 }),
-  ]);
+  const [categories, projects] = await Promise.all([listCategories(), listAllPublishedProjectCards()]);
 
   const staticEntries = STATIC_SITEMAP_ROUTES.map((route) =>
     entry(route.path, {
@@ -48,7 +63,7 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  const projectEntries = projects.items.map((project) =>
+  const projectEntries = projects.map((project) =>
     entry(ROUTES.website(project.slug), {
       lastModified: project.updated_at,
       changeFrequency: 'weekly',

@@ -1,23 +1,36 @@
 import { HomePage } from '@/components/home/HomePage';
+import { JsonLd } from '@/components/layout/JsonLd';
 import { buildPageMetadata } from '@/lib/metadata';
-import { listHomepageSections } from '@/src/features/ecommerce-showcase/api/projects';
+import { HOME_SEO_DESCRIPTION, HOME_SEO_TITLE } from '@/lib/site';
+import { customEcommerceServiceJsonLd } from '@/lib/structured-data';
+import {
+  listHomepageLegacyCategorySections,
+  listHomepageSections,
+} from '@/src/features/ecommerce-showcase/api/projects';
 
 export const revalidate = 60;
 
 export const metadata = buildPageMetadata({
-  title: 'Premium Custom E-commerce Website Designs | Bridge IT Park',
-  description:
-    'Browse 100+ custom Next.js, React and Laravel e-commerce website designs. Preview pages, compare packages, and request a custom store.',
+  title: HOME_SEO_TITLE,
+  description: HOME_SEO_DESCRIPTION,
   keywords: [
+    'custom e-commerce website',
     'custom ecommerce website Bangladesh',
-    'Next.js ecommerce website',
-    'React ecommerce website Bangladesh',
-    'Laravel ecommerce website',
+    'e-commerce website design',
+    'ecommerce website development',
   ],
   path: '/',
 });
 
 export default async function Home() {
-  const sections = await listHomepageSections();
-  return <HomePage sections={sections} />;
+  const [sections, legacySections] = await Promise.all([
+    listHomepageSections(),
+    listHomepageLegacyCategorySections(),
+  ]);
+  return (
+    <>
+      <JsonLd data={customEcommerceServiceJsonLd()} />
+      <HomePage sections={sections} legacySections={legacySections} />
+    </>
+  );
 }

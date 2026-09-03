@@ -48,3 +48,28 @@ export function defaultPreviewPage<
   const withImage = pages.filter(pageHasImage);
   return withImage.find((page) => page.page_type === 'homepage') ?? withImage[0];
 }
+
+/** Homepage → checkout first, then about/mobile/other pages. */
+const TOP_PREVIEW_PAGE_TYPES = [
+  'homepage',
+  'landing_page',
+  'collection',
+  'shop',
+  'category',
+  'product_details',
+  'product',
+  'cart',
+  'checkout',
+] as const;
+
+export function sortPreviewPages<T extends { page_type: string; sort_order?: number }>(pages: T[]): T[] {
+  const rank = (type: string) => {
+    const index = TOP_PREVIEW_PAGE_TYPES.indexOf(type as (typeof TOP_PREVIEW_PAGE_TYPES)[number]);
+    return index === -1 ? 100 + TOP_PREVIEW_PAGE_TYPES.length : index;
+  };
+  return [...pages].sort((a, b) => {
+    const byType = rank(a.page_type) - rank(b.page_type);
+    if (byType !== 0) return byType;
+    return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+  });
+}

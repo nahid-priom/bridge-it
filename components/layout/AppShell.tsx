@@ -51,6 +51,7 @@ export function AppShell({
 
   const isHome = pathname === '/';
   const hideBreadcrumb = NO_BREADCRUMB_PREFIXES.some((p) => pathname.startsWith(p));
+  const hideChat = hideBreadcrumb;
 
   return (
     <AuthProfileProvider profile={authProfile}>
@@ -66,8 +67,8 @@ export function AppShell({
         {!hideBreadcrumb && <SiteBreadcrumb />}
         {children}
       </main>
-      <Footer />
-      <ChatWidget />
+      {!hideBreadcrumb ? <Footer /> : null}
+      {!hideChat ? <ChatWidget /> : null}
       <GlobalSearchModal />
       <Notification />
     </div>

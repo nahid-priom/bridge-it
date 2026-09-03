@@ -1,7 +1,7 @@
 import type { PageTypeId } from '../config/page-types';
-import type { LeadStatus } from '../config/constants';
+import type { LeadStatus, WebsiteOrderStatus } from '../config/constants';
 
-export type { PageTypeId, LeadStatus };
+export type { PageTypeId, LeadStatus, WebsiteOrderStatus };
 
 export type EcommerceCategory = {
   id: string;
@@ -180,3 +180,33 @@ export type HomepageSectionCard = EcommerceProjectCard & {
 };
 
 export type HomepageSectionsResult = Record<HomepageSectionKey, EcommerceProjectCard[]>;
+
+export type HomepageLegacyCategorySection = {
+  slug: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  viewAllHref: string;
+  viewAllLabel: string;
+  projects: EcommerceProjectCard[];
+};
+
+export type WebsiteOrder = {
+  id: string;
+  order_number: string;
+  user_id: string;
+  project_id: string;
+  package_id: string | null;
+  project_title: string;
+  package_name: string;
+  amount: number;
+  currency: string;
+  customer_name: string;
+  phone: string;
+  business_name: string | null;
+  notes: string | null;
+  status: WebsiteOrderStatus;
+  created_at: string;
+  updated_at: string;
+  project_slug?: string | null;
+};

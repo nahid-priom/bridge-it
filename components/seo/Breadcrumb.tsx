@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Home, ChevronRight } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 import type { BreadcrumbItem } from '@/lib/seo/breadcrumbs';
 
@@ -8,9 +9,10 @@ export type { BreadcrumbItem };
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
   className?: string;
+  trailing?: ReactNode;
 }
 
-export function Breadcrumb({ items, className }: BreadcrumbProps) {
+export function Breadcrumb({ items, className, trailing }: BreadcrumbProps) {
   if (items.length === 0) return null;
 
   return (
@@ -20,10 +22,10 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
         className
       )}
     >
-      <div className="container  mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto flex items-center gap-3 px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Breadcrumb"
-          className="border-b border-border-subtle/50 pb-2 md:pb-2.5"
+          className="min-w-0 flex-1 border-b border-border-subtle/50 pb-2 md:pb-2.5"
         >
           <ol
             className={cn(
@@ -84,6 +86,9 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
             })}
           </ol>
         </nav>
+        {trailing ? (
+          <div className="shrink-0 self-center pb-2 md:pb-2.5 lg:hidden">{trailing}</div>
+        ) : null}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { ArrowRight, Clock, Search, TrendingUp, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useNavigateToSearch } from '@/hooks/useNavigateToSearch';
 import { SEARCH_POPULAR_CHIPS } from '@/constants/mainMarketplaceCategories';
+import { useWebsiteSearchPlaceholder } from '@/hooks/useWebsiteSearchPlaceholder';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 const RECENT_KEY = 'deshi-recent-searches';
@@ -36,6 +37,7 @@ export function MobileSearchOverlay() {
   const searchQuery = useStore((s) => s.searchQuery);
   const setSearchQuery = useStore((s) => s.setSearchQuery);
   const { goToSearch } = useNavigateToSearch();
+  const typed = useWebsiteSearchPlaceholder(open && searchQuery.length === 0);
   const inputRef = useRef<HTMLInputElement>(null);
   const [recent, setRecent] = useState<string[]>([]);
 
@@ -103,7 +105,9 @@ export function MobileSearchOverlay() {
                     type="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search Fashion, Electronics, Grocery..."
+                    placeholder={typed.placeholder}
+                    onFocus={typed.onFocus}
+                    onBlur={typed.onBlur}
                     autoComplete="off"
                     className="flex-1 min-w-0 bg-transparent text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none"
                   />

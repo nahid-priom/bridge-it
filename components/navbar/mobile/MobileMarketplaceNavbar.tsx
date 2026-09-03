@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Bell, Menu, Search, X } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { ROUTES } from '@/lib/routes';
 import type { AuthProfile } from '@/lib/auth/types';
@@ -19,7 +19,6 @@ const tapEase = [0.22, 1, 0.36, 1] as const;
 type MobileMarketplaceNavbarProps = {
   authProfile: AuthProfile | null;
   cartCount?: number;
-  notificationCount?: number;
   messageCount?: number;
   isScrolled?: boolean;
   isHeroMode?: boolean;
@@ -88,41 +87,14 @@ function NavIconButton({
   );
 }
 
-function NotificationButton({ count = 0 }: { count?: number }) {
-  return (
-    <NavIconButton
-      label={count ? `Notifications, ${count} unread` : 'Notifications'}
-      onClick={() => {}}
-    >
-      <Bell className="w-[19px] h-[19px]" strokeWidth={1.75} aria-hidden />
-      {count > 0 && (
-        <motion.span
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="absolute top-2 right-2 w-2 h-2 rounded-full bg-violet-500 ring-[1.5px] ring-white dark:ring-deshi-navy"
-        >
-          <motion.span
-            className="absolute inset-0 rounded-full bg-violet-500"
-            animate={{ opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-            aria-hidden
-          />
-        </motion.span>
-      )}
-    </NavIconButton>
-  );
-}
-
 export function MobileMarketplaceNavbar({
   authProfile,
   cartCount = 0,
-  notificationCount = 3,
   messageCount = 0,
   isScrolled = false,
   isHeroMode = false,
 }: MobileMarketplaceNavbarProps) {
   const isMenuOpen = useStore((s) => s.isMenuOpen);
-  const openSearchModal = useStore((s) => s.openSearchModal);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const closeDrawer = useCallback(() => {
@@ -165,24 +137,6 @@ export function MobileMarketplaceNavbar({
         aria-label="Mobile navigation"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 w-full min-w-0 h-full">
-        <div className="flex items-center gap-1.5 shrink-0">
-          <GhostIconButton label={isMenuOpen ? 'Close menu' : 'Open menu'} onClick={toggleDrawer} pressed={isMenuOpen}>
-            <motion.span
-              key={isMenuOpen ? 'close' : 'menu'}
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="inline-flex"
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" strokeWidth={1.75} aria-hidden />
-              ) : (
-                <Menu className="w-5 h-5" strokeWidth={1.75} aria-hidden />
-              )}
-            </motion.span>
-          </GhostIconButton>
-
           <Link
             href={ROUTES.home}
             className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-lg"
@@ -190,36 +144,50 @@ export function MobileMarketplaceNavbar({
           >
             <BridgeLogo iconSize="sm" textVisibility="always" href={false} />
           </Link>
-        </div>
 
-        <div className="flex-1 min-w-0" aria-hidden />
+          <div className="flex-1 min-w-0" aria-hidden />
 
-        <div className="flex items-center gap-0.5 shrink-0">
-          <NavIconButton label="Search services" onClick={openSearch}>
-            <Search className="w-[19px] h-[19px]" strokeWidth={1.75} aria-hidden />
-          </NavIconButton>
-          <NotificationButton count={notificationCount} />
-          <motion.button
-            type="button"
-            onClick={openProfile}
-            aria-label="Account menu"
-            whileTap={{ scale: 0.94 }}
-            className={cn(
-              'relative inline-flex items-center justify-center w-11 h-11 rounded-full p-0.5',
-              'ring-2 ring-slate-200/80 dark:ring-white/15',
-              'hover:ring-deshi-green/40 transition-shadow',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/50'
-            )}
-          >
-            <SellerAvatar name={name} size="sm" hue={isLoggedIn ? undefined : 200} />
-            {isLoggedIn && (
-              <span
-                className="absolute bottom-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-[1.5px] ring-white dark:ring-deshi-navy"
-                aria-hidden
-              />
-            )}
-          </motion.button>
-        </div>
+          <div className="ml-auto flex items-center gap-0.5 shrink-0">
+            <NavIconButton label="Search services" onClick={openSearch}>
+              <Search className="w-[19px] h-[19px]" strokeWidth={1.75} aria-hidden />
+            </NavIconButton>
+            <motion.button
+              type="button"
+              onClick={openProfile}
+              aria-label="Account menu"
+              whileTap={{ scale: 0.94 }}
+              className={cn(
+                'relative inline-flex items-center justify-center w-11 h-11 rounded-full p-0.5',
+                'ring-2 ring-slate-200/80 dark:ring-white/15',
+                'hover:ring-deshi-green/40 transition-shadow',
+                'focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/50'
+              )}
+            >
+              <SellerAvatar name={name} size="sm" hue={isLoggedIn ? undefined : 200} />
+              {isLoggedIn && (
+                <span
+                  className="absolute bottom-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-[1.5px] ring-white dark:ring-deshi-navy"
+                  aria-hidden
+                />
+              )}
+            </motion.button>
+            <GhostIconButton label={isMenuOpen ? 'Close menu' : 'Open menu'} onClick={toggleDrawer} pressed={isMenuOpen}>
+              <motion.span
+                key={isMenuOpen ? 'close' : 'menu'}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="inline-flex"
+              >
+                {isMenuOpen ? (
+                  <X className="w-5 h-5" strokeWidth={1.75} aria-hidden />
+                ) : (
+                  <Menu className="w-5 h-5" strokeWidth={1.75} aria-hidden />
+                )}
+              </motion.span>
+            </GhostIconButton>
+          </div>
         </div>
       </motion.nav>
 
@@ -228,7 +196,6 @@ export function MobileMarketplaceNavbar({
         onClose={closeDrawer}
         authProfile={authProfile}
         cartCount={cartCount}
-        notificationCount={notificationCount}
         messageCount={messageCount}
       />
 

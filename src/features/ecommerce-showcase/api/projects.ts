@@ -2,7 +2,8 @@ import 'server-only';
 
 import { cache } from 'react';
 import { getAdminClient, getServerClient } from '@/lib/services/client';
-import { GALLERY_PAGE_SIZE, HOMEPAGE_SECTIONS, TECHNOLOGY_OPTIONS } from '../config/constants';
+import { GALLERY_PAGE_SIZE, HOMEPAGE_LEGACY_CATEGORY_SECTIONS, HOMEPAGE_SECTIONS, HOMEPAGE_SECTION_MAX, TECHNOLOGY_OPTIONS } from '../config/constants';
+import { parseFilterList } from '../utils/filters';
 import type {
   EcommerceCategory,
   EcommercePackage,
@@ -11,6 +12,7 @@ import type {
   EcommerceProjectDetail,
   EcommerceProjectPage,
   EcommerceTechnology,
+  HomepageLegacyCategorySection,
   HomepageSectionKey,
   HomepageSectionsResult,
   ShowcaseListFilters,
@@ -158,11 +160,12 @@ export const getCategoryBySlug = cache(async (slug: string): Promise<EcommerceCa
   return (data as EcommerceCategory | null) ?? null;
 });
 
-async function matchingProjectIdsForPageType(supabase: Db, pageType: string): Promise<string[]> {
+async function matchingProjectIdsForPageTypes(supabase: Db, pageTypes: string[]): Promise<string[]> {
+  if (pageTypes.length === 0) return [];
   const { data } = await supabase
     .from('ecommerce_project_pages')
     .select('project_id')
-    .eq('page_type', pageType)
+    .in('page_type', pageTypes)
     .eq('published', true)
     .is('deleted_at', null);
   return [...new Set((data ?? []).map((row) => String((row as { project_id: string }).project_id)))];
@@ -199,12 +202,13 @@ async function listProjectCardsUncached(
 
   const limit = filters.limit ?? GALLERY_PAGE_SIZE;
   const offset = filters.offset ?? 0;
-  const pageTypeFilter = filters.view || filters.page;
+  const pageTypes = parseFilterList(filters.view || filters.page);
+  const categories = parseFilterList(filters.category);
 
   let query = supabase
     .from('ecommerce_project_cards')
     .select(
-      'id, title, slug, short_description, category_id, category_name, category_slug, industry, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count',
+      'id, title, slug, short_description, category_id, category_name, category_slug, industry, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count',
       { count: 'exact' }
     )
     .is('deleted_at', null);
@@ -223,7 +227,8 @@ async function listProjectCardsUncached(
       `title.ilike.%${q}%,industry.ilike.%${q}%,short_description.ilike.%${q}%,category_name.ilike.%${q}%,category_slug.ilike.%${q}%`
     );
   }
-  if (filters.category) query = query.eq('category_slug', filters.category);
+  if (categories.length === 1) query = query.eq('category_slug', categories[0]);
+  else if (categories.length > 1) query = query.in('category_slug', categories);
   if (filters.tech) {
     const techName =
       TECHNOLOGY_OPTIONS.find((item) => item.slug === filters.tech || item.id === filters.tech)?.id ??
@@ -236,8 +241,8 @@ async function listProjectCardsUncached(
   if (filters.minPrice != null) query = query.gte('starting_price', filters.minPrice);
   if (filters.maxPrice != null) query = query.lte('starting_price', filters.maxPrice);
 
-  if (pageTypeFilter && pageTypeFilter !== 'all') {
-    const ids = await matchingProjectIdsForPageType(supabase, pageTypeFilter);
+  if (pageTypes.length > 0) {
+    const ids = await matchingProjectIdsForPageTypes(supabase, pageTypes);
     if (ids.length === 0) return { items: [], total: 0 };
     query = query.in('id', ids);
   }
@@ -436,6 +441,21 @@ async function listHomepageSectionsUncached(): Promise<HomepageSectionsResult> {
 }
 
 export const listHomepageSections = cache(listHomepageSectionsUncached);
+
+async function listHomepageLegacyCategorySectionsUncached(): Promise<HomepageLegacyCategorySection[]> {
+  const rows = await Promise.all(
+    HOMEPAGE_LEGACY_CATEGORY_SECTIONS.map(async (section) => {
+      const { items } = await listProjectCards({
+        category: section.slug,
+        limit: HOMEPAGE_SECTION_MAX,
+      });
+      return { ...section, projects: items };
+    })
+  );
+  return rows;
+}
+
+export const listHomepageLegacyCategorySections = cache(listHomepageLegacyCategorySectionsUncached);
 
 export async function listProjectHomepageSections(projectId: string): Promise<HomepageSectionKey[]> {
   const supabase = await getAdminClient();

@@ -1,10 +1,11 @@
 import type { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/site';
 import {
   LEGACY_MARKETPLACE_PREFIXES,
   NON_INDEXABLE_PATH_PREFIXES,
   TRANSACTIONAL_PATH_PATTERNS,
 } from '@/lib/seo/config';
+
+const CANONICAL_ORIGIN = 'https://www.bridgeitpark.com';
 
 const DISALLOW = [
   ...NON_INDEXABLE_PATH_PREFIXES,
@@ -17,16 +18,16 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: ['/', '/_next/static/', '/_next/image'],
         disallow: DISALLOW,
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: ['/', '/_next/static/', '/_next/image'],
         disallow: DISALLOW,
       },
     ],
-    sitemap: `${SITE_URL.replace(/\/$/, '')}/sitemap.xml`,
-    host: SITE_URL.replace(/^https?:\/\//, ''),
+    sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,
+    host: 'www.bridgeitpark.com',
   };
 }

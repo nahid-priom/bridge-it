@@ -5,7 +5,10 @@ import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { getProjectBySlug } from '@/src/features/ecommerce-showcase/api/projects';
 import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/roles';
 import { ProjectPreview } from '@/src/features/ecommerce-showcase/public/ProjectPreview';
-import { SITE_URL } from '@/lib/site';
+import {
+  showcaseTemplateBreadcrumbJsonLd,
+  showcaseTemplateServiceJsonLd,
+} from '@/lib/structured-data';
 
 export const revalidate = 60;
 
@@ -39,24 +42,14 @@ export default async function WebsiteDetailPage({ params, searchParams }: Props)
   const project = await getProjectBySlug(slug, { includeDrafts });
   if (!project) notFound();
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: project.title,
-    description: project.short_description,
-    url: `${SITE_URL}/websites/${project.slug}`,
-    image: project.cover_image_url || project.cover_fallback_url,
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: project.currency,
-      price: project.starting_price,
-      availability: 'https://schema.org/InStock',
-    },
-  };
-
   return (
     <>
-      <JsonLd data={jsonLd} />
+      <JsonLd
+        data={[
+          showcaseTemplateServiceJsonLd(project),
+          showcaseTemplateBreadcrumbJsonLd(project.title, project.slug),
+        ]}
+      />
       {!project.published ? (
         <p className="bg-amber-100 text-amber-900 text-center text-sm py-2">Draft preview — not public</p>
       ) : null}

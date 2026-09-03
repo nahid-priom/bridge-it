@@ -4,6 +4,7 @@ import { AuthCard } from '@/components/auth/AuthCard';
 import { SignupForm } from '@/components/auth/SignupForm';
 import { buildPageMetadata } from '@/lib/metadata';
 import { BRANDING } from '@/lib/config/branding';
+import { safeNextPath } from '@/lib/auth/redirect';
 
 export const metadata = buildPageMetadata({
   title: 'Create account',
@@ -12,21 +13,27 @@ export const metadata = buildPageMetadata({
   noIndex: true,
 });
 
-export default function SignupPage() {
+type Props = { searchParams: Promise<{ next?: string }> };
+
+export default async function SignupPage({ searchParams }: Props) {
+  const { next } = await searchParams;
+  const nextPath = safeNextPath(next);
+  const loginHref = nextPath !== '/' ? `/login?next=${encodeURIComponent(nextPath)}` : '/login';
+
   return (
     <AuthCard
       title={`Join ${BRANDING.appName}`}
-      subtitle="Create your client account to order solutions and track projects"
+      subtitle="Create your account to order a website and track it in your dashboard"
       footer={
         <>
           Already have an account?{' '}
-          <Link href="/login" className="text-bridge-primary font-semibold hover:underline">
+          <Link href={loginHref} className="text-bridge-primary font-semibold hover:underline">
             Sign in
           </Link>
         </>
       }
     >
-      <Suspense fallback={<p className="text-sm text-text-secondary text-center">Loading…</p>}>
+      <Suspense fallback={<p className="text-center text-sm text-text-secondary">Loading…</p>}>
         <SignupForm />
       </Suspense>
     </AuthCard>

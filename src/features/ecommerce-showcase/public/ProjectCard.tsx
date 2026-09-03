@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import type { EcommerceProjectCard } from '../types';
-import { formatStartingPrice, websiteDetailUrl } from '../utils/filters';
+import { websiteDetailUrl } from '../utils/filters';
+import { CardStartingPrice, CardTechIcons } from './CardTechIcons';
 import { ShowcaseImage } from './ShowcaseImage';
 
 export function ProjectCard({
@@ -46,7 +47,7 @@ export function ProjectCard({
           <ShowcaseImage
             src={project.cover_image_url}
             fallbackSrc={project.cover_fallback_url}
-            alt={`${project.title} cover`}
+            alt={`${project.title} custom e-commerce website design`}
             width={1600}
             height={1000}
             eager={eager || priority}
@@ -57,40 +58,43 @@ export function ProjectCard({
             sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           />
         </Link>
-        <div className="flex items-end justify-between gap-3 p-3.5 sm:p-4">
-          <div className="min-w-0">
-            <h3 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
-              <Link
-                href={href}
-                className="hover:text-[#2563eb] dark:hover:text-[#60a5fa]"
-                prefetch={false}
-                onMouseEnter={prefetchDetail}
-                onFocus={prefetchDetail}
-              >
-                {project.title}
-              </Link>
-            </h3>
-            <p className="mt-0.5 text-sm text-text-secondary">
-              {project.category_name ?? project.industry ?? 'E-commerce'}
-            </p>
-            <p className="mt-1.5 text-sm font-semibold text-text-primary">
-              {formatStartingPrice(project.starting_price, project.currency)}
-            </p>
+        <div className="flex flex-col gap-3 p-3.5 sm:p-4">
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
+                <Link
+                  href={href}
+                  className="hover:text-[#2563eb] dark:hover:text-[#60a5fa]"
+                  prefetch={false}
+                  onMouseEnter={prefetchDetail}
+                  onFocus={prefetchDetail}
+                >
+                  {project.title}
+                </Link>
+              </h3>
+              <p className="mt-0.5 text-sm text-text-secondary">
+                {project.category_name ?? project.industry ?? 'E-commerce'}
+              </p>
+            </div>
+            <Link
+              href={href}
+              prefetch={false}
+              onMouseEnter={prefetchDetail}
+              onFocus={prefetchDetail}
+              aria-label={`View ${project.title}`}
+              className={cn(
+                'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
+                'transition-colors hover:border-[#2563eb]/50 hover:bg-[#2563eb] hover:text-white',
+                'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
+              )}
+            >
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
           </div>
-          <Link
-            href={href}
-            prefetch={false}
-            onMouseEnter={prefetchDetail}
-            onFocus={prefetchDetail}
-            aria-label={`View ${project.title}`}
-            className={cn(
-              'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
-              'transition-colors hover:border-[#2563eb]/50 hover:bg-[#2563eb] hover:text-white',
-              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
-            )}
-          >
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
+          <div className="flex items-center justify-between gap-3">
+            <CardStartingPrice />
+            <CardTechIcons seed={project.id} stack={project.technology_stack} />
+          </div>
         </div>
       </article>
     );
@@ -113,7 +117,7 @@ export function ProjectCard({
         <ShowcaseImage
           src={project.cover_image_url}
           fallbackSrc={project.cover_fallback_url}
-          alt={`${project.title} cover`}
+          alt={`${project.title} custom e-commerce website design`}
           width={1600}
           height={1000}
           eager={eager || priority}
@@ -144,9 +148,10 @@ export function ProjectCard({
             <p className="mt-1.5 line-clamp-1 text-sm text-text-secondary">{project.short_description}</p>
           ) : null}
         </div>
-        <p className="mt-auto text-sm font-semibold text-text-primary">
-          {formatStartingPrice(project.starting_price, project.currency)}
-        </p>
+        <div className="mt-auto flex items-center justify-between gap-3">
+          <CardStartingPrice />
+          <CardTechIcons seed={project.id} stack={project.technology_stack} />
+        </div>
         <Link
           href={href}
           prefetch={false}

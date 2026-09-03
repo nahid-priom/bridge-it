@@ -1,12 +1,28 @@
+import { Suspense } from 'react';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
+import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
 import { WebsitesPageHeader } from '@/src/features/ecommerce-showcase/public/WebsitesPageHeader';
-import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
+import { LISTING_LIMIT, websitesListingCopy } from '@/src/features/ecommerce-showcase/public/websites-listing';
+import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
+import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
+import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
+
+function CatalogFallback() {
+  return (
+    <>
+      <FilterSkeleton />
+      <div className="mt-6">
+        <ProjectGridSkeleton count={6} />
+      </div>
+    </>
+  );
+}
 
 export const revalidate = 60;
 
@@ -18,8 +34,8 @@ function first(value: string | string[] | undefined): string {
 }
 
 function parseListingFilters(sp: Record<string, string | string[] | undefined>) {
-  const view = first(sp.view).trim() || first(sp.page).trim() || 'all';
-  const category = first(sp.category).trim() || 'all';
+  const view = serializeFilterList(parseFilterList(first(sp.view) || first(sp.page))) ?? 'all';
+  const category = serializeFilterList(parseFilterList(first(sp.category))) ?? 'all';
   const q = first(sp.q).trim() || first(sp.search).trim();
   return {
     view: view === 'all' ? undefined : view,
@@ -28,23 +44,27 @@ function parseListingFilters(sp: Record<string, string | string[] | undefined>) 
   };
 }
 
-export async function generateMetadata() {
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
+  const filters = parseListingFilters(await searchParams);
+  const { title, description } = websitesListingCopy(filters);
+  const keywords = [
+    'custom ecommerce website Bangladesh',
+    'ecommerce website designs',
+    'Next.js ecommerce website',
+  ];
+  if (filters.category) keywords.unshift(`${filters.category} ecommerce website`);
   return buildPageMetadata({
-    title: 'E-commerce Website Designs',
-    description:
-      'Browse premium custom e-commerce website designs. Choose a ready storefront or customize one for your brand.',
+    title,
+    description,
     path: '/websites',
-    keywords: [
-      'custom ecommerce website Bangladesh',
-      'ecommerce website designs',
-      'Next.js ecommerce website',
-    ],
+    keywords,
   });
 }
 
 export default async function WebsitesPage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;
   const filters = parseListingFilters(sp);
+  const { title, description } = websitesListingCopy(filters);
   const listingFilters = {
     q: filters.q,
     category: filters.category,
@@ -71,9 +91,8 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'E-commerce Website Designs',
-    description:
-      'Browse premium custom e-commerce website designs. Choose a ready storefront or customize one for your brand.',
+    name: title,
+    description,
     url: `${SITE_URL}/websites`,
     mainEntity: {
       '@type': 'ItemList',
@@ -90,17 +109,20 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
   return (
     <>
       <JsonLd data={jsonLd} />
+      <PageBreadcrumbJsonLd path="/websites" />
       <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
+        <WebsitesPageHeader title={title} description={description} />
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <WebsitesCatalog
-            header={<WebsitesPageHeader />}
-            initialFilters={{
-              q: filters.q ?? '',
-              category: filters.category ?? 'all',
-              view: filters.view ?? 'all',
-            }}
-            initialData={result}
-          />
+          <Suspense fallback={<CatalogFallback />}>
+            <WebsitesCatalog
+              initialFilters={{
+                q: filters.q ?? '',
+                category: filters.category ?? 'all',
+                view: filters.view ?? 'all',
+              }}
+              initialData={result}
+            />
+          </Suspense>
         </HydrationBoundary>
       </div>
     </>

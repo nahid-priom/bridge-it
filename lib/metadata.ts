@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BRANDING } from '@/lib/config/branding';
+import { BRANDING, HOME_SEO_TITLE } from '@/lib/config/branding';
 import { BRAND_ASSETS } from '@/lib/config/brand-assets';
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/site';
 
@@ -36,10 +36,11 @@ function toDisplayTitle(title: string, path: string): string {
   return `${title}${suffix}`;
 }
 
-function resolveOgImage(image?: string | null) {
-  if (!image?.trim()) return [DEFAULT_OG_IMAGE];
+function resolveOgImage(image?: string | null, alt?: string) {
+  const imageAlt = alt ?? `${SITE_NAME} — ${BRANDING.tagline}`;
+  if (!image?.trim()) return [{ ...DEFAULT_OG_IMAGE, alt: imageAlt }];
   const url = image.startsWith('http') ? image : image.startsWith('/') ? image : `/${image}`;
-  return [{ url, width: 1200, height: 630, alt: SITE_NAME }];
+  return [{ url, width: 1200, height: 630, alt: imageAlt }];
 }
 
 function buildRobots(noIndex: boolean): Metadata['robots'] {
@@ -71,7 +72,7 @@ export function buildPageMetadata({
   const url = `${SITE_URL.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
   const resolvedTitle = resolveTitle(title, path);
   const displayTitle = toDisplayTitle(title, path);
-  const ogImages = resolveOgImage(image);
+  const ogImages = resolveOgImage(image, displayTitle);
 
   return {
     title: resolvedTitle,
@@ -142,13 +143,13 @@ export const rootMetadata: Metadata = {
     alternateLocale: ['bn_BD'],
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: SITE_NAME,
+    title: HOME_SEO_TITLE,
     description: SITE_DESCRIPTION,
-    images: [DEFAULT_OG_IMAGE],
+    images: [{ ...DEFAULT_OG_IMAGE, alt: HOME_SEO_TITLE }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: SITE_NAME,
+    title: HOME_SEO_TITLE,
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE.url],
   },

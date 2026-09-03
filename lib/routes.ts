@@ -2,6 +2,8 @@ export const ROUTES = {
   home: '/',
   websites: '/websites',
   website: (slug: string) => `/websites/${slug}`,
+  websiteOrder: (slug: string, packageId?: string) =>
+    packageId ? `/websites/${slug}/order?package=${packageId}` : `/websites/${slug}/order`,
   ecommerceCategory: (slug: string) => `/ecommerce/${slug}`,
   solutions: '/websites',
   solution: (slug: string) => `/websites/${slug}`,

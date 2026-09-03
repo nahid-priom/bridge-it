@@ -1,6 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
 import { BRANDING } from '@/lib/config/branding';
+
+export const metadata: Metadata = {
+  title: 'Page not found',
+  description: 'This page does not exist on Bridge IT Park.',
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (

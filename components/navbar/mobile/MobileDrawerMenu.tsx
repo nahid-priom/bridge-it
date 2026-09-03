@@ -22,7 +22,6 @@ type MobileDrawerMenuProps = {
   onClose: () => void;
   authProfile: AuthProfile | null;
   cartCount?: number;
-  notificationCount?: number;
   messageCount?: number;
 };
 
@@ -31,7 +30,6 @@ export function MobileDrawerMenu({
   onClose,
   authProfile,
   cartCount = 0,
-  notificationCount = 3,
   messageCount = 0,
 }: MobileDrawerMenuProps) {
   const pathname = usePathname();
@@ -75,17 +73,17 @@ export function MobileDrawerMenu({
           />
 
           <motion.div
-            initial={{ x: '-100%' }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 340 }}
             className={cn(
-              'absolute top-0 left-0 bottom-0 w-[min(100vw-2.5rem,340px)]',
+              'absolute top-0 right-0 bottom-0 w-[min(100vw-2.5rem,340px)]',
               'flex flex-col overflow-hidden',
-              'rounded-r-[1.75rem]',
+              'rounded-l-[1.75rem]',
               'bg-white/92 dark:bg-deshi-navy/94 backdrop-blur-2xl',
-              'border-r border-slate-200/70 dark:border-white/10',
-              'shadow-[8px_0_48px_rgba(15,23,42,0.16)]'
+              'border-l border-slate-200/70 dark:border-white/10',
+              'shadow-[-8px_0_48px_rgba(15,23,42,0.16)]'
             )}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100/90 dark:border-white/10">
@@ -124,7 +122,6 @@ export function MobileDrawerMenu({
               </p>
               <MobileQuickActions
                 cartCount={cartCount}
-                notificationCount={notificationCount}
                 messageCount={messageCount}
                 onNavigate={closeAndNavigate}
               />

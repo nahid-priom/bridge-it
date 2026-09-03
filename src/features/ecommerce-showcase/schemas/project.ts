@@ -65,6 +65,19 @@ export const leadFormSchema = z.object({
 
 export type LeadFormValues = z.infer<typeof leadFormSchema>;
 
+export const websiteOrderFormSchema = z.object({
+  customer_name: z.string().min(2, 'Name is required'),
+  phone: z
+    .string()
+    .min(8, 'Phone is required')
+    .regex(/^[0-9+\-\s]{8,20}$/, 'Enter a valid phone number'),
+  business_name: z.string().optional().or(z.literal('')),
+  package_id: z.string().uuid('Select a package'),
+  notes: z.string().max(800).optional().or(z.literal('')),
+});
+
+export type WebsiteOrderFormValues = z.infer<typeof websiteOrderFormSchema>;
+
 export const leadStatusSchema = z.enum(LEAD_STATUSES);
 
 export function slugifyTitle(value: string): string {

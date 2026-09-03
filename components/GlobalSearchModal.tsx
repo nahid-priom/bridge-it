@@ -8,11 +8,13 @@ import { useNavigateToSearch } from '@/hooks/useNavigateToSearch';
 import { SEARCH_POPULAR_CHIPS } from '@/constants/mainMarketplaceCategories';
 import { cn } from '@/lib/cn';
 import { BRANDING } from '@/lib/config/branding';
+import { useWebsiteSearchPlaceholder } from '@/hooks/useWebsiteSearchPlaceholder';
 
 export const GlobalSearchModal: React.FC = () => {
   const { isSearchModalOpen, closeSearchModal, searchQuery, setSearchQuery } = useStore();
   const { goToSearch } = useNavigateToSearch();
   const inputRef = useRef<HTMLInputElement>(null);
+  const typed = useWebsiteSearchPlaceholder(isSearchModalOpen && searchQuery.length === 0);
 
   useBodyScrollLock(isSearchModalOpen);
 
@@ -76,7 +78,9 @@ export const GlobalSearchModal: React.FC = () => {
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search Fashion, Electronics, Grocery..."
+            placeholder={typed.placeholder}
+            onFocus={typed.onFocus}
+            onBlur={typed.onBlur}
             className={cn(
               'flex-1 min-w-0 bg-transparent text-base sm:text-lg font-medium',
               'text-slate-900 dark:text-white',

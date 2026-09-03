@@ -1,9 +1,15 @@
 import Link from 'next/link';
 import { HOMEPAGE_SECTIONS } from '../config/constants';
-import type { HomepageSectionsResult } from '../types';
+import type { HomepageLegacyCategorySection, HomepageSectionsResult } from '../types';
 import { HomeShowcaseSection } from './HomeShowcaseSection';
 
-export function HomeGallery({ sections }: { sections: HomepageSectionsResult }) {
+export function HomeGallery({
+  sections,
+  legacySections,
+}: {
+  sections: HomepageSectionsResult;
+  legacySections: HomepageLegacyCategorySection[];
+}) {
   return (
     <div className="mt-14 md:mt-16">
       {HOMEPAGE_SECTIONS.map((section, index) => (
@@ -16,6 +22,19 @@ export function HomeGallery({ sections }: { sections: HomepageSectionsResult }) 
           viewAllLabel={section.viewAllLabel}
           projects={sections[section.key] ?? []}
           eagerCount={index === 0 ? 3 : 0}
+        />
+      ))}
+      {legacySections
+        .filter((section) => section.projects.length > 0)
+        .map((section) => (
+        <HomeShowcaseSection
+          key={section.slug}
+          eyebrow={section.eyebrow}
+          title={section.title}
+          description={section.description}
+          viewAllHref={section.viewAllHref}
+          viewAllLabel={section.viewAllLabel}
+          projects={section.projects}
         />
       ))}
       <section className="pb-14 md:pb-20">

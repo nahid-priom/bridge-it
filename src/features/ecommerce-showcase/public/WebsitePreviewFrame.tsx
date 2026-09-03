@@ -16,6 +16,8 @@ export function WebsitePreviewFrame({
   busy = false,
   showContentSkeleton = false,
   subdued = false,
+  fillWidth = false,
+  projectTitle,
   onImageReady,
   onImageError,
 }: {
@@ -29,6 +31,8 @@ export function WebsitePreviewFrame({
   busy?: boolean;
   showContentSkeleton?: boolean;
   subdued?: boolean;
+  fillWidth?: boolean;
+  projectTitle?: string;
   onImageReady?: () => void;
   onImageError?: () => void;
 }) {
@@ -62,15 +66,22 @@ export function WebsitePreviewFrame({
           ) : null}
           <div
             className={cn(
-              'mx-auto max-h-[75vh] overflow-y-auto bg-white',
-              device === 'desktop' ? 'w-full md:w-[68%]' : 'w-full'
+              'mx-auto overflow-y-auto bg-white',
+              fillWidth ? 'max-h-[min(70vh,40rem)] lg:max-h-[calc(100vh-14rem)]' : 'max-h-[75vh]',
+              device === 'desktop' && !fillWidth ? 'w-full md:w-[68%]' : 'w-full'
             )}
             style={device === 'desktop' ? undefined : { width: `min(100%, ${frameWidth}px)` }}
           >
             <ShowcaseImage
               src={page?.image_url}
               fallbackSrc={page?.fallback_url}
-              alt={page?.page_name ? `${page.page_name} screenshot` : 'Website page screenshot'}
+              alt={
+                page?.page_name
+                  ? `${projectTitle ? `${projectTitle} ` : ''}${page.page_name} page`
+                  : projectTitle
+                    ? `${projectTitle} website page`
+                    : 'Custom e-commerce website page'
+              }
               width={page?.image_width ?? frameWidth}
               height={page?.image_height ?? 1800}
               eager

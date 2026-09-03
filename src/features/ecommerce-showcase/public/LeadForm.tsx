@@ -7,6 +7,7 @@ import { FieldSelect } from '@/components/ui/FieldSelect';
 import { submitShowcaseLeadAction } from '@/app/actions/ecommerce-showcase';
 import { leadFormSchema, type LeadFormValues } from '../schemas/project';
 import type { EcommercePackage } from '../types';
+import { catalogTierForPackage, formatCatalogTierPrice } from '../utils/filters';
 
 export function LeadForm({
   projectId,
@@ -102,9 +103,9 @@ export function LeadForm({
           Preferred Package
           <FieldSelect {...form.register('package_id')} className="mt-1 py-2.5">
             <option value="">Select a package</option>
-            {packages.map((pkg) => (
+            {packages.map((pkg, index) => (
               <option key={pkg.id} value={pkg.id}>
-                {pkg.name}
+                {pkg.name} — {formatCatalogTierPrice(catalogTierForPackage(pkg, index))}
               </option>
             ))}
           </FieldSelect>

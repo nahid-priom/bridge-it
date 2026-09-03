@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Expand, X } from 'lucide-react';
-import { FieldSelect } from '@/components/ui/FieldSelect';
 import { cn } from '@/lib/cn';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
 import { PreviewError } from '@/src/components/skeletons/section-errors';
@@ -11,7 +10,7 @@ import { TabRowSkeleton } from '@/src/components/skeletons/TabRowSkeleton';
 import { useDelayedLoading } from '@/src/components/skeletons/useDelayedLoading';
 import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import type { DeviceViewport } from '../config/constants';
-import { defaultPreviewPage, getPageType } from '../config/page-types';
+import { defaultPreviewPage, getPageType, sortPreviewPages } from '../config/page-types';
 import type { EcommerceProjectPage } from '../types';
 import {
   pageImageUrl,
@@ -41,19 +40,26 @@ export function DevicePreview({
   pages,
   projectId,
   initialPageId,
+  fillWidth = false,
+  projectTitle,
 }: {
   pages: EcommerceProjectPage[];
   projectId?: string;
   initialPageId?: string;
+  fillWidth?: boolean;
+  projectTitle?: string;
 }) {
   const queryClient = useQueryClient();
   const resolvedProjectId = projectId || pages[0]?.project_id || 'unknown';
 
   const visible = useMemo(
-    () => pages.filter((page) => page.published && (page.image_url || page.fallback_url)),
+    () => sortPreviewPages(pages.filter((page) => page.published && (page.image_url || page.fallback_url))),
     [pages]
   );
-  const allPublished = useMemo(() => pages.filter((page) => page.published), [pages]);
+  const allPublished = useMemo(
+    () => sortPreviewPages(pages.filter((page) => page.published)),
+    [pages]
+  );
   const fallback = defaultPreviewPage(visible);
   const initialId = initialPageId ?? fallback?.id;
 
@@ -63,6 +69,7 @@ export function DevicePreview({
   const [fullscreen, setFullscreen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [initialReady, setInitialReady] = useState(false);
+  const tabListRef = useRef<HTMLDivElement>(null);
   const requestId = useRef(0);
   const selectedIdRef = useRef(selectedId);
   selectedIdRef.current = selectedId;
@@ -97,6 +104,13 @@ export function DevicePreview({
       setImageError(false);
     }
   }, [visible, allPublished, selectedId]);
+
+  useEffect(() => {
+    const list = tabListRef.current;
+    if (!list || !selected?.id) return;
+    const active = list.querySelector<HTMLElement>(`[data-page-id="${selected.id}"]`);
+    active?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }, [selected?.id]);
 
   useEffect(() => {
     if (!resolvedProjectId || resolvedProjectId === 'unknown') return;
@@ -193,6 +207,8 @@ export function DevicePreview({
         page={null}
         device={device}
         chromeLabel={selected.page_name || getPageType(selected.page_type).label}
+        fillWidth={fillWidth}
+        projectTitle={projectTitle}
         empty={
           <div className="space-y-2">
             <p className="font-display font-bold text-text-primary">Preview not available for this page.</p>
@@ -209,6 +225,8 @@ export function DevicePreview({
         busy={busy}
         subdued={pending && !showSkeleton}
         showContentSkeleton={showSkeleton}
+        fillWidth={fillWidth}
+        projectTitle={projectTitle}
         onImageReady={() => setInitialReady(true)}
         onImageError={() => {
           if (!pending) setImageError(true);
@@ -221,23 +239,13 @@ export function DevicePreview({
 
   return (
     <div>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <label className="min-w-0 flex-1 text-sm font-semibold md:hidden">
-          Preview Page
-          <FieldSelect
-            className="mt-1"
-            aria-label="Preview page"
-            value={selected?.id ?? ''}
-            onChange={(event) => void selectPage(event.target.value)}
-          >
-            {visible.map((page) => (
-              <option key={page.id} value={page.id}>
-                {page.page_name || getPageType(page.page_type).label}
-              </option>
-            ))}
-          </FieldSelect>
-        </label>
-        <div className="hidden gap-2 overflow-x-auto pb-1 md:flex">
+      <div className="mb-3 flex flex-col gap-3">
+        <div
+          ref={tabListRef}
+          className="-mx-1 flex gap-2 overflow-x-auto overscroll-x-contain px-1 pb-1 scrollbar-none"
+          role="tablist"
+          aria-label="Preview page"
+        >
           {visible.map((page) => {
             const isSelected = page.id === selected?.id;
             const isPending = isSelected && pending;
@@ -245,34 +253,36 @@ export function DevicePreview({
               <button
                 key={page.id}
                 type="button"
+                role="tab"
+                aria-selected={isSelected}
                 onClick={() => void selectPage(page.id)}
                 onMouseEnter={() => void prefetchPageImage(queryClient, resolvedProjectId, page)}
                 onFocus={() => void prefetchPageImage(queryClient, resolvedProjectId, page)}
+                data-page-id={page.id}
                 className={cn(
-                  'inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-semibold',
+                  'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-sm font-semibold',
                   isSelected
                     ? 'border-text-primary bg-text-primary text-background'
                     : 'border-border-subtle text-text-secondary'
                 )}
               >
-                {page.page_name || getPageType(page.page_type).shortLabel}
+                {page.page_name || getPageType(page.page_type).label}
                 {isPending ? <InlineSpinner size={14} className="text-current" /> : null}
               </button>
             );
           })}
         </div>
-        <DeviceToggle device={device} onChange={setDevice} />
-      </div>
-
-      <div className="mb-3 flex justify-end">
-        <button
-          type="button"
-          onClick={() => setFullscreen(true)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700"
-        >
-          <Expand className="h-4 w-4" />
-          Full screen
-        </button>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <DeviceToggle device={device} onChange={setDevice} />
+          <button
+            type="button"
+            onClick={() => setFullscreen(true)}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]"
+          >
+            <Expand className="h-4 w-4" />
+            Full screen
+          </button>
+        </div>
       </div>
 
       <div aria-busy={busy || undefined}>{viewer}</div>

@@ -9,8 +9,15 @@ import {
   uploadProjectCover,
   uploadProjectPageImage,
 } from '@/src/features/ecommerce-showcase/services/projectImageService';
-import { leadFormSchema, projectFormSchema, slugifyTitle } from '@/src/features/ecommerce-showcase/schemas/project';
-import type { ProjectFormValues } from '@/src/features/ecommerce-showcase/schemas/project';
+import {
+  leadFormSchema,
+  projectFormSchema,
+  slugifyTitle,
+  websiteOrderFormSchema,
+  type ProjectFormValues,
+} from '@/src/features/ecommerce-showcase/schemas/project';
+import { WEBSITE_ORDER_STATUSES } from '@/src/features/ecommerce-showcase/config/constants';
+import type { WebsiteOrderStatus } from '@/src/features/ecommerce-showcase/types';
 import type { LeadStatus } from '@/src/features/ecommerce-showcase/config/constants';
 import { HOMEPAGE_SECTION_MAX, HOMEPAGE_SECTIONS } from '@/src/features/ecommerce-showcase/config/constants';
 import type { HomepageSectionKey } from '@/src/features/ecommerce-showcase/types';
@@ -828,4 +835,57 @@ export async function syncProjectHomepageSectionsAction(projectId: string, secti
   }
   revalidateShowcase(undefined, projectId);
   return { data: { ok: true } };
+}
+
+export async function placeWebsiteOrderAction(input: {
+  project_id: string;
+  package_id: string;
+  customer_name: string;
+  phone: string;
+  business_name?: string;
+  notes?: string;
+}) {
+  const parsed = websiteOrderFormSchema.safeParse({
+    customer_name: input.customer_name,
+    phone: input.phone,
+    business_name: input.business_name ?? '',
+    package_id: input.package_id,
+    notes: input.notes ?? '',
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Invalid order' };
+
+  const supabase = await getServerClient();
+  if (!supabase) return { error: 'Unable to place the order right now. Please try again.' };
+
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) {
+    return { error: 'Sign in to place an order', needsAuth: true as const };
+  }
+
+  const { data, error } = await supabase.rpc('place_ecommerce_website_order', {
+    p_project_id: input.project_id,
+    p_package_id: parsed.data.package_id,
+    p_customer_name: parsed.data.customer_name,
+    p_phone: parsed.data.phone,
+    p_business_name: parsed.data.business_name || null,
+    p_notes: parsed.data.notes || null,
+  });
+
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/orders');
+  revalidatePath('/admin/ecommerce-orders');
+  return { data: { id: data as string } };
+}
+
+export async function updateWebsiteOrderStatusAction(id: string, status: WebsiteOrderStatus) {
+  const auth = await assertShowcaseEditor();
+  if ('error' in auth) return { error: auth.error };
+  if (!WEBSITE_ORDER_STATUSES.includes(status)) return { error: 'Invalid status' };
+  const supabase = await getAdminClient();
+  if (!supabase) return { error: 'Database is not configured' };
+  const { error } = await supabase.from('ecommerce_website_orders').update({ status }).eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/admin/ecommerce-orders');
+  revalidatePath('/dashboard/orders');
+  return { data: { id } };
 }

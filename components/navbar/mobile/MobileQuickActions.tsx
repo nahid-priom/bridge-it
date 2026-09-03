@@ -2,14 +2,12 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Bell, Heart, MessageCircle, ShoppingCart } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Heart, MessageCircle, ShoppingCart } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 
 type MobileQuickActionsProps = {
   cartCount?: number;
-  notificationCount?: number;
   messageCount?: number;
   onNavigate?: () => void;
   className?: string;
@@ -53,7 +51,6 @@ function QuickActionCard({
 
 export function MobileQuickActions({
   cartCount = 0,
-  notificationCount = 0,
   messageCount = 0,
   onNavigate,
   className,
@@ -67,28 +64,6 @@ export function MobileQuickActions({
         badge={messageCount}
         onNavigate={onNavigate}
       />
-      <button
-        type="button"
-        className={cn(
-          'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left',
-          'bg-slate-50/90 dark:bg-white/[0.06]',
-          'border border-slate-100/80 dark:border-white/[0.08]',
-          'text-sm font-medium text-text-primary',
-          'active:scale-[0.98] transition-transform'
-        )}
-      >
-        <Bell className="w-4 h-4 text-violet-500 shrink-0" aria-hidden />
-        <span className="flex-1 truncate">Alerts</span>
-        {notificationCount > 0 && (
-          <motion.span
-            animate={{ scale: [1, 1.08, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-[10px] font-bold bg-violet-500 text-white min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center"
-          >
-            {notificationCount > 99 ? '99+' : notificationCount}
-          </motion.span>
-        )}
-      </button>
       <QuickActionCard
         href={ROUTES.products}
         label="Wishlist"

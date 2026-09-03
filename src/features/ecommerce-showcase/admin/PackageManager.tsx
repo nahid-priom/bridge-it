@@ -38,9 +38,9 @@ export function PackageManager({
     packages.length
       ? packages.map(toDraft)
       : [
-          { name: 'Starter', price: 49000, short_description: 'Launch-ready storefront', featuresText: 'Core pages\nMobile responsive\nAdmin training', is_popular: false },
-          { name: 'Business', price: 89000, short_description: 'Growth store with integrations', featuresText: 'Everything in Starter\nCourier automation ready\nSEO setup', is_popular: true },
-          { name: 'Premium', price: 149000, short_description: 'Full custom commerce suite', featuresText: 'Everything in Business\nCustom modules\nPriority delivery', is_popular: false },
+          { name: 'Landing Page', price: 10000, short_description: 'Premium single-page storefront', featuresText: 'Premium Landing Page\nProduct / Offer presentation\nCTA / Order action\nMobile Responsive\nLead / Order Form', is_popular: false },
+          { name: 'E-commerce Website', price: 30000, short_description: 'Complete store with cart and checkout', featuresText: 'Homepage + Shop + Product + Cart + Checkout\nResponsive Design\nProduct Management\nBasic Admin\nSEO Setup', is_popular: true },
+          { name: 'Premium Custom', price: 70000, short_description: 'Custom commerce with automations', featuresText: 'Fully Custom UI/UX\nInventory / Stock\nCourier Automation\nAdvanced Checkout & Analytics\nPOS / ERP integrations where required', is_popular: false },
         ]
   );
   const [error, setError] = useState<string | null>(null);

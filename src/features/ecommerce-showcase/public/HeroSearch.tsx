@@ -1,27 +1,31 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { useWebsiteSearchPlaceholder } from '@/hooks/useWebsiteSearchPlaceholder';
 
 export function HeroSearch({ className }: { className?: string }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState('');
+  const typed = useWebsiteSearchPlaceholder(query.length === 0);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
     const q = query.trim();
-    router.push(q ? `/websites?q=${encodeURIComponent(q)}` : '/websites');
+    const params =
+      pathname === '/websites' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    if (q) params.set('q', q);
+    else params.delete('q');
+    const qs = params.toString();
+    router.push(qs ? `/websites?${qs}` : '/websites');
   };
 
   return (
-    <form
-      onSubmit={onSubmit}
-      role="search"
-      className={cn('w-full max-w-[540px]', className)}
-    >
-      <div className="flex h-[52px] items-stretch overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#0c1520]">
+    <form onSubmit={onSubmit} role="search" className={cn('w-full', className)}>
+      <div className="flex h-11 items-center rounded-xl border border-slate-300 bg-white shadow-sm dark:border-white/40 dark:bg-[#0c1520]">
         <label htmlFor="hero-website-search" className="sr-only">
           Search Fashion, Electronics, Grocery
         </label>
@@ -29,20 +33,22 @@ export function HeroSearch({ className }: { className?: string }) {
           id="hero-website-search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search Fashion, Electronics, Grocery..."
-          className="min-w-0 flex-1 bg-transparent px-4 text-base text-text-primary outline-none placeholder:text-text-muted"
+          onFocus={typed.onFocus}
+          onBlur={typed.onBlur}
+          placeholder={typed.placeholder}
+          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-sm leading-none text-text-primary outline-none placeholder:text-text-muted"
           autoComplete="off"
         />
         <button
           type="submit"
           className={cn(
-            'm-1.5 inline-flex aspect-square h-[calc(100%-0.75rem)] shrink-0 items-center justify-center rounded-xl',
+            'm-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
             'bg-[#2563eb] text-white transition-colors hover:bg-[#1d4ed8]',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
           )}
           aria-label="Search websites"
         >
-          <Search className="h-5 w-5" aria-hidden />
+          <Search className="h-4 w-4" aria-hidden />
         </button>
       </div>
     </form>

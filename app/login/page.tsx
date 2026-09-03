@@ -25,7 +25,10 @@ export default async function LoginPage({ searchParams }: Props) {
       footer={
         <>
           New here?{' '}
-          <Link href="/signup" className="text-bridge-primary font-semibold hover:underline">
+          <Link
+            href={nextPath !== '/' ? `/signup?next=${encodeURIComponent(nextPath)}` : '/signup'}
+            className="text-bridge-primary font-semibold hover:underline"
+          >
             Create account
           </Link>
         </>
