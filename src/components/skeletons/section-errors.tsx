@@ -19,7 +19,7 @@ function SectionError({
     <div
       role="alert"
       className={cn(
-        'rounded-2xl border border-dashed border-border-subtle px-6 py-10 text-center',
+        'rounded-2xl border border-dashed border-border-subtle px-6 py-6 text-center md:py-10',
         className
       )}
     >

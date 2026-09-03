@@ -20,7 +20,7 @@ export function HomeShowcaseSection({
   eagerCount?: number;
 }) {
   return (
-    <section className="py-10 md:py-16">
+    <section className="pt-2 pb-6 md:py-16">
       <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10">
         <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-end md:justify-between">
           <div className="min-w-0">

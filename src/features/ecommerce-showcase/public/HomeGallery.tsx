@@ -11,7 +11,7 @@ export function HomeGallery({
   legacySections: HomepageLegacyCategorySection[];
 }) {
   return (
-    <div className="mt-14 md:mt-16">
+    <div className="mt-0">
       {HOMEPAGE_SECTIONS.map((section, index) => (
         <HomeShowcaseSection
           key={section.key}

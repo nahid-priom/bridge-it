@@ -27,7 +27,7 @@ export const FeaturedServices: React.FC<FeaturedServicesProps> = ({
   if (displayServices.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-16 relative" aria-labelledby="featured-services-heading">
+    <section className="py-6 md:py-16 relative" aria-labelledby="featured-services-heading">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bridge-primary/20 to-transparent" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">

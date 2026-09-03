@@ -25,7 +25,7 @@ export function PopularProductsRow({ products }: PopularProductsRowProps) {
 
   return (
     <section
-      className="py-10 md:py-12 bg-slate-50/80 dark:bg-deshi-navy/15"
+      className="py-6 md:py-12 bg-slate-50/80 dark:bg-deshi-navy/15"
       aria-labelledby="popular-products-heading"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -36,7 +36,7 @@ export function HomeFeaturedSolutions({ products }: HomeFeaturedSolutionsProps) 
 
 export function HomeShowroomPromos() {
   return (
-    <section className="py-10 md:py-12">
+    <section className="py-6 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-4 text-center">Interactive Showrooms</p>
         <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">

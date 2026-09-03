@@ -3,7 +3,7 @@ import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkele
 
 export default function EcommerceCategoryLoading() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-16">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16 md:py-10">
       <PageHeaderSkeleton />
       <div className="mt-8">
         <ProjectGridSkeleton count={6} />

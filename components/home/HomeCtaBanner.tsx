@@ -7,9 +7,9 @@ import { HOME_CTA } from '@/data/homeContent';
 
 export function HomeCtaBanner() {
   return (
-    <section className="py-10 md:py-12" aria-labelledby="home-cta-heading">
+    <section className="py-6 md:py-12" aria-labelledby="home-cta-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="deshi-cta-banner relative overflow-hidden rounded-3xl px-6 py-10 md:px-12 md:py-14">
+        <div className="deshi-cta-banner relative overflow-hidden rounded-3xl px-6 py-6 md:px-12 md:py-14">
           <div className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 opacity-20 md:opacity-30 pointer-events-none" aria-hidden>
             <div className="relative w-32 h-32 md:w-48 md:h-48">
               <div className="absolute inset-0 rounded-3xl bg-white/20 rotate-12" />

@@ -3,7 +3,7 @@ import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkele
 
 export default function ProductsLoading() {
   return (
-    <div className="mx-auto max-w-[1440px] px-4 py-10">
+    <div className="mx-auto max-w-[1440px] px-4 py-6 md:py-10">
       <PageHeaderSkeleton />
       <div className="mt-8">
         <ProjectGridSkeleton count={6} />

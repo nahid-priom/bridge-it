@@ -11,7 +11,7 @@ const ICONS = {
 export function TrustSecurityStrip() {
   return (
     <section
-      className="py-10 md:py-12 bg-deshi-mint/50 dark:bg-deshi-green/5 border-y border-deshi-green/10"
+      className="py-6 md:py-12 bg-deshi-mint/50 dark:bg-deshi-green/5 border-y border-deshi-green/10"
       aria-labelledby="trust-strip-heading"
     >
       <h2 id="trust-strip-heading" className="sr-only">

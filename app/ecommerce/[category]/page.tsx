@@ -59,7 +59,7 @@ export default async function EcommerceCategoryPage({ params }: Props) {
           { label: cat.name, href: `/ecommerce/${cat.slug}` },
         ]}
       />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16 md:py-10">
         <h1 className="font-display text-3xl md:text-4xl font-black text-[#0f2744] dark:text-white">
           {cat.name} e-commerce websites
         </h1>

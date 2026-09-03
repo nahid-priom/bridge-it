@@ -109,7 +109,7 @@ export function CategoryServiceRow({ config, services }: CategoryServiceRowProps
         className="py-4 md:py-8"
         aria-labelledby={sectionId}
       >
-        <div className="mx-4 sm:mx-6 lg:mx-8 rounded-3xl border border-deshi-green/15 dark:border-deshi-green/20 bg-gradient-to-br from-deshi-mint/40 via-white to-purple-50/80 dark:from-emerald-950/30 dark:via-[#0c101c] dark:to-purple-950/25 shadow-sm py-10 md:py-12">
+        <div className="mx-4 sm:mx-6 lg:mx-8 rounded-3xl border border-deshi-green/15 dark:border-deshi-green/20 bg-gradient-to-br from-deshi-mint/40 via-white to-purple-50/80 dark:from-emerald-950/30 dark:via-[#0c101c] dark:to-purple-950/25 shadow-sm py-6 md:py-12">
           {inner}
         </div>
       </section>
@@ -117,7 +117,7 @@ export function CategoryServiceRow({ config, services }: CategoryServiceRowProps
   }
 
   return (
-    <section className="py-10 md:py-12 bg-deshi-mint/20 dark:bg-deshi-navy/15" aria-labelledby={sectionId}>
+    <section className="py-6 md:py-12 bg-deshi-mint/20 dark:bg-deshi-navy/15" aria-labelledby={sectionId}>
       {inner}
     </section>
   );
