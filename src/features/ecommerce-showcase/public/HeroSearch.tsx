@@ -49,12 +49,6 @@ export function HeroSearch({
             : 'h-11 rounded-xl border border-slate-300 bg-white shadow-sm dark:border-white/40 dark:bg-[#0c1520]'
         )}
       >
-        {isPremium ? (
-          <span className="pointer-events-none pl-4 text-text-muted" aria-hidden>
-            <Search className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} />
-          </span>
-        ) : null}
-
         <label htmlFor="hero-website-search" className="sr-only">
           Search websites, software, and creative marketing
         </label>
@@ -69,7 +63,7 @@ export function HeroSearch({
             'h-full min-w-0 flex-1 bg-transparent text-sm leading-none text-text-primary outline-none',
             'placeholder:text-text-muted',
             isPremium
-              ? 'px-3 text-left sm:text-[0.9375rem]'
+              ? 'pl-4 pr-3 text-left sm:text-[0.9375rem]'
               : 'px-3.5 text-center placeholder:text-center sm:text-left sm:placeholder:text-left'
           )}
           autoComplete="off"
