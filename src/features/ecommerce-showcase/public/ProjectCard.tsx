@@ -3,10 +3,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/cn';
+import { cn, focusVisibleRing } from '@/lib/cn';
 import type { EcommerceProjectCard } from '../types';
 import { websiteDetailUrl } from '../utils/filters';
 import { ShowcaseImage } from './ShowcaseImage';
+
+const HOME_SIZES =
+  '(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw';
 
 export function ProjectCard({
   project,
@@ -21,6 +24,7 @@ export function ProjectCard({
 }) {
   const router = useRouter();
   const href = websiteDetailUrl(project.slug);
+  const categoryLabel = project.category_name ?? project.industry ?? 'E-commerce';
 
   const prefetchDetail = () => {
     router.prefetch(href);
@@ -30,67 +34,55 @@ export function ProjectCard({
     return (
       <article
         className={cn(
-          'group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface',
-          'transition-[transform,border-color] duration-300 ease-out',
-          'hover:-translate-y-0.5 hover:border-[#2563eb]/40',
+          'group flex h-full flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface sm:rounded-2xl',
+          'transition-[transform,border-color,box-shadow] duration-300 ease-out',
+          'hover:-translate-y-0.5 hover:border-[#2563eb]/45 hover:shadow-[0_0_0_1px_rgba(37,99,235,0.12)]',
+          'active:opacity-90',
           'motion-reduce:transition-none motion-reduce:hover:translate-y-0'
         )}
       >
         <Link
           href={href}
-          className="relative block aspect-[16/10] overflow-hidden bg-background-soft"
           prefetch={false}
           onMouseEnter={prefetchDetail}
           onFocus={prefetchDetail}
+          className={cn('flex h-full flex-col outline-none', focusVisibleRing)}
+          aria-label={`View ${project.title}`}
         >
-          <ShowcaseImage
-            src={project.cover_image_url}
-            fallbackSrc={project.cover_fallback_url}
-            alt={`${project.title} custom e-commerce website design`}
-            width={1600}
-            height={1000}
-            eager={eager || priority}
-            priority={priority}
-            fit="cover"
-            className="h-full w-full"
-            imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          />
-        </Link>
-        <div className="flex flex-col gap-3 p-3.5 sm:p-4">
-          <div className="flex items-end justify-between gap-3">
-            <div className="min-w-0">
-              <h4 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
-                <Link
-                  href={href}
-                  className="hover:text-[#2563eb] dark:hover:text-[#60a5fa]"
-                  prefetch={false}
-                  onMouseEnter={prefetchDetail}
-                  onFocus={prefetchDetail}
-                >
-                  {project.title}
-                </Link>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-background-soft sm:rounded-t-2xl">
+            <ShowcaseImage
+              src={project.cover_image_url}
+              fallbackSrc={project.cover_fallback_url}
+              alt={`${project.title} custom e-commerce website design`}
+              width={800}
+              height={600}
+              eager={eager || priority}
+              priority={priority}
+              fit="cover"
+              className="h-full w-full"
+              imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+              sizes={HOME_SIZES}
+            />
+          </div>
+          <div className="flex flex-1 items-start justify-between gap-2 p-3 sm:p-3.5">
+            <div className="min-w-0 flex-1">
+              <h4 className="font-display text-sm font-bold leading-snug text-text-primary line-clamp-2 sm:text-[0.9375rem]">
+                {project.title}
               </h4>
-              <p className="mt-0.5 text-sm text-text-secondary">
-                {project.category_name ?? project.industry ?? 'E-commerce'}
-              </p>
+              <p className="mt-0.5 text-xs text-text-muted line-clamp-1">{categoryLabel}</p>
             </div>
-            <Link
-              href={href}
-              prefetch={false}
-              onMouseEnter={prefetchDetail}
-              onFocus={prefetchDetail}
-              aria-label={`View ${project.title}`}
+            <span
+              aria-hidden
               className={cn(
-                'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
-                'transition-colors hover:border-[#2563eb]/50 hover:bg-[#2563eb] hover:text-white',
-                'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
+                'mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
+                'transition-transform duration-300 group-hover:translate-x-0.5 group-hover:border-[#2563eb]/50 group-hover:bg-[#2563eb] group-hover:text-white',
+                'motion-reduce:transition-none motion-reduce:group-hover:translate-x-0'
               )}
             >
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
+              <ArrowRight className="h-4 w-4" />
+            </span>
           </div>
-        </div>
+        </Link>
       </article>
     );
   }
@@ -126,7 +118,7 @@ export function ProjectCard({
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-            {project.category_name ?? project.industry ?? 'E-commerce'}
+            {categoryLabel}
           </p>
           <h3 className="mt-1 font-display text-lg font-bold leading-snug text-text-primary">
             <Link

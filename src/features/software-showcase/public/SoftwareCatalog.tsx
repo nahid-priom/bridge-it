@@ -269,28 +269,26 @@ export function SoftwareCatalog({
   return (
     <>
       {!isExploreSoftware ? (
-        <div className="mb-2.5 sm:mb-3">
-          <label htmlFor="software-catalog-search" className="sr-only">
-            Search software solutions
-          </label>
-          <input
-            id="software-catalog-search"
-            type="search"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Search software solutions..."
-            className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
-          />
-        </div>
-      ) : null}
-
-      <div
-        className="flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        role="group"
-        aria-label={isExploreSoftware ? 'More filters' : 'Category filters'}
-      >
-        {!isExploreSoftware
-          ? SOFTWARE_PRIMARY_FILTERS.map((item) => {
+        <div className="scrollbar-none mb-2.5 flex flex-nowrap items-center gap-2 overflow-x-auto overscroll-x-contain sm:mb-3 md:gap-3">
+          <div className="w-[min(100%,16.5rem)] shrink-0 sm:w-72 md:w-80">
+            <label htmlFor="software-catalog-search" className="sr-only">
+              Search software solutions
+            </label>
+            <input
+              id="software-catalog-search"
+              type="search"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Search software solutions..."
+              className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
+            />
+          </div>
+          <div
+            className="flex min-w-0 flex-1 flex-nowrap items-center gap-1.5"
+            role="group"
+            aria-label="Category filters"
+          >
+            {SOFTWARE_PRIMARY_FILTERS.map((item) => {
               const active = category === item.id || (item.taxonomySlug != null && category === item.taxonomySlug);
               return (
                 <button
@@ -306,10 +304,11 @@ export function SoftwareCatalog({
                   {item.label}
                 </button>
               );
-            })
-          : null}
-        <SoftwareMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
-      </div>
+            })}
+            <SoftwareMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
+          </div>
+        </div>
+      ) : null}
 
       {visibleChildren.length > 0 && category !== 'all' ? (
         <div className="mt-2.5 flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

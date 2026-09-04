@@ -1,0 +1,73 @@
+{
+  "completed_at": "2026-09-04T07:50:00.000Z",
+  "total_software_products": 50,
+  "new_covers_generated": 50,
+  "new_screenshots_generated": 536,
+  "average_screens_per_product": 10.72,
+  "broken_covers_before": "see scripts/software-assets-before-rebuild.json (missing_cover_in_db: 2 extras; UUID storage + cover/screen design mismatch)",
+  "broken_covers_after": 0,
+  "legacy_local_assets": {
+    "canonical_root": "seed-assets/software/{slug}/",
+    "legacy_root_preserved": "seed-assets/admin-systems/ (superseded; not deleted — contains historical cover.png sources)",
+    "legacy_local_removed": false,
+    "note": "Canonical tree is seed-assets/software. Old flat admin-systems left as local archive only; public no longer reads it."
+  },
+  "legacy_supabase_objects_removed": 1278,
+  "legacy_db_references_removed": "all 50 catalog products now use software-showcase/{slug}/v3 paths; 0 active projects/ cover paths",
+  "average_card_avif_kb": 13.9,
+  "average_preview_avif_kb": 11.8,
+  "largest_preview": {
+    "slug": "dealership-management",
+    "key": "executive-dashboard",
+    "bytes": 15793
+  },
+  "products_with_mobile_screens": 15,
+  "duplicate_assets_detected": 0,
+  "routes_architecture": {
+    "listing": "/software → SoftwareCard → SoftwareShowcaseImage(card)",
+    "detail": "/software/{slug} → SoftwarePreview → software_project_screens",
+    "admin": "/admin/software-projects/[slug] → canonical slug/versioned upload pipeline"
+  },
+  "asset_version": 3,
+  "storage_prefix": "admin-showcase/software-showcase/{slug}/v3/",
+  "tables": ["software_projects", "software_project_screens"],
+  "migrations_applied": [
+    "20260913120000_software_asset_version.sql",
+    "20260913130000_software_cards_asset_version.sql"
+  ],
+  "pipeline_scripts": [
+    "scripts/audit-software-assets.ts",
+    "scripts/build-software-manifests.ts",
+    "scripts/generate-software-showcases.ts",
+    "scripts/optimize-software-assets.ts",
+    "scripts/upload-software-assets.ts",
+    "scripts/sync-software-assets.ts",
+    "scripts/cleanup-legacy-software-assets.ts",
+    "scripts/validate-software-showcase.ts",
+    "scripts/software-cover-contact-sheets.ts"
+  ],
+  "validation": {
+    "local": "50 / 50 PASS",
+    "remote": "50 / 50 PASS",
+    "spotcheck": {
+      "transport-management": "cover 200 + 12 screens incl. fleet-dashboard/trip-planner",
+      "dealership-management": "cover 200 + 12 screens incl. dealer-directory/collection-due",
+      "garments-erp": "cover 200 + 12 screens incl. buyer-style/size-color-matrix"
+    }
+  },
+  "cleanup": {
+    "dry_run_safe": true,
+    "legacy_active_refs_before_delete": 0,
+    "objects_deleted": 1278,
+    "projects_prefix_folders_remaining": 0,
+    "software_showcase_slug_folders": 50
+  },
+  "do_not_touch_confirmed": [
+    "seed-assets/ecommerce",
+    "seed-assets/creative-marketing",
+    "ecommerce-showcase bucket",
+    "creative-marketing-showcase bucket",
+    "public/showroom BITP flagships (separate surface)"
+  ],
+  "final_validation": "50 / 50 PASS"
+}

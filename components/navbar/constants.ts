@@ -1,7 +1,7 @@
 import { ROUTES } from '@/lib/routes';
 import { NAV_HOW_IT_WORKS_HREF } from '@/data/homeContent';
 
-/** Top-level plain links (Categories is a dropdown, not listed here). */
+/** Top-level plain links (Services is a dropdown, not listed here). */
 export const MAIN_NAV_LINKS = [
   { label: 'Home', href: ROUTES.home },
   { label: 'Consultation', href: ROUTES.consultation },

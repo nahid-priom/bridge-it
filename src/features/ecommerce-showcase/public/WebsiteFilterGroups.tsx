@@ -32,78 +32,64 @@ function Chip({
   );
 }
 
-function FilterRow({
-  label,
-  labelledBy,
-  children,
-}: {
-  label: string;
-  labelledBy: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="grid grid-cols-1 gap-2 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:items-center lg:gap-4">
-      <p
-        id={labelledBy}
-        className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted"
-      >
-        {label}
-      </p>
-      <div className="min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none">{children}</div>
-    </div>
-  );
-}
-
 export function WebsiteFilterGroups({
   views,
   categories,
   onViewsChange,
   onCategoriesChange,
   hideCategories = false,
+  hideViews = false,
 }: {
   views: string[];
   categories: string[];
   onViewsChange: (next: string[]) => void;
   onCategoriesChange: (next: string[]) => void;
   hideCategories?: boolean;
+  hideViews?: boolean;
 }) {
   return (
-    <div className="space-y-3.5">
-      <FilterRow label="Page type" labelledBy="websites-filter-page-type">
-        <div className="flex w-max gap-2" role="group" aria-labelledby="websites-filter-page-type">
-          {LISTING_VIEW_TABS.map((tab) => (
-            <Chip
-              key={tab.id}
-              active={tab.id === 'all' ? views.length === 0 : views.includes(tab.id)}
-              onClick={() => onViewsChange(toggleFilterValue(views, tab.id))}
-            >
-              {tab.id === 'all' ? 'All pages' : tab.label}
-            </Chip>
-          ))}
+    <div className="flex flex-col gap-3">
+      {!hideViews ? (
+        <div
+          className="scrollbar-none min-w-0 overflow-x-auto overscroll-x-contain"
+          role="group"
+          aria-label="Page type filters"
+        >
+          <div className="flex w-max gap-2">
+            {LISTING_VIEW_TABS.map((tab) => (
+              <Chip
+                key={tab.id}
+                active={tab.id === 'all' ? views.length === 0 : views.includes(tab.id)}
+                onClick={() => onViewsChange(toggleFilterValue(views, tab.id))}
+              >
+                {tab.id === 'all' ? 'All pages' : tab.label}
+              </Chip>
+            ))}
+          </div>
         </div>
-      </FilterRow>
+      ) : null}
 
       {!hideCategories ? (
-        <>
-          <div className="border-t border-border-subtle" />
-
-          <FilterRow label="Category" labelledBy="websites-filter-category">
-            <div className="flex w-max gap-2.5" role="group" aria-labelledby="websites-filter-category">
-              {LISTING_CATEGORIES.map((item) => {
-                const value = item.slug ?? 'all';
-                return (
-                  <Chip
-                    key={item.id}
-                    active={item.id === 'all' ? categories.length === 0 : categories.includes(value)}
-                    onClick={() => onCategoriesChange(toggleFilterValue(categories, value))}
-                  >
-                    {item.id === 'all' ? 'All categories' : item.label}
-                  </Chip>
-                );
-              })}
-            </div>
-          </FilterRow>
-        </>
+        <div
+          className="scrollbar-none min-w-0 overflow-x-auto overscroll-x-contain"
+          role="group"
+          aria-label="Category filters"
+        >
+          <div className="flex w-max gap-2.5">
+            {LISTING_CATEGORIES.map((item) => {
+              const value = item.slug ?? 'all';
+              return (
+                <Chip
+                  key={item.id}
+                  active={item.id === 'all' ? categories.length === 0 : categories.includes(value)}
+                  onClick={() => onCategoriesChange(toggleFilterValue(categories, value))}
+                >
+                  {item.id === 'all' ? 'All' : item.label}
+                </Chip>
+              );
+            })}
+          </div>
+        </div>
       ) : null}
     </div>
   );

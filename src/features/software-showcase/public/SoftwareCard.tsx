@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Check } from 'lucide-react';
-import { cn } from '@/lib/cn';
+import { cn, focusVisibleRing } from '@/lib/cn';
 import type { SoftwareProjectCard } from '../types';
+import { SoftwareShowcaseImage } from './SoftwareShowcaseImage';
 
 export function softwareDetailUrl(slug: string): string {
   return `/software/${slug}`;
@@ -14,14 +15,15 @@ export function SoftwareCard({
   project,
   eager = false,
   priority = false,
+  variant = 'default',
 }: {
   project: SoftwareProjectCard;
   eager?: boolean;
   priority?: boolean;
+  variant?: 'default' | 'home';
 }) {
   const router = useRouter();
   const href = softwareDetailUrl(project.slug);
-  const cover = project.cover_card_url ?? project.cover_detail_url;
   const loadEager = eager || priority;
   const categoryLabel =
     project.taxonomy_category_name ?? project.child_category_name ?? project.category_name ?? 'Software';
@@ -32,6 +34,59 @@ export function SoftwareCard({
   const prefetchDetail = () => {
     router.prefetch(href);
   };
+
+  if (variant === 'home') {
+    return (
+      <article
+        className={cn(
+          'group flex h-full flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface sm:rounded-2xl',
+          'transition-[transform,border-color,box-shadow] duration-300 ease-out',
+          'hover:-translate-y-0.5 hover:border-[#2563eb]/45 hover:shadow-[0_0_0_1px_rgba(37,99,235,0.12)]',
+          'active:opacity-90',
+          'motion-reduce:transition-none motion-reduce:hover:translate-y-0'
+        )}
+      >
+        <Link
+          href={href}
+          prefetch={false}
+          onMouseEnter={prefetchDetail}
+          onFocus={prefetchDetail}
+          className={cn('flex h-full flex-col outline-none', focusVisibleRing)}
+          aria-label={`View ${project.title}`}
+        >
+          <div className="overflow-hidden rounded-t-xl sm:rounded-t-2xl">
+            <SoftwareShowcaseImage
+              kind="card"
+              project={project}
+              eager={loadEager}
+              priority={priority}
+              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw"
+              className="w-full"
+              imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            />
+          </div>
+          <div className="flex flex-1 items-start justify-between gap-2 p-3 sm:p-3.5">
+            <div className="min-w-0 flex-1">
+              <h4 className="font-display text-sm font-bold leading-snug text-text-primary line-clamp-2 sm:text-[0.9375rem]">
+                {project.title}
+              </h4>
+              <p className="mt-0.5 text-xs text-text-muted line-clamp-1">{categoryLabel}</p>
+            </div>
+            <span
+              aria-hidden
+              className={cn(
+                'mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-background-soft text-text-primary',
+                'transition-transform duration-300 group-hover:translate-x-0.5 group-hover:border-[#2563eb]/50 group-hover:bg-[#2563eb] group-hover:text-white',
+                'motion-reduce:transition-none motion-reduce:group-hover:translate-x-0'
+              )}
+            >
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </div>
+        </Link>
+      </article>
+    );
+  }
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface">
@@ -47,24 +102,14 @@ export function SoftwareCard({
             Featured
           </span>
         ) : null}
-        {cover ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={cover}
-            alt={`${project.title} software solution`}
-            width={720}
-            height={450}
-            loading={loadEager ? 'eager' : 'lazy'}
-            decoding="async"
-            fetchPriority={priority ? 'high' : 'auto'}
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-sm text-text-muted">
-            No cover
-          </div>
-        )}
+        <SoftwareShowcaseImage
+          kind="card"
+          project={project}
+          eager={loadEager}
+          priority={priority}
+          className="h-full w-full"
+          imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div>

@@ -49,9 +49,10 @@ export function SoftwareMoreFiltersSheet({
         )}
         aria-haspopup="dialog"
         aria-expanded={open}
+        aria-label="More filters"
       >
         <SlidersHorizontal className="h-3 w-3" aria-hidden />
-        More Filters
+        More
         {activeCount > 0 ? (
           <span className="rounded-full bg-white/20 px-1.5 text-[10px] leading-4">{activeCount}</span>
         ) : null}

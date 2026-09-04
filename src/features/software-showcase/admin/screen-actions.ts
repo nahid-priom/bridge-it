@@ -39,6 +39,19 @@ function publicUrl(supabase: NonNullable<Awaited<ReturnType<typeof getAdminClien
   return supabase!.storage.from(SOFTWARE_BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
+async function nextAssetVersion(
+  supabase: NonNullable<Awaited<ReturnType<typeof getAdminClient>>>,
+  projectId: string,
+  current: number | null | undefined
+) {
+  const next = Math.max(1, Number(current ?? 1)) + 1;
+  await supabase
+    .from('software_projects')
+    .update({ asset_version: next, updated_at: new Date().toISOString() })
+    .eq('id', projectId);
+  return next;
+}
+
 export async function uploadSoftwareCover(
   slug: string,
   formData: FormData
@@ -52,7 +65,7 @@ export async function uploadSoftwareCover(
 
   const { data: project, error: projectError } = await supabase
     .from('software_projects')
-    .select('id, slug')
+    .select('id, slug, asset_version, cover_card_path, cover_detail_path')
     .eq('slug', slug)
     .is('deleted_at', null)
     .maybeSingle();
@@ -60,21 +73,28 @@ export async function uploadSoftwareCover(
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const [card, detail] = await Promise.all([encodeCoverCard(buffer), encodeCoverDetail(buffer)]);
-  const cardPath = coverCardPath(project.id);
-  const detailPath = coverDetailPath(project.id);
+  const version = await nextAssetVersion(supabase, project.id, project.asset_version);
+  const cardPath = coverCardPath(slug, version);
+  const detailPath = coverDetailPath(slug, version);
 
   const [cardUp, detailUp] = await Promise.all([
     supabase.storage.from(SOFTWARE_BUCKET).upload(cardPath, card.buffer, {
       contentType: card.contentType,
       upsert: true,
+      cacheControl: '31536000, immutable',
     }),
     supabase.storage.from(SOFTWARE_BUCKET).upload(detailPath, detail.buffer, {
       contentType: detail.contentType,
       upsert: true,
+      cacheControl: '31536000, immutable',
     }),
   ]);
   if (cardUp.error) return { ok: false, error: cardUp.error.message };
   if (detailUp.error) return { ok: false, error: detailUp.error.message };
+
+  const obsolete = [project.cover_card_path, project.cover_detail_path].filter(
+    (p): p is string => Boolean(p) && p !== cardPath && p !== detailPath
+  );
 
   const { error } = await supabase
     .from('software_projects')
@@ -83,10 +103,16 @@ export async function uploadSoftwareCover(
       cover_card_url: publicUrl(supabase, cardPath),
       cover_detail_path: detailPath,
       cover_detail_url: publicUrl(supabase, detailPath),
+      og_image_url: publicUrl(supabase, detailPath),
+      asset_version: version,
       updated_at: new Date().toISOString(),
     })
     .eq('id', project.id);
   if (error) return { ok: false, error: error.message };
+
+  if (obsolete.length) {
+    await supabase.storage.from(SOFTWARE_BUCKET).remove(obsolete);
+  }
 
   revalidateSoftware(slug);
   return { ok: true };
@@ -136,40 +162,51 @@ export async function uploadSoftwareScreen(
 
   const { data: project } = await supabase
     .from('software_projects')
-    .select('id')
+    .select('id, asset_version')
     .eq('slug', slug)
     .is('deleted_at', null)
     .maybeSingle();
   if (!project) return { ok: false, error: 'Project not found' };
 
-  const { data: existing } = await supabase
+  const { data: existingMeta } = await supabase
+    .from('software_project_screens')
+    .select('id, image_path, thumbnail_path, sort_order')
+    .eq('project_id', project.id)
+    .eq('screen_key', screenKey)
+    .is('deleted_at', null)
+    .maybeSingle();
+
+  const { data: maxOrder } = await supabase
     .from('software_project_screens')
     .select('sort_order')
     .eq('project_id', project.id)
     .is('deleted_at', null)
     .order('sort_order', { ascending: false })
     .limit(1);
-  const nextOrder = Number(existing?.[0]?.sort_order ?? 0) + 10;
+  const nextOrder = existingMeta ? Number(existingMeta.sort_order) : Number(maxOrder?.[0]?.sort_order ?? 0) + 10;
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const [preview, thumb] = await Promise.all([encodeScreenPreview(buffer), encodeScreenThumb(buffer)]);
-  const previewPath = screenPreviewPath(project.id, screenKey);
-  const thumbPath = screenThumbPath(project.id, screenKey);
+  const version = await nextAssetVersion(supabase, project.id, project.asset_version);
+  const previewPath = screenPreviewPath(slug, version, screenKey);
+  const thumbPath = screenThumbPath(slug, version, screenKey);
 
   const [pUp, tUp] = await Promise.all([
     supabase.storage.from(SOFTWARE_BUCKET).upload(previewPath, preview.buffer, {
       contentType: preview.contentType,
       upsert: true,
+      cacheControl: '31536000, immutable',
     }),
     supabase.storage.from(SOFTWARE_BUCKET).upload(thumbPath, thumb.buffer, {
       contentType: thumb.contentType,
       upsert: true,
+      cacheControl: '31536000, immutable',
     }),
   ]);
   if (pUp.error) return { ok: false, error: pUp.error.message };
   if (tUp.error) return { ok: false, error: tUp.error.message };
 
-  const { error } = await supabase.from('software_project_screens').insert({
+  const row = {
     project_id: project.id,
     screen_key: screenKey,
     screen_name: screenName || screenKey,
@@ -184,8 +221,21 @@ export async function uploadSoftwareScreen(
     sort_order: nextOrder,
     is_featured: false,
     published: true,
-  });
-  if (error) return { ok: false, error: error.message };
+    deleted_at: null,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (existingMeta?.id) {
+    const { error } = await supabase.from('software_project_screens').update(row).eq('id', existingMeta.id);
+    if (error) return { ok: false, error: error.message };
+    const obsolete = [existingMeta.image_path, existingMeta.thumbnail_path].filter(
+      (p): p is string => Boolean(p) && p !== previewPath && p !== thumbPath
+    );
+    if (obsolete.length) await supabase.storage.from(SOFTWARE_BUCKET).remove(obsolete);
+  } else {
+    const { error } = await supabase.from('software_project_screens').insert(row);
+    if (error) return { ok: false, error: error.message };
+  }
 
   revalidateSoftware(slug);
   return { ok: true };

@@ -1,5 +1,3 @@
-'use client';
-
 import { Layers, Award, Clock, Wallet } from 'lucide-react';
 import { WHY_BRIDGE_IT_PARK } from '@/data/homeContent';
 
@@ -12,28 +10,31 @@ const ICON_MAP = {
 
 export function WhyBridgeItParkSection() {
   return (
-    <section className="py-12 md:py-20 bg-surface" aria-labelledby="benefits-heading">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      className="scroll-mt-[calc(var(--header-offset)+0.75rem)] border-t border-border-subtle/70 bg-surface py-16 md:py-24"
+      aria-labelledby="benefits-heading"
+    >
+      <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10">
         <h2
           id="benefits-heading"
-          className="text-2xl md:text-3xl font-black font-display text-text-primary text-center mb-10 md:mb-12"
+          className="mb-10 text-center font-display text-2xl font-bold tracking-[-0.02em] text-text-primary md:mb-14 md:text-3xl"
         >
-          Why <span className="text-deshi-green">Bridge IT Park</span>
+          Why Businesses Choose Us
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 md:gap-10">
           {WHY_BRIDGE_IT_PARK.map((benefit) => {
             const Icon = ICON_MAP[benefit.icon];
             return (
               <article key={benefit.title} className="text-center px-2">
                 <div
-                  className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                  className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
                   style={{ backgroundColor: `${benefit.color}18` }}
                 >
-                  <Icon className="w-7 h-7" style={{ color: benefit.color }} aria-hidden />
+                  <Icon className="h-7 w-7" style={{ color: benefit.color }} aria-hidden />
                 </div>
-                <h3 className="text-base font-bold text-text-primary mb-2">{benefit.title}</h3>
-                <p className="text-sm text-text-secondary leading-relaxed">{benefit.description}</p>
+                <h3 className="mb-2 text-base font-bold text-text-primary">{benefit.title}</h3>
+                <p className="text-sm leading-relaxed text-text-secondary">{benefit.description}</p>
               </article>
             );
           })}

@@ -10,14 +10,69 @@ import { useClickOutside } from '@/components/navbar/navShared';
 import {
   isCategoryNavPath,
   NAV_CATEGORY_PILLARS,
+  type NavCategoryChild,
   type NavCategoryPillar,
 } from '@/components/navbar/categoryNav';
+import { softwareNavIcon } from '@/components/navbar/softwareNavIcons';
 
 const PILLAR_ICONS = {
   websites: LayoutTemplate,
   software: Code2,
   marketing: Megaphone,
 } as const;
+
+function SoftwareChildLink({
+  child,
+  onNavigate,
+}: {
+  child: NavCategoryChild;
+  onNavigate: () => void;
+}) {
+  const Icon = softwareNavIcon(child.id);
+
+  return (
+    <Link
+      href={child.href}
+      onClick={onNavigate}
+      className={cn(
+        'group flex min-w-0 items-center gap-2 rounded-xl px-2 py-2 text-[13px] font-medium',
+        'text-text-secondary transition-colors',
+        'hover:bg-[#2563eb]/06 hover:text-text-primary',
+        'dark:hover:bg-[#2563eb]/12'
+      )}
+    >
+      <span
+        className={cn(
+          'inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+          'bg-[#2563eb]/10 text-[#2563eb]',
+          'transition-colors group-hover:bg-[#2563eb]/15',
+          'dark:bg-[#2563eb]/20 dark:text-[#60a5fa]'
+        )}
+      >
+        <Icon className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <span className="truncate">{child.label}</span>
+    </Link>
+  );
+}
+
+function TextChildLink({
+  child,
+  onNavigate,
+}: {
+  child: NavCategoryChild;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link
+      href={child.href}
+      onClick={onNavigate}
+      className="block truncate rounded-lg px-2 py-1.5 text-[13px] font-medium text-text-secondary transition-colors hover:bg-slate-50 hover:text-text-primary dark:hover:bg-white/[0.04]"
+    >
+      {child.label}
+    </Link>
+  );
+}
 
 function PillarColumn({
   pillar,
@@ -27,6 +82,7 @@ function PillarColumn({
   onNavigate: () => void;
 }) {
   const Icon = PILLAR_ICONS[pillar.id];
+  const isSoftware = pillar.id === 'software';
 
   return (
     <div className="min-w-0">
@@ -44,38 +100,46 @@ function PillarColumn({
         </span>
       </Link>
 
-      <ul className="space-y-0.5">
-        {pillar.children.map((child) => (
-          <li key={child.id}>
-            <Link
-              href={child.href}
-              onClick={onNavigate}
-              className="block truncate rounded-lg px-2 py-1.5 text-[13px] font-medium text-text-secondary transition-colors hover:bg-slate-50 hover:text-text-primary dark:hover:bg-white/[0.04]"
-            >
-              {child.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {isSoftware ? (
+        <ul className="grid grid-cols-2 gap-0.5">
+          {pillar.children.map((child) => (
+            <li key={child.id}>
+              <SoftwareChildLink child={child} onNavigate={onNavigate} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ul className="space-y-0.5">
+          {pillar.children.map((child) => (
+            <li key={child.id}>
+              <TextChildLink child={child} onNavigate={onNavigate} />
+            </li>
+          ))}
+        </ul>
+      )}
 
       {pillar.moreChildren && pillar.moreChildren.length > 0 ? (
         <>
           <p className="mb-1 mt-3 px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
             More
           </p>
-          <ul className="space-y-0.5">
-            {pillar.moreChildren.map((child) => (
-              <li key={child.id}>
-                <Link
-                  href={child.href}
-                  onClick={onNavigate}
-                  className="block truncate rounded-lg px-2 py-1.5 text-[13px] font-medium text-text-secondary transition-colors hover:bg-slate-50 hover:text-text-primary dark:hover:bg-white/[0.04]"
-                >
-                  {child.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {isSoftware ? (
+            <ul className="grid grid-cols-2 gap-0.5">
+              {pillar.moreChildren.map((child) => (
+                <li key={child.id}>
+                  <SoftwareChildLink child={child} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className="space-y-0.5">
+              {pillar.moreChildren.map((child) => (
+                <li key={child.id}>
+                  <TextChildLink child={child} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          )}
         </>
       ) : null}
     </div>
@@ -148,7 +212,7 @@ export function CategoryDropdown({ className }: { className?: string }) {
             : 'text-text-primary hover:bg-emerald-50/50 hover:text-deshi-green dark:hover:bg-emerald-500/5'
         )}
       >
-        Categories
+        Services
         <ChevronDown
           className={cn('h-3.5 w-3.5 opacity-70 transition-transform', open && 'rotate-180')}
           aria-hidden
@@ -163,15 +227,15 @@ export function CategoryDropdown({ className }: { className?: string }) {
             exit={{ opacity: 0, y: 6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              'absolute left-1/2 top-[calc(100%+10px)] z-50 w-[min(100vw-2rem,900px)] -translate-x-1/2',
+              'absolute left-1/2 top-[calc(100%+10px)] z-50 w-[min(100vw-2rem,960px)] -translate-x-1/2',
               'overflow-hidden rounded-2xl border border-slate-200/90 dark:border-white/10',
               'bg-white/96 dark:bg-slate-900/96 backdrop-blur-2xl',
               'shadow-[0_24px_60px_rgba(15,23,42,0.14)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.5)]'
             )}
             role="menu"
-            aria-label="Categories"
+            aria-label="Services"
           >
-            <div className="grid grid-cols-3 gap-3 p-4">
+            <div className="grid grid-cols-3 gap-3 p-4 md:gap-4 md:p-5">
               {NAV_CATEGORY_PILLARS.map((pillar) => (
                 <PillarColumn key={pillar.id} pillar={pillar} onNavigate={close} />
               ))}

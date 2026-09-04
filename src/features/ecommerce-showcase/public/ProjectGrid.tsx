@@ -44,8 +44,9 @@ export function ProjectGrid({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3',
-        columns === 'home' ? 'xl:grid-cols-4' : ''
+        columns === 'home'
+          ? 'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 max-md:[&>*:nth-child(n+5)]:hidden'
+          : 'grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3'
       )}
       aria-busy={busy || undefined}
     >

@@ -14,7 +14,7 @@ import {
 import { listHomepageSoftwareSections } from '@/src/features/software-showcase/api/projects';
 import { listHomepageCreativeMarketingSections } from '@/src/features/creative-marketing-showcase/api/projects';
 
-export const revalidate = 60;
+export const revalidate = 30;
 
 export const metadata = buildPageMetadata({
   title: HOME_SEO_TITLE,

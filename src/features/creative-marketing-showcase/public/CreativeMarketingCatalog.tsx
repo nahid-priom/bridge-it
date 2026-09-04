@@ -198,28 +198,26 @@ export function CreativeMarketingCatalog({
   return (
     <>
       {!isExplore ? (
-        <div className="mb-3 max-w-xl sm:mb-4">
-          <label htmlFor="cm-catalog-search" className="sr-only">
-            Search services
-          </label>
-          <input
-            id="cm-catalog-search"
-            type="search"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search creative & marketing…"
-            className="w-full rounded-xl border border-border-subtle bg-surface px-4 py-2.5 text-sm outline-none focus:border-[#2563eb]"
-          />
-        </div>
-      ) : null}
-
-      <div
-        className="flex flex-wrap items-center gap-2"
-        role="group"
-        aria-label={isExplore ? 'More filters' : 'Service type filters'}
-      >
-        {!isExplore
-          ? CREATIVE_PRIMARY_FILTERS.map((item) => {
+        <div className="scrollbar-none mb-3 flex flex-nowrap items-center gap-2 overflow-x-auto overscroll-x-contain sm:mb-4 md:gap-3">
+          <div className="w-[min(100%,16.5rem)] shrink-0 sm:w-72 md:w-80">
+            <label htmlFor="cm-catalog-search" className="sr-only">
+              Search services
+            </label>
+            <input
+              id="cm-catalog-search"
+              type="search"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search creative & marketing…"
+              className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-4 text-sm outline-none focus:border-[#2563eb]"
+            />
+          </div>
+          <div
+            className="flex min-w-0 flex-1 flex-nowrap items-center gap-2"
+            role="group"
+            aria-label="Service type filters"
+          >
+            {CREATIVE_PRIMARY_FILTERS.map((item) => {
               const active = group === item.id;
               return (
                 <button
@@ -228,17 +226,18 @@ export function CreativeMarketingCatalog({
                   onClick={() => writeGroup(item.id)}
                   className={
                     active
-                      ? 'rounded-full bg-[#0f2744] px-3.5 py-1.5 text-sm font-semibold text-white'
-                      : 'rounded-full border border-border-subtle px-3.5 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40'
+                      ? 'shrink-0 rounded-full bg-[#0f2744] px-3.5 py-1.5 text-sm font-semibold text-white'
+                      : 'shrink-0 rounded-full border border-border-subtle px-3.5 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40'
                   }
                 >
                   {item.label}
                 </button>
               );
-            })
-          : null}
-        <CreativeMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
-      </div>
+            })}
+            <CreativeMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
+          </div>
+        </div>
+      ) : null}
 
       {more.length > 0 ? (
         <div className="mt-2.5 flex flex-wrap gap-1.5">

@@ -77,22 +77,23 @@ export function HeroSearch({
         <button
           type="submit"
           className={cn(
-            'shrink-0 items-center justify-center text-white transition-[background-color,transform] duration-150',
+            'inline-flex shrink-0 items-center justify-center gap-1.5 font-semibold text-white transition-[background-color,transform] duration-150',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]',
             isPremium
               ? cn(
-                  'm-1.5 inline-flex h-11 w-11 rounded-[0.875rem] bg-bridge-primary sm:h-12 sm:w-12',
+                  'm-1.5 h-11 rounded-[0.875rem] bg-bridge-primary px-3.5 text-sm sm:h-12 sm:px-4',
                   'hover:bg-bridge-primary-dark active:scale-[0.97]',
                   'motion-reduce:active:scale-100'
                 )
               : cn(
-                  'm-1 inline-flex h-8 w-8 rounded-lg bg-[#2563eb]',
+                  'm-1 h-8 rounded-lg bg-[#2563eb] px-2.5 text-xs',
                   'hover:bg-[#1d4ed8]'
                 )
           )}
           aria-label="Search solutions"
         >
           <Search className={isPremium ? 'h-[1.125rem] w-[1.125rem]' : 'h-4 w-4'} aria-hidden />
+          <span>Search</span>
         </button>
       </div>
     </form>

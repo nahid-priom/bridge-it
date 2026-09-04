@@ -80,20 +80,27 @@ function MarketingFallback() {
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
   const type = parseExploreType(first((await searchParams).type));
   const titles = {
-    websites: 'Explore Custom Websites',
-    software: 'Explore Software Solutions',
-    marketing: 'Explore Creative & Digital Marketing',
+    websites: 'E-commerce Website Designs in Bangladesh',
+    software: 'ERP & Business Software Solutions',
+    marketing: 'Digital Marketing & Creative Design Services',
   } as const;
   return buildPageMetadata({
     title: titles[type],
     description:
-      'Explore Bridge IT Park solutions — custom e-commerce websites, business software, and digital marketing.',
+      type === 'software'
+        ? 'Browse ERP, POS, CRM, HRM and custom business software solutions for growing companies in Bangladesh.'
+        : type === 'marketing'
+          ? 'Explore digital marketing, branding, social media design and creative services for your brand.'
+          : 'Browse premium custom e-commerce website designs for fashion, electronics, beauty and more.',
     path: ROUTES.explore,
     keywords: [
-      'explore bridge it park',
-      'ecommerce websites Bangladesh',
+      'ecommerce website designs Bangladesh',
+      'custom ecommerce website',
+      'ERP software Bangladesh',
       'business software solutions',
-      'digital marketing services',
+      'digital marketing services Bangladesh',
+      'creative design services',
+      'explore bridge it park',
     ],
   });
 }
@@ -248,17 +255,17 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
 
   const heading =
     type === 'software'
-      ? 'Software Solutions'
+      ? 'ERP & Business Software Solutions'
       : type === 'marketing'
-        ? 'Creative & Digital Marketing'
-        : 'Custom Websites';
+        ? 'Digital Marketing & Creative Design Services'
+        : 'E-commerce Website Designs';
 
   const description =
     type === 'software'
-      ? 'Ready and custom ERP / admin systems for real business operations.'
+      ? 'Ready ERP, POS, CRM, HRM and custom admin systems for real business operations.'
       : type === 'marketing'
-        ? 'Creatives and growth support matched to your business goals.'
-        : '100+ custom premium e-commerce website designs for your brand.';
+        ? 'Branding, social creatives and digital marketing services matched to your growth goals.'
+        : '100+ premium custom e-commerce website designs for fashion, electronics, beauty and more.';
 
   return (
     <>
@@ -266,16 +273,17 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
         data={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',
-          name: 'Explore Bridge IT Park',
-          description:
-            'Explore custom e-commerce websites, business software, and digital marketing solutions.',
+          name: heading,
+          description,
           url: `${SITE_URL}${ROUTES.explore}`,
         }}
       />
       <PageBreadcrumbJsonLd path={ROUTES.explore} />
       <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-0 sm:px-6 lg:px-8 xl:px-10">
-        <header className="mb-5 max-w-3xl sm:mb-6">
-          <h1 className="font-display text-2xl font-black text-text-primary sm:text-3xl">{heading}</h1>
+        <header className="mb-5 max-w-3xl pt-4 sm:mb-6 sm:pt-5 md:pt-6">
+          <h1 className="font-display text-2xl font-black tracking-tight text-text-primary sm:text-3xl md:text-[2rem]">
+            {heading}
+          </h1>
           <p className="mt-2 text-sm text-text-secondary sm:text-base">{description}</p>
         </header>
 

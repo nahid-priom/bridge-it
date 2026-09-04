@@ -21,7 +21,17 @@
     "generate:platform-hero-assets": "tsx scripts/generate-platform-hero-assets.ts",
     "validate:admin-showcase-assets": "tsx scripts/validate-admin-showcase-assets.ts",
     "audit:software-premium": "tsx scripts/audit-software-premium-quality.ts",
-    "qa:software-contact-sheets": "tsx scripts/software-premium-contact-sheets.ts"
+    "qa:software-contact-sheets": "tsx scripts/software-premium-contact-sheets.ts",
+    "generate:software-showcases": "tsx scripts/generate-software-showcases.ts",
+    "build:software-manifests": "tsx scripts/generate-software-showcases.ts --manifests-only",
+    "upload:software-assets": "tsx scripts/upload-software-assets.ts",
+    "sync:software-assets": "tsx scripts/sync-software-assets.ts",
+    "audit:software-assets": "tsx scripts/audit-software-assets.ts",
+    "validate:software-showcase": "tsx scripts/validate-software-showcase.ts",
+    "cleanup:legacy-software-assets": "tsx scripts/cleanup-legacy-software-assets.ts",
+    "optimize:software-assets": "tsx scripts/optimize-software-assets.ts",
+    "qa:software-cover-contact-sheets": "tsx scripts/software-cover-contact-sheets.ts",
+    "sync:software-homepage": "tsx scripts/sync-software-homepage-placements.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

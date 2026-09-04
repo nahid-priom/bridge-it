@@ -66,7 +66,13 @@ const RAIL_LABEL: Record<ExploreTypeId, string> = {
   marketing: 'Service type',
 };
 
-export function ExploreSubcategoryRail({ activeType }: { activeType: ExploreTypeId }) {
+export function ExploreSubcategoryRail({
+  activeType,
+  className,
+}: {
+  activeType: ExploreTypeId;
+  className?: string;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -114,12 +120,9 @@ export function ExploreSubcategoryRail({ activeType }: { activeType: ExploreType
   };
 
   return (
-    <div className="min-w-0">
-      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">
-        {RAIL_LABEL[activeType]}
-      </p>
+    <div className={cn('min-w-0', className)}>
       <div
-        className="flex w-full min-w-0 flex-nowrap gap-1.5 overflow-x-auto overscroll-x-contain pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="scrollbar-none flex w-full min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto overscroll-x-contain"
         role="group"
         aria-label={`${RAIL_LABEL[activeType]} filters`}
       >

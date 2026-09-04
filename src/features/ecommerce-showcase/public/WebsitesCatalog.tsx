@@ -139,22 +139,26 @@ export function WebsitesCatalog({
   return (
     <>
       {!isExplore ? (
-        <WebsiteSearch
-          id="websites-catalog-search"
-          value={searchInput}
-          onChange={setSearchInput}
-          className="mb-5 max-w-xl"
-        />
+        <div className="scrollbar-none mb-5 flex flex-nowrap items-center gap-2 overflow-x-auto overscroll-x-contain md:mb-6 md:gap-3">
+          <WebsiteSearch
+            id="websites-catalog-search"
+            value={searchInput}
+            onChange={setSearchInput}
+            className="w-[min(100%,16.5rem)] shrink-0 sm:w-72 md:w-80"
+          />
+          <div className="min-w-0 flex-1">
+            <WebsiteFilterToolbar
+              views={views}
+              categories={categories}
+              onViewsChange={(next) => writeFilters(next, categories)}
+              onCategoriesChange={(next) => writeFilters(views, next)}
+              hideCategories={false}
+            />
+          </div>
+        </div>
       ) : null}
-      <WebsiteFilterToolbar
-        views={views}
-        categories={categories}
-        onViewsChange={(next) => writeFilters(next, categories)}
-        onCategoriesChange={(next) => writeFilters(views, next)}
-        hideCategories={isExplore}
-      />
 
-      <div className={isExplore ? 'mt-4 md:mt-5' : 'mt-6 md:mt-8'}>
+      <div className={isExplore ? 'mt-4 md:mt-5' : 'mt-2 md:mt-3'}>
         {isError && !data ? (
           <ProjectGridError onRetry={() => void refetch()} />
         ) : showGridSkeleton ? (

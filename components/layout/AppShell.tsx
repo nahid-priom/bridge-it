@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import type { Category } from '@/types';
@@ -32,6 +32,27 @@ const NO_BREADCRUMB_PREFIXES = [
   '/seller',
 ];
 
+function scrollWindowToTop() {
+  if (typeof window === 'undefined') return;
+  if (window.location.hash) return;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, left: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+}
+
+function RouteScrollToTop() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? '';
+
+  useEffect(() => {
+    useStore.getState().closeSearchModal();
+    unlockBodyScroll();
+    scrollWindowToTop();
+  }, [pathname, search]);
+
+  return null;
+}
+
 export function AppShell({
   children,
   categories,
@@ -44,14 +65,19 @@ export function AppShell({
   const pathname = usePathname();
   const hideShell = NO_SHELL_PREFIXES.some((p) => pathname.startsWith(p));
 
-  useEffect(() => {
-    useStore.getState().closeSearchModal();
-    unlockBodyScroll();
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [pathname]);
+  const scrollWatcher = (
+    <Suspense fallback={null}>
+      <RouteScrollToTop />
+    </Suspense>
+  );
 
   if (hideShell) {
-    return <>{children}</>;
+    return (
+      <>
+        {scrollWatcher}
+        {children}
+      </>
+    );
   }
 
   const isHome = pathname === '/';
@@ -60,6 +86,7 @@ export function AppShell({
   return (
     <AuthProfileProvider profile={authProfile}>
     <SellerActivationListener />
+    {scrollWatcher}
     <div className="min-h-screen bg-background text-text-primary">
       <Navbar categories={categories} authProfile={authProfile} />
       <main

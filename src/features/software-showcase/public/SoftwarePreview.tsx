@@ -2,19 +2,32 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { Check, Maximize2, X } from 'lucide-react';
+import { Maximize2, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
 import type { SoftwareProductFeature, SoftwareProjectDetail, SoftwareProjectScreen } from '../types';
+import {
+  resolveSoftwareCover,
+  resolveSoftwareScreen,
+  withCacheBust,
+} from '../utils/resolve-software-asset';
 
-function screenImageUrl(screen: SoftwareProjectScreen | null | undefined): string | null {
+function screenImageUrl(
+  screen: SoftwareProjectScreen | null | undefined,
+  assetVersion = 1
+): string | null {
   if (!screen) return null;
-  return screen.image_url || screen.thumbnail_url || null;
+  const resolved = resolveSoftwareScreen(screen, 'preview', assetVersion);
+  return resolved ? withCacheBust(resolved.url, resolved.assetVersion) : null;
 }
 
-function screenThumbUrl(screen: SoftwareProjectScreen | null | undefined): string | null {
+function screenThumbUrl(
+  screen: SoftwareProjectScreen | null | undefined,
+  assetVersion = 1
+): string | null {
   if (!screen) return null;
-  return screen.thumbnail_url || screen.image_url || null;
+  const resolved = resolveSoftwareScreen(screen, 'thumb', assetVersion);
+  return resolved ? withCacheBust(resolved.url, resolved.assetVersion) : null;
 }
 
 function screenLabel(screen: SoftwareProjectScreen): string {
@@ -44,21 +57,16 @@ function ManageChips({ features }: { features: SoftwareProductFeature[] }) {
   if (items.length === 0) return null;
   return (
     <Section title="What You Can Manage">
-      <ul className="grid gap-3 sm:grid-cols-2">
+      <ul className="grid grid-cols-2 gap-2 sm:gap-3">
         {items.map((feature) => (
           <li
             key={feature.id}
-            className="flex items-start gap-3 rounded-xl border border-border-subtle bg-surface px-4 py-3"
+            className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 sm:px-4 sm:py-3"
           >
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-700">
-              <Check className="h-4 w-4" aria-hidden />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-text-primary">{feature.title}</p>
-              {feature.short_description ? (
-                <p className="mt-0.5 text-xs text-text-secondary">{feature.short_description}</p>
-              ) : null}
-            </div>
+            <p className="text-sm font-semibold text-text-primary">{feature.title}</p>
+            {feature.short_description ? (
+              <p className="mt-0.5 line-clamp-2 text-xs text-text-secondary">{feature.short_description}</p>
+            ) : null}
           </li>
         ))}
       </ul>
@@ -77,16 +85,20 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
   );
 
   const initial =
-    screens.find((screen) => screen.is_featured) ?? screens.find((screen) => screenImageUrl(screen)) ?? screens[0];
+    screens.find((screen) => screen.is_featured) ??
+    screens.find((screen) => screenImageUrl(screen, project.asset_version ?? 1)) ??
+    screens[0];
 
   const [selectedKey, setSelectedKey] = useState(initial?.screen_key);
   const [viewAllOpen, setViewAllOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const assetVersion = project.asset_version ?? 1;
   const selected = screens.find((screen) => screen.screen_key === selectedKey) ?? initial ?? null;
-  const imageUrl = screenImageUrl(selected);
+  const imageUrl = screenImageUrl(selected, assetVersion);
   const categoryLabel =
     project.taxonomy_category?.name ?? project.child_category?.name ?? project.category?.name ?? 'Software';
-  const cover = project.cover_detail_url ?? project.cover_card_url;
+  const coverResolved = resolveSoftwareCover(project, 'detail');
+  const cover = coverResolved ? withCacheBust(coverResolved.url, coverResolved.assetVersion) : null;
   const outcome = project.feature_summary ?? project.short_description;
 
   useEffect(() => {
@@ -112,8 +124,15 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
 
   const selectScreen = (screen: SoftwareProjectScreen) => {
     setSelectedKey(screen.screen_key);
-    const url = screenImageUrl(screen);
+    const url = screenImageUrl(screen, assetVersion);
     if (url) preloadImage(url);
+  };
+
+  const nextScreen = () => {
+    if (!selected || screens.length < 2) return;
+    const idx = screens.findIndex((s) => s.screen_key === selected.screen_key);
+    const next = screens[(idx + 1) % screens.length];
+    if (next) selectScreen(next);
   };
 
   const keyFeatures = features.length > 0 ? features : project.modules.map((title, index) => ({
@@ -193,7 +212,7 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                       type="button"
                       onClick={() => selectScreen(screen)}
                       onMouseEnter={() => {
-                        const url = screenImageUrl(screen);
+                        const url = screenImageUrl(screen, assetVersion);
                         if (url) preloadImage(url);
                       }}
                       className={cn(
@@ -279,13 +298,20 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                     onClick={() => setFullscreen(true)}
                   />
                 ) : (
-                  <div className="flex min-h-[240px] items-center justify-center text-sm text-text-muted">
-                    Screen preview unavailable
-                  </div>
+                  <div className="aspect-[16/10] animate-pulse bg-background-soft" aria-hidden />
                 )}
               </div>
               {selected?.short_caption ? (
                 <p className="mt-2 text-sm text-text-secondary">{selected.short_caption}</p>
+              ) : null}
+              {screens.length > 1 ? (
+                <button
+                  type="button"
+                  onClick={nextScreen}
+                  className="mt-3 flex h-11 w-full items-center justify-center rounded-xl border border-border-subtle bg-surface text-sm font-semibold text-text-primary"
+                >
+                  Next Module →
+                </button>
               ) : null}
             </div>
           </section>
@@ -307,7 +333,7 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
         </Section>
 
         {project.full_description ? (
-          <Section title="Benefits">
+          <Section title="Business Workflow">
             <p className="leading-relaxed text-text-secondary whitespace-pre-line line-clamp-8">
               {project.full_description.replace(/Starting\s*৳[\d,]+[+]?/gi, '').replace(/৳[\d,]+[+]?/g, '')}
             </p>
@@ -371,7 +397,7 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {screens.map((screen) => {
-                const thumb = screenThumbUrl(screen);
+                const thumb = screenThumbUrl(screen, assetVersion);
                 return (
                   <button
                     key={screen.id}

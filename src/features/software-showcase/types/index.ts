@@ -111,6 +111,7 @@ export type SoftwareProject = {
   seo_description: string | null;
   seo_keywords: string[];
   sort_order: number;
+  asset_version: number;
   created_by: string | null;
   updated_by: string | null;
   created_at: string;
@@ -181,6 +182,7 @@ export type SoftwareProjectCard = {
   popular: boolean;
   published: boolean;
   sort_order: number;
+  asset_version?: number;
   created_at: string;
   updated_at: string;
   category_name: string | null;

@@ -21,6 +21,7 @@ import {
   NAV_CATEGORY_PILLARS,
   type NavCategoryPillarId,
 } from '@/components/navbar/categoryNav';
+import { softwareNavIcon } from '@/components/navbar/softwareNavIcons';
 import { MobileQuickActions } from '@/components/navbar/mobile/MobileQuickActions';
 import type { AuthProfile } from '@/lib/auth/types';
 import { useAuthProfile } from '@/components/auth/AuthProfileContext';
@@ -156,7 +157,7 @@ export function MobileDrawerMenu({
                         : 'text-text-primary'
                     )}
                   >
-                    Categories
+                    Services
                     <ChevronDown
                       className={cn(
                         'h-4 w-4 opacity-70 transition-transform',
@@ -201,30 +202,80 @@ export function MobileDrawerMenu({
                               </button>
                             </div>
                             {expanded ? (
-                              <ul className="mb-2 ml-6 space-y-0.5 border-l border-slate-100 pl-3 dark:border-white/10">
-                                {pillar.children.map((child) => (
-                                  <li key={child.id}>
-                                    <Link
-                                      href={child.href}
-                                      onClick={closeAndNavigate}
-                                      className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
-                                    >
-                                      {child.label}
-                                    </Link>
-                                  </li>
-                                ))}
-                                {pillar.moreChildren?.map((child) => (
-                                  <li key={child.id}>
-                                    <Link
-                                      href={child.href}
-                                      onClick={closeAndNavigate}
-                                      className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
-                                    >
-                                      {child.label}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
+                              pillar.id === 'software' ? (
+                                <div className="mb-2 ml-2 space-y-2">
+                                  <ul className="grid grid-cols-2 gap-1">
+                                    {pillar.children.map((child) => {
+                                      const ChildIcon = softwareNavIcon(child.id);
+                                      return (
+                                        <li key={child.id}>
+                                          <Link
+                                            href={child.href}
+                                            onClick={closeAndNavigate}
+                                            className="flex items-center gap-2 rounded-xl px-2 py-2 text-[13px] font-medium text-text-secondary hover:bg-[#2563eb]/06 hover:text-text-primary dark:hover:bg-[#2563eb]/12"
+                                          >
+                                            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2563eb]/10 text-[#2563eb] dark:bg-[#2563eb]/20 dark:text-[#60a5fa]">
+                                              <ChildIcon className="h-3.5 w-3.5" aria-hidden />
+                                            </span>
+                                            <span className="truncate">{child.label}</span>
+                                          </Link>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                  {pillar.moreChildren && pillar.moreChildren.length > 0 ? (
+                                    <>
+                                      <p className="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                                        More
+                                      </p>
+                                      <ul className="grid grid-cols-2 gap-1">
+                                        {pillar.moreChildren.map((child) => {
+                                          const ChildIcon = softwareNavIcon(child.id);
+                                          return (
+                                            <li key={child.id}>
+                                              <Link
+                                                href={child.href}
+                                                onClick={closeAndNavigate}
+                                                className="flex items-center gap-2 rounded-xl px-2 py-2 text-[13px] font-medium text-text-secondary hover:bg-[#2563eb]/06 hover:text-text-primary dark:hover:bg-[#2563eb]/12"
+                                              >
+                                                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2563eb]/10 text-[#2563eb] dark:bg-[#2563eb]/20 dark:text-[#60a5fa]">
+                                                  <ChildIcon className="h-3.5 w-3.5" aria-hidden />
+                                                </span>
+                                                <span className="truncate">{child.label}</span>
+                                              </Link>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    </>
+                                  ) : null}
+                                </div>
+                              ) : (
+                                <ul className="mb-2 ml-6 space-y-0.5 border-l border-slate-100 pl-3 dark:border-white/10">
+                                  {pillar.children.map((child) => (
+                                    <li key={child.id}>
+                                      <Link
+                                        href={child.href}
+                                        onClick={closeAndNavigate}
+                                        className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
+                                      >
+                                        {child.label}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                  {pillar.moreChildren?.map((child) => (
+                                    <li key={child.id}>
+                                      <Link
+                                        href={child.href}
+                                        onClick={closeAndNavigate}
+                                        className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
+                                      >
+                                        {child.label}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )
                             ) : null}
                           </div>
                         );

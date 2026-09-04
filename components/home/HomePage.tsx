@@ -1,11 +1,10 @@
-import { ExploreOurWorkHeader } from '@/components/home/hero/ExploreOurWorkHeader';
 import { HomepageHero } from '@/components/home/hero/HomepageHero';
 import { MainCategoryStrip } from '@/components/home/hero/MainCategoryStrip';
-import { HomeGallery } from '@/src/features/ecommerce-showcase/public/HomeGallery';
+import { PortfolioExperience } from '@/components/home/portfolio';
+import { WhyBridgeItParkSection } from '@/components/home/WhyBridgeItParkSection';
+import { HomeCtaBanner } from '@/components/home/HomeCtaBanner';
 import type { HomepageLegacyCategorySection, HomepageSectionsResult } from '@/src/features/ecommerce-showcase/types';
-import { SoftwareHomeGallery } from '@/src/features/software-showcase/public/SoftwareHomeGallery';
 import type { SoftwareHomepageSectionsResult } from '@/src/features/software-showcase/types';
-import { CreativeMarketingHomeGallery } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingHomeGallery';
 import type { CreativeMarketingHomepageSectionsResult } from '@/src/features/creative-marketing-showcase/types';
 
 export function HomePage({
@@ -23,10 +22,14 @@ export function HomePage({
     <>
       <HomepageHero />
       <MainCategoryStrip />
-      <ExploreOurWorkHeader />
-      <HomeGallery sections={sections} legacySections={legacySections} />
-      {softwareSections ? <SoftwareHomeGallery sections={softwareSections} /> : null}
-      {creativeSections ? <CreativeMarketingHomeGallery sections={creativeSections} /> : null}
+      <PortfolioExperience
+        sections={sections}
+        legacySections={legacySections}
+        softwareSections={softwareSections}
+        creativeSections={creativeSections}
+      />
+      <WhyBridgeItParkSection />
+      <HomeCtaBanner />
     </>
   );
 }
