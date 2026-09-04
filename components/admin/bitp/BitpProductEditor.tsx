@@ -24,6 +24,7 @@ import type {
   ProductStatus,
   ProductType,
 } from '@/types/bitp';
+import { PRODUCT_TYPE_OPTIONS } from '@/types/bitp';
 import { cn } from '@/lib/cn';
 
 type PackageDraft = BitpProductPackage & { features: BitpPackageFeature[]; _local?: boolean };
@@ -35,16 +36,6 @@ type BitpProductEditorProps = {
   onClose: () => void;
   onSaved: () => void;
 };
-
-const PRODUCT_TYPES: ProductType[] = [
-  'service',
-  'software',
-  'website',
-  'marketing',
-  'creative',
-  'digital_product',
-  'subscription',
-];
 
 const PRICING_TYPES: PricingType[] = [
   'fixed',
@@ -63,7 +54,7 @@ function emptyProduct(defaultCategoryId?: string): Partial<BitpProduct> {
     slug: '',
     short_description: '',
     full_description: '',
-    product_type: 'service',
+    product_type: 'software_solution',
     pricing_type: 'starting_from',
     starting_price: 0,
     currency: 'BDT',
@@ -383,12 +374,12 @@ export function BitpProductEditor({
                 Product type
                 <select
                   className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white"
-                  value={form.product_type ?? 'service'}
+                  value={form.product_type ?? 'software_solution'}
                   onChange={(e) => setForm({ ...form, product_type: e.target.value as ProductType })}
                 >
-                  {PRODUCT_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  {PRODUCT_TYPE_OPTIONS.map((t) => (
+                    <option key={t.value} value={t.value}>
+                      {t.label}
                     </option>
                   ))}
                 </select>

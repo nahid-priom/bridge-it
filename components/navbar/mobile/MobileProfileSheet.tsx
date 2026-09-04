@@ -8,7 +8,6 @@ import {
   Heart,
   LayoutDashboard,
   LogOut,
-  MessageCircle,
   Package,
   Settings,
   ShoppingCart,
@@ -70,8 +69,9 @@ export function MobileProfileSheet({
   onClose,
   authProfile,
   cartCount = 0,
-  messageCount = 0,
+  messageCount: _messageCount = 0,
 }: MobileProfileSheetProps) {
+  void _messageCount;
   const contextProfile = useAuthProfile();
   const profile = contextProfile ?? authProfile;
   const mode = useDashboardModeStore((s) => s.mode);
@@ -165,7 +165,7 @@ export function MobileProfileSheet({
                     <>
                       <SheetLink
                         href={ROUTES.sellerDashboardServices}
-                        icon={<Store className="w-4 h-4 text-violet-500" />}
+                        icon={<Store className="w-4 h-4 text-blue-500" />}
                         label="My Services"
                         onClose={onClose}
                       />
@@ -187,13 +187,6 @@ export function MobileProfileSheet({
                     href={ROUTES.products}
                     icon={<Heart className="w-4 h-4 text-rose-500" />}
                     label="Wishlist"
-                    onClose={onClose}
-                  />
-                  <SheetLink
-                    href={ROUTES.messages}
-                    icon={<MessageCircle className="w-4 h-4 text-sky-500" />}
-                    label="Messages"
-                    badge={messageCount}
                     onClose={onClose}
                   />
                   <SheetLink

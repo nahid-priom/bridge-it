@@ -81,10 +81,10 @@ export const MAIN_CATEGORY_EMOJI: Record<string, string> = {
 };
 
 export const SEARCH_POPULAR_CHIPS = [
-  'Fashion',
-  'Electronics',
-  'Grocery',
-  'Cosmetics',
-  'Furniture',
-  'Next.js',
+  'Fashion Store Website',
+  'Garments ERP System',
+  'Retail POS Software',
+  'Beauty Shop Design',
+  'Social Media Design',
+  'Facebook Ads Setup',
 ] as const;

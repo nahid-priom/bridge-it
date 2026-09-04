@@ -55,7 +55,7 @@ export function MarketplaceProductCard({
                 {product.categoryName}
               </span>
               {product.isFeatured && (
-                <span className="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-md bg-violet-600 text-white text-[10px] font-bold">
+                <span className="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-bold">
                   Featured
                 </span>
               )}

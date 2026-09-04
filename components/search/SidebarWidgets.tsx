@@ -128,7 +128,7 @@ export function SidebarWidgets({ services, topSellers = [] }: SidebarWidgetsProp
         </ul>
       </WidgetCard>
 
-      <div className="rounded-2xl overflow-hidden border border-violet-200/60 dark:border-violet-500/20 bg-gradient-to-br from-violet-50 via-white to-sky-50 dark:from-violet-950/40 dark:via-slate-900 dark:to-sky-950/30 p-5 shadow-sm">
+      <div className="rounded-2xl overflow-hidden border border-blue-200/60 dark:border-blue-500/20 bg-gradient-to-br from-blue-50 via-white to-sky-50 dark:from-blue-950/40 dark:via-slate-900 dark:to-sky-950/30 p-5 shadow-sm">
         <div className="flex gap-3">
           <div className="shrink-0">
             <SellerAvatar name="Join Seller" size="lg" hue={270} />

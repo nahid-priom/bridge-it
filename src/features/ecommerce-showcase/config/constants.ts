@@ -8,38 +8,31 @@ export const GALLERY_PAGE_SIZE = 12;
 
 export const HOMEPAGE_SECTION_MAX = 6;
 
+/** Public homepage: exactly 3 website design category rows (admin-curated). */
 export const HOMEPAGE_SECTIONS = [
   {
-    key: 'popular',
-    title: 'Popular E-commerce Designs',
-    eyebrow: 'Curated',
-    description: 'Hand-picked storefronts for Bangladesh businesses.',
-    viewAllHref: '/websites',
-    viewAllLabel: 'View all websites',
-  },
-  {
     key: 'fashion_lifestyle',
-    title: 'Fashion & Lifestyle',
+    title: 'Fashion Website Designs',
     eyebrow: 'Fashion',
-    description: 'Apparel, jewellery, beauty and lifestyle stores.',
+    description: 'Apparel, jewellery and lifestyle storefronts for your brand.',
     viewAllHref: '/websites?category=fashion',
-    viewAllLabel: 'View fashion',
+    viewAllLabel: 'View fashion websites',
   },
   {
     key: 'electronics_gadgets',
-    title: 'Electronics & Gadgets',
+    title: 'Electronics Website Designs',
     eyebrow: 'Electronics',
-    description: 'Mobile, gadgets and appliance storefronts.',
+    description: 'Mobile, gadgets and appliance storefronts ready to customize.',
     viewAllHref: '/websites?category=electronics',
-    viewAllLabel: 'View electronics',
+    viewAllLabel: 'View electronics websites',
   },
   {
-    key: 'food_home_specialty',
-    title: 'Food, Home & Specialty',
-    eyebrow: 'Specialty',
-    description: 'Grocery, home and niche commerce designs.',
-    viewAllHref: '/websites',
-    viewAllLabel: 'View all websites',
+    key: 'popular',
+    title: 'Beauty & Lifestyle Designs',
+    eyebrow: 'Beauty',
+    description: 'Beauty, lifestyle and specialty storefronts for Bangladesh brands.',
+    viewAllHref: '/websites?category=cosmetics',
+    viewAllLabel: 'View more websites',
   },
 ] as const;
 
@@ -91,41 +84,18 @@ export const CATALOG_PACKAGE_TIERS = [
   },
 ] as const;
 
-/** Extra homepage rows loaded by category slug (not admin curation). */
-export const HOMEPAGE_LEGACY_CATEGORY_SECTIONS = [
-  {
-    slug: 'cosmetics',
-    title: 'Beauty & Cosmetics',
-    eyebrow: 'Popular',
-    description: 'Skincare, makeup and beauty storefronts.',
-    viewAllHref: '/ecommerce/cosmetics',
-    viewAllLabel: 'View beauty',
-  },
-  {
-    slug: 'furniture',
-    title: 'Furniture & Home',
-    eyebrow: 'Popular',
-    description: 'Furniture and home decor commerce designs.',
-    viewAllHref: '/ecommerce/furniture',
-    viewAllLabel: 'View home',
-  },
-  {
-    slug: 'grocery',
-    title: 'Food & Grocery',
-    eyebrow: 'Popular',
-    description: 'Organic shops, bakeries and local grocery storefronts.',
-    viewAllHref: '/ecommerce/grocery',
-    viewAllLabel: 'View grocery',
-  },
-  {
-    slug: 'sports',
-    title: 'Sports & Outdoor',
-    eyebrow: 'Popular',
-    description: 'Activewear, cycling and sports gear storefronts.',
-    viewAllHref: '/ecommerce/sports',
-    viewAllLabel: 'View sports',
-  },
-] as const;
+/**
+ * Legacy auto category rows removed from homepage (Sports & Outdoor, etc.)
+ * Keep empty so HomeGallery stays focused on the 3 curated website sections.
+ */
+export const HOMEPAGE_LEGACY_CATEGORY_SECTIONS: Array<{
+  slug: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  viewAllHref: string;
+  viewAllLabel: string;
+}> = [];
 
 /** Compact page tabs for /websites listing and homepage Design Gallery. */
 export const LISTING_VIEW_TABS = [

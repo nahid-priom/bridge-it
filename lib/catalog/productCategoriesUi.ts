@@ -4,7 +4,7 @@ import type { ProductCategoryKey } from '@/types/product';
 
 const GRADIENTS: Record<string, string> = {
   electronics: 'from-sky-500 to-blue-700',
-  gadgets: 'from-violet-500 to-purple-700',
+  gadgets: 'from-blue-500 to-blue-700',
   'office-solutions': 'from-slate-500 to-slate-700',
   'smart-devices': 'from-emerald-500 to-teal-700',
   'digital-products': 'from-amber-500 to-orange-600',
@@ -12,7 +12,7 @@ const GRADIENTS: Record<string, string> = {
 
 const COLORS: Record<string, string> = {
   electronics: '#0ea5e9',
-  gadgets: '#8b5cf6',
+  gadgets: '#3b82f6',
   'office-solutions': '#64748b',
   'smart-devices': '#10b981',
   'digital-products': '#f59e0b',

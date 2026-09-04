@@ -18,7 +18,7 @@ export const HowItWorks: React.FC = () => {
       title: 'Verify & Review',
       titleBn: 'যাচাই করুন',
       description: 'Check seller profiles, reviews and watermark-protected demo galleries.',
-      color: '#8B5CF6',
+      color: '#3B82F6',
       num: '02',
     },
     {

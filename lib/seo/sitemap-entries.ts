@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next';
 import { ROUTES } from '@/lib/routes';
 import { STATIC_SITEMAP_ROUTES } from '@/lib/seo/config';
 import { listCategories, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
+import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
+import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 
 const CANONICAL_ORIGIN = 'https://www.bridgeitpark.com';
 
@@ -45,8 +47,47 @@ async function listAllPublishedProjectCards() {
   return items;
 }
 
+async function listAllPublishedSoftwareCards() {
+  const pageSize = 48;
+  let page = 1;
+  const items: Awaited<ReturnType<typeof listSoftwareProjectCards>>['items'] = [];
+  let total = Infinity;
+
+  while ((page - 1) * pageSize < total) {
+    const result = await listSoftwareProjectCards({ page, pageSize });
+    total = result.total;
+    items.push(...result.items);
+    if (result.items.length < pageSize) break;
+    page += 1;
+  }
+
+  return items;
+}
+
+async function listAllPublishedCreativeCards() {
+  const pageSize = 48;
+  let page = 1;
+  const items: Awaited<ReturnType<typeof listCreativeMarketingCards>>['items'] = [];
+  let total = Infinity;
+
+  while ((page - 1) * pageSize < total) {
+    const result = await listCreativeMarketingCards({ page, pageSize });
+    total = result.total;
+    items.push(...result.items);
+    if (result.items.length < pageSize) break;
+    page += 1;
+  }
+
+  return items;
+}
+
 export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
-  const [categories, projects] = await Promise.all([listCategories(), listAllPublishedProjectCards()]);
+  const [categories, projects, softwareProjects, creativeProjects] = await Promise.all([
+    listCategories(),
+    listAllPublishedProjectCards(),
+    listAllPublishedSoftwareCards(),
+    listAllPublishedCreativeCards(),
+  ]);
 
   const staticEntries = STATIC_SITEMAP_ROUTES.map((route) =>
     entry(route.path, {
@@ -71,5 +112,27 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  return [...staticEntries, ...categoryEntries, ...projectEntries];
+  const softwareEntries = softwareProjects.map((project) =>
+    entry(ROUTES.softwareSolution(project.slug), {
+      lastModified: project.updated_at,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    })
+  );
+
+  const creativeEntries = creativeProjects.map((project) =>
+    entry(ROUTES.creativeMarketingSolution(project.slug), {
+      lastModified: project.updated_at,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    })
+  );
+
+  return [
+    ...staticEntries,
+    ...categoryEntries,
+    ...projectEntries,
+    ...softwareEntries,
+    ...creativeEntries,
+  ];
 }

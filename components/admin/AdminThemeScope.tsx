@@ -14,7 +14,7 @@ function restoreSiteTheme(html: HTMLElement) {
 }
 
 function isShowcaseAdmin(pathname: string) {
-  return pathname.startsWith('/admin/ecommerce-projects') || pathname.startsWith('/admin/ecommerce-leads');
+  return pathname.startsWith('/admin/ecommerce-projects') || pathname.startsWith('/admin/ecommerce-leads') || pathname.startsWith('/admin/software-projects');
 }
 
 /** Keep BITP /admin on dark UI; ecommerce showcase follows the site theme switcher. */

@@ -1,28 +1,37 @@
 import { redirect } from 'next/navigation';
-import { solutionsSearchUrl, solutionsUrl } from '@/lib/routes';
+import { ROUTES } from '@/lib/routes';
+import { buildExploreSearchUrl, inferExploreType } from '@/lib/search/inferExploreType';
+import { parseExploreType } from '@/components/explore/explore-types';
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-/** Legacy /search route — redirects to unified solutions catalog */
+function first(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
+}
+
+/** Legacy /search route — aliases to /explore with type inference when type is missing */
 export default async function SearchRoute({ searchParams }: Props) {
   const params = await searchParams;
-  const q =
-    typeof params.q === 'string'
-      ? params.q
-      : Array.isArray(params.q)
-        ? (params.q[0] ?? '')
-        : '';
-  const category =
-    typeof params.category === 'string'
-      ? params.category
-      : Array.isArray(params.category)
-        ? (params.category[0] ?? '')
-        : '';
+  const q = first(params.q).trim();
+  const rawType = first(params.type).trim();
+  const type = rawType
+    ? parseExploreType(rawType === 'creative-marketing' ? 'marketing' : rawType)
+    : inferExploreType(q);
+  const category = first(params.category).trim();
+  const page = first(params.page).trim();
 
-  if (category && category !== 'all') {
-    redirect(solutionsUrl(category, q ? { q } : undefined));
+  if (!category && (!page || page === '1')) {
+    redirect(buildExploreSearchUrl({ q, type }));
   }
-  redirect(solutionsSearchUrl(q));
+
+  const next = new URLSearchParams();
+  next.set('type', type);
+  if (q) next.set('q', q);
+  if (category && category !== 'all') next.set('category', category);
+  if (page && page !== '1') next.set('page', page);
+
+  redirect(`${ROUTES.explore}?${next.toString()}`);
 }

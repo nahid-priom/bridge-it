@@ -53,7 +53,7 @@ export function SellerChatPanel({
                 )}
               >
                 <div className="relative shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-deshi-green to-violet-500 flex items-center justify-center text-white text-sm font-bold">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-deshi-green to-blue-500 flex items-center justify-center text-white text-sm font-bold">
                     {conv.sellerName.charAt(0)}
                   </div>
                   {conv.isOnline && (
@@ -80,7 +80,7 @@ export function SellerChatPanel({
       {active && (
         <div className="flex-1 flex flex-col min-w-0">
           <div className="px-4 py-3 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-deshi-green to-violet-500 flex items-center justify-center text-white text-sm font-bold">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-deshi-green to-blue-500 flex items-center justify-center text-white text-sm font-bold">
               {active.sellerName.charAt(0)}
             </div>
             <div>

@@ -1,0 +1,21 @@
+{
+  "serviceName": "Packaging Design",
+  "serviceGroup": "packaging-print",
+  "targetBusiness": "FMCG, food, cosmetics, retail products",
+  "visualDirection": "Retail packaging hero with box, pouch and bottle mockups",
+  "mockupStyle": "angled product packaging on soft retail backdrop",
+  "photographyDirection": "realistic product packaging photography, shelf-ready",
+  "primaryElements": [
+    "box",
+    "label",
+    "pouch",
+    "bottle",
+    "shelf mockup"
+  ],
+  "palette": [
+    "#B45309",
+    "#059669",
+    "#FEF3C7",
+    "#1C1917"
+  ]
+}

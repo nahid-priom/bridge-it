@@ -6,15 +6,15 @@ import { marketplaceCategorySearchUrl } from '@/lib/routes';
 import type { Category, CategoryType } from '@/types';
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
-  'software-development': 'from-violet-500 to-purple-700',
+  'software-development': 'from-blue-500 to-blue-700',
   'web-development': 'from-emerald-400 to-cyan-600',
   'app-development': 'from-sky-400 to-indigo-600',
   'digital-marketing': 'from-amber-400 to-rose-500',
-  'ai-automations': 'from-fuchsia-400 to-violet-600',
+  'ai-automations': 'from-fuchsia-400 to-blue-600',
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'software-development': '#7C3AED',
+  'software-development': '#2563EB',
   'web-development': '#10B981',
   'app-development': '#3B82F6',
   'digital-marketing': '#F59E0B',

@@ -40,7 +40,7 @@ export function MilestoneTracker({ milestones }: { milestones: ClientMilestone[]
                 </p>
                 <div className="h-1.5 rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden mb-2">
                   <div
-                    className="h-full bg-gradient-to-r from-deshi-green to-violet-500 rounded-full"
+                    className="h-full bg-gradient-to-r from-deshi-green to-blue-500 rounded-full"
                     style={{ width: `${ms.progress}%` }}
                   />
                 </div>

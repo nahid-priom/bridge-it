@@ -30,9 +30,9 @@ export function HeroDecorations() {
       {/* Far left mint blob */}
       <div className="absolute -left-24 md:-left-32 top-[15%] w-64 h-64 md:w-96 md:h-96 rounded-full bg-teal-200/40 dark:bg-teal-500/10 blur-3xl opacity-80 md:opacity-100 scale-75 md:scale-100" />
 
-      {/* Left top — tilted purple dot cluster */}
+      {/* Left top — tilted blue dot cluster */}
       <svg
-        className="absolute left-[2%] md:left-[5%] top-[12%] md:top-[14%] w-20 h-20 md:w-28 md:h-28 text-[#6D35F5] opacity-50 md:opacity-70 -rotate-12"
+        className="absolute left-[2%] md:left-[5%] top-[12%] md:top-[14%] w-20 h-20 md:w-28 md:h-28 text-[#2563EB] opacity-50 md:opacity-70 -rotate-12"
         viewBox="0 0 100 100"
       >
         <defs>
@@ -49,7 +49,7 @@ export function HeroDecorations() {
         animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.9, 0.5] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <FourPointStar className="w-4 h-4 md:w-5 md:h-5" color="#6D35F5" />
+        <FourPointStar className="w-4 h-4 md:w-5 md:h-5" color="#2563EB" />
       </motion.div>
 
       {/* Green plus accent — lower left */}
@@ -76,7 +76,7 @@ export function HeroDecorations() {
       >
         <path
           d="M25 200 C 70 150, 110 120, 155 75"
-          stroke="#6D35F5"
+          stroke="#2563EB"
           strokeWidth="2.5"
           strokeDasharray="7 9"
           strokeLinecap="round"
@@ -93,9 +93,9 @@ export function HeroDecorations() {
         </g>
       </motion.svg>
 
-      {/* Right — purple wave fan (ripple lines) */}
+      {/* Right — blue wave fan (ripple lines) */}
       <svg
-        className="absolute -right-4 md:right-0 top-[22%] h-[55%] w-24 md:w-32 text-[#6D35F5] opacity-25 md:opacity-40 dark:opacity-20 dark:md:opacity-30 hidden sm:block"
+        className="absolute -right-4 md:right-0 top-[22%] h-[55%] w-24 md:w-32 text-[#2563EB] opacity-25 md:opacity-40 dark:opacity-20 dark:md:opacity-30 hidden sm:block"
         viewBox="0 0 80 200"
         preserveAspectRatio="none"
         fill="none"
@@ -111,13 +111,13 @@ export function HeroDecorations() {
         ))}
       </svg>
 
-      {/* Mid-right purple star */}
+      {/* Mid-right blue star */}
       <motion.div
         className="absolute right-[12%] md:right-[16%] top-[38%] md:top-[36%] hidden sm:block"
         animate={{ opacity: [0.4, 0.75, 0.4] }}
         transition={{ duration: 3.5, repeat: Infinity }}
       >
-        <FourPointStar className="w-3.5 h-3.5 md:w-4 md:h-4" color="#6D35F5" />
+        <FourPointStar className="w-3.5 h-3.5 md:w-4 md:h-4" color="#2563EB" />
       </motion.div>
 
       {/* Bottom right — yellow star */}
@@ -129,17 +129,17 @@ export function HeroDecorations() {
         <FourPointStar className="w-3 h-3 md:w-4 md:h-4" color="#FBBF24" />
       </motion.div>
 
-      {/* Bottom right — purple star */}
+      {/* Bottom right — blue star */}
       <motion.div
         className="absolute right-[14%] md:right-[18%] bottom-[22%] md:bottom-[24%]"
         animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.85, 0.5] }}
         transition={{ duration: 3.2, repeat: Infinity, delay: 0.6 }}
       >
-        <FourPointStar className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" color="#6D35F5" />
+        <FourPointStar className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" color="#2563EB" />
       </motion.div>
 
-      {/* Soft purple glow — right */}
-      <div className="absolute top-0 right-0 w-[45%] h-[70%] bg-gradient-to-bl from-violet-100/50 via-transparent to-transparent dark:from-violet-900/20 blur-2xl" />
+      {/* Soft blue glow — right */}
+      <div className="absolute top-0 right-0 w-[45%] h-[70%] bg-gradient-to-bl from-blue-100/50 via-transparent to-transparent dark:from-blue-900/20 blur-2xl" />
     </div>
   );
 }

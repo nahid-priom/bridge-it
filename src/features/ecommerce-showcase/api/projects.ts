@@ -391,10 +391,9 @@ export async function getProjectById(id: string): Promise<EcommerceProjectDetail
 
 function emptyHomepageSections(): HomepageSectionsResult {
   return {
-    popular: [],
     fashion_lifestyle: [],
     electronics_gadgets: [],
-    food_home_specialty: [],
+    popular: [],
   };
 }
 
@@ -418,7 +417,8 @@ async function listHomepageSectionsUncached(): Promise<HomepageSectionsResult> {
   const grouped = emptyHomepageSections();
   for (const row of data ?? []) {
     const key = String((row as { section_key: string }).section_key) as HomepageSectionKey;
-    if (!grouped[key] || grouped[key].length >= 6) continue;
+    if (!HOMEPAGE_SECTIONS.some((section) => section.key === key)) continue;
+    if (!grouped[key] || grouped[key].length >= HOMEPAGE_SECTION_MAX) continue;
     grouped[key].push({
       ...mapCard({
         ...(row as Record<string, unknown>),

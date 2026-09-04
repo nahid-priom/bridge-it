@@ -1,0 +1,133 @@
+{
+  "brandName": "Automobile Workshop Management",
+  "businessType": "Car / bike service workshop",
+  "primaryUser": "Workshop owner / Service advisor / Parts store",
+  "solutionGroup": "business-automation",
+  "softwareType": "Automation",
+  "platformType": "web",
+  "modules": [
+    "Job Cards",
+    "Estimates",
+    "Parts Store",
+    "Labour",
+    "Invoicing",
+    "Vehicle History"
+  ],
+  "dashboardKPIs": [
+    "Open Jobs",
+    "Bay Utilization",
+    "Parts Margin",
+    "Avg Job Value",
+    "Pending Deliveries",
+    "Follow-ups Due"
+  ],
+  "quickActions": [
+    "New Job Cards",
+    "New Estimates",
+    "New Parts Store",
+    "New Labour"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Vehicle Intake",
+    "Estimates",
+    "Job Cards",
+    "Parts Store",
+    "Labour",
+    "Invoicing",
+    "Vehicle History",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Job card",
+    "Service advisor",
+    "Bay",
+    "Estimate"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Job Cards",
+    "Estimates",
+    "Parts Store",
+    "Labour",
+    "Invoicing"
+  ],
+  "terminology": [
+    "Job card",
+    "Service advisor",
+    "Bay",
+    "Estimate",
+    "Parts issue",
+    "Labour hour",
+    "Vehicle history",
+    "Gate pass",
+    "Warranty job",
+    "Next service due"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#B71C1C",
+    "accent": "#90A4AE",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Auto workshop",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "vehicle-intake",
+      "name": "Vehicle Intake",
+      "category": "form"
+    },
+    {
+      "key": "estimates",
+      "name": "Estimates",
+      "category": "detail"
+    },
+    {
+      "key": "job-cards",
+      "name": "Job Cards",
+      "category": "list"
+    },
+    {
+      "key": "parts-store",
+      "name": "Parts Store",
+      "category": "stock"
+    },
+    {
+      "key": "labour",
+      "name": "Labour",
+      "category": "transaction"
+    },
+    {
+      "key": "invoicing",
+      "name": "Invoicing",
+      "category": "accounts"
+    },
+    {
+      "key": "vehicle-history",
+      "name": "Vehicle History",
+      "category": "other"
+    },
+    {
+      "key": "workshop-reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

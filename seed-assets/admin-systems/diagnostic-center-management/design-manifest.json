@@ -1,0 +1,140 @@
+{
+  "brandName": "Diagnostic Center Management",
+  "businessType": "Diagnostic centre / lab chain",
+  "primaryUser": "Lab admin / Reception / Pathologist coordinator",
+  "solutionGroup": "healthcare-software",
+  "softwareType": "Healthcare",
+  "platformType": "web",
+  "modules": [
+    "Test Catalog",
+    "Booking",
+    "Sample Tracking",
+    "Reporting",
+    "Billing",
+    "Referral Ledger",
+    "TAT"
+  ],
+  "dashboardKPIs": [
+    "Bookings Today",
+    "Samples Pending",
+    "Reports Ready",
+    "Avg TAT Hours",
+    "Referral Dues",
+    "Collection Amount"
+  ],
+  "quickActions": [
+    "New Test Catalog",
+    "New Booking",
+    "New Sample Tracking",
+    "New Reporting"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Test Catalog",
+    "Bookings",
+    "Sample Tracking",
+    "Processing Queue",
+    "Report Entry",
+    "Billing",
+    "Referral Ledger",
+    "TAT Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Accession",
+    "Sample ID",
+    "Panel",
+    "TAT"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Test Catalog",
+    "Booking",
+    "Sample Tracking",
+    "Reporting",
+    "Billing"
+  ],
+  "terminology": [
+    "Accession",
+    "Sample ID",
+    "Panel",
+    "TAT",
+    "Referral doctor",
+    "Report release",
+    "Critical value",
+    "Collection centre",
+    "Homecare draw",
+    "Parameter"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#6A1B9A",
+    "accent": "#26A69A",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Diagnostics / pathology",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "test-catalog",
+      "name": "Test Catalog",
+      "category": "list"
+    },
+    {
+      "key": "bookings",
+      "name": "Bookings",
+      "category": "form"
+    },
+    {
+      "key": "sample-tracking",
+      "name": "Sample Tracking",
+      "category": "detail"
+    },
+    {
+      "key": "processing-queue",
+      "name": "Processing Queue",
+      "category": "list"
+    },
+    {
+      "key": "report-entry",
+      "name": "Report Entry",
+      "category": "transaction"
+    },
+    {
+      "key": "billing",
+      "name": "Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "referral-ledger",
+      "name": "Referral Ledger",
+      "category": "accounts"
+    },
+    {
+      "key": "tat-reports",
+      "name": "TAT Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

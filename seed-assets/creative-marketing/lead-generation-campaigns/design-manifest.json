@@ -1,0 +1,21 @@
+{
+  "serviceName": "Lead Generation Campaigns",
+  "serviceGroup": "lead-generation",
+  "targetBusiness": "Services, education, real estate, B2B",
+  "visualDirection": "Lead funnel presentation with landing page, lead form ad and CRM flow",
+  "mockupStyle": "phone lead form + desktop landing + funnel stages",
+  "photographyDirection": "professional service brand photography, indigo/teal accents",
+  "primaryElements": [
+    "lead funnel",
+    "landing page",
+    "lead ad",
+    "form UI",
+    "CRM flow"
+  ],
+  "palette": [
+    "#4F46E5",
+    "#14B8A6",
+    "#EEF2FF",
+    "#1E1B4B"
+  ]
+}

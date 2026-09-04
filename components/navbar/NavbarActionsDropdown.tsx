@@ -6,7 +6,6 @@ import {
   Globe,
   Heart,
   HelpCircle,
-  MessageCircle,
   MoreHorizontal,
   ShoppingCart,
 } from 'lucide-react';
@@ -35,7 +34,8 @@ export function NavbarActionsDropdown({
 }: NavbarActionsDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const totalBadge = notificationCount + messageCount + cartCount;
+  const totalBadge = notificationCount + cartCount;
+  void messageCount;
 
   useClickOutside(ref, () => setOpen(false), open);
 
@@ -87,18 +87,10 @@ export function NavbarActionsDropdown({
           >
             <NavDropdownSection title="Activity">
               <NavDropdownItem
-                href={ROUTES.messages}
-                onClick={close}
-                icon={<MessageCircle className="w-4 h-4 text-sky-500" />}
-                label="Messages"
-                description="Chat with sellers"
-                badge={messageCount}
-              />
-              <NavDropdownItem
                 onClick={() => {
                   close();
                 }}
-                icon={<Bell className="w-4 h-4 text-violet-500" />}
+                icon={<Bell className="w-4 h-4 text-blue-500" />}
                 label="Notifications"
                 description="Updates & alerts"
                 badge={notificationCount}

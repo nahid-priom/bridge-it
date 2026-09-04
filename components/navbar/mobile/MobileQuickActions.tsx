@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Heart, MessageCircle, ShoppingCart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 
@@ -51,19 +51,14 @@ function QuickActionCard({
 
 export function MobileQuickActions({
   cartCount = 0,
-  messageCount = 0,
+  messageCount: _messageCount = 0,
   onNavigate,
   className,
 }: MobileQuickActionsProps) {
+  void _messageCount;
+
   return (
     <div className={cn('grid grid-cols-2 gap-2', className)}>
-      <QuickActionCard
-        href={ROUTES.messages}
-        label="Messages"
-        icon={<MessageCircle className="w-4 h-4 text-sky-500 shrink-0" aria-hidden />}
-        badge={messageCount}
-        onNavigate={onNavigate}
-      />
       <QuickActionCard
         href={ROUTES.products}
         label="Wishlist"

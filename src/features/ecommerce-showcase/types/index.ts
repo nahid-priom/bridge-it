@@ -163,8 +163,7 @@ export type ShowcaseListResult = {
 export type HomepageSectionKey =
   | 'popular'
   | 'fashion_lifestyle'
-  | 'electronics_gadgets'
-  | 'food_home_specialty';
+  | 'electronics_gadgets';
 
 export type HomepagePlacement = {
   id: string;

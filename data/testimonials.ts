@@ -19,7 +19,7 @@ export const platformTestimonials: PlatformTestimonial[] = [
     comment:
       `${BRANDING.appName} transformed how we go digital. Their team delivered a polished website and marketing setup that gave us confidence to invest in our brand online.`,
     rating: 5,
-    accentColor: '#6C3CE1',
+    accentColor: '#2563EB',
   },
   {
     id: 't2',

@@ -1,0 +1,134 @@
+{
+  "brandName": "Flour Mill Management",
+  "businessType": "Flour mill / atta mill",
+  "primaryUser": "Mill owner / Shift supervisor / Sales accountant",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Wheat Intake",
+    "Milling Shifts",
+    "Packing",
+    "Finished Stock",
+    "Dealer Sales",
+    "Accounts",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Wheat Stock",
+    "Shift Output",
+    "Extraction %",
+    "Pack Stock",
+    "Dealer Orders",
+    "Outstanding"
+  ],
+  "quickActions": [
+    "New Wheat Intake",
+    "New Milling Shifts",
+    "New Packing",
+    "New Finished Stock"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Wheat Intake",
+    "Quality",
+    "Milling Shifts",
+    "Packing",
+    "Finished Stock",
+    "Dealer Sales",
+    "Accounts",
+    "Mill Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Wheat lot",
+    "Extraction",
+    "Shift output",
+    "Pack SKU"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Wheat Intake",
+    "Milling Shifts",
+    "Packing",
+    "Finished Stock",
+    "Dealer Sales"
+  ],
+  "terminology": [
+    "Wheat lot",
+    "Extraction",
+    "Shift output",
+    "Pack SKU",
+    "Bran",
+    "Dealer challan",
+    "Atta",
+    "Maida",
+    "Suji",
+    "Intake weight"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#8D6E63",
+    "accent": "#FFB300",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Flour milling",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "wheat-intake",
+      "name": "Wheat Intake",
+      "category": "transaction"
+    },
+    {
+      "key": "quality",
+      "name": "Quality",
+      "category": "form"
+    },
+    {
+      "key": "milling-shifts",
+      "name": "Milling Shifts",
+      "category": "detail"
+    },
+    {
+      "key": "packing",
+      "name": "Packing",
+      "category": "stock"
+    },
+    {
+      "key": "finished-stock",
+      "name": "Finished Stock",
+      "category": "stock"
+    },
+    {
+      "key": "dealer-sales",
+      "name": "Dealer Sales",
+      "category": "list"
+    },
+    {
+      "key": "accounts",
+      "name": "Accounts",
+      "category": "accounts"
+    },
+    {
+      "key": "mill-reports",
+      "name": "Mill Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

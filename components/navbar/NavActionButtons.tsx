@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Heart, MessageCircle, ShoppingCart } from 'lucide-react';
+import { Bell, Heart, ShoppingCart } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { NavIconButton } from '@/components/navbar/NavIconButton';
 import type { AuthProfile } from '@/lib/auth/types';
@@ -32,19 +32,8 @@ export function NavActionButtons({
     <div className={cn('flex items-center gap-0.5 shrink-0', className)}>
       {!cartOnly && (
         <>
-          <NavIconButton
-            href={ROUTES.products}
-            label="Wishlist"
-            size={iconSize}
-          >
+          <NavIconButton href={ROUTES.products} label="Wishlist" size={iconSize}>
             <Heart className="w-5 h-5" aria-hidden />
-          </NavIconButton>
-          <NavIconButton
-            href={ROUTES.messages}
-            label="Messages"
-            size={iconSize}
-          >
-            <MessageCircle className="w-5 h-5" aria-hidden />
           </NavIconButton>
           <NavIconButton
             label={

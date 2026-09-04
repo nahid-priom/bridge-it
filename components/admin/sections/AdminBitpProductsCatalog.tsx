@@ -117,7 +117,17 @@ export function AdminBitpProductsSection() {
   }, [catalog, categoryFilter]);
 
   const categoryChips = useMemo(() => {
-    const chips = [...categories];
+    const preferredOrder = [
+      BITP_ECOMMERCE_SOLUTIONS_SLUG,
+      'software-solutions',
+      'creative-digital-marketing',
+      'web-app-solutions',
+    ];
+    const chips = categories.filter(
+      (item) =>
+        item.is_active !== false &&
+        !['digital-marketing', 'graphics-creative'].includes(item.slug)
+    );
     if (!chips.some((item) => item.slug === BITP_ECOMMERCE_SOLUTIONS_SLUG)) {
       chips.unshift({
         id: 'ecommerce-solutions-virtual',
@@ -131,7 +141,26 @@ export function AdminBitpProductsSection() {
         updated_at: '',
       });
     }
-    return chips.sort((a, b) => a.sort_order - b.sort_order);
+    const renamed = chips.map((item) => {
+      if (item.slug === 'creative-digital-marketing') {
+        return { ...item, name: 'Creative & Digital Marketing' };
+      }
+      if (item.slug === 'software-solutions') {
+        return { ...item, name: 'Software Solutions' };
+      }
+      if (item.slug === 'web-app-solutions') {
+        return { ...item, name: 'Web & App Solutions' };
+      }
+      return item;
+    });
+    return renamed.sort((a, b) => {
+      const ai = preferredOrder.indexOf(a.slug);
+      const bi = preferredOrder.indexOf(b.slug);
+      if (ai === -1 && bi === -1) return a.sort_order - b.sort_order;
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
   }, [categories]);
 
   const countFor = (slug: string) => {

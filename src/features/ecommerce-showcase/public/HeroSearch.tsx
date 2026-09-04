@@ -1,33 +1,28 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { buildExploreSearchUrl } from '@/lib/search/inferExploreType';
 import { useWebsiteSearchPlaceholder } from '@/hooks/useWebsiteSearchPlaceholder';
 
 export function HeroSearch({ className }: { className?: string }) {
   const router = useRouter();
-  const pathname = usePathname();
   const [query, setQuery] = useState('');
   const typed = useWebsiteSearchPlaceholder(query.length === 0);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
     const q = query.trim();
-    const params =
-      pathname === '/websites' ? new URLSearchParams(window.location.search) : new URLSearchParams();
-    if (q) params.set('q', q);
-    else params.delete('q');
-    const qs = params.toString();
-    router.push(qs ? `/websites?${qs}` : '/websites');
+    router.push(buildExploreSearchUrl({ q }));
   };
 
   return (
     <form onSubmit={onSubmit} role="search" className={cn('w-full', className)}>
       <div className="flex h-11 items-center rounded-xl border border-slate-300 bg-white shadow-sm dark:border-white/40 dark:bg-[#0c1520]">
         <label htmlFor="hero-website-search" className="sr-only">
-          Search Fashion, Electronics, Grocery
+          Search websites, software, and creative marketing
         </label>
         <input
           id="hero-website-search"
@@ -36,7 +31,7 @@ export function HeroSearch({ className }: { className?: string }) {
           onFocus={typed.onFocus}
           onBlur={typed.onBlur}
           placeholder={typed.placeholder}
-          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-sm leading-none text-text-primary outline-none placeholder:text-text-muted"
+          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-center text-sm leading-none text-text-primary outline-none placeholder:text-center placeholder:text-text-muted sm:text-left sm:placeholder:text-left"
           autoComplete="off"
         />
         <button
@@ -46,7 +41,7 @@ export function HeroSearch({ className }: { className?: string }) {
             'bg-[#2563eb] text-white transition-colors hover:bg-[#1d4ed8]',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60a5fa]'
           )}
-          aria-label="Search websites"
+          aria-label="Search solutions"
         >
           <Search className="h-4 w-4" aria-hidden />
         </button>

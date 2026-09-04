@@ -15,7 +15,7 @@ export type PageHeroProps = {
   title: string;
   /** Second line — green accent */
   highlightedText?: string;
-  /** Third line — purple script accent */
+  /** Third line — blue script accent */
   accentLine?: string;
   subtitle?: string;
   variant?: PageHeroVariant;
@@ -31,7 +31,7 @@ export type PageHeroProps = {
 function HeroUnderline() {
   return (
     <svg
-      className="absolute -bottom-0.5 sm:-bottom-1 left-1/2 -translate-x-1/2 w-[min(100%,320px)] h-3 sm:h-4 text-[#6D35F5] dark:text-violet-400"
+      className="absolute -bottom-0.5 sm:-bottom-1 left-1/2 -translate-x-1/2 w-[min(100%,320px)] h-3 sm:h-4 text-[#2563EB] dark:text-blue-400"
       viewBox="0 0 280 14"
       preserveAspectRatio="none"
       aria-hidden
@@ -94,7 +94,7 @@ export function PageHero({
           aria-hidden
         >
           <div className="absolute -left-20 top-0 w-48 h-48 rounded-full bg-teal-200/30 dark:bg-teal-500/10 blur-3xl" />
-          <div className="absolute right-0 top-0 w-40 h-40 rounded-full bg-violet-100/40 dark:bg-violet-900/15 blur-2xl" />
+          <div className="absolute right-0 top-0 w-40 h-40 rounded-full bg-blue-100/40 dark:bg-blue-900/15 blur-2xl" />
         </div>
       )}
 

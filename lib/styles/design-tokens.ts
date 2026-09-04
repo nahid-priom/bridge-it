@@ -4,8 +4,8 @@
 export const COLORS = {
   primary: '#00A85A',
   primaryDark: '#059669',
-  accent: '#7C3AED',
-  accentViolet: '#6D35F5',
+  accent: '#2563EB',
+  accentViolet: '#0EA5E9',
   ink: '#080B16',
   muted: '#4B5563',
 } as const;
@@ -17,7 +17,7 @@ export const heroTypography = {
   h1Ink: 'text-[#080B16] dark:text-white',
   h1Accent: 'text-[#00A85A]',
   h1Script:
-    'hero-script-line block text-[2.25rem] sm:text-[3rem] md:text-[3.75rem] lg:text-[4.25rem] xl:text-[4.75rem] text-[#6D35F5] dark:text-violet-400 leading-[1.05]',
+    'hero-script-line block text-[2.25rem] sm:text-[3rem] md:text-[3.75rem] lg:text-[4.25rem] xl:text-[4.75rem] text-[#0EA5E9] dark:text-sky-400 leading-[1.05]',
   subtitle:
     'mx-auto max-w-[600px] text-base sm:text-[17px] lg:text-lg text-[#4B5563] dark:text-slate-300 leading-relaxed',
   eyebrow:

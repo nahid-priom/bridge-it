@@ -1,0 +1,133 @@
+{
+  "brandName": "College Management",
+  "businessType": "College / institute campus",
+  "primaryUser": "Registrar / Accounts / Department admin",
+  "solutionGroup": "education-software",
+  "softwareType": "Education",
+  "platformType": "web",
+  "modules": [
+    "Admissions",
+    "Enrollment",
+    "Fees",
+    "Exams",
+    "Faculty",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Active Students",
+    "Enrollment Rate",
+    "Semester Fee Due",
+    "Exam Clearance Pending",
+    "Results Published",
+    "Faculty Load"
+  ],
+  "quickActions": [
+    "New Admissions",
+    "New Enrollment",
+    "New Fees",
+    "New Exams"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Admissions",
+    "Course Catalog",
+    "Enrollment",
+    "Fee Billing",
+    "Exam Schedule",
+    "Results",
+    "Faculty",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Program",
+    "Semester",
+    "Enrollment",
+    "Credit hour"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Admissions",
+    "Enrollment",
+    "Fees",
+    "Exams",
+    "Faculty"
+  ],
+  "terminology": [
+    "Program",
+    "Semester",
+    "Enrollment",
+    "Credit hour",
+    "Exam clearance",
+    "Result gazette",
+    "Faculty load",
+    "Hall ticket",
+    "Course drop",
+    "Registrar"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#4A148C",
+    "accent": "#80CBC4",
+    "sidebar": "brand",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Colleges / tertiary",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "admissions",
+      "name": "Admissions",
+      "category": "list"
+    },
+    {
+      "key": "course-catalog",
+      "name": "Course Catalog",
+      "category": "detail"
+    },
+    {
+      "key": "enrollment",
+      "name": "Enrollment",
+      "category": "form"
+    },
+    {
+      "key": "fee-billing",
+      "name": "Fee Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "exam-schedule",
+      "name": "Exam Schedule",
+      "category": "list"
+    },
+    {
+      "key": "results",
+      "name": "Results",
+      "category": "transaction"
+    },
+    {
+      "key": "faculty",
+      "name": "Faculty",
+      "category": "users"
+    },
+    {
+      "key": "college-reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

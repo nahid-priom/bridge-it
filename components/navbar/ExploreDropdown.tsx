@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react';
 import {
   HelpCircle,
-  Palette,
   ShoppingBag,
   Sparkles,
   Star,
@@ -19,21 +18,19 @@ import { NavDropdownItem } from '@/components/navbar/navShared';
 import { EXPLORE_MOBILE_LINKS } from '@/components/navbar/exploreLinks';
 
 const EXPLORE_ICONS: Record<string, ReactNode> = {
-  'Software Showroom': <Code className="w-4 h-4 text-emerald-500" />,
+  'Software Solutions': <Code className="w-4 h-4 text-emerald-500" />,
   'E-commerce Showroom': <ShoppingBag className="w-4 h-4 text-teal-500" />,
+  'Creative & Digital Marketing': <Sparkles className="w-4 h-4 text-amber-500" />,
   'Web & App Solutions': <Globe className="w-4 h-4 text-blue-500" />,
-  'Digital Marketing': <Sparkles className="w-4 h-4 text-amber-500" />,
-  'Graphics & Creative': <Palette className="w-4 h-4 text-violet-500" />,
   'Success Stories': <Star className="w-4 h-4 text-amber-500" />,
   'Help Center': <HelpCircle className="w-4 h-4 text-slate-500" />,
 };
 
 const EXPLORE_DESCRIPTIONS: Record<string, string> = {
-  'Software Showroom': 'Live ERP demos',
+  'Software Solutions': 'ERP, POS, CRM & more',
   'E-commerce Showroom': 'Store demos & packages',
+  'Creative & Digital Marketing': 'Design + performance marketing',
   'Web & App Solutions': 'Websites & mobile apps',
-  'Digital Marketing': 'Ads, SEO & growth',
-  'Graphics & Creative': 'Design & branding',
   'Success Stories': 'Client wins',
   'Help Center': 'Support & guides',
 };

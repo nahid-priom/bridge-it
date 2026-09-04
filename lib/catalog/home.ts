@@ -45,7 +45,7 @@ export async function getHomeTopSellers(limit = 8): Promise<Seller[]> {
 
 export async function getHomeTestimonials(limit = 6): Promise<PlatformTestimonial[]> {
   const { data } = await listRecentReviews(limit);
-  const accents = ['#FF6B6B', '#8B5CF6', '#06D6A0', '#F59E0B', '#EC4899', '#3B82F6'];
+  const accents = ['#FF6B6B', '#3B82F6', '#06D6A0', '#F59E0B', '#EC4899', '#3B82F6'];
   return data.map((review, i) => ({
     id: review.id,
     name: review.reviewer_name,

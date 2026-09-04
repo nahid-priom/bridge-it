@@ -1,0 +1,133 @@
+{
+  "brandName": "Beauty Salon Management",
+  "businessType": "Salon / parlor / spa outlet",
+  "primaryUser": "Salon owner / Front desk / Stylist lead",
+  "solutionGroup": "business-automation",
+  "softwareType": "Automation",
+  "platformType": "web",
+  "modules": [
+    "Appointments",
+    "Services",
+    "Packages",
+    "Retail POS",
+    "Staff",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Appointments Today",
+    "Collection",
+    "Package Sales",
+    "Retail Sales",
+    "Staff Utilization",
+    "No-Shows"
+  ],
+  "quickActions": [
+    "New Appointments",
+    "New Services",
+    "New Packages",
+    "New Retail POS"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Appointments",
+    "Customers",
+    "Service Menu",
+    "Checkout",
+    "Packages",
+    "Retail Stock",
+    "Staff",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Appointment slot",
+    "Service menu",
+    "Package balance",
+    "Stylist"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Appointments",
+    "Services",
+    "Packages",
+    "Retail POS",
+    "Staff"
+  ],
+  "terminology": [
+    "Appointment slot",
+    "Service menu",
+    "Package balance",
+    "Stylist",
+    "Retail SKU",
+    "Membership",
+    "Commission",
+    "No-show",
+    "Walk-in",
+    "Bill split"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#AD1457",
+    "accent": "#26A69A",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Beauty salon / parlor",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "appointments",
+      "name": "Appointments",
+      "category": "list"
+    },
+    {
+      "key": "customers",
+      "name": "Customers",
+      "category": "detail"
+    },
+    {
+      "key": "service-menu",
+      "name": "Service Menu",
+      "category": "form"
+    },
+    {
+      "key": "checkout",
+      "name": "Checkout",
+      "category": "transaction"
+    },
+    {
+      "key": "packages",
+      "name": "Packages",
+      "category": "other"
+    },
+    {
+      "key": "retail-stock",
+      "name": "Retail Stock",
+      "category": "stock"
+    },
+    {
+      "key": "staff",
+      "name": "Staff",
+      "category": "users"
+    },
+    {
+      "key": "salon-reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

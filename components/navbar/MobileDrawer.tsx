@@ -79,6 +79,7 @@ export function MobileDrawer({
   cartCount = 0,
   messageBadge = 0,
 }: MobileDrawerProps) {
+  void messageBadge;
   const pathname = usePathname();
   const isActive = (href: string) => isNavActive(pathname, href);
   const contextProfile = useAuthProfile();
@@ -133,7 +134,6 @@ export function MobileDrawer({
           label: 'Dashboard',
           href: dashboardHref,
         },
-        { label: 'Messages', href: ROUTES.messages, badge: messageBadge },
         { label: 'Orders', href: ROUTES.clientOrders },
         { label: 'Wishlist', href: ROUTES.products },
       ]
@@ -294,7 +294,7 @@ export function MobileDrawer({
                 className={cn(
                   'flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors',
                   item.highlight
-                    ? 'bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-semibold shadow-[0_8px_20px_rgba(108,60,225,0.3)]'
+                    ? 'bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-semibold shadow-[0_8px_20px_rgba(37,99,235,0.3)]'
                     : 'text-slate-600 hover:bg-slate-50 dark:text-white/85 dark:hover:bg-white/5'
                 )}
               >
@@ -315,7 +315,7 @@ export function MobileDrawer({
             onClick={closeAndNavigate}
             className="mt-6 flex items-center gap-4 p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-gradient-to-br from-slate-50 to-white dark:from-bridge-dark-3/50 dark:to-bridge-dark-2 hover:border-bridge-primary/30 transition-colors group"
           >
-            <div className="shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-bridge-primary to-bridge-primary-light flex items-center justify-center text-white shadow-[0_8px_20px_rgba(108,60,225,0.35)]">
+            <div className="shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-bridge-primary to-bridge-primary-light flex items-center justify-center text-white shadow-[0_8px_20px_rgba(37,99,235,0.35)]">
               <Store className="w-6 h-6" aria-hidden />
             </div>
             <div className="flex-1 min-w-0">

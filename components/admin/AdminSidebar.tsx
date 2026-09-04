@@ -55,6 +55,18 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         >
           E-commerce Projects
         </Link>
+        <Link
+          href="/admin/software-projects"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-sky-300 hover:text-white hover:bg-white/5 border border-transparent"
+        >
+          Software Solutions
+        </Link>
+        <Link
+          href="/admin/creative-marketing-projects"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-amber-300 hover:text-white hover:bg-white/5 border border-transparent"
+        >
+          Creative & Marketing
+        </Link>
         {adminNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeSection === item.id;

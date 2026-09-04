@@ -61,7 +61,7 @@ export function ProjectCard({
         <div className="flex flex-col gap-3 p-3.5 sm:p-4">
           <div className="flex items-end justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
+              <h4 className="font-display text-base font-bold leading-snug text-text-primary sm:text-lg">
                 <Link
                   href={href}
                   className="hover:text-[#2563eb] dark:hover:text-[#60a5fa]"
@@ -71,7 +71,7 @@ export function ProjectCard({
                 >
                   {project.title}
                 </Link>
-              </h3>
+              </h4>
               <p className="mt-0.5 text-sm text-text-secondary">
                 {project.category_name ?? project.industry ?? 'E-commerce'}
               </p>

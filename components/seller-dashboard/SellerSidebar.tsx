@@ -96,7 +96,7 @@ export function SellerSidebar({
                         'flex items-center gap-3 rounded-xl text-sm font-medium transition-all',
                         collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5',
                         active
-                          ? 'bg-gradient-to-r from-emerald-500/15 to-violet-500/10 text-deshi-green border border-emerald-500/20 shadow-sm'
+                          ? 'bg-gradient-to-r from-emerald-500/15 to-blue-500/10 text-deshi-green border border-emerald-500/20 shadow-sm'
                           : 'text-text-secondary hover:bg-slate-100/80 dark:hover:bg-white/5 border border-transparent'
                       )}
                     >

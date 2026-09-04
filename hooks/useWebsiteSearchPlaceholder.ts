@@ -3,16 +3,24 @@
 import { useState, useSyncExternalStore } from 'react';
 import { useTypewriter } from '@/hooks/useTypewriter';
 
-export const WEBSITE_SEARCH_TERMS = [
-  'Fashion',
-  'Electronics',
-  'Grocery',
-  'Beauty',
-  'Furniture',
-  'Sports',
+/** Mixed 2–3 word phrases across websites, software, and creative marketing. */
+export const ECOSYSTEM_SEARCH_TERMS = [
+  'Fashion Store Website',
+  'Beauty Shop Design',
+  'Electronics Hub Store',
+  'Garments ERP System',
+  'Retail POS Software',
+  'Clinic Management System',
+  'HR Payroll Software',
+  'Social Media Design',
+  'Brand Identity Pack',
+  'Facebook Ads Setup',
 ] as const;
 
-export const WEBSITE_SEARCH_FALLBACK = 'Search Fashion, Electronics, Grocery...';
+/** @deprecated Prefer ECOSYSTEM_SEARCH_TERMS */
+export const WEBSITE_SEARCH_TERMS = ECOSYSTEM_SEARCH_TERMS;
+
+export const WEBSITE_SEARCH_FALLBACK = 'Search Fashion Store Website, Garments ERP...';
 
 function subscribeReducedMotion(callback: () => void) {
   const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -28,7 +36,7 @@ export function useWebsiteSearchPlaceholder(active: boolean) {
   const [focused, setFocused] = useState(false);
   const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
   const animate = active && !focused && !reducedMotion;
-  const typed = useTypewriter(WEBSITE_SEARCH_TERMS, {
+  const typed = useTypewriter(ECOSYSTEM_SEARCH_TERMS, {
     enabled: animate,
     typingMs: 72,
     deletingMs: 38,

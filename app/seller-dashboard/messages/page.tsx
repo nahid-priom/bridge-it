@@ -40,7 +40,7 @@ export default async function SellerMessagesPage() {
                   <p className="font-semibold text-text-primary">{c.subject ?? 'Order conversation'}</p>
                   <p className="text-xs text-text-secondary">{c.buyerLabel}</p>
                   {c.orderId && (
-                    <p className="text-xs text-violet-600 mt-1">Linked to order</p>
+                    <p className="text-xs text-blue-600 mt-1">Linked to order</p>
                   )}
                 </div>
                 <div className="text-right shrink-0">

@@ -31,7 +31,7 @@ export function PopularProductsRow({ products }: PopularProductsRowProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 md:mb-8">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wide mb-1">
+            <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-1">
               Product Marketplace
             </p>
             <h2

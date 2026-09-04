@@ -55,8 +55,6 @@ const nextConfig: NextConfig = {
       { source: '/products', destination: '/websites', permanent: false },
       { source: '/products/:path*', destination: '/websites', permanent: false },
       { source: '/services/:path*', destination: '/websites', permanent: false },
-      { source: '/search', destination: '/websites', permanent: false },
-      { source: '/search/:path*', destination: '/websites', permanent: false },
       { source: '/services', destination: '/websites', permanent: false },
       { source: '/categories', destination: '/websites', permanent: false },
       { source: '/categories/:path*', destination: '/websites', permanent: false },

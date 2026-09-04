@@ -1,0 +1,140 @@
+{
+  "brandName": "Factory Management",
+  "businessType": "Large factory / industrial group",
+  "primaryUser": "Factory director / Operations head / Finance controller",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Multi-Plant Planning",
+    "Production",
+    "Maintenance",
+    "Procurement",
+    "Stores",
+    "Quality",
+    "Finance"
+  ],
+  "dashboardKPIs": [
+    "Plant Output",
+    "Downtime Hours",
+    "Maintenance Backlog",
+    "Spare Parts Cover",
+    "Procurement Pipeline",
+    "Plant Contribution"
+  ],
+  "quickActions": [
+    "New Multi-Plant Planning",
+    "New Production",
+    "New Maintenance",
+    "New Procurement"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Plant Overview",
+    "Production Plan",
+    "Maintenance",
+    "Breakdown Tickets",
+    "Spare Parts",
+    "Procurement",
+    "Finance",
+    "Plant Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Work centre",
+    "OEE proxy",
+    "PM schedule",
+    "Breakdown ticket"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Multi-Plant Planning",
+    "Production",
+    "Maintenance",
+    "Procurement",
+    "Stores"
+  ],
+  "terminology": [
+    "Work centre",
+    "OEE proxy",
+    "PM schedule",
+    "Breakdown ticket",
+    "Spare issue",
+    "Plant code",
+    "Capacity load",
+    "GRN",
+    "Capex request",
+    "Inter-plant transfer"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#212121",
+    "accent": "#FF6F00",
+    "sidebar": "brand",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Heavy / multi-plant manufacturing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "plant-overview",
+      "name": "Plant Overview",
+      "category": "detail"
+    },
+    {
+      "key": "production-plan",
+      "name": "Production Plan",
+      "category": "list"
+    },
+    {
+      "key": "maintenance",
+      "name": "Maintenance",
+      "category": "list"
+    },
+    {
+      "key": "breakdown-tickets",
+      "name": "Breakdown Tickets",
+      "category": "form"
+    },
+    {
+      "key": "spare-parts",
+      "name": "Spare Parts",
+      "category": "stock"
+    },
+    {
+      "key": "procurement",
+      "name": "Procurement",
+      "category": "transaction"
+    },
+    {
+      "key": "finance",
+      "name": "Finance",
+      "category": "accounts"
+    },
+    {
+      "key": "plant-reports",
+      "name": "Plant Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

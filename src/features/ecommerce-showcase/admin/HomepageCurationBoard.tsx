@@ -38,7 +38,6 @@ export function HomepageCurationBoard({
     popular: '',
     fashion_lifestyle: '',
     electronics_gadgets: '',
-    food_home_specialty: '',
   });
 
   const grouped = useMemo(() => {
@@ -46,7 +45,6 @@ export function HomepageCurationBoard({
       popular: [],
       fashion_lifestyle: [],
       electronics_gadgets: [],
-      food_home_specialty: [],
     };
     for (const item of placements) {
       next[item.section_key]?.push(item);

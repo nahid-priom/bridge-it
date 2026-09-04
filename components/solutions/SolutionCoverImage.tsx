@@ -37,7 +37,7 @@ const CATEGORY_PLACEHOLDERS: Record<string, CategoryPlaceholderConfig> = {
   },
   'digital-marketing': {
     icon: Megaphone,
-    gradient: 'from-[#0f2744] via-violet-900/30 to-emerald-900/30',
+    gradient: 'from-[#0f2744] via-blue-900/30 to-emerald-900/30',
   },
   'graphics-creative': {
     icon: BarChart3,
@@ -57,7 +57,7 @@ const CATEGORY_PLACEHOLDERS: Record<string, CategoryPlaceholderConfig> = {
   },
   'ai-automations': {
     icon: BarChart3,
-    gradient: 'from-[#0f2744] via-violet-900/40 to-emerald-900/30',
+    gradient: 'from-[#0f2744] via-blue-900/40 to-emerald-900/30',
   },
   logistics: {
     icon: Truck,

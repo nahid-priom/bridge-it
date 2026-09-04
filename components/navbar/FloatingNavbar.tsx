@@ -11,6 +11,7 @@ import type { Category } from '@/types';
 import type { AuthProfile } from '@/lib/auth/types';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
+import { CategoryDropdown } from '@/components/navbar/CategoryDropdown';
 import { NavbarQuickActions } from '@/components/navbar/NavbarQuickActions';
 import { NavbarProfileMenu } from '@/components/navbar/NavbarProfileMenu';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -74,10 +75,10 @@ export function FloatingNavbar({
           transition={{ duration: 0.32, ease: navEase }}
           className={cn(
             'premium-navbar-shell relative hidden lg:block min-w-0 w-full',
-            'rounded-none border-0 transition-[height,box-shadow,transform,padding] duration-300',
-            isHeroMode
-              ? 'py-3.5 lg:py-4 h-[84px] lg:h-[88px] shadow-md'
-              : 'py-2 lg:py-2.5 h-[76px] shadow-lg',
+            'rounded-none border-0 transition-[box-shadow,transform,padding] duration-300',
+            /* Fixed height — avoid mid-scroll layout jumps in reserved page padding */
+            'h-[80px]',
+            isHeroMode ? 'py-3.5 shadow-md' : 'py-2.5 shadow-lg',
             isScrolled && !isHeroMode && 'premium-navbar-shell--scrolled'
           )}
           aria-label="Main navigation"
@@ -85,11 +86,11 @@ export function FloatingNavbar({
           <div
             className={cn(
               'container mx-auto px-4 sm:px-6 lg:px-8',
-              'flex items-center w-full min-w-0 h-full',
+              'grid w-full min-w-0 h-full grid-cols-[1fr_auto_1fr] items-center',
               isHeroMode ? 'gap-3 lg:gap-5' : 'gap-2 lg:gap-3'
             )}
           >
-            <div className="flex items-center gap-6 shrink-0 min-w-0">
+            <div className="flex min-w-0 items-center justify-self-start">
               <Link
                 href={ROUTES.home}
                 className="shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deshi-green/40 rounded-xl"
@@ -97,33 +98,48 @@ export function FloatingNavbar({
               >
                 <BridgeLogo iconSize="nav" textVisibility="always" href={false} />
               </Link>
-
-              <div className="flex items-center gap-1">
-                {MAIN_NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      'px-3 py-2 rounded-xl text-sm font-semibold transition-colors',
-                      isNavActive(pathname, link.href)
-                        ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
-                        : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
             </div>
 
-            <div className="flex-1 min-w-0" aria-hidden />
+            <nav
+              className="flex items-center justify-center gap-0.5 xl:gap-1"
+              aria-label="Primary"
+            >
+              {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.home).map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'whitespace-nowrap rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3.5',
+                    isNavActive(pathname, link.href)
+                      ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
+                      : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <CategoryDropdown />
+              {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.consultation).map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'whitespace-nowrap rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3.5',
+                    isNavActive(pathname, link.href)
+                      ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
+                      : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-            <div className="flex items-center gap-2 shrink-0 ml-auto">
+            <div className="flex items-center justify-self-end gap-2 shrink-0">
               <ThemeSwitcher />
               <NavbarQuickActions
                 cartCount={0}
                 notificationCount={0}
-                messageCount={0}
                 onCartClick={() => openSearchModal()}
                 onSearchClick={openSearchModal}
                 hideCart

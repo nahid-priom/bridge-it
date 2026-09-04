@@ -1,0 +1,133 @@
+{
+  "brandName": "Bakery Management",
+  "businessType": "Bakery shop / production bakery",
+  "primaryUser": "Bakery owner / Production baker / Counter staff",
+  "solutionGroup": "restaurant-hospitality",
+  "softwareType": "Hospitality",
+  "platformType": "web",
+  "modules": [
+    "Recipes",
+    "Production Batches",
+    "Ingredient Stock",
+    "Counter POS",
+    "Waste",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Batches Today",
+    "Counter Sales",
+    "Waste Value",
+    "Ingredient Cover",
+    "Top SKUs",
+    "Gross Margin %"
+  ],
+  "quickActions": [
+    "New Recipes",
+    "New Production Batches",
+    "New Ingredient Stock",
+    "New Counter POS"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Recipes",
+    "Production Batches",
+    "Ingredient Stock",
+    "Counter POS",
+    "Pre-Orders",
+    "Waste Log",
+    "Accounts",
+    "Daily Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Bake plan",
+    "Recipe yield",
+    "Batch tray",
+    "Ingredient issue"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Recipes",
+    "Production Batches",
+    "Ingredient Stock",
+    "Counter POS",
+    "Waste"
+  ],
+  "terminology": [
+    "Bake plan",
+    "Recipe yield",
+    "Batch tray",
+    "Ingredient issue",
+    "Freshness window",
+    "Counter SKU",
+    "Waste log",
+    "Pre-order cake",
+    "Proofing",
+    "Cost sheet"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#6D4C41",
+    "accent": "#FF8A65",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Bakery / confectionery",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "recipes",
+      "name": "Recipes",
+      "category": "list"
+    },
+    {
+      "key": "production-batches",
+      "name": "Production Batches",
+      "category": "transaction"
+    },
+    {
+      "key": "ingredient-stock",
+      "name": "Ingredient Stock",
+      "category": "stock"
+    },
+    {
+      "key": "counter-pos",
+      "name": "Counter POS",
+      "category": "transaction"
+    },
+    {
+      "key": "pre-orders",
+      "name": "Pre-Orders",
+      "category": "form"
+    },
+    {
+      "key": "waste-log",
+      "name": "Waste Log",
+      "category": "other"
+    },
+    {
+      "key": "bakery-accounts",
+      "name": "Accounts",
+      "category": "accounts"
+    },
+    {
+      "key": "daily-reports",
+      "name": "Daily Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

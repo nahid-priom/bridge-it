@@ -73,12 +73,12 @@ export function MegaMenuFeaturedColumn({
   title: string;
   items: FeaturedLink[];
   onClose: () => void;
-  accent?: 'emerald' | 'sky' | 'violet';
+  accent?: 'emerald' | 'sky' | 'blue';
 }) {
   const accentMap = {
     emerald: 'from-emerald-50 to-teal-50/50 dark:from-emerald-500/10 dark:to-teal-500/5 border-emerald-100/80 dark:border-emerald-500/20',
     sky: 'from-sky-50 to-blue-50/50 dark:from-sky-500/10 dark:to-blue-500/5 border-sky-100/80 dark:border-sky-500/20',
-    violet: 'from-violet-50 to-purple-50/50 dark:from-violet-500/10 dark:to-purple-500/5 border-violet-100/80 dark:border-violet-500/20',
+    blue: 'from-blue-50 to-sky-50/50 dark:from-blue-500/10 dark:to-sky-500/5 border-blue-100/80 dark:border-blue-500/20',
   };
 
   return (

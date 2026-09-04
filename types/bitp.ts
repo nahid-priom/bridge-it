@@ -5,6 +5,14 @@ export type BitpUserRole = 'client' | 'admin' | 'super_admin' | 'buyer' | 'selle
 export type ProductStatus = 'draft' | 'published' | 'archived';
 export type PricingType = 'fixed' | 'starting_from' | 'package' | 'custom_quote' | 'subscription';
 export type ProductType =
+  | 'ecommerce_website'
+  | 'software_solution'
+  | 'creative_digital_marketing'
+  | 'mobile_app'
+  | 'business_automation'
+  | 'saas'
+  | 'custom_development'
+  /** @deprecated legacy values kept for DB rows until remapped */
   | 'service'
   | 'software'
   | 'website'
@@ -12,6 +20,16 @@ export type ProductType =
   | 'creative'
   | 'digital_product'
   | 'subscription';
+
+export const PRODUCT_TYPE_OPTIONS: Array<{ value: ProductType; label: string }> = [
+  { value: 'ecommerce_website', label: 'E-commerce Website' },
+  { value: 'software_solution', label: 'Software Solution' },
+  { value: 'creative_digital_marketing', label: 'Creative & Digital Marketing' },
+  { value: 'mobile_app', label: 'Mobile App' },
+  { value: 'saas', label: 'SaaS' },
+  { value: 'business_automation', label: 'Business Automation' },
+  { value: 'custom_development', label: 'Custom Development' },
+];
 
 export type OrderStatus =
   | 'pending'

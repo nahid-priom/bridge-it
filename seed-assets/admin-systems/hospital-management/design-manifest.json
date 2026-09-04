@@ -1,0 +1,140 @@
+{
+  "brandName": "Hospital Management",
+  "businessType": "Hospital / multi-department facility",
+  "primaryUser": "Hospital admin / Front desk / Department head",
+  "solutionGroup": "healthcare-software",
+  "softwareType": "Healthcare",
+  "platformType": "web",
+  "modules": [
+    "Registration",
+    "OPD",
+    "IPD",
+    "Billing",
+    "Pharmacy",
+    "Lab Orders",
+    "MIS"
+  ],
+  "dashboardKPIs": [
+    "OPD Today",
+    "IPD Occupancy %",
+    "Pending Discharges",
+    "Pharmacy Sales",
+    "Outstanding Bills",
+    "Avg Length of Stay"
+  ],
+  "quickActions": [
+    "New Registration",
+    "New OPD",
+    "New IPD",
+    "New Billing"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Patient Registration",
+    "OPD",
+    "IPD & Beds",
+    "Clinical Orders",
+    "Hospital Pharmacy",
+    "Billing",
+    "Discharge",
+    "MIS Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "UHID",
+    "OPD token",
+    "IPD admission",
+    "Bed board"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Registration",
+    "OPD",
+    "IPD",
+    "Billing",
+    "Pharmacy"
+  ],
+  "terminology": [
+    "UHID",
+    "OPD token",
+    "IPD admission",
+    "Bed board",
+    "Deposit",
+    "Discharge bill",
+    "Clinical order",
+    "Package",
+    "Consultant share",
+    "Ward"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#0D47A1",
+    "accent": "#00BCD4",
+    "sidebar": "dark",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Hospitals",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "patient-registration",
+      "name": "Patient Registration",
+      "category": "form"
+    },
+    {
+      "key": "opd",
+      "name": "OPD",
+      "category": "list"
+    },
+    {
+      "key": "ipd-beds",
+      "name": "IPD & Beds",
+      "category": "detail"
+    },
+    {
+      "key": "clinical-orders",
+      "name": "Clinical Orders",
+      "category": "transaction"
+    },
+    {
+      "key": "hospital-pharmacy",
+      "name": "Hospital Pharmacy",
+      "category": "stock"
+    },
+    {
+      "key": "billing",
+      "name": "Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "discharge",
+      "name": "Discharge",
+      "category": "transaction"
+    },
+    {
+      "key": "hospital-reports",
+      "name": "MIS Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "brandName": "Packaging Factory Management",
+  "businessType": "Carton / flexible packaging factory",
+  "primaryUser": "Plant manager / Planning / Store & QC",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Customer Specs",
+    "Job Planning",
+    "Production",
+    "Material Store",
+    "QC",
+    "Dispatch",
+    "Costing"
+  ],
+  "dashboardKPIs": [
+    "Open Jobs",
+    "Material Cover",
+    "Reject %",
+    "Finished Ready",
+    "On-Time Dispatch %",
+    "Job Margin"
+  ],
+  "quickActions": [
+    "New Customer Specs",
+    "New Job Planning",
+    "New Production",
+    "New Material Store"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Customer Specs",
+    "Job Planning",
+    "Production Jobs",
+    "Material Store",
+    "QC Gate",
+    "Finished Stock",
+    "Dispatch",
+    "Costing",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Spec",
+    "Die",
+    "Board grade",
+    "Conversion job"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Customer Specs",
+    "Job Planning",
+    "Production",
+    "Material Store",
+    "QC"
+  ],
+  "terminology": [
+    "Spec",
+    "Die",
+    "Board grade",
+    "Conversion job",
+    "Make-ready",
+    "QC gate",
+    "Pallet dispatch",
+    "Customer artwork",
+    "Ink match",
+    "Wastage %"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#00695C",
+    "accent": "#FFB300",
+    "sidebar": "brand",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Packaging manufacturing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "customer-specs",
+      "name": "Customer Specs",
+      "category": "detail"
+    },
+    {
+      "key": "job-planning",
+      "name": "Job Planning",
+      "category": "list"
+    },
+    {
+      "key": "production-jobs",
+      "name": "Production Jobs",
+      "category": "transaction"
+    },
+    {
+      "key": "material-store",
+      "name": "Material Store",
+      "category": "stock"
+    },
+    {
+      "key": "qc-gate",
+      "name": "QC Gate",
+      "category": "form"
+    },
+    {
+      "key": "finished-stock",
+      "name": "Finished Stock",
+      "category": "stock"
+    },
+    {
+      "key": "dispatch",
+      "name": "Dispatch",
+      "category": "list"
+    },
+    {
+      "key": "costing",
+      "name": "Costing",
+      "category": "accounts"
+    },
+    {
+      "key": "reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

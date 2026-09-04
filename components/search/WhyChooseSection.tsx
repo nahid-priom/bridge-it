@@ -15,7 +15,7 @@ const BENEFITS = [
     title: 'Secure Payment',
     description: '100% secure payment. Pay only when you are satisfied with the work.',
     icon: ShieldCheck,
-    color: '#7C3AED',
+    color: '#2563EB',
   },
   {
     title: 'Fast Delivery',

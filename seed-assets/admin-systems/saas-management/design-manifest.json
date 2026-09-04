@@ -1,0 +1,134 @@
+{
+  "brandName": "Subscription Management Platform",
+  "businessType": "Software / subscription company",
+  "primaryUser": "Founder / Billing ops / Customer success",
+  "solutionGroup": "saas-platforms",
+  "softwareType": "SaaS",
+  "platformType": "saas",
+  "modules": [
+    "Plans",
+    "Subscriptions",
+    "Trials",
+    "Invoicing",
+    "Renewals",
+    "Customer Success",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Active Subscriptions",
+    "MRR Proxy",
+    "Trials Converting",
+    "Failed Payments",
+    "Churn MTD",
+    "Renewals Due"
+  ],
+  "quickActions": [
+    "New Plans",
+    "New Subscriptions",
+    "New Trials",
+    "New Invoicing"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Tenants",
+    "Subscriptions",
+    "Plans",
+    "Usage",
+    "Billing",
+    "Users",
+    "Analytics",
+    "Support",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Plan",
+    "Subscription",
+    "Trial",
+    "Renewal"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Plans",
+    "Subscriptions",
+    "Trials",
+    "Invoicing",
+    "Renewals"
+  ],
+  "terminology": [
+    "Plan",
+    "Subscription",
+    "Trial",
+    "Renewal",
+    "Seat",
+    "Invoice",
+    "Failed payment",
+    "Churn",
+    "Upgrade/downgrade",
+    "Customer success note"
+  ],
+  "visualStyle": "multi-tenant-saas",
+  "theme": {
+    "primary": "#311B92",
+    "accent": "#00BFA5",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "SaaS / subscription business",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "tenants",
+      "name": "Tenants",
+      "category": "list"
+    },
+    {
+      "key": "subscriptions",
+      "name": "Subscriptions",
+      "category": "list"
+    },
+    {
+      "key": "plans",
+      "name": "Plans",
+      "category": "list"
+    },
+    {
+      "key": "usage",
+      "name": "Usage",
+      "category": "detail"
+    },
+    {
+      "key": "billing",
+      "name": "Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "analytics",
+      "name": "Analytics",
+      "category": "reports"
+    },
+    {
+      "key": "support",
+      "name": "Support",
+      "category": "list"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

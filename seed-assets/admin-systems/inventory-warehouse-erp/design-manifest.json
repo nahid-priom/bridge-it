@@ -1,0 +1,140 @@
+{
+  "brandName": "Inventory & Warehouse Management",
+  "businessType": "Central warehouse / factory stores",
+  "primaryUser": "Warehouse manager / Storekeeper / Inventory controller",
+  "solutionGroup": "inventory-warehouse",
+  "softwareType": "Inventory",
+  "platformType": "web",
+  "modules": [
+    "Item Master",
+    "Bin Locations",
+    "Receiving",
+    "Picking",
+    "Transfers",
+    "Cycle Count",
+    "Valuation"
+  ],
+  "dashboardKPIs": [
+    "Stock Value",
+    "Pending Putaways",
+    "Open Picks",
+    "Near-Zero SKUs",
+    "Aging Stock",
+    "Count Variance %"
+  ],
+  "quickActions": [
+    "New Item Master",
+    "New Bin Locations",
+    "New Receiving",
+    "New Picking"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Item Master",
+    "Bin Locations",
+    "Receiving",
+    "Putaway",
+    "Picking",
+    "Stock Transfers",
+    "Cycle Counts",
+    "Valuation Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Bin",
+    "Putaway",
+    "Pick list",
+    "GRN"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Item Master",
+    "Bin Locations",
+    "Receiving",
+    "Picking",
+    "Transfers"
+  ],
+  "terminology": [
+    "Bin",
+    "Putaway",
+    "Pick list",
+    "GRN",
+    "Transfer note",
+    "Cycle count",
+    "Reorder level",
+    "ABC class",
+    "Quarantine",
+    "Stock aging"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#455A64",
+    "accent": "#26C6DA",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Warehousing & inventory control",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "item-master",
+      "name": "Item Master",
+      "category": "list"
+    },
+    {
+      "key": "bin-locations",
+      "name": "Bin Locations",
+      "category": "detail"
+    },
+    {
+      "key": "receiving",
+      "name": "Receiving",
+      "category": "transaction"
+    },
+    {
+      "key": "putaway",
+      "name": "Putaway",
+      "category": "form"
+    },
+    {
+      "key": "picking",
+      "name": "Picking",
+      "category": "transaction"
+    },
+    {
+      "key": "stock-transfers",
+      "name": "Stock Transfers",
+      "category": "stock"
+    },
+    {
+      "key": "cycle-counts",
+      "name": "Cycle Counts",
+      "category": "other"
+    },
+    {
+      "key": "valuation-reports",
+      "name": "Valuation Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

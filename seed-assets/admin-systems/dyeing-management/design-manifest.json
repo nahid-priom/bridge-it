@@ -1,0 +1,140 @@
+{
+  "brandName": "Dyeing Management",
+  "businessType": "Dyeing factory / processing mill",
+  "primaryUser": "Dyeing manager / Lab / Production planner",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Recipe Lab",
+    "Machine Planning",
+    "Batch Dyeing",
+    "Chemical Store",
+    "QC",
+    "Delivery",
+    "Costing"
+  ],
+  "dashboardKPIs": [
+    "Batches Today",
+    "Machine Utilization",
+    "Rework %",
+    "Chemical Cover",
+    "Pending QC",
+    "On-Time Delivery %"
+  ],
+  "quickActions": [
+    "New Recipe Lab",
+    "New Machine Planning",
+    "New Batch Dyeing",
+    "New Chemical Store"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Recipes",
+    "Machine Plan",
+    "Batch Dyeing",
+    "Chemical Store",
+    "QC",
+    "Finished Lots",
+    "Delivery",
+    "Costing",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Recipe",
+    "Shade standard",
+    "Machine load",
+    "Batch"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Recipe Lab",
+    "Machine Planning",
+    "Batch Dyeing",
+    "Chemical Store",
+    "QC"
+  ],
+  "terminology": [
+    "Recipe",
+    "Shade standard",
+    "Machine load",
+    "Batch",
+    "Chemical issue",
+    "Lab dip",
+    "Rework",
+    "Finishing lot",
+    "Water/energy note",
+    "Delivery challan"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#4A148C",
+    "accent": "#00BCD4",
+    "sidebar": "dark",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Dyeing / wet processing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "recipes",
+      "name": "Recipes",
+      "category": "list"
+    },
+    {
+      "key": "machine-plan",
+      "name": "Machine Plan",
+      "category": "detail"
+    },
+    {
+      "key": "batch-dyeing",
+      "name": "Batch Dyeing",
+      "category": "transaction"
+    },
+    {
+      "key": "chemical-store",
+      "name": "Chemical Store",
+      "category": "stock"
+    },
+    {
+      "key": "qc",
+      "name": "QC",
+      "category": "form"
+    },
+    {
+      "key": "finished-lots",
+      "name": "Finished Lots",
+      "category": "stock"
+    },
+    {
+      "key": "delivery",
+      "name": "Delivery",
+      "category": "list"
+    },
+    {
+      "key": "dyeing-costing",
+      "name": "Costing",
+      "category": "accounts"
+    },
+    {
+      "key": "reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

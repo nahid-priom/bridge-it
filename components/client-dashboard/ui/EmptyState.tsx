@@ -23,7 +23,7 @@ export function EmptyState({
         className
       )}
     >
-      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-50 to-violet-50 dark:from-emerald-500/10 dark:to-violet-500/10 flex items-center justify-center mb-4">
+      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-emerald-500/10 dark:to-blue-500/10 flex items-center justify-center mb-4">
         <Icon className="w-7 h-7 text-deshi-green dark:text-emerald-400" />
       </div>
       <h3 className="text-lg font-bold text-text-primary mb-1">{title}</h3>

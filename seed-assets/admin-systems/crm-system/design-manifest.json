@@ -1,0 +1,133 @@
+{
+  "brandName": "CRM System",
+  "businessType": "B2B / service sales organization",
+  "primaryUser": "Sales head / Account manager / Marketing coordinator",
+  "solutionGroup": "crm-sales",
+  "softwareType": "CRM",
+  "platformType": "web",
+  "modules": [
+    "Leads",
+    "Pipeline",
+    "Follow-ups",
+    "Quotations",
+    "Accounts",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "New Leads",
+    "Open Opportunities",
+    "Pipeline Value",
+    "Overdue Follow-ups",
+    "Win Rate %",
+    "Quota Attainment"
+  ],
+  "quickActions": [
+    "New Leads",
+    "New Pipeline",
+    "New Follow-ups",
+    "New Quotations"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Leads",
+    "Pipeline",
+    "Contacts",
+    "Follow-ups",
+    "Tasks",
+    "Sales",
+    "Activities",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Lead source",
+    "Opportunity stage",
+    "Activity",
+    "Quotation"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Leads",
+    "Pipeline",
+    "Follow-ups",
+    "Quotations",
+    "Accounts"
+  ],
+  "terminology": [
+    "Lead source",
+    "Opportunity stage",
+    "Activity",
+    "Quotation",
+    "Account owner",
+    "Territory",
+    "Win/loss reason",
+    "Next action",
+    "Contact role",
+    "Conversion"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#00695C",
+    "accent": "#FFA726",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Sales & customer relations",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "leads",
+      "name": "Leads",
+      "category": "list"
+    },
+    {
+      "key": "pipeline",
+      "name": "Pipeline",
+      "category": "detail"
+    },
+    {
+      "key": "contacts",
+      "name": "Contacts",
+      "category": "list"
+    },
+    {
+      "key": "follow-ups",
+      "name": "Follow-ups",
+      "category": "list"
+    },
+    {
+      "key": "tasks",
+      "name": "Tasks",
+      "category": "list"
+    },
+    {
+      "key": "sales",
+      "name": "Sales",
+      "category": "transaction"
+    },
+    {
+      "key": "activities",
+      "name": "Activities",
+      "category": "list"
+    },
+    {
+      "key": "reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -45,7 +45,7 @@ export default async function SellerReviewsPage() {
                 <span className="text-amber-600 font-black">{r.rating}★</span>
               </div>
               {r.projectTitle && (
-                <p className="text-xs text-violet-600 mt-2 font-semibold">{r.projectTitle}</p>
+                <p className="text-xs text-blue-600 mt-2 font-semibold">{r.projectTitle}</p>
               )}
               <p className="text-sm text-text-secondary mt-2">{r.reviewText}</p>
               <p className="text-xs text-text-muted mt-2">{r.createdAt}</p>

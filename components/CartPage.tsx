@@ -24,7 +24,7 @@ export const CartPage: React.FC = () => {
   const paymentMethods = [
     { id: 'bkash', name: 'bKash', icon: <Smartphone className="w-5 h-5" />, color: 'from-pink-500 to-pink-600' },
     { id: 'nagad', name: 'Nagad', icon: <Smartphone className="w-5 h-5" />, color: 'from-orange-500 to-orange-600' },
-    { id: 'rocket', name: 'Rocket', icon: <Smartphone className="w-5 h-5" />, color: 'from-purple-500 to-purple-600' },
+    { id: 'rocket', name: 'Rocket', icon: <Smartphone className="w-5 h-5" />, color: 'from-blue-500 to-blue-600' },
     { id: 'card', name: 'Card', icon: <CreditCard className="w-5 h-5" />, color: 'from-blue-500 to-blue-600' },
     { id: 'bank', name: 'Bank Transfer', icon: <Building className="w-5 h-5" />, color: 'from-green-500 to-green-600' },
   ];

@@ -52,7 +52,7 @@ export function SellerModeSwitcher({ compact }: { compact?: boolean }) {
         className={cn(
           'flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all',
           mode === 'seller'
-            ? 'bg-gradient-to-r from-emerald-500/20 to-violet-500/15 text-deshi-green border border-emerald-500/25 shadow-sm'
+            ? 'bg-gradient-to-r from-emerald-500/20 to-blue-500/15 text-deshi-green border border-emerald-500/25 shadow-sm'
             : 'text-text-muted hover:text-text-secondary'
         )}
       >

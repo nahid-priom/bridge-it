@@ -77,7 +77,7 @@ export function DashboardSidebar({
                 'flex items-center gap-3 rounded-xl text-sm font-medium transition-all',
                 collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5',
                 active
-                  ? 'bg-gradient-to-r from-emerald-500/15 to-violet-500/10 text-deshi-green border border-emerald-500/20 shadow-sm'
+                  ? 'bg-gradient-to-r from-emerald-500/15 to-blue-500/10 text-deshi-green border border-emerald-500/20 shadow-sm'
                   : 'text-text-secondary hover:bg-slate-100/80 dark:hover:bg-white/5 border border-transparent'
               )}
             >
@@ -99,15 +99,15 @@ export function DashboardSidebar({
 
       <div className={cn('p-3 border-t border-slate-200/80 dark:border-white/10 space-y-2', collapsed && 'px-2')}>
         {!collapsed && (
-          <div className="rounded-xl bg-gradient-to-br from-violet-500/10 to-emerald-500/10 border border-violet-500/20 p-3">
+          <div className="rounded-xl bg-gradient-to-br from-blue-500/10 to-emerald-500/10 border border-blue-500/20 p-3">
             <div className="flex items-center gap-2 mb-1">
-              <Crown className="w-4 h-4 text-violet-600" />
+              <Crown className="w-4 h-4 text-blue-600" />
               <span className="text-xs font-bold text-text-primary">Pro Client</span>
             </div>
             <p className="text-[10px] text-text-muted mb-2">Priority support & lower fees</p>
             <button
               type="button"
-              className="w-full py-1.5 rounded-lg bg-violet-600 text-white text-[11px] font-semibold"
+              className="w-full py-1.5 rounded-lg bg-blue-600 text-white text-[11px] font-semibold"
             >
               Upgrade
             </button>

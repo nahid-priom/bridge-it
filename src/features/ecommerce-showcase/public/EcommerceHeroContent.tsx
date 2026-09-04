@@ -11,23 +11,28 @@ export function EcommerceHeroContent({ className }: { className?: string }) {
       )}
     >
       <h1 className="font-display tracking-[-0.035em] text-text-primary">
-        <span className="block text-[clamp(1.9rem,5.2vw,3.15rem)] font-bold leading-[1.12] text-[#3b82f6]">
-          Custom E-commerce
+        <span className="block text-[clamp(1.35rem,3.4vw,2rem)] font-bold leading-[1.15] text-[#3b82f6]">
+          Bridge IT Park
         </span>
-        <span className="mt-1 block text-[clamp(2.35rem,7.2vw,4.35rem)] font-extrabold leading-[0.98] text-text-primary">
-          Websites &amp; Apps
+        <span className="mt-1.5 block text-[clamp(1.65rem,4.8vw,2.85rem)] font-extrabold leading-[1.08] text-text-primary">
+          Websites · Software · Marketing
         </span>
-        <span className="mt-2 block text-[clamp(1.35rem,3.2vw,2.1rem)] font-semibold leading-snug tracking-[-0.02em] text-[#eab308]">
-          for Your Business
+        <span className="mt-1 block text-[clamp(1.2rem,3.2vw,1.75rem)] font-bold leading-[1.15] text-text-secondary">
+          Creative Design + Performance Marketing
         </span>
       </h1>
 
       <p className="mt-5 max-w-[36rem] text-[15px] leading-relaxed text-text-secondary sm:text-base">
-        <span className="font-bold text-text-primary">100+ Custom Premium</span> e-commerce website and app designs. Choose the storefront that fits your brand.
+        <span className="font-bold text-text-primary">Custom Websites</span>,{' '}
+        <span className="font-bold text-text-primary">Software Solutions</span> and{' '}
+        <span className="font-bold text-text-primary">Creative &amp; Digital Marketing</span> —
+        three pillars for your business growth.
       </p>
 
-      <HeroSearch className="mt-6" />
-      <HeroActions className="mt-4" />
+      <div className="mt-6 flex w-full min-w-0 flex-col gap-3 lg:flex-row lg:items-center lg:gap-3">
+        <HeroSearch className="min-w-0 flex-1" />
+        <HeroActions className="w-full shrink-0 lg:w-auto" />
+      </div>
     </div>
   );
 }

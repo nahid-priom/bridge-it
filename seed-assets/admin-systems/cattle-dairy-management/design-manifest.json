@@ -1,0 +1,146 @@
+{
+  "brandName": "Cattle & Dairy Management",
+  "businessType": "Cattle dairy farm",
+  "primaryUser": "Dairy farm owner / Herd manager",
+  "solutionGroup": "agro-farm-management",
+  "softwareType": "Agro",
+  "platformType": "web",
+  "modules": [
+    "Herd Register",
+    "Milk Collection",
+    "Breeding",
+    "Feed Ration",
+    "Veterinary",
+    "Milk Sales",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Herd Size",
+    "Daily Milk Litre",
+    "Avg Yield / Cow",
+    "Dry Cows",
+    "Feed Cost / Litre",
+    "Milk Buyer Dues"
+  ],
+  "quickActions": [
+    "New Herd Register",
+    "New Milk Collection",
+    "New Breeding",
+    "New Feed Ration"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Herd Register",
+    "Cow Profile",
+    "Milk Collection",
+    "Breeding",
+    "Feed Rations",
+    "Veterinary",
+    "Milk Sales",
+    "Dairy Accounts",
+    "Yield Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Lactation",
+    "Milking shift",
+    "AI date",
+    "Calving"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Herd Register",
+    "Milk Collection",
+    "Breeding",
+    "Feed Ration",
+    "Veterinary"
+  ],
+  "terminology": [
+    "Lactation",
+    "Milking shift",
+    "AI date",
+    "Calving",
+    "Dry period",
+    "Bulk cooler",
+    "Fat %",
+    "SNF",
+    "Ration chart",
+    "Cattle tag"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#5D4037",
+    "accent": "#43A047",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Dairy farming",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "herd-register",
+      "name": "Herd Register",
+      "category": "list"
+    },
+    {
+      "key": "cow-profile",
+      "name": "Cow Profile",
+      "category": "detail"
+    },
+    {
+      "key": "milk-collection",
+      "name": "Milk Collection",
+      "category": "transaction"
+    },
+    {
+      "key": "breeding",
+      "name": "Breeding",
+      "category": "form"
+    },
+    {
+      "key": "feed-rations",
+      "name": "Feed Rations",
+      "category": "stock"
+    },
+    {
+      "key": "veterinary",
+      "name": "Veterinary",
+      "category": "other"
+    },
+    {
+      "key": "milk-sales",
+      "name": "Milk Sales",
+      "category": "list"
+    },
+    {
+      "key": "dairy-accounts",
+      "name": "Dairy Accounts",
+      "category": "accounts"
+    },
+    {
+      "key": "yield-reports",
+      "name": "Yield Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -1,11 +1,12 @@
 export const ROUTES = {
   home: '/',
+  explore: '/explore',
   websites: '/websites',
   website: (slug: string) => `/websites/${slug}`,
   websiteOrder: (slug: string, packageId?: string) =>
     packageId ? `/websites/${slug}/order?package=${packageId}` : `/websites/${slug}/order`,
   ecommerceCategory: (slug: string) => `/ecommerce/${slug}`,
-  solutions: '/websites',
+  solutions: '/explore',
   solution: (slug: string) => `/websites/${slug}`,
   solutionOrder: (slug: string) => `/consultation`,
   solutionQuote: (slug: string) => `/consultation`,
@@ -17,11 +18,14 @@ export const ROUTES = {
   ecommerceSolution: (slug: string) => `/websites/${slug}`,
   ecommerceSolutionOrder: (slug: string) => `/consultation`,
   ecommerceDemo: (demoSlug: string) => `/demo/ecommerce/${demoSlug}`,
-  softwareShowroom: '/websites',
-  softwareSolution: (slug: string) => `/websites/${slug}`,
+  softwareShowroom: '/software',
+  softwareSolution: (slug: string) => `/software/${slug}`,
   softwareSolutionOrder: (slug: string) => `/consultation`,
   softwareDemo: (demoSlug: string) => `/demo/software/${demoSlug}`,
-  search: '/websites',
+  creativeMarketingShowroom: '/creative-marketing',
+  creativeMarketingSolution: (slug: string) => `/creative-marketing/${slug}`,
+  creativeMarketingOrder: (slug: string) => `/consultation`,
+  search: '/explore',
   /** @deprecated Use solutions */
   categories: '/categories',
   category: (slug: string) => `/categories/${slug}`,
@@ -53,6 +57,8 @@ export const ROUTES = {
   admin: '/admin',
   adminEcommerceProjects: '/admin/ecommerce-projects',
   adminEcommerceLeads: '/admin/ecommerce-leads',
+  adminSoftwareProjects: '/admin/software-projects',
+  adminCreativeMarketingProjects: '/admin/creative-marketing-projects',
   /** @deprecated Seller hub removed — redirects via middleware */
   sellerDashboard: '/seller-dashboard',
   sellerDashboardOrders: '/seller-dashboard/orders',
@@ -87,6 +93,7 @@ export const ROUTES = {
 
 export function searchUrl(query?: string, extra?: Record<string, string>): string {
   const params = new URLSearchParams();
+  params.set('type', 'websites');
   const trimmed = query?.trim();
   if (trimmed) params.set('q', trimmed);
   if (extra) {
@@ -95,12 +102,19 @@ export function searchUrl(query?: string, extra?: Record<string, string>): strin
     }
   }
   const qs = params.toString();
-  return qs ? `${ROUTES.solutions}?${qs}` : ROUTES.solutions;
+  return `${ROUTES.explore}?${qs}`;
 }
 
 export function solutionsUrl(category?: string, extra?: Record<string, string>): string {
+  const normalized = category?.trim();
+  if (normalized === 'digital-marketing' || normalized === 'graphics-creative') {
+    return ROUTES.creativeMarketingShowroom;
+  }
+  if (normalized === 'creative-digital-marketing') {
+    return ROUTES.creativeMarketingShowroom;
+  }
   const params = new URLSearchParams();
-  if (category?.trim()) params.set('category', category.trim());
+  if (normalized) params.set('category', normalized);
   if (extra) {
     for (const [key, value] of Object.entries(extra)) {
       if (value) params.set(key, value);

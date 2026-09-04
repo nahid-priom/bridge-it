@@ -16,7 +16,7 @@ const STAT_ICONS = [
 
 const STAT_COLORS = [
   'from-green-400 to-emerald-500',
-  'from-bridge-primary to-purple-500',
+  'from-bridge-primary to-blue-500',
   'from-bridge-gold to-orange-500',
   'from-bridge-cyan to-blue-500',
 ];
@@ -183,7 +183,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data }) => {
                       <span className="text-text-primary font-medium">95%</span>
                     </div>
                     <div className="h-2 bg-surface-elevated rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-bridge-primary to-purple-400 rounded-full" style={{ width: '95%' }}></div>
+                      <div className="h-full bg-gradient-to-r from-bridge-primary to-blue-400 rounded-full" style={{ width: '95%' }}></div>
                     </div>
                   </div>
                   <div>
@@ -299,7 +299,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data }) => {
               <div className="space-y-4">
                 {[
                   { source: 'Facebook Ads', value: 42, color: 'from-blue-500 to-blue-600' },
-                  { source: 'Direct / Custom URL', value: 28, color: 'from-bridge-primary to-purple-500' },
+                  { source: 'Direct / Custom URL', value: 28, color: 'from-bridge-primary to-blue-500' },
                   { source: 'Instagram', value: 18, color: 'from-pink-500 to-rose-500' },
                   { source: 'Google Search', value: 8, color: 'from-bridge-secondary to-emerald-500' },
                   { source: 'Other', value: 4, color: 'from-bridge-gray to-gray-500' },

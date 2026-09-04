@@ -53,7 +53,7 @@ export default async function SellerOrdersPage() {
                         {o.orderNumber} · {o.buyerLabel}
                       </p>
                       {o.deliveryDate && (
-                        <p className="text-xs text-violet-600 mt-1">Due: {o.deliveryDate}</p>
+                        <p className="text-xs text-blue-600 mt-1">Due: {o.deliveryDate}</p>
                       )}
                     </div>
                     <div className="text-right">

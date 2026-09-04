@@ -1,0 +1,20 @@
+{
+  "serviceName": "Brochure & Flyer Design",
+  "serviceGroup": "packaging-print",
+  "targetBusiness": "Events, clinics, education, retail",
+  "visualDirection": "Printed flyer and tri-fold brochure spread on desk",
+  "mockupStyle": "A4 flyer front/back + tri-fold brochure open",
+  "photographyDirection": "print mockup photography with soft shadows",
+  "primaryElements": [
+    "flyer front",
+    "flyer back",
+    "tri-fold",
+    "poster accent"
+  ],
+  "palette": [
+    "#1D4ED8",
+    "#DC2626",
+    "#F8FAFC",
+    "#0F172A"
+  ]
+}

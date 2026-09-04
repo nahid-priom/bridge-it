@@ -18,14 +18,14 @@ export function Breadcrumb({ items, className, trailing }: BreadcrumbProps) {
   return (
     <div
       className={cn(
-        'pt-[calc(var(--header-offset)+var(--breadcrumb-gap))] pb-1 md:pb-1.5',
+        'pt-[calc(var(--header-offset)+var(--breadcrumb-gap))] pb-1',
         className
       )}
     >
       <div className="container mx-auto flex items-center gap-3 px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Breadcrumb"
-          className="min-w-0 flex-1 border-b border-border-subtle/50 pb-2 md:pb-2.5"
+          className="min-w-0 flex-1 border-b border-border-subtle/50 pb-2"
         >
           <ol
             className={cn(
@@ -87,7 +87,7 @@ export function Breadcrumb({ items, className, trailing }: BreadcrumbProps) {
           </ol>
         </nav>
         {trailing ? (
-          <div className="shrink-0 self-center pb-2 md:pb-2.5 lg:hidden">{trailing}</div>
+          <div className="shrink-0 self-center pb-2 lg:hidden">{trailing}</div>
         ) : null}
       </div>
     </div>

@@ -42,7 +42,7 @@ export function CategoryServiceRow({ config, services }: CategoryServiceRowProps
             </span>
           )}
           {config.sectionBadge && (
-            <p className="text-xs font-semibold text-deshi-purple dark:text-purple-300 mb-1">
+            <p className="text-xs font-semibold text-deshi-purple dark:text-blue-300 mb-1">
               {config.sectionBadge}
             </p>
           )}
@@ -109,7 +109,7 @@ export function CategoryServiceRow({ config, services }: CategoryServiceRowProps
         className="py-4 md:py-8"
         aria-labelledby={sectionId}
       >
-        <div className="mx-4 sm:mx-6 lg:mx-8 rounded-3xl border border-deshi-green/15 dark:border-deshi-green/20 bg-gradient-to-br from-deshi-mint/40 via-white to-purple-50/80 dark:from-emerald-950/30 dark:via-[#0c101c] dark:to-purple-950/25 shadow-sm py-6 md:py-12">
+        <div className="mx-4 sm:mx-6 lg:mx-8 rounded-3xl border border-deshi-green/15 dark:border-deshi-green/20 bg-gradient-to-br from-deshi-mint/40 via-white to-blue-50/80 dark:from-emerald-950/30 dark:via-[#0c101c] dark:to-blue-950/25 shadow-sm py-6 md:py-12">
           {inner}
         </div>
       </section>

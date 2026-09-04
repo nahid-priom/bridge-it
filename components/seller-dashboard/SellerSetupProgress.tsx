@@ -20,7 +20,7 @@ export function SellerSetupProgress({
 
   if (percent >= 100) {
     return (
-      <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-emerald-500/10 to-violet-500/5 p-4 flex items-center gap-3">
+      <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-emerald-500/10 to-blue-500/5 p-4 flex items-center gap-3">
         <CheckCircle2 className="w-8 h-8 text-emerald-500 shrink-0" />
         <div>
           <p className="font-bold text-text-primary">Profile strength: 100%</p>
@@ -54,7 +54,7 @@ export function SellerSetupProgress({
           </div>
           <div>
             <p className="font-bold text-text-primary flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-violet-500" />
+              <Sparkles className="w-4 h-4 text-blue-500" />
               Profile strength
             </p>
             <p className="text-xs text-text-secondary">Complete setup to boost visibility</p>
@@ -72,7 +72,7 @@ export function SellerSetupProgress({
       {!compact && (
         <div className="h-1.5 bg-slate-100 dark:bg-white/5 mx-4 sm:mx-5 rounded-full overflow-hidden -mt-1 mb-3">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-violet-500 rounded-full transition-all duration-500"
+            className="h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full transition-all duration-500"
             style={{ width: `${percent}%` }}
           />
         </div>

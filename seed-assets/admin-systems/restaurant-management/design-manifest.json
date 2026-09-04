@@ -1,0 +1,133 @@
+{
+  "brandName": "Restaurant Management",
+  "businessType": "Restaurant / cafe / multi-outlet dining",
+  "primaryUser": "Restaurant owner / Floor manager / Cashier",
+  "solutionGroup": "restaurant-hospitality",
+  "softwareType": "Hospitality",
+  "platformType": "web",
+  "modules": [
+    "Table Orders",
+    "KOT",
+    "Recipes",
+    "Inventory",
+    "Billing",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Today Covers",
+    "Avg Bill",
+    "Open Tables",
+    "Food Cost %",
+    "Void Value",
+    "Top Menu Items"
+  ],
+  "quickActions": [
+    "New Table Orders",
+    "New KOT",
+    "New Recipes",
+    "New Inventory"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Table Map",
+    "Order Taking",
+    "KOT Screen",
+    "Recipes",
+    "Store Inventory",
+    "Billing",
+    "Menu Reports",
+    "Staff",
+    "Settings"
+  ],
+  "tableTypes": [
+    "KOT",
+    "Table map",
+    "Cover",
+    "Modifier"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Table Orders",
+    "KOT",
+    "Recipes",
+    "Inventory",
+    "Billing"
+  ],
+  "terminology": [
+    "KOT",
+    "Table map",
+    "Cover",
+    "Modifier",
+    "Recipe yield",
+    "Void reason",
+    "Service charge",
+    "Store issue",
+    "Menu engineering",
+    "Shift close"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#BF360C",
+    "accent": "#FFB300",
+    "sidebar": "dark",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Restaurants / F&B",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "table-map",
+      "name": "Table Map",
+      "category": "detail"
+    },
+    {
+      "key": "order-taking",
+      "name": "Order Taking",
+      "category": "transaction"
+    },
+    {
+      "key": "kot-screen",
+      "name": "KOT Screen",
+      "category": "list"
+    },
+    {
+      "key": "recipes",
+      "name": "Recipes",
+      "category": "form"
+    },
+    {
+      "key": "store-inventory",
+      "name": "Store Inventory",
+      "category": "stock"
+    },
+    {
+      "key": "billing",
+      "name": "Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "menu-reports",
+      "name": "Menu Reports",
+      "category": "reports"
+    },
+    {
+      "key": "staff",
+      "name": "Staff",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -24,6 +24,14 @@ export const bitpProductSchema = z.object({
   cover_image_prompt: z.string().optional().nullable(),
   cover_image_updated_at: z.string().optional().nullable(),
   product_type: z.enum([
+    'ecommerce_website',
+    'software_solution',
+    'creative_digital_marketing',
+    'mobile_app',
+    'business_automation',
+    'saas',
+    'custom_development',
+    // legacy
     'service',
     'software',
     'website',

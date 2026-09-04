@@ -8,7 +8,7 @@ export type ThumbnailStyle = {
 const CATEGORY_STYLES: Record<string, ThumbnailStyle> = {
   'software-development': {
     className:
-      'bg-gradient-to-br from-violet-500/90 via-indigo-600/90 to-purple-700/90 dark:from-violet-600/80 dark:via-indigo-700/80 dark:to-purple-900/90',
+      'bg-gradient-to-br from-blue-500/90 via-indigo-600/90 to-blue-700/90 dark:from-blue-600/80 dark:via-indigo-700/80 dark:to-blue-900/90',
     icon: '💻',
   },
   'web-development': {
@@ -28,7 +28,7 @@ const CATEGORY_STYLES: Record<string, ThumbnailStyle> = {
   },
   'ai-automations': {
     className:
-      'bg-gradient-to-br from-fuchsia-400/90 via-purple-500/90 to-violet-600/90 dark:from-fuchsia-600/70 dark:via-purple-700/80 dark:to-violet-900/90',
+      'bg-gradient-to-br from-fuchsia-400/90 via-blue-500/90 to-blue-600/90 dark:from-fuchsia-600/70 dark:via-blue-700/80 dark:to-blue-900/90',
     icon: '🤖',
   },
 };

@@ -1,0 +1,134 @@
+{
+  "brandName": "Rice Mill Management",
+  "businessType": "Rice mill / auto rice mill",
+  "primaryUser": "Mill owner / Production manager / Godown keeper",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Paddy Purchase",
+    "Milling",
+    "By-Products",
+    "Rice Stock",
+    "Sales",
+    "Party Ledger",
+    "Yield"
+  ],
+  "dashboardKPIs": [
+    "Paddy Stock MT",
+    "Milling Today",
+    "Yield %",
+    "Rice Stock",
+    "By-Product Value",
+    "Party Outstanding"
+  ],
+  "quickActions": [
+    "New Paddy Purchase",
+    "New Milling",
+    "New By-Products",
+    "New Rice Stock"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Paddy Purchase",
+    "Quality Check",
+    "Milling Runs",
+    "By-Products",
+    "Rice Stock",
+    "Rice Sales",
+    "Party Ledger",
+    "Yield Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Paddy lot",
+    "Moisture",
+    "Milling run",
+    "Head rice"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Paddy Purchase",
+    "Milling",
+    "By-Products",
+    "Rice Stock",
+    "Sales"
+  ],
+  "terminology": [
+    "Paddy lot",
+    "Moisture",
+    "Milling run",
+    "Head rice",
+    "Broken rice",
+    "Bran",
+    "Husk",
+    "Recovery %",
+    "Gunny bag",
+    "Party rate"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#F9A825",
+    "accent": "#5D4037",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Rice milling",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "paddy-purchase",
+      "name": "Paddy Purchase",
+      "category": "transaction"
+    },
+    {
+      "key": "quality-check",
+      "name": "Quality Check",
+      "category": "form"
+    },
+    {
+      "key": "milling-runs",
+      "name": "Milling Runs",
+      "category": "detail"
+    },
+    {
+      "key": "by-products",
+      "name": "By-Products",
+      "category": "stock"
+    },
+    {
+      "key": "rice-stock",
+      "name": "Rice Stock",
+      "category": "stock"
+    },
+    {
+      "key": "rice-sales",
+      "name": "Rice Sales",
+      "category": "list"
+    },
+    {
+      "key": "party-ledger",
+      "name": "Party Ledger",
+      "category": "accounts"
+    },
+    {
+      "key": "yield-reports",
+      "name": "Yield Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

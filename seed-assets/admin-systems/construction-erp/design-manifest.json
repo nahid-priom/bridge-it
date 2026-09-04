@@ -1,0 +1,140 @@
+{
+  "brandName": "Construction Management",
+  "businessType": "Construction company / contractor",
+  "primaryUser": "Project director / Site engineer / QS / Accounts",
+  "solutionGroup": "real-estate-construction",
+  "softwareType": "Construction",
+  "platformType": "web",
+  "modules": [
+    "Projects",
+    "BOQ",
+    "Site Stores",
+    "Progress Billing",
+    "Subcontractors",
+    "Costing",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Active Projects",
+    "Budget Consumed %",
+    "Material Overrun",
+    "Progress Certified",
+    "Subcontractor Payable",
+    "Retention Held"
+  ],
+  "quickActions": [
+    "New Projects",
+    "New BOQ",
+    "New Site Stores",
+    "New Progress Billing"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Projects",
+    "BOQ",
+    "Material Requisitions",
+    "Site Stores",
+    "Progress Billing",
+    "Subcontractors",
+    "Project Costing",
+    "Project Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "BOQ",
+    "RA bill",
+    "Material requisition",
+    "Site store"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Projects",
+    "BOQ",
+    "Site Stores",
+    "Progress Billing",
+    "Subcontractors"
+  ],
+  "terminology": [
+    "BOQ",
+    "RA bill",
+    "Material requisition",
+    "Site store",
+    "Subcontractor",
+    "Retention",
+    "Variation",
+    "Cost to complete",
+    "Work front",
+    "Measurement book"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#3E2723",
+    "accent": "#FF6F00",
+    "sidebar": "brand",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Construction contracting",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "projects",
+      "name": "Projects",
+      "category": "list"
+    },
+    {
+      "key": "boq",
+      "name": "BOQ",
+      "category": "detail"
+    },
+    {
+      "key": "material-requisitions",
+      "name": "Material Requisitions",
+      "category": "form"
+    },
+    {
+      "key": "site-stores",
+      "name": "Site Stores",
+      "category": "stock"
+    },
+    {
+      "key": "progress-billing",
+      "name": "Progress Billing",
+      "category": "transaction"
+    },
+    {
+      "key": "subcontractors",
+      "name": "Subcontractors",
+      "category": "list"
+    },
+    {
+      "key": "project-costing",
+      "name": "Project Costing",
+      "category": "accounts"
+    },
+    {
+      "key": "project-reports",
+      "name": "Project Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useState, Suspense } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { buildSearchUrl, parseSearchParams } from '@/lib/search/searchHelpers';
+import { buildExploreSearchUrl } from '@/lib/search/inferExploreType';
+import { parseSearchParams } from '@/lib/search/searchHelpers';
 import { cn } from '@/lib/cn';
 
 type NavbarSearchProps = {
@@ -35,7 +36,12 @@ function NavbarSearchForm({
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (pathname === '/search' || pathname.startsWith('/search?')) {
+    if (
+      pathname === '/search' ||
+      pathname.startsWith('/search?') ||
+      pathname === '/explore' ||
+      pathname.startsWith('/explore')
+    ) {
       setQ(urlState.q);
     }
   }, [pathname, urlState.q]);
@@ -46,20 +52,14 @@ function NavbarSearchForm({
     setSearchQuery(trimmed);
     useStore.setState({ isMenuOpen: false });
     onSubmitted?.();
-    router.push(
-      buildSearchUrl({
-        q: trimmed,
-        category: pathname.startsWith('/search') ? urlState.category : 'all',
-        page: 1,
-      })
-    );
+    router.push(buildExploreSearchUrl({ q: trimmed }));
   };
 
   const clear = () => {
     setQ('');
     setSearchQuery('');
-    if (pathname.startsWith('/search')) {
-      router.push(buildSearchUrl({ q: '', category: 'all', page: 1 }));
+    if (pathname.startsWith('/search') || pathname.startsWith('/explore')) {
+      router.push(buildExploreSearchUrl({ q: '' }));
     }
   };
 
@@ -74,7 +74,7 @@ function NavbarSearchForm({
           isCompact && 'group/search',
           focused &&
             isCompact &&
-            'shadow-[0_0_0_3px_rgba(16,185,129,0.15),0_8px_24px_rgba(108,60,225,0.12)] rounded-full'
+            'shadow-[0_0_0_3px_rgba(16,185,129,0.15),0_8px_24px_rgba(37,99,235,0.12)] rounded-full'
         )}
       >
         <Search
@@ -154,7 +154,7 @@ function NavbarSearchForm({
               'absolute right-1.5 top-1/2 -translate-y-1/2 h-9 w-9',
               'flex items-center justify-center rounded-full cursor-pointer',
               'bg-gradient-to-br from-bridge-primary to-bridge-primary-light text-white',
-              'shadow-[0_4px_14px_rgba(108,60,225,0.45)]',
+              'shadow-[0_4px_14px_rgba(37,99,235,0.45)]',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-bridge-primary/40'
             )}
             aria-label="Submit search"

@@ -1,0 +1,146 @@
+{
+  "brandName": "Feed Mill ERP",
+  "businessType": "Feed mill / feed producer",
+  "primaryUser": "Mill owner / Production supervisor / Storekeeper",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "Formula Management",
+    "Raw Material Store",
+    "Batch Production",
+    "Quality Control",
+    "Sales Orders",
+    "Dealer Ledger",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Today Batches",
+    "Raw Material Cover Days",
+    "Finished Feed Stock MT",
+    "Dealer Outstanding",
+    "Yield Variance %",
+    "Pending Dispatches"
+  ],
+  "quickActions": [
+    "New Formula Management",
+    "New Raw Material Store",
+    "New Batch Production",
+    "New Quality Control"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Feed Formulas",
+    "Raw Materials",
+    "Batch Production",
+    "QC Lab",
+    "Finished Stock",
+    "Sales Orders",
+    "Dealer Ledger",
+    "Dispatch",
+    "Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Formula",
+    "Batch ticket",
+    "Premix",
+    "Baghouse"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Formula Management",
+    "Raw Material Store",
+    "Batch Production",
+    "Quality Control",
+    "Sales Orders"
+  ],
+  "terminology": [
+    "Formula",
+    "Batch ticket",
+    "Premix",
+    "Baghouse",
+    "Lot number",
+    "Moisture %",
+    "Dealer challan",
+    "MT stock",
+    "Mixer run",
+    "QC assay"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#2E7D32",
+    "accent": "#FFB300",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Animal feed manufacturing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "formulas",
+      "name": "Feed Formulas",
+      "category": "list"
+    },
+    {
+      "key": "raw-materials",
+      "name": "Raw Materials",
+      "category": "stock"
+    },
+    {
+      "key": "batch-production",
+      "name": "Batch Production",
+      "category": "transaction"
+    },
+    {
+      "key": "qc-lab",
+      "name": "QC Lab",
+      "category": "form"
+    },
+    {
+      "key": "finished-stock",
+      "name": "Finished Stock",
+      "category": "stock"
+    },
+    {
+      "key": "sales-orders",
+      "name": "Sales Orders",
+      "category": "list"
+    },
+    {
+      "key": "dealer-ledger",
+      "name": "Dealer Ledger",
+      "category": "accounts"
+    },
+    {
+      "key": "dispatch",
+      "name": "Dispatch",
+      "category": "transaction"
+    },
+    {
+      "key": "production-reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "brandName": "Transport Management",
+  "businessType": "Transport company / own fleet",
+  "primaryUser": "Transport manager / Dispatcher / Fleet accountant",
+  "solutionGroup": "logistics-courier",
+  "softwareType": "Logistics",
+  "platformType": "web",
+  "modules": [
+    "Fleet Master",
+    "Trip Booking",
+    "Fuel",
+    "Maintenance",
+    "Hire Billing",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Active Trips",
+    "Fleet Utilization %",
+    "Fuel Cost",
+    "Maintenance Due",
+    "Hire Receivables",
+    "Idle Vehicles"
+  ],
+  "quickActions": [
+    "New Fleet Master",
+    "New Trip Booking",
+    "New Fuel",
+    "New Maintenance"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Vehicles",
+    "Trip Booking",
+    "Trip Sheets",
+    "Fuel Log",
+    "Maintenance",
+    "Hire Billing",
+    "Fleet Reports",
+    "Drivers",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Trip sheet",
+    "Hire party",
+    "Challan",
+    "Fuel slip"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Fleet Master",
+    "Trip Booking",
+    "Fuel",
+    "Maintenance",
+    "Hire Billing"
+  ],
+  "terminology": [
+    "Trip sheet",
+    "Hire party",
+    "Challan",
+    "Fuel slip",
+    "Odometer",
+    "Route",
+    "Demurrage",
+    "Vehicle fitness",
+    "Driver advance",
+    "Cost per km"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#33691E",
+    "accent": "#FFAB00",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Fleet / transport",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "vehicles",
+      "name": "Vehicles",
+      "category": "list"
+    },
+    {
+      "key": "trip-booking",
+      "name": "Trip Booking",
+      "category": "form"
+    },
+    {
+      "key": "trip-sheets",
+      "name": "Trip Sheets",
+      "category": "detail"
+    },
+    {
+      "key": "fuel-log",
+      "name": "Fuel Log",
+      "category": "transaction"
+    },
+    {
+      "key": "maintenance",
+      "name": "Maintenance",
+      "category": "stock"
+    },
+    {
+      "key": "hire-billing",
+      "name": "Hire Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "fleet-reports",
+      "name": "Fleet Reports",
+      "category": "reports"
+    },
+    {
+      "key": "drivers",
+      "name": "Drivers",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

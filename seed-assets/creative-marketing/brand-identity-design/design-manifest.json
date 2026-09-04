@@ -1,0 +1,22 @@
+{
+  "serviceName": "Brand Identity Design",
+  "serviceGroup": "branding-identity",
+  "targetBusiness": "New brands and rebrands",
+  "visualDirection": "Premium brand identity presentation kit on textured paper and desk",
+  "mockupStyle": "logo mark, business card, palette chips, typography specimen, packaging accent",
+  "photographyDirection": "studio product + print stationery photography",
+  "primaryElements": [
+    "logo",
+    "color palette",
+    "typography",
+    "business card",
+    "brand mockup",
+    "usage system"
+  ],
+  "palette": [
+    "#0F2744",
+    "#10B981",
+    "#F5F5F4",
+    "#1C1917"
+  ]
+}

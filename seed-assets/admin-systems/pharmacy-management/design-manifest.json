@@ -1,0 +1,134 @@
+{
+  "brandName": "Pharmacy Management",
+  "businessType": "Pharmacy / medicine shop",
+  "primaryUser": "Pharmacist / Pharmacy owner / Dispenser",
+  "solutionGroup": "healthcare-software",
+  "softwareType": "Healthcare",
+  "platformType": "web",
+  "modules": [
+    "Medicine Master",
+    "Batch & Expiry",
+    "Pharmacy POS",
+    "Purchase",
+    "Suppliers",
+    "Controlled Log",
+    "Reports"
+  ],
+  "dashboardKPIs": [
+    "Today Sales",
+    "Near-Expiry Value",
+    "Expired Stock",
+    "Supplier Outstanding",
+    "Top Molecules",
+    "Margin %"
+  ],
+  "quickActions": [
+    "New Medicine Master",
+    "New Batch & Expiry",
+    "New Pharmacy POS",
+    "New Purchase"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Pharmacy Billing",
+    "Products",
+    "Stock",
+    "Customers",
+    "Purchase",
+    "Sales",
+    "Cash",
+    "Reports",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Batch",
+    "Expiry",
+    "Molecule",
+    "Rx reference"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Medicine Master",
+    "Batch & Expiry",
+    "Pharmacy POS",
+    "Purchase",
+    "Suppliers"
+  ],
+  "terminology": [
+    "Batch",
+    "Expiry",
+    "Molecule",
+    "Rx reference",
+    "Schedule drug",
+    "Rack location",
+    "Supplier invoice",
+    "Return to vendor",
+    "Substitute",
+    "Dispense"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#00695C",
+    "accent": "#EC407A",
+    "sidebar": "brand",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Retail pharmacy",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "pos-billing",
+      "name": "Pharmacy Billing",
+      "category": "transaction"
+    },
+    {
+      "key": "products",
+      "name": "Products",
+      "category": "list"
+    },
+    {
+      "key": "stock",
+      "name": "Stock",
+      "category": "stock"
+    },
+    {
+      "key": "customers",
+      "name": "Customers",
+      "category": "list"
+    },
+    {
+      "key": "purchase",
+      "name": "Purchase",
+      "category": "transaction"
+    },
+    {
+      "key": "sales",
+      "name": "Sales",
+      "category": "list"
+    },
+    {
+      "key": "cash",
+      "name": "Cash",
+      "category": "accounts"
+    },
+    {
+      "key": "reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

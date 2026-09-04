@@ -49,8 +49,8 @@ export const HERO_TRUST_STATS = [
     id: 'satisfaction',
     label: 'Client Satisfaction',
     icon: 'shield' as const,
-    iconBg: 'bg-violet-100 dark:bg-violet-500/20',
-    iconColor: 'text-violet-600 dark:text-violet-400',
+    iconBg: 'bg-blue-100 dark:bg-blue-500/20',
+    iconColor: 'text-blue-600 dark:text-blue-400',
   },
   {
     id: 'support',
@@ -65,8 +65,7 @@ export const HERO_CATEGORY_OPTIONS = [
   { label: 'All Categories', value: 'all' },
   { label: 'Software Solutions', value: 'software-solutions' },
   { label: 'Web & App Solutions', value: 'web-app-solutions' },
-  { label: 'Digital Marketing', value: 'digital-marketing' },
-  { label: 'Graphics & Creative', value: 'graphics-creative' },
+  { label: 'Creative & Digital Marketing', value: 'creative-digital-marketing' },
 ] as const;
 
 /* ─── Why Bridge IT Park ─── */
@@ -182,15 +181,15 @@ export const TRUST_SECURITY_ITEMS = [
 
 /* ─── Footer links ─── */
 export const FOOTER_BRAND_DESCRIPTION =
-  'Premium custom e-commerce website designs for growing Bangladeshi businesses — Next.js, React, and Laravel.';
+  'Custom websites, software solutions, and creative & digital marketing for growing Bangladeshi businesses.';
 
 export const FOOTER_COLUMNS = {
   solutions: [
     { label: 'All Websites', href: ROUTES.websites },
+    { label: 'Software Solutions', href: ROUTES.softwareShowroom },
+    { label: 'Creative & Marketing', href: ROUTES.creativeMarketingShowroom },
     { label: 'Fashion', href: '/ecommerce/fashion' },
-    { label: 'Electronics', href: '/ecommerce/electronics' },
-    { label: 'Grocery', href: '/ecommerce/grocery' },
-    { label: 'Cosmetics', href: '/ecommerce/cosmetics' },
+    { label: 'Free Demo', href: ROUTES.consultation },
   ],
   company: [
     { label: 'About Us', href: ROUTES.about },
@@ -204,10 +203,10 @@ export const FOOTER_COLUMNS = {
     { label: 'Privacy Policy', href: ROUTES.about },
   ],
   categories: [
-    { label: 'Furniture', href: '/ecommerce/furniture' },
-    { label: 'Wholesale / B2B', href: '/ecommerce/wholesale' },
-    { label: 'Single Product', href: '/ecommerce/single-product' },
-    { label: 'Local Shop', href: '/ecommerce/local-shop' },
+    { label: 'Facebook Ads', href: '/creative-marketing?more=facebook-instagram-ads' },
+    { label: 'Social Media Design', href: '/creative-marketing?more=social-media-design' },
+    { label: 'POS & Retail', href: '/software?group=pos' },
+    { label: 'CRM & Sales', href: '/software?group=crm' },
   ],
 } as const;
 
@@ -248,7 +247,7 @@ export const HOME_CATEGORY_GRID: HomeCategoryItem[] = [
     icon: 'software',
     color: '#10B981',
     href: ROUTES.softwareShowroom,
-    subtitle: 'Stock to enterprise ERP — live demos',
+    subtitle: 'ERP, POS, CRM, HRM and industry software',
   },
   {
     id: 'web',
@@ -268,19 +267,11 @@ export const HOME_CATEGORY_GRID: HomeCategoryItem[] = [
   },
   {
     id: 'marketing',
-    name: 'Digital Marketing',
+    name: 'Creative & Digital Marketing',
     icon: 'marketing',
     color: '#f59e0b',
-    href: solutionsUrl('digital-marketing'),
-    subtitle: 'Ads, SEO, and growth',
-  },
-  {
-    id: 'ai',
-    name: 'Graphics & Creative',
-    icon: 'ai',
-    color: '#8b5cf6',
-    href: solutionsUrl('graphics-creative'),
-    subtitle: 'Design and brand identity',
+    href: ROUTES.creativeMarketingShowroom,
+    subtitle: 'Design, Meta ads and growth',
   },
   {
     id: 'more',

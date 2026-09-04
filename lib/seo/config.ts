@@ -1,3 +1,5 @@
+import { ROUTES } from '@/lib/routes';
+
 export const GOOGLE_SITE_VERIFICATION = 'f2F2jc6bDCd4G1gsde7UfIW83Bnow_32Kfr2Sv6HUtw';
 
 /** Paths that must not appear in the sitemap */
@@ -40,7 +42,10 @@ export type StaticSitemapRoute = {
 /** Public marketing pages for Bridge IT Park */
 export const STATIC_SITEMAP_ROUTES: StaticSitemapRoute[] = [
   { path: ROUTES.home, changeFrequency: 'daily', priority: 1 },
+  { path: ROUTES.explore, changeFrequency: 'daily', priority: 0.96 },
   { path: ROUTES.websites, changeFrequency: 'daily', priority: 0.95 },
+  { path: ROUTES.softwareShowroom, changeFrequency: 'daily', priority: 0.94 },
+  { path: ROUTES.creativeMarketingShowroom, changeFrequency: 'daily', priority: 0.93 },
   { path: ROUTES.consultation, changeFrequency: 'monthly', priority: 0.85 },
   { path: ROUTES.about, changeFrequency: 'monthly', priority: 0.75 },
 ];

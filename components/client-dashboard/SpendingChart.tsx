@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { DashboardCard } from '@/components/client-dashboard/ui/DashboardCard';
 
-const PIE_COLORS = ['#10B981', '#6C3CE1', '#F59E0B'];
+const PIE_COLORS = ['#10B981', '#2563EB', '#F59E0B'];
 
 export function SpendingChart({
   spendingByMonth,

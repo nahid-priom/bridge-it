@@ -72,9 +72,9 @@ export function SearchCategoryHero({
       {/* Subtle background — no landing-page decorations */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute -left-32 top-0 w-64 h-64 rounded-full bg-teal-200/25 dark:bg-teal-500/8 blur-3xl" />
-        <div className="absolute right-0 top-0 w-48 h-48 rounded-full bg-violet-100/30 dark:bg-violet-900/10 blur-2xl" />
+        <div className="absolute right-0 top-0 w-48 h-48 rounded-full bg-blue-100/30 dark:bg-blue-900/10 blur-2xl" />
         <svg
-          className="absolute right-[8%] top-6 w-16 h-16 text-violet-400/20 dark:text-violet-500/15"
+          className="absolute right-[8%] top-6 w-16 h-16 text-blue-400/20 dark:text-blue-500/15"
           viewBox="0 0 100 100"
           aria-hidden
         >

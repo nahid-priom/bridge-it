@@ -1,14 +1,26 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutDashboard, X } from 'lucide-react';
+import {
+  ChevronDown,
+  Code2,
+  LayoutDashboard,
+  LayoutTemplate,
+  Megaphone,
+  X,
+} from 'lucide-react';
 import { ROUTES, isNavActive } from '@/lib/routes';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { MAIN_NAV_LINKS } from '@/components/navbar/constants';
+import {
+  isCategoryNavPath,
+  NAV_CATEGORY_PILLARS,
+  type NavCategoryPillarId,
+} from '@/components/navbar/categoryNav';
 import { MobileQuickActions } from '@/components/navbar/mobile/MobileQuickActions';
 import type { AuthProfile } from '@/lib/auth/types';
 import { useAuthProfile } from '@/components/auth/AuthProfileContext';
@@ -16,6 +28,12 @@ import { resolveDashboardHref } from '@/lib/auth/dashboard-routes';
 import { useDashboardModeStore } from '@/store/dashboardModeStore';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { cn } from '@/lib/cn';
+
+const PILLAR_ICONS = {
+  websites: LayoutTemplate,
+  software: Code2,
+  marketing: Megaphone,
+} as const;
 
 type MobileDrawerMenuProps = {
   open: boolean;
@@ -34,6 +52,8 @@ export function MobileDrawerMenu({
 }: MobileDrawerMenuProps) {
   const pathname = usePathname();
   const isActive = (href: string) => isNavActive(pathname, href);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [openPillar, setOpenPillar] = useState<NavCategoryPillarId | null>(null);
 
   const contextProfile = useAuthProfile();
   const profile = contextProfile ?? authProfile;
@@ -55,6 +75,13 @@ export function MobileDrawerMenu({
   useEffect(() => {
     onClose();
   }, [pathname, onClose]);
+
+  useEffect(() => {
+    if (!open) {
+      setCategoriesOpen(false);
+      setOpenPillar(null);
+    }
+  }, [open]);
 
   const closeAndNavigate = () => onClose();
 
@@ -102,7 +129,110 @@ export function MobileDrawerMenu({
 
             <div className="flex-1 overflow-y-auto px-4 py-3">
               <nav aria-label="Main navigation">
-                {MAIN_NAV_LINKS.map((link) => (
+                {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.home).map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeAndNavigate}
+                    className={cn(
+                      'block py-3 text-[15px] font-semibold border-b border-slate-100/90 dark:border-white/[0.08]',
+                      isActive(link.href) ? 'text-deshi-green' : 'text-text-primary'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                <div className="border-b border-slate-100/90 dark:border-white/[0.08]">
+                  <button
+                    type="button"
+                    onClick={() => setCategoriesOpen((v) => !v)}
+                    aria-expanded={categoriesOpen}
+                    className={cn(
+                      'flex w-full items-center justify-between py-3 text-left text-[15px] font-semibold',
+                      isCategoryNavPath(pathname) || categoriesOpen
+                        ? 'text-deshi-green'
+                        : 'text-text-primary'
+                    )}
+                  >
+                    Categories
+                    <ChevronDown
+                      className={cn(
+                        'h-4 w-4 opacity-70 transition-transform',
+                        categoriesOpen && 'rotate-180'
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+
+                  {categoriesOpen ? (
+                    <div className="pb-3 pl-1">
+                      {NAV_CATEGORY_PILLARS.map((pillar) => {
+                        const Icon = PILLAR_ICONS[pillar.id];
+                        const expanded = openPillar === pillar.id;
+                        return (
+                          <div key={pillar.id} className="mb-1">
+                            <div className="flex items-center gap-1">
+                              <Link
+                                href={pillar.href}
+                                onClick={closeAndNavigate}
+                                className="flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-text-primary hover:bg-slate-50 dark:hover:bg-white/[0.04]"
+                              >
+                                <Icon className="h-4 w-4 shrink-0 text-[#2563eb]" aria-hidden />
+                                <span className="truncate">{pillar.label}</span>
+                              </Link>
+                              <button
+                                type="button"
+                                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${pillar.label}`}
+                                aria-expanded={expanded}
+                                onClick={() =>
+                                  setOpenPillar((current) => (current === pillar.id ? null : pillar.id))
+                                }
+                                className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-white/10"
+                              >
+                                <ChevronDown
+                                  className={cn(
+                                    'h-4 w-4 opacity-70 transition-transform',
+                                    expanded && 'rotate-180'
+                                  )}
+                                  aria-hidden
+                                />
+                              </button>
+                            </div>
+                            {expanded ? (
+                              <ul className="mb-2 ml-6 space-y-0.5 border-l border-slate-100 pl-3 dark:border-white/10">
+                                {pillar.children.map((child) => (
+                                  <li key={child.id}>
+                                    <Link
+                                      href={child.href}
+                                      onClick={closeAndNavigate}
+                                      className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
+                                    >
+                                      {child.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                                {pillar.moreChildren?.map((child) => (
+                                  <li key={child.id}>
+                                    <Link
+                                      href={child.href}
+                                      onClick={closeAndNavigate}
+                                      className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
+                                    >
+                                      {child.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+
+                {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.consultation).map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

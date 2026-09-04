@@ -1,0 +1,140 @@
+{
+  "brandName": "Manufacturing ERP",
+  "businessType": "Multi-process manufacturing plant",
+  "primaryUser": "Plant manager / Production planner / Store manager",
+  "solutionGroup": "manufacturing-production",
+  "softwareType": "Manufacturing",
+  "platformType": "web",
+  "modules": [
+    "BOM",
+    "Work Orders",
+    "Shop Floor",
+    "Inventory",
+    "Quality",
+    "Costing",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Open Work Orders",
+    "On-Time Completion %",
+    "WIP Value",
+    "Scrap %",
+    "Raw Material Cover",
+    "Cost Variance %"
+  ],
+  "quickActions": [
+    "New BOM",
+    "New Work Orders",
+    "New Shop Floor",
+    "New Inventory"
+  ],
+  "navigation": [
+    "Dashboard",
+    "BOM List",
+    "Work Orders",
+    "Shop Floor Entry",
+    "Material Issues",
+    "Quality Checks",
+    "Finished Goods",
+    "Costing",
+    "Production Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "BOM",
+    "Routing",
+    "Work order",
+    "Operation"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "BOM",
+    "Work Orders",
+    "Shop Floor",
+    "Inventory",
+    "Quality"
+  ],
+  "terminology": [
+    "BOM",
+    "Routing",
+    "Work order",
+    "Operation",
+    "WIP",
+    "Issue slip",
+    "Receipt note",
+    "Scrap ticket",
+    "Standard cost",
+    "Variance"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#B71C1C",
+    "accent": "#FFB300",
+    "sidebar": "dark",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "General manufacturing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "boms",
+      "name": "BOM List",
+      "category": "list"
+    },
+    {
+      "key": "work-orders",
+      "name": "Work Orders",
+      "category": "list"
+    },
+    {
+      "key": "shop-floor",
+      "name": "Shop Floor Entry",
+      "category": "transaction"
+    },
+    {
+      "key": "material-issues",
+      "name": "Material Issues",
+      "category": "stock"
+    },
+    {
+      "key": "quality-checks",
+      "name": "Quality Checks",
+      "category": "form"
+    },
+    {
+      "key": "finished-goods",
+      "name": "Finished Goods",
+      "category": "stock"
+    },
+    {
+      "key": "costing",
+      "name": "Costing",
+      "category": "accounts"
+    },
+    {
+      "key": "production-reports",
+      "name": "Production Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

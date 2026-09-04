@@ -17,7 +17,7 @@ export function SellerProfileSummary({ profile }: { profile: SellerProfileSnapsh
         )}
       </div>
       <div className="flex-1 min-w-[200px]">
-        <p className="text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+        <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
           {profile.sellerLevel}
         </p>
         <h2 className="text-xl font-black text-text-primary">{profile.fullName}</h2>

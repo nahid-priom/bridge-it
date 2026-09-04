@@ -67,7 +67,7 @@ export function MobileSearchOverlay() {
           className="fixed inset-0 z-[85] lg:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label="Search websites"
+          aria-label="Search websites, software, and creative marketing"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

@@ -4,7 +4,7 @@ import type { MarketplaceSellerPortfolioItem } from '@/types/marketplaceSeller';
 import { cn } from '@/lib/cn';
 
 const GRADIENTS = [
-  'from-violet-600 to-indigo-800',
+  'from-blue-600 to-indigo-800',
   'from-emerald-500 to-teal-700',
   'from-amber-500 to-orange-700',
   'from-sky-500 to-blue-800',

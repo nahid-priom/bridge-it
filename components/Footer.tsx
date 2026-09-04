@@ -84,9 +84,17 @@ export const Footer: React.FC = () => {
                 ))}
               </nav>
             </div>
-            <p className="text-xs text-slate-500 shrink-0 lg:text-right">
-              © {new Date().getFullYear()} Bridge IT Park. All rights reserved.
-            </p>
+            <div className="flex flex-col gap-1.5 shrink-0 lg:items-end lg:text-right">
+              <p className="text-xs text-slate-500">
+                © {new Date().getFullYear()} Bridge IT Park. All rights reserved.
+              </p>
+              <p className="text-xs text-slate-500">
+                Powered by{' '}
+                <span className="powered-by-brand font-semibold tracking-wide">
+                  CODE BONDHU IT
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>

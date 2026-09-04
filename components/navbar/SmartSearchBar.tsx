@@ -6,17 +6,18 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Search as SearchIcon, Sparkles, Store, Package, Briefcase, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { buildSearchUrl, parseSearchParams } from '@/lib/search/searchHelpers';
+import { buildExploreSearchUrl } from '@/lib/search/inferExploreType';
+import { parseSearchParams } from '@/lib/search/searchHelpers';
 import { ROUTES, productsSearchUrl } from '@/lib/routes';
 import { SEARCH_POPULAR_CHIPS } from '@/constants/mainMarketplaceCategories';
 import { cn } from '@/lib/cn';
 
 const RECENT_KEY = 'deshi-recent-searches';
 const PLACEHOLDERS = [
-  'Search solutions...',
-  'Search e-commerce packages...',
-  'Search software...',
-  'Search digital marketing...',
+  'Search Fashion Store Website...',
+  'Search Garments ERP System...',
+  'Search Retail POS Software...',
+  'Search Social Media Design...',
 ] as const;
 
 export type SmartSearchBarProps = {
@@ -70,7 +71,14 @@ function SmartSearchBarInner({
   }, []);
 
   useEffect(() => {
-    if (pathname === '/solutions' || pathname.startsWith('/solutions?')) {
+    if (
+      pathname === '/solutions' ||
+      pathname.startsWith('/solutions?') ||
+      pathname === '/explore' ||
+      pathname.startsWith('/explore') ||
+      pathname === '/search' ||
+      pathname.startsWith('/search')
+    ) {
       setQ(urlState.q);
     }
   }, [pathname, urlState.q]);
@@ -109,16 +117,10 @@ function SmartSearchBarInner({
       setRecent(readRecent());
       useStore.setState({ isMenuOpen: false });
       onSubmitted?.();
-      router.push(
-        buildSearchUrl({
-          q: trimmed,
-          category: pathname.startsWith('/solutions') ? urlState.category : 'all',
-          page: 1,
-        })
-      );
+      router.push(buildExploreSearchUrl({ q: trimmed }));
       setFocused(false);
     },
-    [onSubmitted, pathname, router, setSearchQuery, urlState.category]
+    [onSubmitted, router, setSearchQuery]
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -129,8 +131,8 @@ function SmartSearchBarInner({
   const clear = () => {
     setQ('');
     setSearchQuery('');
-    if (pathname.startsWith('/solutions')) {
-      router.push(buildSearchUrl({ q: '', category: 'all', page: 1 }));
+    if (pathname.startsWith('/solutions') || pathname.startsWith('/explore') || pathname.startsWith('/search')) {
+      router.push(buildExploreSearchUrl({ q: '' }));
     }
   };
 
@@ -278,7 +280,7 @@ function SmartSearchBarInner({
 
             <div>
               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted px-1 mb-1.5 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-violet-500" aria-hidden />
+                <Sparkles className="w-3 h-3 text-blue-500" aria-hidden />
                 Trending
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -287,7 +289,7 @@ function SmartSearchBarInner({
                     key={chip}
                     type="button"
                     onClick={() => submit(chip)}
-                    className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 hover:bg-violet-100 dark:hover:bg-violet-500/20 transition-colors"
+                    className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
                   >
                     {chip}
                   </button>

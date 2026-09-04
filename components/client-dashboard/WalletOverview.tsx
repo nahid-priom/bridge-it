@@ -22,7 +22,7 @@ export function WalletOverview({
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-3 gap-4">
-        <DashboardCard className="p-5 sm:p-6 bg-gradient-to-br from-emerald-500/10 via-white to-violet-500/5 dark:from-emerald-500/10 dark:via-slate-900/80 dark:to-violet-500/10">
+        <DashboardCard className="p-5 sm:p-6 bg-gradient-to-br from-emerald-500/10 via-white to-blue-500/5 dark:from-emerald-500/10 dark:via-slate-900/80 dark:to-blue-500/10">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-xl bg-deshi-green/15 flex items-center justify-center">
               <Wallet className="w-5 h-5 text-deshi-green" />

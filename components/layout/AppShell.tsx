@@ -6,7 +6,6 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import type { Category } from '@/types';
 import type { AuthProfile } from '@/lib/auth/types';
-import { ChatWidget } from '@/components/ChatWidget';
 import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { Notification } from '@/components/Notification';
 import { SiteBreadcrumb } from '@/components/layout/SiteBreadcrumb';
@@ -51,7 +50,6 @@ export function AppShell({
 
   const isHome = pathname === '/';
   const hideBreadcrumb = NO_BREADCRUMB_PREFIXES.some((p) => pathname.startsWith(p));
-  const hideChat = hideBreadcrumb;
 
   return (
     <AuthProfileProvider profile={authProfile}>
@@ -68,7 +66,6 @@ export function AppShell({
         {children}
       </main>
       {!hideBreadcrumb ? <Footer /> : null}
-      {!hideChat ? <ChatWidget /> : null}
       <GlobalSearchModal />
       <Notification />
     </div>

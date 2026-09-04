@@ -132,7 +132,7 @@ export default async function SellerDashboardOverviewPage() {
               <p className="text-xs text-text-secondary">Available</p>
               <p className="text-xl font-black mt-1">{formatCurrency(stats.walletBalance)}</p>
             </div>
-            <div className="rounded-xl bg-violet-500/10 p-4">
+            <div className="rounded-xl bg-blue-500/10 p-4">
               <p className="text-xs text-text-secondary">Pending</p>
               <p className="text-xl font-black mt-1">{formatCurrency(stats.pendingBalance)}</p>
             </div>
@@ -173,7 +173,7 @@ export default async function SellerDashboardOverviewPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-dashed border-violet-500/30 bg-gradient-to-r from-violet-500/5 to-emerald-500/5 p-5">
+      <div className="rounded-2xl border border-dashed border-blue-500/30 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 p-5">
         <h3 className="font-bold text-text-primary">Growth tips</h3>
         <ul className="mt-2 space-y-1 text-sm text-text-secondary list-disc list-inside">
           <li>Respond to messages within 1 hour to improve your response rate.</li>

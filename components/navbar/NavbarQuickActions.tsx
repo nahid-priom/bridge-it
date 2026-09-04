@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, MessageCircle, Search, ShoppingCart } from 'lucide-react';
+import { Bell, Search, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 
 type NavbarQuickActionsProps = {
@@ -66,12 +65,14 @@ function ActionButton({
 export function NavbarQuickActions({
   cartCount,
   notificationCount = 0,
-  messageCount = 0,
+  messageCount: _messageCount = 0,
   onCartClick,
   onSearchClick,
   hideCart = false,
   className,
 }: NavbarQuickActionsProps) {
+  void _messageCount;
+
   return (
     <div
       className={cn(
@@ -87,9 +88,6 @@ export function NavbarQuickActions({
           <Search className="w-[18px] h-[18px]" aria-hidden />
         </ActionButton>
       ) : null}
-      <ActionButton label="Messages" href={ROUTES.clientMessages} badge={messageCount}>
-        <MessageCircle className="w-[18px] h-[18px]" aria-hidden />
-      </ActionButton>
       <ActionButton label="Notifications" onClick={() => {}} badge={notificationCount}>
         <Bell className="w-[18px] h-[18px]" aria-hidden />
       </ActionButton>

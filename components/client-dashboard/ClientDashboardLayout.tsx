@@ -29,7 +29,7 @@ export function ClientDashboardLayout({
         aria-hidden
         style={{
           background:
-            'radial-gradient(ellipse 60% 50% at 0% 0%, rgba(16,185,129,0.08), transparent 50%), radial-gradient(ellipse 50% 40% at 100% 0%, rgba(108,60,225,0.08), transparent 45%)',
+            'radial-gradient(ellipse 60% 50% at 0% 0%, rgba(16,185,129,0.08), transparent 50%), radial-gradient(ellipse 50% 40% at 100% 0%, rgba(37,99,235,0.08), transparent 45%)',
         }}
       />
 

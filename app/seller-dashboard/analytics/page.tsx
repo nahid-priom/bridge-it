@@ -37,7 +37,7 @@ export default async function SellerAnalyticsPage() {
             <div key={bar.label} className="flex-1 flex flex-col items-center gap-2">
               <div className="w-full flex flex-col justify-end h-36">
                 <div
-                  className="w-full rounded-t-lg bg-gradient-to-t from-emerald-600 to-violet-500 min-h-[4px]"
+                  className="w-full rounded-t-lg bg-gradient-to-t from-emerald-600 to-blue-500 min-h-[4px]"
                   style={{ height: `${Math.max(8, (bar.value / bar.max) * 100)}%` }}
                 />
               </div>

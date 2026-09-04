@@ -1,0 +1,133 @@
+{
+  "brandName": "Logistics Management",
+  "businessType": "Logistics provider / warehouse + transport",
+  "primaryUser": "Logistics director / Warehouse lead / Fleet planner",
+  "solutionGroup": "logistics-courier",
+  "softwareType": "Logistics",
+  "platformType": "web",
+  "modules": [
+    "Warehouse",
+    "Transport Planning",
+    "Trips",
+    "POD",
+    "Freight Billing",
+    "SLA"
+  ],
+  "dashboardKPIs": [
+    "Orders in WH",
+    "Trips Today",
+    "On-Time %",
+    "Detention Hours",
+    "Unbilled Freight",
+    "SLA Breaches"
+  ],
+  "quickActions": [
+    "New Warehouse",
+    "New Transport Planning",
+    "New Trips",
+    "New POD"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Warehouse Orders",
+    "Dispatch",
+    "Trip Planning",
+    "Trip Sheets",
+    "Proof of Delivery",
+    "Freight Billing",
+    "SLA Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "3PL",
+    "ASN",
+    "Trip sheet",
+    "POD"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Warehouse",
+    "Transport Planning",
+    "Trips",
+    "POD",
+    "Freight Billing"
+  ],
+  "terminology": [
+    "3PL",
+    "ASN",
+    "Trip sheet",
+    "POD",
+    "Detention",
+    "Freight invoice",
+    "Client SLA",
+    "Lane",
+    "Dock appointment",
+    "Cross-dock"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#01579B",
+    "accent": "#FF6F00",
+    "sidebar": "dark",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "3PL / logistics",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "warehouse-orders",
+      "name": "Warehouse Orders",
+      "category": "list"
+    },
+    {
+      "key": "dispatch",
+      "name": "Dispatch",
+      "category": "transaction"
+    },
+    {
+      "key": "trip-planning",
+      "name": "Trip Planning",
+      "category": "form"
+    },
+    {
+      "key": "trip-sheets",
+      "name": "Trip Sheets",
+      "category": "detail"
+    },
+    {
+      "key": "pod",
+      "name": "Proof of Delivery",
+      "category": "transaction"
+    },
+    {
+      "key": "freight-billing",
+      "name": "Freight Billing",
+      "category": "accounts"
+    },
+    {
+      "key": "sla-reports",
+      "name": "SLA Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

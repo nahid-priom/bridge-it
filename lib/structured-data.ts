@@ -47,7 +47,7 @@ export function websiteJsonLd() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}${ROUTES.websites}?q={search_term_string}`,
+        urlTemplate: `${SITE_URL}${ROUTES.explore}?type=websites&q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
@@ -218,27 +218,48 @@ export function bitpSolutionBreadcrumbJsonLd(product: BitpProductDetail) {
 export function customEcommerceServiceJsonLd() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'Custom E-commerce Website',
+    '@type': 'ItemList',
+    name: 'Websites, Software & Creative Marketing',
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    serviceType: 'E-commerce website design',
-    provider: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'Bangladesh',
-    },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'BDT',
-      lowPrice: 10000,
-      highPrice: 70000,
-      offerCount: 3,
-    },
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        item: {
+          '@type': 'Service',
+          name: 'Custom E-commerce Website',
+          serviceType: 'E-commerce website design',
+          url: `${SITE_URL}${ROUTES.websites}`,
+          provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+          areaServed: { '@type': 'Country', name: 'Bangladesh' },
+        },
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        item: {
+          '@type': 'Service',
+          name: 'Software Solutions',
+          serviceType: 'Custom software development',
+          url: `${SITE_URL}${ROUTES.softwareShowroom}`,
+          provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+          areaServed: { '@type': 'Country', name: 'Bangladesh' },
+        },
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        item: {
+          '@type': 'Service',
+          name: 'Creative & Digital Marketing',
+          serviceType: 'Creative design and digital marketing',
+          url: `${SITE_URL}${ROUTES.creativeMarketingShowroom}`,
+          provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+          areaServed: { '@type': 'Country', name: 'Bangladesh' },
+        },
+      },
+    ],
   };
 }
 
@@ -286,5 +307,53 @@ export function showcaseTemplateBreadcrumbJsonLd(title: string, slug: string) {
     { name: 'Home', url: SITE_URL },
     { name: 'Websites', url: `${SITE_URL}${ROUTES.websites}` },
     { name: title, url: `${SITE_URL}${ROUTES.website(slug)}` },
+  ]);
+}
+
+export function softwareShowcaseServiceJsonLd(project: {
+  title: string;
+  slug: string;
+  short_description: string | null;
+  cover_card_url: string | null;
+  cover_detail_url: string | null;
+  og_image_url: string | null;
+  currency: string;
+  starting_price: number;
+  software_type?: string | null;
+  solution_group?: string | null;
+  category?: { name: string } | null;
+}) {
+  const url = `${SITE_URL}${ROUTES.softwareSolution(project.slug)}`;
+  const image = project.cover_detail_url || project.cover_card_url || project.og_image_url;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: project.title,
+    description: project.short_description,
+    image,
+    url,
+    applicationCategory:
+      project.software_type || project.category?.name || 'BusinessApplication',
+    operatingSystem: 'Web',
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: project.currency || 'BDT',
+      price: project.starting_price || 0,
+      availability: 'https://schema.org/InStock',
+      url,
+    },
+  };
+}
+
+export function softwareShowcaseBreadcrumbJsonLd(title: string, slug: string) {
+  return breadcrumbJsonLd([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Software Solutions', url: `${SITE_URL}${ROUTES.softwareShowroom}` },
+    { name: title, url: `${SITE_URL}${ROUTES.softwareSolution(slug)}` },
   ]);
 }

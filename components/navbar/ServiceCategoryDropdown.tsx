@@ -61,7 +61,7 @@ export function ServiceCategoryDropdown({
         <div
           id={panelId}
           role="menu"
-          className="absolute top-full left-0 mt-2 w-[min(100vw-2rem,22rem)] py-2 rounded-2xl bg-white dark:bg-bridge-dark-2 border border-slate-200/80 dark:border-white/10 shadow-[0_20px_50px_rgba(108,60,225,0.14)] z-[60]"
+          className="absolute top-full left-0 mt-2 w-[min(100vw-2rem,22rem)] py-2 rounded-2xl bg-white dark:bg-bridge-dark-2 border border-slate-200/80 dark:border-white/10 shadow-[0_20px_50px_rgba(37,99,235,0.14)] z-[60]"
         >
           <div className="px-4 py-2.5 border-b border-slate-100 dark:border-white/10">
             <p className="text-xs font-bold text-deshi-green uppercase tracking-wide">

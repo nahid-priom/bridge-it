@@ -16,8 +16,8 @@ export function InvoiceCards({ invoices }: { invoices: ClientInvoice[] }) {
         {invoices.map((inv) => (
           <DashboardCard key={inv.id} hover className="p-5">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-500/15 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/15 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <StatusBadge status={inv.status} />
             </div>

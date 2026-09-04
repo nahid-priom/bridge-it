@@ -10,7 +10,7 @@ export const CATEGORY_STYLES: Record<
   // Service marketplace
   'software-development': {
     color: '#6366F1',
-    gradient: 'from-indigo-500 to-violet-600',
+    gradient: 'from-indigo-500 to-blue-600',
     nameBn: 'সফটওয়্যার ডেভেলপমেন্ট',
   },
   'web-development': {
@@ -29,8 +29,8 @@ export const CATEGORY_STYLES: Record<
     nameBn: 'ডিজিটাল মার্কেটিং',
   },
   'ai-automations': {
-    color: '#8B5CF6',
-    gradient: 'from-violet-500 to-purple-600',
+    color: '#3B82F6',
+    gradient: 'from-blue-500 to-blue-600',
     nameBn: 'এআই ও অটোমেশন',
   },
   // Product marketplace
@@ -40,8 +40,8 @@ export const CATEGORY_STYLES: Record<
     nameBn: 'ইলেকট্রনিক্স',
   },
   gadgets: {
-    color: '#8B5CF6',
-    gradient: 'from-violet-500 to-purple-600',
+    color: '#3B82F6',
+    gradient: 'from-blue-500 to-blue-600',
     nameBn: 'গ্যাজেট',
   },
   'office-solutions': {
@@ -70,7 +70,7 @@ export function getCategoryStyle(key: string) {
   return (
     CATEGORY_STYLES[key] ?? {
       color: '#6366F1',
-      gradient: 'from-indigo-500 to-purple-500',
+      gradient: 'from-indigo-500 to-blue-500',
       nameBn: '',
     }
   );

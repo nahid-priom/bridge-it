@@ -1,0 +1,147 @@
+{
+  "brandName": "Garments ERP",
+  "businessType": "Export & domestic garments factory",
+  "primaryUser": "Factory owner / Merchandiser / Production manager",
+  "solutionGroup": "erp-business-management",
+  "softwareType": "ERP",
+  "platformType": "web",
+  "modules": [
+    "Order Booking",
+    "Merchandising",
+    "Cutting & Sewing",
+    "Finishing",
+    "Shipment",
+    "Inventory",
+    "Accounts",
+    "HR"
+  ],
+  "dashboardKPIs": [
+    "Open Style Orders",
+    "Cutting Efficiency %",
+    "Sewing Line Output",
+    "On-Time Shipment %",
+    "Fabric Utilization %",
+    "Outstanding LC Value"
+  ],
+  "quickActions": [
+    "New Order Booking",
+    "New Merchandising",
+    "New Cutting & Sewing",
+    "New Finishing"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Style Orders",
+    "Merchandising",
+    "Cut Plans",
+    "Sewing Lines",
+    "Finishing & QC",
+    "Fabric Stock",
+    "Shipment",
+    "Accounts",
+    "Production Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Style",
+    "BOM",
+    "Cut plan",
+    "Bundle"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Order Booking",
+    "Merchandising",
+    "Cutting & Sewing",
+    "Finishing",
+    "Shipment"
+  ],
+  "terminology": [
+    "Style",
+    "BOM",
+    "Cut plan",
+    "Bundle",
+    "Line balancing",
+    "CM",
+    "PI",
+    "LC",
+    "Shipment packing list",
+    "Trim card"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#1B4F72",
+    "accent": "#F39C12",
+    "sidebar": "dark",
+    "density": "compact"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Apparel manufacturing",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "style-orders",
+      "name": "Style Orders",
+      "category": "list"
+    },
+    {
+      "key": "merchandising",
+      "name": "Merchandising",
+      "category": "detail"
+    },
+    {
+      "key": "cut-plans",
+      "name": "Cut Plans",
+      "category": "form"
+    },
+    {
+      "key": "sewing-lines",
+      "name": "Sewing Lines",
+      "category": "list"
+    },
+    {
+      "key": "finishing-qc",
+      "name": "Finishing & QC",
+      "category": "transaction"
+    },
+    {
+      "key": "fabric-stock",
+      "name": "Fabric Stock",
+      "category": "stock"
+    },
+    {
+      "key": "shipment",
+      "name": "Shipment",
+      "category": "transaction"
+    },
+    {
+      "key": "accounts",
+      "name": "Accounts",
+      "category": "accounts"
+    },
+    {
+      "key": "production-reports",
+      "name": "Production Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

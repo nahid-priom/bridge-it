@@ -33,7 +33,7 @@ export function ClientStatsCards({ stats }: { stats: ClientDashboardStats }) {
       label: 'Active Projects',
       value: String(stats.activeProjects),
       sub: 'In delivery',
-      gradient: 'from-sky-500/20 to-violet-500/10',
+      gradient: 'from-sky-500/20 to-blue-500/10',
       iconColor: 'text-sky-600 dark:text-sky-400',
     },
     {
@@ -41,8 +41,8 @@ export function ClientStatsCards({ stats }: { stats: ClientDashboardStats }) {
       label: 'Total Orders',
       value: String(stats.totalOrders),
       sub: 'All time',
-      gradient: 'from-violet-500/20 to-fuchsia-500/10',
-      iconColor: 'text-violet-600 dark:text-violet-400',
+      gradient: 'from-blue-500/20 to-fuchsia-500/10',
+      iconColor: 'text-blue-600 dark:text-blue-400',
     },
     {
       key: 'payments',
@@ -73,7 +73,7 @@ export function ClientStatsCards({ stats }: { stats: ClientDashboardStats }) {
       label: 'Active Sellers',
       value: String(stats.activeSellers),
       sub: 'Hired freelancers',
-      gradient: 'from-indigo-500/20 to-purple-500/10',
+      gradient: 'from-indigo-500/20 to-blue-500/10',
       iconColor: 'text-indigo-600 dark:text-indigo-400',
     },
   ];

@@ -32,7 +32,7 @@ export const AboutPage: React.FC = () => {
       icon: <MessageCircle className="w-8 h-8" />,
       title: 'Dedicated Support',
       description: 'Direct communication with Bridge IT Park from consultation through delivery and launch.',
-      color: 'from-bridge-primary to-purple-500',
+      color: 'from-bridge-primary to-blue-500',
     },
     {
       icon: <CreditCard className="w-8 h-8" />,

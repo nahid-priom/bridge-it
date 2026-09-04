@@ -1,0 +1,140 @@
+{
+  "brandName": "Garments Accessories ERP",
+  "businessType": "Accessories factory / trim supplier",
+  "primaryUser": "Factory owner / Merchandiser / Store & sales",
+  "solutionGroup": "erp-business-management",
+  "softwareType": "ERP",
+  "platformType": "web",
+  "modules": [
+    "Style Orders",
+    "Trim BOM",
+    "Production",
+    "QC",
+    "Finished Stock",
+    "Delivery",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Open Style Orders",
+    "WIP Lots",
+    "Finished Ready",
+    "OTIF %",
+    "Stock Value",
+    "Party Dues"
+  ],
+  "quickActions": [
+    "New Style Orders",
+    "New Trim BOM",
+    "New Production",
+    "New QC"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Style Orders",
+    "Trim BOM",
+    "Production Lots",
+    "QC",
+    "Finished Stock",
+    "Delivery",
+    "Party Accounts",
+    "OTIF Reports",
+    "Users",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Trim",
+    "Style linked PO",
+    "Sample approval",
+    "Lot"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Style Orders",
+    "Trim BOM",
+    "Production",
+    "QC",
+    "Finished Stock"
+  ],
+  "terminology": [
+    "Trim",
+    "Style linked PO",
+    "Sample approval",
+    "Lot",
+    "Packing list",
+    "OTIF",
+    "Garments buyer",
+    "Accessory SKU",
+    "Shade/size run",
+    "Delivery carton"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#880E4F",
+    "accent": "#7CB342",
+    "sidebar": "light",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Garments accessories",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "style-orders",
+      "name": "Style Orders",
+      "category": "list"
+    },
+    {
+      "key": "trim-bom",
+      "name": "Trim BOM",
+      "category": "detail"
+    },
+    {
+      "key": "production-lots",
+      "name": "Production Lots",
+      "category": "transaction"
+    },
+    {
+      "key": "qc",
+      "name": "QC",
+      "category": "form"
+    },
+    {
+      "key": "finished-stock",
+      "name": "Finished Stock",
+      "category": "stock"
+    },
+    {
+      "key": "delivery",
+      "name": "Delivery",
+      "category": "list"
+    },
+    {
+      "key": "party-accounts",
+      "name": "Party Accounts",
+      "category": "accounts"
+    },
+    {
+      "key": "otif-reports",
+      "name": "OTIF Reports",
+      "category": "reports"
+    },
+    {
+      "key": "users",
+      "name": "Users",
+      "category": "users"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

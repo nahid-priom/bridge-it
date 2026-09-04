@@ -1,0 +1,21 @@
+{
+  "serviceName": "Facebook & Instagram Ads Management",
+  "serviceGroup": "facebook-instagram-ads",
+  "targetBusiness": "E-commerce and lead generation businesses",
+  "visualDirection": "Agency campaign workspace with ad creatives and clean performance UI (no fake ROAS claims)",
+  "mockupStyle": "laptop Ads Manager-style UI + phone with live ad creatives",
+  "photographyDirection": "realistic UI chrome with product ads inside, soft blue studio",
+  "primaryElements": [
+    "campaign overview",
+    "ad creatives",
+    "audience structure",
+    "weekly report panel",
+    "phone + laptop"
+  ],
+  "palette": [
+    "#1877F2",
+    "#E1306C",
+    "#F8FAFC",
+    "#0F172A"
+  ]
+}

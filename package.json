@@ -13,7 +13,13 @@
     "logos:process": "tsx scripts/process-brand-logos.ts",
     "backfill:marketplace": "tsx scripts/backfill-marketplace-sync.ts",
     "seed:ecommerce-showcase": "tsx scripts/seed-ecommerce-showcase.ts",
-    "seed:ecommerce-projects": "tsx scripts/seed-ecommerce-projects.ts"
+    "seed:ecommerce-projects": "tsx scripts/seed-ecommerce-projects.ts",
+    "seed:admin-showcase": "tsx scripts/seed-admin-showcase.ts",
+    "seed:creative-marketing": "tsx scripts/seed-creative-marketing.ts",
+    "generate:admin-showcase-assets": "tsx scripts/generate-admin-showcase-assets.ts",
+    "generate:creative-marketing-assets": "tsx scripts/generate-creative-marketing-assets.ts",
+    "generate:platform-hero-assets": "tsx scripts/generate-platform-hero-assets.ts",
+    "validate:admin-showcase-assets": "tsx scripts/validate-admin-showcase-assets.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

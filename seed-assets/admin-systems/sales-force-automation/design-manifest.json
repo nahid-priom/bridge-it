@@ -1,0 +1,133 @@
+{
+  "brandName": "Mobile Sales App",
+  "businessType": "Field sales / distribution sales force",
+  "primaryUser": "Sales director / Area manager / Field executive",
+  "solutionGroup": "mobile-apps",
+  "softwareType": "Mobile App",
+  "platformType": "mobile",
+  "modules": [
+    "Beat Plans",
+    "Visit Logs",
+    "Order Booking",
+    "Collections",
+    "Targets",
+    "Field Reports"
+  ],
+  "dashboardKPIs": [
+    "Visits Today",
+    "Visit Compliance %",
+    "Orders Booked",
+    "Collection Amount",
+    "Missed Outlets",
+    "Target %"
+  ],
+  "quickActions": [
+    "New Beat Plans",
+    "New Visit Logs",
+    "New Order Booking",
+    "New Collections"
+  ],
+  "navigation": [
+    "Mobile Dashboard",
+    "Customer",
+    "Order Entry",
+    "Route",
+    "Collection",
+    "Stock",
+    "Visit",
+    "Location",
+    "Reports",
+    "Profile"
+  ],
+  "tableTypes": [
+    "Beat",
+    "Call average",
+    "Visit check-in",
+    "Secondary order"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Beat Plans",
+    "Visit Logs",
+    "Order Booking",
+    "Collections",
+    "Targets"
+  ],
+  "terminology": [
+    "Beat",
+    "Call average",
+    "Visit check-in",
+    "Secondary order",
+    "Field collection",
+    "Territory",
+    "SKU pitch",
+    "Perfect store",
+    "Journey plan",
+    "Geo tag"
+  ],
+  "visualStyle": "mobile-first",
+  "theme": {
+    "primary": "#AD1457",
+    "accent": "#00ACC1",
+    "sidebar": "dark",
+    "density": "compact"
+  },
+  "mobileBehavior": "native-mobile",
+  "industry": "Field sales",
+  "screens": [
+    {
+      "key": "mobile-dashboard",
+      "name": "Mobile Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "customer",
+      "name": "Customer",
+      "category": "list"
+    },
+    {
+      "key": "order-entry",
+      "name": "Order Entry",
+      "category": "form"
+    },
+    {
+      "key": "route",
+      "name": "Route",
+      "category": "list"
+    },
+    {
+      "key": "collection",
+      "name": "Collection",
+      "category": "transaction"
+    },
+    {
+      "key": "stock",
+      "name": "Stock",
+      "category": "stock"
+    },
+    {
+      "key": "visit",
+      "name": "Visit",
+      "category": "form"
+    },
+    {
+      "key": "location",
+      "name": "Location",
+      "category": "detail"
+    },
+    {
+      "key": "reports",
+      "name": "Reports",
+      "category": "reports"
+    },
+    {
+      "key": "profile",
+      "name": "Profile",
+      "category": "settings"
+    }
+  ]
+}

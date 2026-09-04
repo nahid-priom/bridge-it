@@ -1,0 +1,21 @@
+{
+  "serviceName": "Social Media Management",
+  "serviceGroup": "social-media-management",
+  "targetBusiness": "Local brands needing consistent presence",
+  "visualDirection": "Content calendar + feed grid + story set for managed social presence",
+  "mockupStyle": "calendar board, Instagram-style grid, phone stories",
+  "photographyDirection": "lifestyle brand photography in pink/indigo palette",
+  "primaryElements": [
+    "content calendar",
+    "feed grid",
+    "story set",
+    "post samples",
+    "insights snapshot"
+  ],
+  "palette": [
+    "#DB2777",
+    "#6366F1",
+    "#FDF2F8",
+    "#831843"
+  ]
+}

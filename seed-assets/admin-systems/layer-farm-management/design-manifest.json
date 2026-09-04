@@ -1,0 +1,140 @@
+{
+  "brandName": "Layer Farm Management",
+  "businessType": "Commercial layer farm",
+  "primaryUser": "Layer farm owner / Production supervisor",
+  "solutionGroup": "agro-farm-management",
+  "softwareType": "Agro",
+  "platformType": "web",
+  "modules": [
+    "Hen House",
+    "Egg Collection",
+    "Feed Schedule",
+    "Health Records",
+    "Egg Sales",
+    "Store",
+    "Accounts"
+  ],
+  "dashboardKPIs": [
+    "Daily Egg Production",
+    "Hen-Day %",
+    "Broken Eggs %",
+    "Feed / Dozen",
+    "Egg Stock Cases",
+    "Buyer Outstanding"
+  ],
+  "quickActions": [
+    "New Hen House",
+    "New Egg Collection",
+    "New Feed Schedule",
+    "New Health Records"
+  ],
+  "navigation": [
+    "Dashboard",
+    "Hen Houses",
+    "Egg Collection",
+    "Feed Schedule",
+    "Health Records",
+    "Egg Stock",
+    "Egg Sales",
+    "Buyer Ledger",
+    "Production Reports",
+    "Medicine Log",
+    "Settings"
+  ],
+  "tableTypes": [
+    "Hen-day",
+    "Egg case",
+    "Pullet",
+    "Peak production"
+  ],
+  "chartTypes": [
+    "bar",
+    "line",
+    "donut"
+  ],
+  "workflow": [
+    "Hen House",
+    "Egg Collection",
+    "Feed Schedule",
+    "Health Records",
+    "Egg Sales"
+  ],
+  "terminology": [
+    "Hen-day",
+    "Egg case",
+    "Pullet",
+    "Peak production",
+    "Shell quality",
+    "Layer mash",
+    "Collection tray",
+    "Cull birds",
+    "House grade",
+    "Egg grade"
+  ],
+  "visualStyle": "enterprise-saas",
+  "theme": {
+    "primary": "#6A1B9A",
+    "accent": "#FFA000",
+    "sidebar": "dark",
+    "density": "comfortable"
+  },
+  "mobileBehavior": "responsive-drawer",
+  "industry": "Layer / egg production",
+  "screens": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "category": "dashboard"
+    },
+    {
+      "key": "hen-houses",
+      "name": "Hen Houses",
+      "category": "list"
+    },
+    {
+      "key": "egg-collection",
+      "name": "Egg Collection",
+      "category": "transaction"
+    },
+    {
+      "key": "feed-schedule",
+      "name": "Feed Schedule",
+      "category": "form"
+    },
+    {
+      "key": "health-records",
+      "name": "Health Records",
+      "category": "detail"
+    },
+    {
+      "key": "egg-stock",
+      "name": "Egg Stock",
+      "category": "stock"
+    },
+    {
+      "key": "egg-sales",
+      "name": "Egg Sales",
+      "category": "list"
+    },
+    {
+      "key": "buyer-ledger",
+      "name": "Buyer Ledger",
+      "category": "accounts"
+    },
+    {
+      "key": "production-reports",
+      "name": "Production Reports",
+      "category": "reports"
+    },
+    {
+      "key": "medicine-log",
+      "name": "Medicine Log",
+      "category": "other"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "category": "settings"
+    }
+  ]
+}

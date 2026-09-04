@@ -5,9 +5,9 @@ export const BRANDING = {
   appName: 'Bridge IT Park',
   shortName: 'Bridge IT Park',
   legalName: 'Bridge IT Park',
-  tagline: 'Premium Custom E-commerce Websites',
+  tagline: 'Websites, Software Solutions & Creative Marketing',
   description:
-    'Browse custom e-commerce website designs for Bangladesh businesses. Preview storefronts, compare packages, and request a store built for your brand.',
+    'Custom e-commerce websites, software solutions, and creative & digital marketing for Bangladesh businesses.',
   primaryColor: '#0f2744',
   accentColor: '#10B981',
   navyColor: '#0f2744',
@@ -23,18 +23,20 @@ export const BRANDING = {
 
 export const BRAND_KEYWORDS = [
   'custom e-commerce website',
-  'custom ecommerce website Bangladesh',
-  'e-commerce website design',
-  'ecommerce website development',
-  'premium ecommerce website',
-  'custom online shop',
+  'software solutions Bangladesh',
+  'creative digital marketing bangladesh',
+  'graphic design services bangladesh',
+  'facebook ads management bangladesh',
+  'digital marketing agency bangladesh',
   'Bridge IT Park',
+  'Code Bondhu IT',
 ] as const;
 
-export const HOME_SEO_TITLE = 'Custom E-commerce Websites for Your Business | Bridge IT Park';
+export const HOME_SEO_TITLE =
+  'Websites, Software & Creative Marketing | Bridge IT Park';
 
 export const HOME_SEO_DESCRIPTION =
-  'Choose a custom e-commerce website for your business. Preview ready storefront designs, compare packages from ৳10,000, and request a store built for your brand.';
+  'Custom websites, software solutions, and creative & Digital Marketing - design, Meta ads and growth services for your business.';
 
 export function whatsappUrl(message: string) {
   const digits = BRANDING.whatsappNumber.replace(/\D/g, '');
