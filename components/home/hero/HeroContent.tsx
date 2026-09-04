@@ -67,7 +67,7 @@ export function HeroContent({ className }: { className?: string }) {
         id="homepage-hero-heading"
         className="mt-3 max-w-[22rem] font-display font-extrabold tracking-[-0.03em] text-text-primary sm:mt-2.5 sm:max-w-none lg:max-w-none"
       >
-        <span className="block text-[clamp(1.55rem,5.2vw,1.85rem)] font-semibold leading-snug tracking-[-0.015em] text-text-secondary lg:text-[1.75rem]">
+        <span className="block text-[clamp(1.55rem,5.2vw,1.85rem)] font-semibold leading-snug tracking-[-0.015em] text-text-secondary dark:text-white/90 lg:text-[1.75rem]">
           Build Your Business with
         </span>
         <span className="hero-solutions-wave mt-2 block text-[clamp(2.25rem,8.5vw,2.85rem)] leading-[1.1] lg:mt-2 lg:text-[clamp(2.35rem,2.9vw,2.95rem)] lg:leading-[1.08]">

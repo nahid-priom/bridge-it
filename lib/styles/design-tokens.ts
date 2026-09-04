@@ -15,13 +15,13 @@ export const heroTypography = {
   h1Line:
     'block font-display font-black tracking-tight leading-[1.08] text-[2rem] sm:text-[2.75rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[4.5rem]',
   h1Ink: 'text-[#080B16] dark:text-white',
-  h1Accent: 'text-[#00A85A]',
+  h1Accent: 'text-[#00A85A] dark:text-emerald-300',
   h1Script:
-    'hero-script-line block text-[2.25rem] sm:text-[3rem] md:text-[3.75rem] lg:text-[4.25rem] xl:text-[4.75rem] text-[#0EA5E9] dark:text-sky-400 leading-[1.05]',
+    'hero-script-line block text-[2.25rem] sm:text-[3rem] md:text-[3.75rem] lg:text-[4.25rem] xl:text-[4.75rem] text-[#0EA5E9] dark:text-sky-200 leading-[1.05]',
   subtitle:
-    'mx-auto max-w-[600px] text-base sm:text-[17px] lg:text-lg text-[#4B5563] dark:text-slate-300 leading-relaxed',
+    'mx-auto max-w-[600px] text-base sm:text-[17px] lg:text-lg text-[#4B5563] dark:text-slate-200 leading-relaxed',
   eyebrow:
-    'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-white/5 border border-slate-200/90 dark:border-white/15 shadow-sm text-sm font-semibold text-[#00A85A] dark:text-emerald-400',
+    'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-white/5 border border-slate-200/90 dark:border-white/15 shadow-sm text-sm font-semibold text-[#00A85A] dark:text-emerald-300',
   /** Search results / marketplace search hero */
   searchHeading:
     'font-display font-black tracking-tight leading-[1.12] text-xl sm:text-2xl md:text-[1.625rem]',

@@ -309,15 +309,16 @@ body {
   background-clip: text;
 }
 
+/* Dark theme: darker ink → white so headings stay bright on dark hero */
 .dark .hero-solutions-wave {
   background-image: linear-gradient(
     90deg,
-    #93c5fd 0%,
-    #60a5fa 22%,
-    #38bdf8 48%,
-    #7dd3fc 68%,
-    #60a5fa 88%,
-    #93c5fd 100%
+    #1e3a8a 0%,
+    #1e40af 14%,
+    #334155 32%,
+    #94a3b8 52%,
+    #e2e8f0 72%,
+    #ffffff 100%
   );
 }
 
@@ -530,6 +531,13 @@ html[data-admin-route] body {
   background-clip: text;
 }
 
+.dark .gradient-text {
+  background: linear-gradient(135deg, #1e3a8a 0%, #64748b 45%, #f8fafc 78%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .gradient-text-gold {
   background: linear-gradient(135deg, #F59E0B, #FF6B6B, #EC4899);
   -webkit-background-clip: text;
@@ -537,8 +545,22 @@ html[data-admin-route] body {
   background-clip: text;
 }
 
+.dark .gradient-text-gold {
+  background: linear-gradient(135deg, #78350f 0%, #a8a29e 40%, #f5f5f4 75%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .gradient-text-warm {
   background: linear-gradient(135deg, #FF6B6B, #F59E0B, #EC4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text-warm {
+  background: linear-gradient(135deg, #7f1d1d 0%, #78716c 42%, #fafaf9 78%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
