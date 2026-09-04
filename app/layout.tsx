@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Poppins, Noto_Sans_Bengali } from 'next/font/google';
+import localFont from 'next/font/local';
 import { AppShell } from '@/components/layout/AppShell';
 import { getMainMarketplaceCategoriesForUi } from '@/lib/catalog/marketplaceNav';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
@@ -11,22 +11,78 @@ import { organizationJsonLd, websiteJsonLd } from '@/lib/structured-data';
 import { ShowcaseQueryProvider } from '@/src/features/ecommerce-showcase/components/QueryProvider';
 import './globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
+const inter = localFont({
+  src: '../src/fonts/inter/inter-latin-wght-normal.woff2',
   variable: '--font-inter',
   display: 'swap',
+  weight: '100 900',
 });
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '900'],
+const poppins = localFont({
+  src: [
+    { path: '../src/fonts/poppins/poppins-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: '../src/fonts/poppins/poppins-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: '../src/fonts/poppins/poppins-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: '../src/fonts/poppins/poppins-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: '../src/fonts/poppins/poppins-latin-900-normal.woff2', weight: '900', style: 'normal' },
+  ],
   variable: '--font-poppins',
   display: 'swap',
 });
 
-const notoSansBengali = Noto_Sans_Bengali({
-  subsets: ['bengali', 'latin'],
-  weight: ['400', '500', '600', '700', '900'],
+const notoSansBengali = localFont({
+  src: [
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-bengali-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-bengali-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-latin-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-bengali-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-latin-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-bengali-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-latin-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-bengali-900-normal.woff2',
+      weight: '900',
+      style: 'normal',
+    },
+    {
+      path: '../src/fonts/noto-sans-bengali/noto-sans-bengali-latin-900-normal.woff2',
+      weight: '900',
+      style: 'normal',
+    },
+  ],
   variable: '--font-noto-bengali',
   display: 'swap',
 });
