@@ -15,7 +15,7 @@ export function HomepageHero({ className }: { className?: string }) {
       />
       <div className="relative mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.5rem)] pb-1 sm:px-6 sm:pb-2 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] lg:pb-4 xl:px-10">
         <div className="grid min-w-0 grid-cols-1 items-center gap-0 lg:grid-cols-2 lg:gap-10 xl:gap-12">
-          <div className="mx-auto flex w-full min-w-0 max-w-xl flex-col items-center lg:mx-0 lg:max-w-none lg:items-stretch">
+          <div className="mx-auto flex w-full min-w-0 max-w-xl flex-col items-center py-8 sm:py-6 lg:mx-0 lg:max-w-none lg:items-stretch lg:py-0">
             <HeroContent />
             <HeroActions className="mt-6 w-full sm:mt-[22px]" />
           </div>

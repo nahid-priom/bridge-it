@@ -1,6 +1,7 @@
 /**
  * Validate admin showcase local assets.
  * Usage: npx tsx scripts/validate-admin-showcase-assets.ts
+ * Optional: --require-premium-png  (fail if cover.png missing)
  */
 import { access, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
@@ -11,6 +12,7 @@ import { SOFTWARE_SEED_PRODUCTS } from '../src/features/software-showcase/seed/c
 const ROOT = path.join(process.cwd(), 'seed-assets/admin-systems');
 const CARD_LIMIT = 50 * 1024;
 const THUMB_LIMIT = 35 * 1024;
+const requirePremiumPng = process.argv.includes('--require-premium-png');
 
 type Issue = { slug: string; file: string; message: string; level: 'FAIL' | 'WARN' };
 
@@ -43,10 +45,22 @@ async function main() {
       issues.push({ slug: product.slug, file: 'design-manifest.json', message: 'missing', level: 'FAIL' });
     } else {
       try {
-        JSON.parse(await readFile(manifest, 'utf8'));
+        const raw = JSON.parse(await readFile(manifest, 'utf8')) as Record<string, unknown>;
+        if (requirePremiumPng && (!raw.premiumUpgradeVersion || Number(raw.premiumUpgradeVersion) < 2)) {
+          issues.push({
+            slug: product.slug,
+            file: 'design-manifest.json',
+            message: 'premiumUpgradeVersion < 2',
+            level: 'FAIL',
+          });
+        }
       } catch {
         issues.push({ slug: product.slug, file: 'design-manifest.json', message: 'invalid JSON', level: 'FAIL' });
       }
+    }
+
+    if (requirePremiumPng && !(await exists(path.join(dir, 'cover.png')))) {
+      issues.push({ slug: product.slug, file: 'cover.png', message: 'missing premium source', level: 'FAIL' });
     }
 
     const coverCard = path.join(dir, 'cover-card.avif');
@@ -85,6 +99,10 @@ async function main() {
       });
     }
 
+    const expectedScreenFiles = new Set(
+      product.screens.flatMap((s) => [`${s.key}.avif`, `${s.key}-thumb.avif`])
+    );
+
     for (const screen of product.screens) {
       const preview = path.join(dir, `${screen.key}.avif`);
       const thumb = path.join(dir, `${screen.key}-thumb.avif`);
@@ -110,16 +128,21 @@ async function main() {
       }
     }
 
-    // duplicate filename check within folder
     const files = await readdir(dir);
     const seen = new Set<string>();
     for (const f of files) {
       if (seen.has(f)) issues.push({ slug: product.slug, file: f, message: 'duplicate filename', level: 'FAIL' });
       seen.add(f);
+      if (
+        f.endsWith('.avif') &&
+        !f.startsWith('cover') &&
+        !expectedScreenFiles.has(f)
+      ) {
+        issues.push({ slug: product.slug, file: f, message: 'orphan screen asset', level: 'WARN' });
+      }
     }
   }
 
-  // crude hash duplicates across cover-cards
   const hashes = new Map<string, string>();
   for (const product of SOFTWARE_SEED_PRODUCTS) {
     const coverCard = path.join(ROOT, product.slug, 'cover-card.avif');
@@ -149,6 +172,7 @@ async function main() {
   console.log(`Avg cover-card size: ${covers ? (cardBytes / covers / 1024).toFixed(1) : 0} KB`);
   console.log(`Cover-cards >50KB: ${over50}`);
   console.log(`Largest asset: ${largest.file} (${(largest.size / 1024).toFixed(1)} KB)`);
+  console.log(`require-premium-png: ${requirePremiumPng}`);
   console.log(`FAIL: ${fails.length}  WARN: ${warns.length}`);
   for (const i of issues.slice(0, 40)) {
     console.log(`${i.level} ${i.slug}/${i.file}: ${i.message}`);

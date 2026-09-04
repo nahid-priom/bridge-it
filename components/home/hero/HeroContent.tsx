@@ -25,7 +25,7 @@ const CATEGORY_PILLS = [
       'border-bridge-cyan/30 bg-[#CFFAFE] text-cyan-800 hover:border-bridge-cyan/55 hover:bg-[#A5F3FC] dark:border-bridge-cyan/40 dark:bg-bridge-cyan/20 dark:text-cyan-200 dark:hover:bg-bridge-cyan/30',
   },
   {
-    label: 'Digital Marketing',
+    label: 'Marketing',
     href: `${ROUTES.explore}?type=marketing`,
     Icon: Megaphone,
     className:

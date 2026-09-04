@@ -19,7 +19,9 @@
     "generate:admin-showcase-assets": "tsx scripts/generate-admin-showcase-assets.ts",
     "generate:creative-marketing-assets": "tsx scripts/generate-creative-marketing-assets.ts",
     "generate:platform-hero-assets": "tsx scripts/generate-platform-hero-assets.ts",
-    "validate:admin-showcase-assets": "tsx scripts/validate-admin-showcase-assets.ts"
+    "validate:admin-showcase-assets": "tsx scripts/validate-admin-showcase-assets.ts",
+    "audit:software-premium": "tsx scripts/audit-software-premium-quality.ts",
+    "qa:software-contact-sheets": "tsx scripts/software-premium-contact-sheets.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

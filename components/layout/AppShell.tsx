@@ -1,18 +1,24 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import type { Category } from '@/types';
 import type { AuthProfile } from '@/lib/auth/types';
-import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { Notification } from '@/components/Notification';
 import { SiteBreadcrumb } from '@/components/layout/SiteBreadcrumb';
 import { AuthProfileProvider } from '@/components/auth/AuthProfileContext';
 import { SellerActivationListener } from '@/components/seller/SellerActivationListener';
 import { unlockBodyScroll } from '@/hooks/useBodyScrollLock';
 import { useStore } from '@/store/useStore';
+
+const GlobalSearchModal = dynamic(
+  () =>
+    import('@/components/GlobalSearchModal').then((mod) => mod.GlobalSearchModal),
+  { ssr: false }
+);
 
 /** Public chrome hidden; admin keeps its own dark UI (see app/admin/layout.tsx). */
 const NO_SHELL_PREFIXES = ['/admin', '/dashboard'];

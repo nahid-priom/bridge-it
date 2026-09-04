@@ -50,3 +50,7 @@ coverage/
 # Misc
 *.local
 .cache/
+
+# Local seed / generate assets (not needed for production builds)
+seed-assets/
+scripts/seed-assets/

@@ -1,14 +1,25 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ArrowRight } from 'lucide-react';
 import { ClientStatsCards } from '@/components/client-dashboard/ClientStatsCards';
 import { ActiveProjectsBoard } from '@/components/client-dashboard/ActiveProjectsBoard';
-import { SpendingChart } from '@/components/client-dashboard/SpendingChart';
 import { DashboardCard } from '@/components/client-dashboard/ui/DashboardCard';
 import { StatusBadge } from '@/components/client-dashboard/ui/StatusBadge';
 import { ROUTES } from '@/lib/routes';
 import type { ClientDashboardOverview } from '@/types/client-dashboard';
+
+const SpendingChart = dynamic(
+  () =>
+    import('@/components/client-dashboard/SpendingChart').then((mod) => mod.SpendingChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-72 animate-pulse rounded-2xl bg-slate-100 dark:bg-white/5" aria-hidden />
+    ),
+  }
+);
 
 export function ClientDashboardOverviewPage({ data }: { data: ClientDashboardOverview }) {
   return (

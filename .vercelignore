@@ -1,0 +1,3 @@
+# Local seed / generate assets — not used by the Next.js app at build or runtime
+seed-assets/
+scripts/seed-assets/

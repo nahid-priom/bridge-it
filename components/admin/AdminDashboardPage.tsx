@@ -1,26 +1,78 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { AnimatePresence } from 'framer-motion';
 import { AdminDashboardLayout } from '@/components/admin/AdminDashboardLayout';
 import { AdminDataProvider } from '@/components/admin/AdminDataContext';
 import type { AdminSection } from '@/types/admin';
 import type { AdminDashboardData } from '@/types/admin';
-import { AdminOverviewSection } from './sections/AdminOverviewSection';
-import { AdminBitpOverviewSection } from './sections/AdminBitpOverviewSection';
-import {
-  AdminBitpProductsSection,
-  AdminBitpOrdersSection,
-  AdminBitpCategoriesSection,
-  AdminBitpConsultationsSection,
-  AdminBitpContentSection,
-  AdminBitpGenericSection,
-  AdminBitpProjectsSection,
-  AdminBitpPaymentsSection,
-  AdminBitpSoftwareSection,
-  AdminBitpEcommerceDemoSection,
-} from './sections/AdminBitpSections';
 import type { SellerApplicationRow } from '@/lib/db/seller-applications';
+
+const sectionLoading = () => (
+  <div className="h-64 animate-pulse rounded-2xl bg-white/5" aria-hidden />
+);
+
+const AdminOverviewSection = dynamic(
+  () =>
+    import('./sections/AdminOverviewSection').then((mod) => mod.AdminOverviewSection),
+  { loading: sectionLoading }
+);
+const AdminBitpOverviewSection = dynamic(
+  () =>
+    import('./sections/AdminBitpOverviewSection').then((mod) => mod.AdminBitpOverviewSection),
+  { loading: sectionLoading }
+);
+const AdminBitpProductsSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpProductsSection),
+  { loading: sectionLoading }
+);
+const AdminBitpOrdersSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpOrdersSection),
+  { loading: sectionLoading }
+);
+const AdminBitpCategoriesSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpCategoriesSection),
+  { loading: sectionLoading }
+);
+const AdminBitpConsultationsSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpConsultationsSection),
+  { loading: sectionLoading }
+);
+const AdminBitpContentSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpContentSection),
+  { loading: sectionLoading }
+);
+const AdminBitpGenericSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpGenericSection),
+  { loading: sectionLoading }
+);
+const AdminBitpProjectsSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpProjectsSection),
+  { loading: sectionLoading }
+);
+const AdminBitpPaymentsSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpPaymentsSection),
+  { loading: sectionLoading }
+);
+const AdminBitpSoftwareSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpSoftwareSection),
+  { loading: sectionLoading }
+);
+const AdminBitpEcommerceDemoSection = dynamic(
+  () =>
+    import('./sections/AdminBitpSections').then((mod) => mod.AdminBitpEcommerceDemoSection),
+  { loading: sectionLoading }
+);
 
 type AdminDashboardPageProps = {
   data: AdminDashboardData;
