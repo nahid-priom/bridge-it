@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { LEGACY_REDIRECTS } from './lib/seo/config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -57,16 +58,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [
-      { source: '/solutions', destination: '/websites', permanent: false },
-      { source: '/solutions/:path*', destination: '/websites', permanent: false },
-      { source: '/products', destination: '/websites', permanent: false },
-      { source: '/products/:path*', destination: '/websites', permanent: false },
-      { source: '/services/:path*', destination: '/websites', permanent: false },
-      { source: '/services', destination: '/websites', permanent: false },
-      { source: '/categories', destination: '/websites', permanent: false },
-      { source: '/categories/:path*', destination: '/websites', permanent: false },
-    ];
+    return LEGACY_REDIRECTS.map((rule) => ({
+      source: rule.source,
+      destination: rule.destination,
+      permanent: rule.permanent,
+    }));
   },
 };
 

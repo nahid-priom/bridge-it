@@ -131,7 +131,7 @@ export function MobileDrawerMenu({
 
             <div className="flex-1 overflow-y-auto px-4 py-3">
               <nav aria-label="Main navigation">
-                {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.home).map((link) => (
+                {MAIN_NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -157,7 +157,7 @@ export function MobileDrawerMenu({
                         : 'text-text-primary'
                     )}
                   >
-                    Services
+                    Browse by category
                     <ChevronDown
                       className={cn(
                         'h-4 w-4 opacity-70 transition-transform',
@@ -283,20 +283,6 @@ export function MobileDrawerMenu({
                     </div>
                   ) : null}
                 </div>
-
-                {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.consultation).map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={closeAndNavigate}
-                    className={cn(
-                      'block py-3 text-[15px] font-semibold border-b border-slate-100/90 dark:border-white/[0.08]',
-                      isActive(link.href) ? 'text-deshi-green' : 'text-text-primary'
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
               </nav>
 
               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted mt-5 mb-2">

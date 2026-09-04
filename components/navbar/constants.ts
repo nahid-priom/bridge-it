@@ -1,9 +1,13 @@
 import { ROUTES } from '@/lib/routes';
 import { NAV_HOW_IT_WORKS_HREF } from '@/data/homeContent';
 
-/** Top-level plain links (Services is a dropdown, not listed here). */
+/** Primary public navigation — one crawlable Link per business pillar. */
 export const MAIN_NAV_LINKS = [
   { label: 'Home', href: ROUTES.home },
+  { label: 'Websites', href: ROUTES.websites },
+  { label: 'Software', href: ROUTES.softwareShowroom },
+  { label: 'Creative & Marketing', href: ROUTES.creativeMarketingShowroom },
+  { label: 'Portfolio', href: ROUTES.portfolio },
   { label: 'Consultation', href: ROUTES.consultation },
 ] as const;
 

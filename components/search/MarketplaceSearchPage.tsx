@@ -214,7 +214,6 @@ export function MarketplaceSearchPage({
                     totalPages={totalPages}
                     onPageChange={(p) => {
                       pushState({ page: p });
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   />
                 )}

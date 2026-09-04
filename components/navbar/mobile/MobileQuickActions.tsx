@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Briefcase, CalendarCheck } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 
@@ -17,13 +17,11 @@ function QuickActionCard({
   href,
   label,
   icon,
-  badge,
   onNavigate,
 }: {
   href: string;
   label: string;
   icon: ReactNode;
-  badge?: number;
   onNavigate?: () => void;
 }) {
   return (
@@ -40,36 +38,31 @@ function QuickActionCard({
     >
       {icon}
       <span className="flex-1 truncate">{label}</span>
-      {badge !== undefined && badge > 0 && (
-        <span className="text-[10px] font-bold bg-deshi-green text-white min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">
-          {badge > 99 ? '99+' : badge}
-        </span>
-      )}
     </Link>
   );
 }
 
 export function MobileQuickActions({
-  cartCount = 0,
+  cartCount: _cartCount = 0,
   messageCount: _messageCount = 0,
   onNavigate,
   className,
 }: MobileQuickActionsProps) {
+  void _cartCount;
   void _messageCount;
 
   return (
     <div className={cn('grid grid-cols-2 gap-2', className)}>
       <QuickActionCard
-        href={ROUTES.products}
-        label="Wishlist"
-        icon={<Heart className="w-4 h-4 text-rose-500 shrink-0" aria-hidden />}
+        href={ROUTES.portfolio}
+        label="Portfolio"
+        icon={<Briefcase className="w-4 h-4 text-[#2563eb] shrink-0" aria-hidden />}
         onNavigate={onNavigate}
       />
       <QuickActionCard
-        href={ROUTES.cart}
-        label="Cart"
-        icon={<ShoppingCart className="w-4 h-4 text-deshi-green shrink-0" aria-hidden />}
-        badge={cartCount}
+        href={ROUTES.consultation}
+        label="Consultation"
+        icon={<CalendarCheck className="w-4 h-4 text-deshi-green shrink-0" aria-hidden />}
         onNavigate={onNavigate}
       />
     </div>

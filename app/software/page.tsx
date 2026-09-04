@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/metadata';
+import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
@@ -23,7 +24,7 @@ export const revalidate = 60;
 
 const PAGE_TITLE = 'Software Solutions';
 const PAGE_DESCRIPTION =
-  'ERP, POS, CRM, HRM & custom business software built around real operations.';
+  'ERP, POS, CRM, HRM and industry-specific business software — browse solutions and request a scoped implementation.';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -32,21 +33,30 @@ function first(value: string | string[] | undefined): string {
   return value ?? '';
 }
 
-export const metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESCRIPTION,
-  path: ROUTES.softwareShowroom,
-  keywords: [
-    'software solutions Bangladesh',
-    'custom software development',
-    'POS software Bangladesh',
-    'CRM software for small business',
-    'HR payroll software Bangladesh',
-    'business automation software',
-    'SaaS development',
-    'mobile business app development',
-  ],
-});
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
+  const sp = await searchParams;
+  const noIndex = listingHasSeoFilters({
+    q: first(sp.q),
+    page: first(sp.page),
+    filters: [first(sp.group), first(sp.solutionGroup), first(sp.category), first(sp.child), first(sp.more)],
+  });
+  return buildPageMetadata({
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    path: ROUTES.softwareShowroom,
+    keywords: [
+      'software solutions Bangladesh',
+      'custom software development',
+      'POS software Bangladesh',
+      'CRM software for small business',
+      'HR payroll software Bangladesh',
+      'business automation software',
+      'SaaS development',
+      'mobile business app development',
+    ],
+    noIndex,
+  });
+}
 
 function CatalogFallback() {
   return (

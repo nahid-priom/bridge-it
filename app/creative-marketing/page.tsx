@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/metadata';
+import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
@@ -18,7 +19,7 @@ export const revalidate = 60;
 
 const PAGE_TITLE = 'Creative & Digital Marketing';
 const PAGE_DESCRIPTION =
-  'আপনার Brand-এর Design, Social Media Creative, Facebook Ads ও Digital Marketing একসাথে পরিচালনা করুন।';
+  'Graphic design, branding, Facebook ads, e-commerce marketing, and lead generation services for growing brands.';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -27,20 +28,31 @@ function first(value: string | string[] | undefined): string {
   return value ?? '';
 }
 
-export const metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESCRIPTION,
-  path: ROUTES.creativeMarketingShowroom,
-  keywords: [
-    'graphic design services bangladesh',
-    'social media post design bangladesh',
-    'facebook ads management bangladesh',
-    'digital marketing agency bangladesh',
-    'meta ads management',
-    'ecommerce marketing services',
-    'brand identity design',
-  ],
-});
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
+  const sp = await searchParams;
+  const group = parseCreativeGroupParam(first(sp.group), first(sp.serviceGroup));
+  const more = parseCreativeMoreParam(first(sp.more));
+  const noIndex = listingHasSeoFilters({
+    q: first(sp.q),
+    page: first(sp.page),
+    filters: [group === 'all' ? undefined : group, more.join(',')],
+  });
+  return buildPageMetadata({
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    path: ROUTES.creativeMarketingShowroom,
+    keywords: [
+      'graphic design services bangladesh',
+      'social media post design bangladesh',
+      'facebook ads management bangladesh',
+      'digital marketing agency bangladesh',
+      'meta ads management',
+      'ecommerce marketing services',
+      'brand identity design',
+    ],
+    noIndex,
+  });
+}
 
 export default async function CreativeMarketingPage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;

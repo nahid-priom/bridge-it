@@ -25,10 +25,10 @@ const ICON_MAP: Record<MainProductCategoryIcon, React.ComponentType<{ className?
 };
 
 const TRENDING_PRODUCTS = [
-  { label: 'Wireless Earbuds Pro', href: '/products?category=gadgets', meta: '৳3,500' },
-  { label: 'Dell Business Laptop', href: '/products?category=electronics', meta: '৳72,000' },
-  { label: 'Smart CCTV Kit', href: '/products?category=smart-devices', meta: '৳22,000' },
-  { label: 'POS Software License', href: '/products?category=digital-products', meta: '৳15,000' },
+  { label: 'Wireless Earbuds Pro', href: ROUTES.websites, meta: '৳3,500' },
+  { label: 'Dell Business Laptop', href: ROUTES.softwareShowroom, meta: '৳72,000' },
+  { label: 'Smart CCTV Kit', href: ROUTES.websites, meta: '৳22,000' },
+  { label: 'POS Software License', href: ROUTES.softwareShowroom, meta: '৳15,000' },
 ];
 
 type ProductsMegaMenuProps = {
@@ -81,7 +81,7 @@ export function ProductsMegaMenu({ open, active, onToggle, onClose }: ProductsMe
           accent="sky"
         />
       </div>
-      <MegaMenuFooterLink href={ROUTES.products} label="View all products" onClose={onClose} />
+      <MegaMenuFooterLink href={ROUTES.websites} label="View all websites" onClose={onClose} />
     </MegaMenuShell>
   );
 }

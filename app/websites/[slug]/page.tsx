@@ -1,14 +1,16 @@
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
+import { RelatedSolutions } from '@/components/seo/RelatedSolutions';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
-import { getProjectBySlug } from '@/src/features/ecommerce-showcase/api/projects';
+import { getProjectBySlug, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/roles';
 import { ProjectPreview } from '@/src/features/ecommerce-showcase/public/ProjectPreview';
 import {
   showcaseTemplateBreadcrumbJsonLd,
   showcaseTemplateServiceJsonLd,
 } from '@/lib/structured-data';
+import { ROUTES } from '@/lib/routes';
 
 export const revalidate = 60;
 
@@ -42,6 +44,16 @@ export default async function WebsiteDetailPage({ params, searchParams }: Props)
   const project = await getProjectBySlug(slug, { includeDrafts });
   if (!project) notFound();
 
+  const related = (
+    await listProjectCards({
+      industry: project.industry || undefined,
+      category: project.category?.slug || undefined,
+      limit: 8,
+    })
+  ).items
+    .filter((item) => item.id !== project.id)
+    .slice(0, 4);
+
   return (
     <>
       <JsonLd
@@ -51,9 +63,15 @@ export default async function WebsiteDetailPage({ params, searchParams }: Props)
         ]}
       />
       {!project.published ? (
-        <p className="bg-amber-100 text-amber-900 text-center text-sm py-2">Draft preview — not public</p>
+        <p className="bg-amber-100 text-center text-sm py-2 text-amber-900">Draft preview — not public</p>
       ) : null}
       <ProjectPreview project={project} />
+      <RelatedSolutions
+        kind="website"
+        items={related}
+        viewAllHref={ROUTES.websites}
+        viewAllLabel="Explore website designs"
+      />
     </>
   );
 }

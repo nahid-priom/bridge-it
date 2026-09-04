@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isReservedSlug } from '@/lib/seo/config';
 import { PAGE_TYPE_IDS } from '../config/page-types';
 import { LEAD_STATUSES } from '../config/constants';
 
@@ -7,7 +8,10 @@ export const projectFormSchema = z.object({
   slug: z
     .string()
     .min(2, 'Slug is required')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers, and hyphens'),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers, and hyphens')
+    .refine((value) => !isReservedSlug(value), {
+      message: 'This slug is reserved for a system page. Choose another.',
+    }),
   short_description: z.string().min(8, 'Add a short description').max(220, 'Keep it under 220 characters'),
   full_description: z.string().min(20, 'Add a fuller description'),
   category_id: z.string().uuid('Select a category'),

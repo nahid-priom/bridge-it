@@ -1,3 +1,5 @@
+import { ROUTES } from '@/lib/routes';
+
 /**
  * Central brand configuration — Bridge IT Park.
  */
@@ -45,12 +47,13 @@ export function whatsappUrl(message: string) {
   return `https://wa.me/?text=${text}`;
 }
 
+/** Canonical public URL for a website showcase project. */
 export function solutionUrl(slug: string): string {
-  return `/solutions/${slug}`;
+  return ROUTES.website(slug);
 }
 
-/** @deprecated */
+/** @deprecated Prefer ROUTES.website */
 export function sellerCustomUrl(slug: string): string {
   const host = BRANDING.siteUrl.replace(/^https?:\/\//, '');
-  return `${host}/solutions/${slug}`;
+  return `${host}${ROUTES.website(slug)}`;
 }

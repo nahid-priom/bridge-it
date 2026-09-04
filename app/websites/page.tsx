@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
+import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
@@ -53,11 +54,16 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
     'Next.js ecommerce website',
   ];
   if (filters.category) keywords.unshift(`${filters.category} ecommerce website`);
+  const noIndex = listingHasSeoFilters({
+    q: filters.q,
+    filters: [filters.view, filters.category],
+  });
   return buildPageMetadata({
     title,
     description,
     path: '/websites',
     keywords,
+    noIndex,
   });
 }
 

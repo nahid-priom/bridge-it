@@ -135,7 +135,7 @@ export function MobileDrawer({
           href: dashboardHref,
         },
         { label: 'Orders', href: ROUTES.clientOrders },
-        { label: 'Wishlist', href: ROUTES.products },
+        { label: 'Websites', href: ROUTES.websites },
       ]
     : [
         { label: 'Log in', href: ROUTES.login },
@@ -196,7 +196,7 @@ export function MobileDrawer({
                 aria-expanded={productsOpen}
                 className={cn(
                   'w-full flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors',
-                  isActive(ROUTES.products) || pathname.startsWith('/products')
+                  isActive(ROUTES.websites) || pathname.startsWith('/websites')
                     ? 'bg-bridge-primary/10 text-bridge-primary font-semibold'
                     : 'text-slate-600 hover:bg-slate-50 dark:text-white/85'
                 )}
@@ -210,7 +210,7 @@ export function MobileDrawer({
               {productsOpen && (
                 <div className="mt-1 ml-2 pl-2 border-l-2 border-bridge-primary/20 space-y-0.5">
                   <Link
-                    href={ROUTES.products}
+                    href={ROUTES.websites}
                     onClick={closeAndNavigate}
                     className="block px-3 py-2 text-sm text-bridge-primary font-medium"
                   >

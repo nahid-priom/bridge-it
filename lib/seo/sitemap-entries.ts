@@ -1,16 +1,32 @@
 import type { MetadataRoute } from 'next';
 import { ROUTES } from '@/lib/routes';
-import { STATIC_SITEMAP_ROUTES } from '@/lib/seo/config';
+import { SITE_URL } from '@/lib/site';
+import {
+  CANONICAL_ORIGIN,
+  STATIC_SITEMAP_ROUTES,
+  SOLUTION_DETAIL_PRIORITY,
+  SOLUTION_CATEGORY_FILTER_PRIORITY,
+} from '@/lib/seo/config';
 import { listCategories, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 
-const CANONICAL_ORIGIN = 'https://www.bridgeitpark.com';
+function canonicalOrigin(): string {
+  try {
+    const fromEnv = new URL(SITE_URL).origin;
+    if (fromEnv.includes('localhost') || fromEnv.includes('127.0.0.1')) {
+      return CANONICAL_ORIGIN;
+    }
+    return fromEnv.replace('://bridgeitpark.com', '://www.bridgeitpark.com');
+  } catch {
+    return CANONICAL_ORIGIN;
+  }
+}
 
 function toAbsoluteUrl(path: string): string {
   if (path.startsWith('http')) return path;
   const normalized = path.startsWith('/') ? path : `/${path}`;
-  return `${CANONICAL_ORIGIN}${normalized}`;
+  return `${canonicalOrigin()}${normalized}`;
 }
 
 function entry(
@@ -100,7 +116,7 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     entry(ROUTES.ecommerceCategory(category.slug), {
       lastModified: category.updated_at,
       changeFrequency: 'weekly',
-      priority: 0.88,
+      priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
     })
   );
 
@@ -108,7 +124,7 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     entry(ROUTES.website(project.slug), {
       lastModified: project.updated_at,
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: SOLUTION_DETAIL_PRIORITY,
     })
   );
 
@@ -116,7 +132,7 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     entry(ROUTES.softwareSolution(project.slug), {
       lastModified: project.updated_at,
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: SOLUTION_DETAIL_PRIORITY,
     })
   );
 
@@ -124,7 +140,7 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     entry(ROUTES.creativeMarketingSolution(project.slug), {
       lastModified: project.updated_at,
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: SOLUTION_DETAIL_PRIORITY,
     })
   );
 

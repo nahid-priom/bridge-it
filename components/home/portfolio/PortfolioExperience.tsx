@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useCallback, useMemo, useState, useTransition } from 'react';
 import { SectionContainer } from './SectionContainer';
 import { PortfolioIntro } from './PortfolioIntro';
 import { CategoryFilter } from './CategoryFilter';
@@ -38,32 +38,13 @@ export function PortfolioExperience({
 
   const [filter, setFilter] = useState<PortfolioFilterId>('all');
   const [, startTransition] = useTransition();
-  const pendingScrollFilter = useRef<PortfolioFilterId | null>(null);
 
   const visible = useMemo(
     () => allSections.filter((section) => sectionMatchesFilter(section, filter)),
     [allSections, filter]
   );
 
-  useEffect(() => {
-    const targetFilter = pendingScrollFilter.current;
-    if (!targetFilter) return;
-    pendingScrollFilter.current = null;
-
-    const preferReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const el =
-      targetFilter === 'all'
-        ? document.getElementById('explore-our-work-heading')
-        : document.getElementById(visible[0]?.id ?? '');
-
-    el?.scrollIntoView({
-      behavior: preferReduced ? 'auto' : 'smooth',
-      block: 'start',
-    });
-  }, [filter, visible]);
-
   const handleFilterChange = useCallback((id: PortfolioFilterId) => {
-    pendingScrollFilter.current = id;
     startTransition(() => setFilter(id));
   }, []);
 

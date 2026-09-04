@@ -32,7 +32,7 @@ export function NavActionButtons({
     <div className={cn('flex items-center gap-0.5 shrink-0', className)}>
       {!cartOnly && (
         <>
-          <NavIconButton href={ROUTES.products} label="Wishlist" size={iconSize}>
+          <NavIconButton href={ROUTES.websites} label="Websites" size={iconSize}>
             <Heart className="w-5 h-5" aria-hidden />
           </NavIconButton>
           <NavIconButton

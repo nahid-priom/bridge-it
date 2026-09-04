@@ -46,7 +46,7 @@ export function ProductCategoryDropdown({
     >
       <DesktopNavLink
         label="Categories"
-        href={ROUTES.products}
+        href={ROUTES.websites}
         active={active}
         hasChevron
         onClick={(e) => {
@@ -72,7 +72,7 @@ export function ProductCategoryDropdown({
             </p>
           </div>
           <Link
-            href={ROUTES.products}
+            href={ROUTES.websites}
             role="menuitem"
             onClick={onClose}
             className="flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-bridge-primary hover:bg-slate-50 dark:hover:bg-white/5"

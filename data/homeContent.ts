@@ -187,12 +187,37 @@ export const FOOTER_BRAND_HEADLINE = 'Control Your Business in One Dashboard';
 export const FOOTER_BRAND_DESCRIPTION = 'Grow Smarter with Bridge IT Park';
 
 export const FOOTER_COLUMNS = {
+  services: [
+    { label: 'Websites', href: ROUTES.websites },
+    { label: 'Software Solutions', href: ROUTES.softwareShowroom },
+    { label: 'Creative & Digital Marketing', href: ROUTES.creativeMarketingShowroom },
+    { label: 'Consultation', href: ROUTES.consultation },
+  ],
+  explore: [
+    { label: 'Explore Catalog', href: ROUTES.explore },
+    { label: 'Portfolio', href: ROUTES.portfolio },
+    { label: 'Pricing', href: ROUTES.pricing },
+    { label: 'About', href: ROUTES.about },
+  ],
+  popular: [
+    { label: 'Garments ERP', href: ROUTES.softwareSolution('garments-erp') },
+    { label: 'Feed Mill ERP', href: ROUTES.softwareSolution('feed-mill-erp') },
+    { label: 'Retail POS', href: ROUTES.softwareSolution('retail-pos') },
+    { label: 'CRM System', href: ROUTES.softwareSolution('crm-system') },
+    { label: 'E-commerce Websites', href: ROUTES.websites },
+  ],
+  legal: [
+    { label: 'Privacy Policy', href: ROUTES.privacy },
+    { label: 'Terms & Conditions', href: ROUTES.terms },
+  ],
+  /** @deprecated Use services */
   solutions: [
     { label: 'Websites', href: ROUTES.websites },
     { label: 'Software', href: ROUTES.softwareShowroom },
     { label: 'Creative & Marketing', href: ROUTES.creativeMarketingShowroom },
-    { label: 'Explore', href: ROUTES.explore },
+    { label: 'Consultation', href: ROUTES.consultation },
   ],
+  /** @deprecated Use explore */
   quickLinks: [
     { label: 'About Us', href: ROUTES.about },
     { label: 'Pricing', href: ROUTES.pricing },

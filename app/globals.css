@@ -157,7 +157,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Instant by default — intentional smooth scrolls pass behavior: 'smooth' explicitly. */
+  scroll-behavior: auto;
 }
 
 body {

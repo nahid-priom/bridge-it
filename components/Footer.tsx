@@ -70,7 +70,7 @@ export function Footer() {
     <footer className="deshi-footer max-w-full min-w-0 overflow-x-hidden text-slate-300">
       <div className="mx-auto w-full max-w-[1480px] min-w-0 px-4 py-10 sm:px-6 md:py-12 lg:px-8 xl:px-10">
         <div className="grid min-w-0 grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-12 lg:gap-8">
-          <div className="col-span-2 min-w-0 lg:col-span-4">
+          <div className="col-span-2 min-w-0 lg:col-span-3">
             <BridgeLogo variant="footer" theme="dark" className="mb-3" />
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#60a5fa]">
               {FOOTER_BRAND_TAGLINE}
@@ -83,22 +83,22 @@ export function Footer() {
             </p>
 
             <div className="mt-5 flex max-w-sm gap-2.5 text-sm leading-relaxed text-slate-400">
-              <MapPin
-                className="mt-0.5 h-4 w-4 shrink-0 text-[#60a5fa]"
-                aria-hidden
-              />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#60a5fa]" aria-hidden />
               <address className="not-italic">{FOOTER_ADDRESS}</address>
             </div>
           </div>
 
           <div className="min-w-0 lg:col-span-2">
-            <FooterColumn title="Solutions" links={FOOTER_COLUMNS.solutions} />
+            <FooterColumn title="Services" links={FOOTER_COLUMNS.services} />
           </div>
           <div className="min-w-0 lg:col-span-2">
-            <FooterColumn title="Quick Links" links={FOOTER_COLUMNS.quickLinks} />
+            <FooterColumn title="Explore" links={FOOTER_COLUMNS.explore} />
+          </div>
+          <div className="min-w-0 lg:col-span-2">
+            <FooterColumn title="Popular Solutions" links={FOOTER_COLUMNS.popular} />
           </div>
 
-          <div className="col-span-2 min-w-0 lg:col-span-4">
+          <div className="col-span-2 min-w-0 lg:col-span-3">
             <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">Contact</h3>
             <ul className="space-y-2.5">
               <li>
@@ -129,6 +129,9 @@ export function Footer() {
               ) : null}
             </ul>
 
+            <div className="mt-6">
+              <FooterColumn title="Legal" links={FOOTER_COLUMNS.legal} />
+            </div>
             <h3 className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-white">
               Follow Us
             </h3>

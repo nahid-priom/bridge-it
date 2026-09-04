@@ -1,7 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { scheduleDeferredThirdParty } from '@/lib/analytics/defer-third-party';
+import {
+  hasAnalyticsConsent,
+  readCookieConsent,
+} from '@/lib/analytics/cookie-consent';
 import { CLARITY_ID } from '@/lib/config/clarity';
 
 declare global {
@@ -30,14 +34,28 @@ function injectClarity(projectId: string) {
 }
 
 /**
- * Microsoft Clarity — deferred until idle / first interaction.
- * Does not load during initial paint or hydration.
+ * Microsoft Clarity — loads only after Analytics consent,
+ * then deferred until idle / first interaction.
  */
 export function MicrosoftClarity() {
+  const [allowed, setAllowed] = useState(false);
+
   useEffect(() => {
-    if (!CLARITY_ID) return;
-    return scheduleDeferredThirdParty(() => injectClarity(CLARITY_ID));
+    const sync = () => setAllowed(hasAnalyticsConsent(readCookieConsent()));
+    sync();
+    const onConsent = () => sync();
+    window.addEventListener('bitp-cookie-consent', onConsent as EventListener);
+    window.addEventListener('storage', onConsent);
+    return () => {
+      window.removeEventListener('bitp-cookie-consent', onConsent as EventListener);
+      window.removeEventListener('storage', onConsent);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!CLARITY_ID || !allowed) return;
+    return scheduleDeferredThirdParty(() => injectClarity(CLARITY_ID));
+  }, [allowed]);
 
   return null;
 }

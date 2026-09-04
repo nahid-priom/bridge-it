@@ -37,7 +37,7 @@ export function DesktopNav({
   return (
     <div className={cn('hidden xl:flex items-center gap-0.5 shrink-0', className)}>
       <ProductCategoryDropdown
-        active={isActive(ROUTES.products) || pathname.startsWith('/products')}
+        active={isActive(ROUTES.websites) || pathname.startsWith('/websites')}
         open={productsOpen}
         onOpen={onProductsOpen}
         onToggle={onProductsToggle}

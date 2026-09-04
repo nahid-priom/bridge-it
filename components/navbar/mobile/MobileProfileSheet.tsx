@@ -184,13 +184,13 @@ export function MobileProfileSheet({
                     onClose={onClose}
                   />
                   <SheetLink
-                    href={ROUTES.products}
+                    href={ROUTES.websites}
                     icon={<Heart className="w-4 h-4 text-rose-500" />}
                     label="Wishlist"
                     onClose={onClose}
                   />
                   <SheetLink
-                    href={ROUTES.cart}
+                    href={ROUTES.consultation}
                     icon={<ShoppingCart className="w-4 h-4 text-deshi-green" />}
                     label="Cart"
                     badge={cartCount}

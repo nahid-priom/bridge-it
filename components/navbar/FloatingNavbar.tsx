@@ -104,12 +104,12 @@ export function FloatingNavbar({
               className="flex items-center justify-center gap-0.5 xl:gap-1"
               aria-label="Primary"
             >
-              {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.home).map((link) => (
+              {MAIN_NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'whitespace-nowrap rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3.5',
+                    'whitespace-nowrap rounded-xl px-2 py-2 text-sm font-semibold transition-colors xl:px-2.5',
                     isNavActive(pathname, link.href)
                       ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
                       : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
@@ -119,20 +119,6 @@ export function FloatingNavbar({
                 </Link>
               ))}
               <CategoryDropdown />
-              {MAIN_NAV_LINKS.filter((link) => link.href === ROUTES.consultation).map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'whitespace-nowrap rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3.5',
-                    isNavActive(pathname, link.href)
-                      ? 'text-deshi-green bg-emerald-50/80 dark:bg-emerald-500/10'
-                      : 'text-text-primary hover:text-deshi-green hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5'
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
             </nav>
 
             <div className="flex items-center justify-self-end gap-2 shrink-0">

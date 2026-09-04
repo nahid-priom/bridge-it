@@ -16,6 +16,8 @@ export const ROUTES = {
   privacy: '/privacy',
   terms: '/terms',
   consultation: '/consultation',
+  /** @deprecated Prefer ROUTES.consultation — /contact permanently redirects */
+  contact: '/consultation',
   ecommerceShowroom: '/websites',
   ecommerceSolution: (slug: string) => `/websites/${slug}`,
   ecommerceSolutionOrder: (slug: string) => `/consultation`,

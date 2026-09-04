@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from 'react';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
+import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
@@ -78,12 +79,24 @@ function MarketingFallback() {
 }
 
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
-  const type = parseExploreType(first((await searchParams).type));
+  const sp = await searchParams;
+  const type = parseExploreType(first(sp.type));
+  const q = first(sp.q).trim() || first(sp.search).trim();
+  const view = first(sp.view) || first(sp.page);
+  const category = first(sp.category);
+  const group = first(sp.group) || first(sp.solutionGroup) || first(sp.serviceGroup);
+  const more = first(sp.more);
+  const page = first(sp.page);
   const titles = {
     websites: 'E-commerce Website Designs in Bangladesh',
     software: 'ERP & Business Software Solutions',
     marketing: 'Digital Marketing & Creative Design Services',
   } as const;
+  const noIndex = listingHasSeoFilters({
+    q,
+    page,
+    filters: [view, category, group, more],
+  });
   return buildPageMetadata({
     title: titles[type],
     description:
@@ -102,6 +115,7 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
       'creative design services',
       'explore bridge it park',
     ],
+    noIndex,
   });
 }
 

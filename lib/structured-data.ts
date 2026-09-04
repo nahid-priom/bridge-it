@@ -293,13 +293,17 @@ export function showcaseTemplateServiceJsonLd(project: {
       '@type': 'Country',
       name: 'Bangladesh',
     },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: project.currency || 'BDT',
-      price: 10000,
-      availability: 'https://schema.org/InStock',
-      url,
-    },
+    ...(project.starting_price > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: project.currency || 'BDT',
+            price: project.starting_price,
+            availability: 'https://schema.org/InStock',
+            url,
+          },
+        }
+      : {}),
   };
 }
 
@@ -341,13 +345,17 @@ export function softwareShowcaseServiceJsonLd(project: {
       name: SITE_NAME,
       url: SITE_URL,
     },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: project.currency || 'BDT',
-      price: project.starting_price || 0,
-      availability: 'https://schema.org/InStock',
-      url,
-    },
+    ...(project.starting_price > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: project.currency || 'BDT',
+            price: project.starting_price,
+            availability: 'https://schema.org/InStock',
+            url,
+          },
+        }
+      : {}),
   };
 }
 

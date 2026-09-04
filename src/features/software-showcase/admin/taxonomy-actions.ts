@@ -41,6 +41,8 @@ export async function upsertShowcaseMain(formData: FormData): Promise<TaxonomyAc
   const active = formData.get('active') === 'on' || formData.get('active') === 'true';
 
   if (!name || !slug) return { ok: false, error: 'Name and slug required' };
+  const { isReservedSlug } = await import('@/lib/seo/config');
+  if (isReservedSlug(slug)) return { ok: false, error: 'This slug is reserved' };
 
   const payload = {
     name,

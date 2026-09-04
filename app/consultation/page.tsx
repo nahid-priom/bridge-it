@@ -194,6 +194,17 @@ function ConsultationForm() {
               className="w-full rounded-xl border border-slate-200 dark:border-white/10 px-4 py-3 text-sm bg-white dark:bg-surface"
             />
           </div>
+          <p className="text-xs leading-relaxed text-text-muted">
+            By submitting, you agree to our{' '}
+            <Link href={ROUTES.terms} className="font-semibold text-[#2563eb] underline">
+              Terms & Conditions
+            </Link>{' '}
+            and acknowledge our{' '}
+            <Link href={ROUTES.privacy} className="font-semibold text-[#2563eb] underline">
+              Privacy Policy
+            </Link>
+            . We use your details only to respond to this consultation request.
+          </p>
           <div className="flex gap-3">
             <button
               type="button"

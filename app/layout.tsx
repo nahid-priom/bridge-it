@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { AppShell } from '@/components/layout/AppShell';
 import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
 import { MicrosoftClarity } from '@/components/analytics/MicrosoftClarity';
+import { CookieConsentBanner } from '@/components/analytics/CookieConsentBanner';
 import { getMainMarketplaceCategoriesForUi } from '@/lib/catalog/marketplaceNav';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { JsonLd } from '@/components/layout/JsonLd';
@@ -113,6 +114,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <AppShell categories={categories} authProfile={authProfile}>
             {children}
           </AppShell>
+          <CookieConsentBanner />
           </ShowcaseQueryProvider>
         </ThemeProvider>
       </body>

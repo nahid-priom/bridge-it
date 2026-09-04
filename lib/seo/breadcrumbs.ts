@@ -25,6 +25,8 @@ export const BREADCRUMB_SEGMENT_LABELS: Record<string, string> = {
   services: 'Services',
   sellers: 'Sellers',
   about: 'About',
+  privacy: 'Privacy Policy',
+  terms: 'Terms & Conditions',
   search: 'Search',
   dashboard: 'Dashboard',
   admin: 'Admin',

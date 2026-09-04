@@ -101,7 +101,7 @@ export function NavbarActionsDropdown({
 
             <NavDropdownSection title="Shopping">
               <NavDropdownItem
-                href={ROUTES.products}
+                href={ROUTES.websites}
                 onClick={close}
                 icon={<Heart className="w-4 h-4 text-rose-500" />}
                 label="Wishlist"

@@ -2,10 +2,14 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
+import { RelatedSolutions } from '@/components/seo/RelatedSolutions';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { ROUTES } from '@/lib/routes';
 import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/roles';
-import { getSoftwareProjectBySlug } from '@/src/features/software-showcase/api/projects';
+import {
+  getSoftwareProjectBySlug,
+  listSoftwareProjectCards,
+} from '@/src/features/software-showcase/api/projects';
 import {
   SoftwarePreview,
   SoftwarePreviewSkeleton,
@@ -49,6 +53,16 @@ export default async function SoftwareDetailPage({ params, searchParams }: Props
   const project = await getSoftwareProjectBySlug(slug, { includeDrafts });
   if (!project) notFound();
 
+  const related = (
+    await listSoftwareProjectCards({
+      solutionGroup: project.solution_group || undefined,
+      taxonomyCategory: project.taxonomy_category?.slug || undefined,
+      pageSize: 8,
+    })
+  ).items
+    .filter((item) => item.id !== project.id)
+    .slice(0, 4);
+
   return (
     <>
       <JsonLd
@@ -65,6 +79,12 @@ export default async function SoftwareDetailPage({ params, searchParams }: Props
       <Suspense fallback={<SoftwarePreviewSkeleton />}>
         <SoftwarePreview project={project} />
       </Suspense>
+      <RelatedSolutions
+        kind="software"
+        items={related}
+        viewAllHref={ROUTES.softwareShowroom}
+        viewAllLabel="Browse software solutions"
+      />
     </>
   );
 }

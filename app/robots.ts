@@ -1,11 +1,23 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 import {
+  CANONICAL_ORIGIN,
   LEGACY_MARKETPLACE_PREFIXES,
   NON_INDEXABLE_PATH_PREFIXES,
   TRANSACTIONAL_PATH_PATTERNS,
 } from '@/lib/seo/config';
 
-const CANONICAL_ORIGIN = 'https://www.bridgeitpark.com';
+function canonicalOrigin(): string {
+  try {
+    const fromEnv = new URL(SITE_URL).origin;
+    if (fromEnv.includes('localhost') || fromEnv.includes('127.0.0.1')) {
+      return CANONICAL_ORIGIN;
+    }
+    return fromEnv.replace('://bridgeitpark.com', '://www.bridgeitpark.com');
+  } catch {
+    return CANONICAL_ORIGIN;
+  }
+}
 
 const DISALLOW = [
   ...NON_INDEXABLE_PATH_PREFIXES,
@@ -14,6 +26,8 @@ const DISALLOW = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
+  const origin = canonicalOrigin();
+  const host = origin.replace(/^https?:\/\//, '');
   return {
     rules: [
       {
@@ -27,7 +41,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: DISALLOW,
       },
     ],
-    sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,
-    host: 'www.bridgeitpark.com',
+    sitemap: `${origin}/sitemap.xml`,
+    host,
   };
 }
