@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { AppShell } from '@/components/layout/AppShell';
+import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
+import { MicrosoftClarity } from '@/components/analytics/MicrosoftClarity';
 import { getMainMarketplaceCategoriesForUi } from '@/lib/catalog/marketplaceNav';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { JsonLd } from '@/components/layout/JsonLd';
@@ -102,6 +104,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${inter.variable} ${poppins.variable} ${notoSansBengali.variable}`}
     >
       <body className="font-sans antialiased bg-background text-text-primary">
+        <GoogleTagManager />
+        <MicrosoftClarity />
         <ThemeProvider>
           <ShowcaseQueryProvider>
           <TopLoader />
