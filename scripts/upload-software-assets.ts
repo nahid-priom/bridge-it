@@ -26,7 +26,7 @@ config({ path: '.env.local' });
 config({ path: '.env' });
 
 const ASSETS_ROOT = path.join(process.cwd(), 'seed-assets/software');
-const ASSET_VERSION = 3;
+const ASSET_VERSION = 4;
 const force = process.argv.includes('--force') || !process.argv.includes('--skip-existing');
 const dryRun = process.argv.includes('--dry-run');
 const slugArg = process.argv.find((a) => a.startsWith('--slug='))?.slice(7);

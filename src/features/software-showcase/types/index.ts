@@ -281,6 +281,10 @@ export type SeedSoftwareTheme = {
 export type SeedSoftwareProduct = {
   slug: string;
   title: string;
+  /** Cover/chrome brand label (e.g. RetailPro). Falls back to title in generators. */
+  brandName: string;
+  /** Short mark for avatar/logo; defaults to first word of brandName. */
+  logoText?: string;
   categorySlug: SoftwareCategorySlug;
   solutionGroup: SoftwareSolutionGroupSlug;
   softwareType: string;

@@ -13,7 +13,7 @@ export function HeroSearch({
   staticPlaceholder,
 }: {
   className?: string;
-  /** Premium dark search chrome for the homepage hero. */
+  /** Premium search chrome for the homepage hero (light in light mode, dark in dark mode). */
   variant?: 'default' | 'premium';
   /** When set, skips the typewriter placeholder animation. */
   staticPlaceholder?: string;
@@ -40,8 +40,8 @@ export function HeroSearch({
           isPremium
             ? cn(
                 'hero-search-field h-14 rounded-[1.25rem] sm:h-[3.75rem]',
-                'border border-border-subtle bg-deshi-navy-light/90 dark:bg-[#071226]',
-                'shadow-[0_0_0_1px_rgba(37,99,235,0.06)]',
+                'border border-slate-200/90 bg-white dark:border-border-subtle dark:bg-[#071226]',
+                'shadow-[0_10px_40px_rgba(8,11,22,0.06)] dark:shadow-[0_0_0_1px_rgba(37,99,235,0.06)]',
                 'transition-[box-shadow,border-color] duration-200',
                 'focus-within:border-bridge-primary/50',
                 'focus-within:shadow-[0_0_0_3px_rgba(37,99,235,0.18)]'
@@ -60,11 +60,15 @@ export function HeroSearch({
           onBlur={useTyped ? typed.onBlur : undefined}
           placeholder={placeholder}
           className={cn(
-            'h-full min-w-0 flex-1 bg-transparent text-sm leading-none text-text-primary outline-none',
-            'placeholder:text-text-muted',
+            'h-full min-w-0 flex-1 bg-transparent text-sm leading-none outline-none',
             isPremium
-              ? 'pl-4 pr-3 text-left sm:text-[0.9375rem]'
-              : 'px-3.5 text-center placeholder:text-center sm:text-left sm:placeholder:text-left'
+              ? cn(
+                  'pl-4 pr-3 text-left text-text-primary sm:text-[0.9375rem]',
+                  'placeholder:text-slate-600 dark:placeholder:text-text-muted'
+                )
+              : cn(
+                  'px-3.5 text-center text-text-primary placeholder:text-center placeholder:text-text-muted sm:text-left sm:placeholder:text-left'
+                )
           )}
           autoComplete="off"
         />

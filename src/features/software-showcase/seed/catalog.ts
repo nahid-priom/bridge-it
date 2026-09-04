@@ -7,6 +7,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'garments-erp',
     title: 'Garments ERP',
+    brandName: 'GarmentPro',
+    logoText: 'GP',
     categorySlug: 'garments-textile',
     solutionGroup: 'erp-business-management',
     softwareType: 'ERP',
@@ -46,6 +48,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'feed-mill-erp',
     title: 'Feed Mill ERP',
+    brandName: 'FeedMill Pro',
+    logoText: 'FM',
     categorySlug: 'agro-farming',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -85,6 +89,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'poultry-management-erp',
     title: 'Poultry Farm Management',
+    brandName: 'PoultryCare',
+    logoText: 'PC',
     categorySlug: 'agro-farming',
     solutionGroup: 'agro-farm-management',
     softwareType: 'Agro',
@@ -124,6 +130,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'layer-farm-management',
     title: 'Layer Farm Management',
+    brandName: 'LayerFarm',
+    logoText: 'LF',
     categorySlug: 'agro-farming',
     solutionGroup: 'agro-farm-management',
     softwareType: 'Agro',
@@ -162,6 +170,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'fish-farm-management',
     title: 'Fish Farm Management',
+    brandName: 'AquaFarm',
+    logoText: 'AF',
     categorySlug: 'agro-farming',
     solutionGroup: 'agro-farm-management',
     softwareType: 'Agro',
@@ -200,6 +210,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'cattle-dairy-management',
     title: 'Cattle & Dairy Management',
+    brandName: 'DairyTrack',
+    logoText: 'DT',
     categorySlug: 'agro-farming',
     solutionGroup: 'agro-farm-management',
     softwareType: 'Agro',
@@ -239,6 +251,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'dealership-management',
     title: 'Dealership Management',
+    brandName: 'DealerHub',
+    logoText: 'DH',
     categorySlug: 'trading-distribution',
     solutionGroup: 'distribution-dealership',
     softwareType: 'Distribution',
@@ -278,6 +292,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'distribution-management',
     title: 'Distribution Management',
+    brandName: 'DistroFlow',
+    logoText: 'DF',
     categorySlug: 'trading-distribution',
     solutionGroup: 'distribution-dealership',
     softwareType: 'Distribution',
@@ -316,6 +332,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'wholesale-erp',
     title: 'Wholesale ERP',
+    brandName: 'WholesalePro',
+    logoText: 'WP',
     categorySlug: 'trading-distribution',
     solutionGroup: 'erp-business-management',
     softwareType: 'ERP',
@@ -354,6 +372,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'trading-erp',
     title: 'Trading ERP',
+    brandName: 'TradeLedger',
+    logoText: 'TL',
     categorySlug: 'trading-distribution',
     solutionGroup: 'erp-business-management',
     softwareType: 'ERP',
@@ -392,6 +412,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'manufacturing-erp',
     title: 'Manufacturing ERP',
+    brandName: 'ManufactureX',
+    logoText: 'MX',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -431,6 +453,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'factory-management',
     title: 'Factory Management',
+    brandName: 'FactoryOps',
+    logoText: 'FO',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -469,6 +493,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'inventory-warehouse-erp',
     title: 'Inventory & Warehouse Management',
+    brandName: 'WareStock',
+    logoText: 'WS',
     categorySlug: 'manufacturing',
     solutionGroup: 'inventory-warehouse',
     softwareType: 'Inventory',
@@ -507,6 +533,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'retail-pos',
     title: 'POS Software',
+    brandName: 'RetailPro',
+    logoText: 'RP',
     categorySlug: 'retail-pos',
     solutionGroup: 'pos-retail',
     softwareType: 'POS',
@@ -544,6 +572,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'super-shop-management',
     title: 'Super Shop Management',
+    brandName: 'SuperMart OS',
+    logoText: 'SM',
     categorySlug: 'retail-pos',
     solutionGroup: 'pos-retail',
     softwareType: 'POS',
@@ -581,6 +611,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'pharmacy-management',
     title: 'Pharmacy Management',
+    brandName: 'PharmaCare',
+    logoText: 'PH',
     categorySlug: 'healthcare',
     solutionGroup: 'healthcare-software',
     softwareType: 'Healthcare',
@@ -618,6 +650,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'hospital-management',
     title: 'Hospital Management',
+    brandName: 'MediCare Hospitals',
+    logoText: 'MH',
     categorySlug: 'healthcare',
     solutionGroup: 'healthcare-software',
     softwareType: 'Healthcare',
@@ -657,6 +691,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'diagnostic-center-management',
     title: 'Diagnostic Center Management',
+    brandName: 'DiagnoLab',
+    logoText: 'DL',
     categorySlug: 'healthcare',
     solutionGroup: 'healthcare-software',
     softwareType: 'Healthcare',
@@ -695,6 +731,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'clinic-management',
     title: 'Clinic Management',
+    brandName: 'ClinicFlow',
+    logoText: 'CF',
     categorySlug: 'healthcare',
     solutionGroup: 'healthcare-software',
     softwareType: 'Healthcare',
@@ -732,6 +770,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'restaurant-management',
     title: 'Restaurant Management',
+    brandName: 'RestoOps',
+    logoText: 'RO',
     categorySlug: 'retail-pos',
     solutionGroup: 'restaurant-hospitality',
     softwareType: 'Hospitality',
@@ -771,6 +811,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'bakery-management',
     title: 'Bakery Management',
+    brandName: 'BakeTrack',
+    logoText: 'BT',
     categorySlug: 'retail-pos',
     solutionGroup: 'restaurant-hospitality',
     softwareType: 'Hospitality',
@@ -808,6 +850,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'school-management',
     title: 'School Management',
+    brandName: 'SchoolAdmin',
+    logoText: 'SA',
     categorySlug: 'education',
     solutionGroup: 'education-software',
     softwareType: 'Education',
@@ -845,6 +889,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'college-management',
     title: 'College Management',
+    brandName: 'CampusERP',
+    logoText: 'CE',
     categorySlug: 'education',
     solutionGroup: 'education-software',
     softwareType: 'Education',
@@ -882,6 +928,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'coaching-management',
     title: 'Coaching Center Management',
+    brandName: 'CoachDesk',
+    logoText: 'CD',
     categorySlug: 'education',
     solutionGroup: 'education-software',
     softwareType: 'Education',
@@ -919,6 +967,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'hr-payroll',
     title: 'HR & Payroll',
+    brandName: 'PeoplePay',
+    logoText: 'PP',
     categorySlug: 'enterprise',
     solutionGroup: 'hrm-payroll',
     softwareType: 'HRM',
@@ -956,6 +1006,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'crm-system',
     title: 'CRM System',
+    brandName: 'BridgeCRM',
+    logoText: 'BC',
     categorySlug: 'enterprise',
     solutionGroup: 'crm-sales',
     softwareType: 'CRM',
@@ -993,6 +1045,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'sales-force-automation',
     title: 'Mobile Sales App',
+    brandName: 'FieldForce',
+    logoText: 'FF',
     categorySlug: 'enterprise',
     solutionGroup: 'mobile-apps',
     softwareType: 'Mobile App',
@@ -1030,6 +1084,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'courier-management',
     title: 'Courier Management',
+    brandName: 'CourierGo',
+    logoText: 'CG',
     categorySlug: 'logistics',
     solutionGroup: 'logistics-courier',
     softwareType: 'Logistics',
@@ -1067,6 +1123,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'logistics-erp',
     title: 'Logistics Management',
+    brandName: 'LogiFleet',
+    logoText: 'LF',
     categorySlug: 'logistics',
     solutionGroup: 'logistics-courier',
     softwareType: 'Logistics',
@@ -1104,6 +1162,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'transport-management',
     title: 'Transport Management',
+    brandName: 'TransitOps',
+    logoText: 'TO',
     categorySlug: 'logistics',
     solutionGroup: 'logistics-courier',
     softwareType: 'Logistics',
@@ -1143,6 +1203,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'manpower-recruiting-erp',
     title: 'Manpower & Recruiting Management',
+    brandName: 'HireBridge',
+    logoText: 'HB',
     categorySlug: 'enterprise',
     solutionGroup: 'hrm-payroll',
     softwareType: 'HRM',
@@ -1180,6 +1242,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'real-estate-erp',
     title: 'Real Estate Management',
+    brandName: 'EstateCore',
+    logoText: 'EC',
     categorySlug: 'real-estate-construction',
     solutionGroup: 'real-estate-construction',
     softwareType: 'Real Estate',
@@ -1219,6 +1283,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'property-management',
     title: 'Property Management',
+    brandName: 'PropManage',
+    logoText: 'PM',
     categorySlug: 'real-estate-construction',
     solutionGroup: 'real-estate-construction',
     softwareType: 'Real Estate',
@@ -1256,6 +1322,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'construction-erp',
     title: 'Construction Management',
+    brandName: 'BuildSite',
+    logoText: 'BS',
     categorySlug: 'real-estate-construction',
     solutionGroup: 'real-estate-construction',
     softwareType: 'Construction',
@@ -1294,6 +1362,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'brick-tiles-erp',
     title: 'Brick & Tiles Factory Management',
+    brandName: 'BrickWorks',
+    logoText: 'BW',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1331,6 +1401,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'rice-mill-erp',
     title: 'Rice Mill Management',
+    brandName: 'RiceMill Pro',
+    logoText: 'RM',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1368,6 +1440,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'flour-mill-erp',
     title: 'Flour Mill Management',
+    brandName: 'FlourMill Pro',
+    logoText: 'FP',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1405,6 +1479,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'oil-production-erp',
     title: 'Mustard Oil Production Management',
+    brandName: 'OilPress ERP',
+    logoText: 'OP',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1443,6 +1519,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'textile-erp',
     title: 'Textile ERP',
+    brandName: 'TextilePro',
+    logoText: 'TX',
     categorySlug: 'garments-textile',
     solutionGroup: 'erp-business-management',
     softwareType: 'ERP',
@@ -1481,6 +1559,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'dyeing-management',
     title: 'Dyeing Management',
+    brandName: 'DyeHouse',
+    logoText: 'DY',
     categorySlug: 'garments-textile',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1519,6 +1599,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'garments-accessories-erp',
     title: 'Garments Accessories ERP',
+    brandName: 'AccessoERP',
+    logoText: 'AE',
     categorySlug: 'garments-textile',
     solutionGroup: 'erp-business-management',
     softwareType: 'ERP',
@@ -1557,6 +1639,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'printing-press-management',
     title: 'Printing Press Management',
+    brandName: 'PrintPress',
+    logoText: 'PR',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1594,6 +1678,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'packaging-factory-erp',
     title: 'Packaging Factory Management',
+    brandName: 'PackFactory',
+    logoText: 'PF',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1632,6 +1718,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'electronics-assembly-erp',
     title: 'Electronics Assembly Management',
+    brandName: 'ElectroAssemble',
+    logoText: 'EA',
     categorySlug: 'manufacturing',
     solutionGroup: 'manufacturing-production',
     softwareType: 'Manufacturing',
@@ -1670,6 +1758,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'automobile-workshop',
     title: 'Automobile Workshop Management',
+    brandName: 'AutoWorkshop',
+    logoText: 'AW',
     categorySlug: 'service-business',
     solutionGroup: 'business-automation',
     softwareType: 'Automation',
@@ -1707,6 +1797,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'service-center-management',
     title: 'Service Center Management',
+    brandName: 'ServiceDesk Pro',
+    logoText: 'SD',
     categorySlug: 'service-business',
     solutionGroup: 'business-automation',
     softwareType: 'Automation',
@@ -1744,6 +1836,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'salon-management',
     title: 'Beauty Salon Management',
+    brandName: 'SalonSuite',
+    logoText: 'SS',
     categorySlug: 'service-business',
     solutionGroup: 'business-automation',
     softwareType: 'Automation',
@@ -1781,6 +1875,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'isp-management',
     title: 'ISP Management',
+    brandName: 'ISP Control',
+    logoText: 'IC',
     categorySlug: 'service-business',
     solutionGroup: 'saas-platforms',
     softwareType: 'SaaS',
@@ -1818,6 +1914,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'saas-management',
     title: 'Subscription Management Platform',
+    brandName: 'SubSaaS',
+    logoText: 'SB',
     categorySlug: 'enterprise',
     solutionGroup: 'saas-platforms',
     softwareType: 'SaaS',
@@ -1855,6 +1953,8 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   {
     slug: 'multi-branch-erp',
     title: 'Multi-Branch Business Management',
+    brandName: 'BranchERP',
+    logoText: 'BE',
     categorySlug: 'enterprise',
     solutionGroup: 'enterprise-solutions',
     softwareType: 'Enterprise',

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
@@ -5,7 +6,10 @@ import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { ROUTES } from '@/lib/routes';
 import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/roles';
 import { getSoftwareProjectBySlug } from '@/src/features/software-showcase/api/projects';
-import { SoftwarePreview } from '@/src/features/software-showcase/public/SoftwarePreview';
+import {
+  SoftwarePreview,
+  SoftwarePreviewSkeleton,
+} from '@/src/features/software-showcase/public/SoftwarePreview';
 import {
   softwareShowcaseBreadcrumbJsonLd,
   softwareShowcaseServiceJsonLd,
@@ -58,7 +62,9 @@ export default async function SoftwareDetailPage({ params, searchParams }: Props
           Draft preview — not public
         </p>
       ) : null}
-      <SoftwarePreview project={project} />
+      <Suspense fallback={<SoftwarePreviewSkeleton />}>
+        <SoftwarePreview project={project} />
+      </Suspense>
     </>
   );
 }

@@ -137,11 +137,11 @@ async function main() {
               message: `legacy cover path still active: ${row.cover_card_path}`,
             });
           }
-          if (Number(row.asset_version ?? 0) < 3) {
+          if (Number(row.asset_version ?? 0) < 4) {
             issues.push({
               slug: product.slug,
               level: 'warn',
-              message: `asset_version=${row.asset_version} (expected >=3 after rebuild)`,
+              message: `asset_version=${row.asset_version} (expected >=4 after premium screen rebuild)`,
             });
           }
           const { data: screensRows } = await supabase

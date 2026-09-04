@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import Link from 'next/link';
-import { Maximize2, X } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
 import type { SoftwareProductFeature, SoftwareProjectDetail, SoftwareProjectScreen } from '../types';
@@ -57,15 +58,19 @@ function ManageChips({ features }: { features: SoftwareProductFeature[] }) {
   if (items.length === 0) return null;
   return (
     <Section title="What You Can Manage">
-      <ul className="grid grid-cols-2 gap-2 sm:gap-3">
+      <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
         {items.map((feature) => (
           <li
             key={feature.id}
-            className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 sm:px-4 sm:py-3"
+            className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 sm:px-3.5 sm:py-3"
           >
-            <p className="text-sm font-semibold text-text-primary">{feature.title}</p>
+            <p className="text-[0.9375rem] font-semibold leading-snug text-text-primary sm:text-base">
+              {feature.title}
+            </p>
             {feature.short_description ? (
-              <p className="mt-0.5 line-clamp-2 text-xs text-text-secondary">{feature.short_description}</p>
+              <p className="mt-0.5 hidden text-sm text-text-secondary sm:line-clamp-2 sm:block">
+                {feature.short_description}
+              </p>
             ) : null}
           </li>
         ))}
@@ -74,7 +79,66 @@ function ManageChips({ features }: { features: SoftwareProductFeature[] }) {
   );
 }
 
+function ScreenChrome({
+  title,
+  index,
+  total,
+  canPrev,
+  canNext,
+  onPrev,
+  onNext,
+  className,
+}: {
+  title: string;
+  index: number;
+  total: number;
+  canPrev: boolean;
+  canNext: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn('flex items-center justify-between gap-2', className)}>
+      <button
+        type="button"
+        onClick={onPrev}
+        disabled={!canPrev}
+        aria-label="Previous screen"
+        className={cn(
+          'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-subtle bg-surface',
+          canPrev ? 'text-text-primary hover:border-[#2563eb]/40' : 'cursor-not-allowed text-text-muted opacity-40'
+        )}
+      >
+        <ChevronLeft className="h-5 w-5" aria-hidden />
+      </button>
+      <div className="min-w-0 flex-1 text-center">
+        <p className="truncate text-[0.9375rem] font-bold text-text-primary sm:text-base">{title}</p>
+        <p className="mt-0.5 text-sm tabular-nums text-text-muted">
+          {index} / {total}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={onNext}
+        disabled={!canNext}
+        aria-label="Next screen"
+        className={cn(
+          'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-subtle bg-surface',
+          canNext ? 'text-text-primary hover:border-[#2563eb]/40' : 'cursor-not-allowed text-text-muted opacity-40'
+        )}
+      >
+        <ChevronRight className="h-5 w-5" aria-hidden />
+      </button>
+    </div>
+  );
+}
+
 export function SoftwarePreview({ project }: { project: SoftwareProjectDetail }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const screens = useMemo(
     () => project.screens.filter((screen) => screen.published).sort((a, b) => a.sort_order - b.sort_order),
     [project.screens]
@@ -84,17 +148,26 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
     [project.features]
   );
 
+  const assetVersion = project.asset_version ?? 1;
+  const screenFromUrl = searchParams.get('screen');
   const initial =
+    (screenFromUrl ? screens.find((s) => s.screen_key === screenFromUrl) : null) ??
     screens.find((screen) => screen.is_featured) ??
-    screens.find((screen) => screenImageUrl(screen, project.asset_version ?? 1)) ??
+    screens.find((screen) => screenImageUrl(screen, assetVersion)) ??
     screens[0];
 
   const [selectedKey, setSelectedKey] = useState(initial?.screen_key);
   const [viewAllOpen, setViewAllOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-  const assetVersion = project.asset_version ?? 1;
+  const previewRef = useRef<HTMLDivElement>(null);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const reducedMotion = useRef(false);
+
   const selected = screens.find((screen) => screen.screen_key === selectedKey) ?? initial ?? null;
+  const selectedIndex = selected ? screens.findIndex((s) => s.screen_key === selected.screen_key) : 0;
   const imageUrl = screenImageUrl(selected, assetVersion);
+  const canPrev = selectedIndex > 0;
+  const canNext = selectedIndex >= 0 && selectedIndex < screens.length - 1;
   const categoryLabel =
     project.taxonomy_category?.name ?? project.child_category?.name ?? project.category?.name ?? 'Software';
   const coverResolved = resolveSoftwareCover(project, 'detail');
@@ -102,52 +175,130 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
   const outcome = project.feature_summary ?? project.short_description;
 
   useEffect(() => {
+    reducedMotion.current =
+      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+
+  useEffect(() => {
     if (!selectedKey && initial?.screen_key) setSelectedKey(initial.screen_key);
   }, [initial?.screen_key, selectedKey]);
 
   useEffect(() => {
-    if (!imageUrl) return;
-    preloadImage(imageUrl);
-  }, [imageUrl]);
+    if (screenFromUrl && screens.some((s) => s.screen_key === screenFromUrl)) {
+      setSelectedKey(screenFromUrl);
+    }
+  }, [screenFromUrl, screens]);
+
+  const syncUrl = useCallback(
+    (key: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (params.get('screen') === key) return;
+      params.set('screen', key);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [pathname, router, searchParams]
+  );
+
+  const selectScreen = useCallback(
+    (screen: SoftwareProjectScreen) => {
+      setSelectedKey(screen.screen_key);
+      syncUrl(screen.screen_key);
+      const url = screenImageUrl(screen, assetVersion);
+      if (url) preloadImage(url);
+    },
+    [assetVersion, syncUrl]
+  );
+
+  const goRelative = useCallback(
+    (dir: -1 | 1) => {
+      if (selectedIndex < 0) return;
+      const next = screens[selectedIndex + dir];
+      if (next) selectScreen(next);
+    },
+    [selectScreen, selectedIndex, screens]
+  );
 
   useEffect(() => {
-    if (!viewAllOpen && !fullscreen) return;
+    if (!imageUrl) return;
+    preloadImage(imageUrl);
+    const next = screens[selectedIndex + 1];
+    const prev = screens[selectedIndex - 1];
+    const idle = window.setTimeout(() => {
+      const nUrl = screenImageUrl(next, assetVersion);
+      const pUrl = screenImageUrl(prev, assetVersion);
+      if (nUrl) preloadImage(nUrl);
+      if (pUrl) preloadImage(pUrl);
+    }, 250);
+    return () => window.clearTimeout(idle);
+  }, [assetVersion, imageUrl, screens, selectedIndex]);
+
+  useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setViewAllOpen(false);
         setFullscreen(false);
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      const typing =
+        target &&
+        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+      if (typing) return;
+      if (fullscreen || previewRef.current?.contains(document.activeElement) || document.activeElement === document.body) {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          goRelative(-1);
+        }
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          goRelative(1);
+        }
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [viewAllOpen, fullscreen]);
+  }, [fullscreen, goRelative, viewAllOpen]);
 
-  const selectScreen = (screen: SoftwareProjectScreen) => {
-    setSelectedKey(screen.screen_key);
-    const url = screenImageUrl(screen, assetVersion);
-    if (url) preloadImage(url);
+  const onPointerDown = (event: ReactPointerEvent) => {
+    pointerStart.current = { x: event.clientX, y: event.clientY };
+  };
+  const onPointerUp = (event: ReactPointerEvent) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) goRelative(1);
+    else goRelative(-1);
   };
 
-  const nextScreen = () => {
-    if (!selected || screens.length < 2) return;
-    const idx = screens.findIndex((s) => s.screen_key === selected.screen_key);
-    const next = screens[(idx + 1) % screens.length];
-    if (next) selectScreen(next);
-  };
+  const keyFeatures =
+    features.length > 0
+      ? features
+      : project.modules.map((title, index) => ({
+          id: `module-${index}`,
+          project_id: project.id,
+          title,
+          short_description: null,
+          icon_key: null,
+          sort_order: index,
+          is_primary: index < 3,
+          published: true,
+          created_at: '',
+          updated_at: '',
+          deleted_at: null,
+        }));
 
-  const keyFeatures = features.length > 0 ? features : project.modules.map((title, index) => ({
-    id: `module-${index}`,
-    project_id: project.id,
-    title,
-    short_description: null,
-    icon_key: null,
-    sort_order: index,
-    is_primary: index < 3,
-    published: true,
-    created_at: '',
-    updated_at: '',
-    deleted_at: null,
-  }));
+  const chromeProps = {
+    title: selected ? screenLabel(selected) : 'Screen',
+    index: selectedIndex + 1,
+    total: screens.length,
+    canPrev,
+    canNext,
+    onPrev: () => goRelative(-1),
+    onNext: () => goRelative(1),
+  };
 
   return (
     <div className="pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-16">
@@ -198,132 +349,135 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
               </button>
             </div>
 
-            {/* Desktop: left nav + canvas */}
-            <div className="hidden gap-5 lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
-              <nav
-                className="max-h-[min(70vh,640px)] space-y-1 overflow-y-auto rounded-2xl border border-border-subtle bg-surface p-2"
-                aria-label="Modules"
-              >
-                {screens.map((screen) => {
-                  const active = screen.screen_key === selected?.screen_key;
-                  return (
-                    <button
-                      key={screen.id}
-                      type="button"
-                      onClick={() => selectScreen(screen)}
-                      onMouseEnter={() => {
-                        const url = screenImageUrl(screen, assetVersion);
-                        if (url) preloadImage(url);
-                      }}
-                      className={cn(
-                        'flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors',
-                        active
-                          ? 'bg-[#0f2744] text-white'
-                          : 'text-text-secondary hover:bg-background-soft hover:text-text-primary'
-                      )}
-                    >
-                      <span className="line-clamp-1">{screenLabel(screen)}</span>
-                    </button>
-                  );
-                })}
+            <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-6">
+              {/* Desktop sidebar */}
+              <nav className="hidden lg:block" aria-label="Modules">
+                <ul className="sticky top-24 space-y-1 rounded-2xl border border-border-subtle bg-surface p-2">
+                  {screens.map((screen) => {
+                    const active = screen.screen_key === selected?.screen_key;
+                    return (
+                      <li key={screen.id}>
+                        <button
+                          type="button"
+                          aria-current={active ? 'page' : undefined}
+                          onClick={() => selectScreen(screen)}
+                          onMouseEnter={() => {
+                            const url = screenImageUrl(screen, assetVersion);
+                            if (url) preloadImage(url);
+                          }}
+                          className={cn(
+                            'w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors',
+                            active
+                              ? 'bg-[#0f2744] text-white'
+                              : 'text-text-secondary hover:bg-background-soft hover:text-text-primary'
+                          )}
+                        >
+                          {screenLabel(screen)}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
               </nav>
-              <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-background-soft">
-                {imageUrl ? (
-                  <>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      key={imageUrl}
-                      src={imageUrl}
-                      alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
-                      width={selected?.image_width ?? 960}
-                      height={selected?.image_height ?? 600}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-auto w-full object-contain object-top"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setFullscreen(true)}
-                      className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-lg bg-black/60 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur"
-                    >
-                      <Maximize2 className="h-3.5 w-3.5" aria-hidden />
-                      Fullscreen
-                    </button>
-                  </>
-                ) : (
-                  <div className="flex min-h-[360px] items-center justify-center text-sm text-text-muted">
-                    Screen preview unavailable
-                  </div>
-                )}
-                {selected?.short_caption ? (
-                  <p className="border-t border-border-subtle px-4 py-2.5 text-sm text-text-secondary">
-                    {selected.short_caption}
-                  </p>
-                ) : null}
-              </div>
-            </div>
 
-            {/* Mobile: full-width stacked */}
-            <div className="lg:hidden">
-              <label htmlFor="software-screen-select" className="sr-only">
-                Select screen
-              </label>
-              <select
-                id="software-screen-select"
-                value={selected?.screen_key ?? ''}
-                onChange={(event) => {
-                  const next = screens.find((s) => s.screen_key === event.target.value);
-                  if (next) selectScreen(next);
-                }}
-                className="mb-3 h-11 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm font-medium"
-              >
-                {screens.map((screen) => (
-                  <option key={screen.id} value={screen.screen_key}>
-                    {screenLabel(screen)}
-                  </option>
-                ))}
-              </select>
-              <div className="overflow-hidden rounded-2xl border border-border-subtle bg-background-soft">
-                {imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={imageUrl}
-                    src={imageUrl}
-                    alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
-                    width={selected?.image_width ?? 960}
-                    height={selected?.image_height ?? 600}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-auto w-full object-contain object-top"
-                    onClick={() => setFullscreen(true)}
-                  />
-                ) : (
-                  <div className="aspect-[16/10] animate-pulse bg-background-soft" aria-hidden />
-                )}
-              </div>
-              {selected?.short_caption ? (
-                <p className="mt-2 text-sm text-text-secondary">{selected.short_caption}</p>
-              ) : null}
-              {screens.length > 1 ? (
-                <button
-                  type="button"
-                  onClick={nextScreen}
-                  className="mt-3 flex h-11 w-full items-center justify-center rounded-xl border border-border-subtle bg-surface text-sm font-semibold text-text-primary"
+              <div>
+                <ScreenChrome {...chromeProps} className="mb-3" />
+
+                <div
+                  ref={previewRef}
+                  tabIndex={0}
+                  className="relative overflow-hidden rounded-2xl border border-border-subtle bg-background-soft outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40"
+                  onPointerDown={onPointerDown}
+                  onPointerUp={onPointerUp}
                 >
-                  Next Module →
-                </button>
-              ) : null}
+                  {imageUrl ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        key={imageUrl}
+                        src={imageUrl}
+                        alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
+                        width={selected?.image_width ?? 1100}
+                        height={selected?.image_height ?? 688}
+                        loading="lazy"
+                        decoding="async"
+                        className={cn(
+                          'h-auto w-full cursor-zoom-in object-contain object-top lg:cursor-default',
+                          !reducedMotion.current && 'motion-safe:transition-opacity motion-safe:duration-200'
+                        )}
+                        onClick={() => {
+                          if (typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches) {
+                            setFullscreen(true);
+                          }
+                        }}
+                        draggable={false}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFullscreen(true)}
+                        className="absolute right-3 top-3 hidden items-center gap-1.5 rounded-lg bg-black/60 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur lg:inline-flex"
+                      >
+                        <Maximize2 className="h-3.5 w-3.5" aria-hidden />
+                        Fullscreen
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex min-h-[240px] items-center justify-center text-sm text-text-muted lg:min-h-[360px]">
+                      Screen preview unavailable
+                    </div>
+                  )}
+                  {selected?.short_caption ? (
+                    <p className="border-t border-border-subtle px-4 py-2.5 text-sm text-text-secondary">
+                      {selected.short_caption}
+                    </p>
+                  ) : null}
+                </div>
+
+                <p className="mt-2 text-center text-xs text-text-muted lg:hidden">Swipe to browse</p>
+
+                {/* Thumbnail strip */}
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Screen thumbnails">
+                  {screens.map((screen, i) => {
+                    const thumb = screenThumbUrl(screen, assetVersion);
+                    const active = screen.screen_key === selected?.screen_key;
+                    return (
+                      <button
+                        key={screen.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        aria-current={active ? 'true' : undefined}
+                        aria-label={screenLabel(screen)}
+                        onClick={() => selectScreen(screen)}
+                        className={cn(
+                          'shrink-0 overflow-hidden rounded-lg border-2 transition-colors',
+                          active ? 'border-[#2563eb]' : 'border-transparent opacity-80 hover:opacity-100'
+                        )}
+                      >
+                        {thumb ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={thumb} alt="" className="h-14 w-[88px] object-cover object-top" loading="lazy" />
+                        ) : (
+                          <div className="flex h-14 w-[88px] items-center justify-center bg-background-soft text-[10px] text-text-muted">
+                            {i + 1}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </section>
         ) : null}
 
         <Section title="Key Features">
           {keyFeatures.length > 0 ? (
-            <ul className="grid gap-2 sm:grid-cols-2">
+            <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
               {keyFeatures.map((feature) => (
                 <li
                   key={feature.id}
-                  className="rounded-xl border border-border-subtle bg-surface px-4 py-3 text-sm font-medium text-text-primary"
+                  className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3 sm:text-sm"
                 >
                   {feature.title}
                 </li>
@@ -373,7 +527,6 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
         </section>
       </div>
 
-      {/* Sticky Free Demo */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
         <div className="mx-auto max-w-lg">
           <Link
@@ -385,7 +538,6 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
         </div>
       </div>
 
-      {/* View All Screens sheet */}
       {viewAllOpen ? (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-6" role="dialog" aria-modal>
           <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-t-2xl bg-background p-4 sm:rounded-2xl sm:p-6">
@@ -398,11 +550,16 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {screens.map((screen) => {
                 const thumb = screenThumbUrl(screen, assetVersion);
+                const active = screen.screen_key === selected?.screen_key;
                 return (
                   <button
                     key={screen.id}
                     type="button"
-                    className="overflow-hidden rounded-xl border border-border-subtle text-left"
+                    aria-current={active ? 'true' : undefined}
+                    className={cn(
+                      'overflow-hidden rounded-xl border text-left',
+                      active ? 'border-[#2563eb]' : 'border-border-subtle'
+                    )}
                     onClick={() => {
                       selectScreen(screen);
                       setViewAllOpen(false);
@@ -423,22 +580,34 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
         </div>
       ) : null}
 
-      {/* Fullscreen lightbox */}
       {fullscreen && imageUrl ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4" role="dialog" aria-modal>
-          <button
-            type="button"
-            onClick={() => setFullscreen(false)}
-            className="absolute right-4 top-4 rounded-lg bg-white/10 p-2 text-white"
-            aria-label="Close fullscreen"
-          >
-            <X className="h-5 w-5" />
-          </button>
+        <div
+          className="fixed inset-0 z-[60] flex flex-col bg-black/90 p-4"
+          role="dialog"
+          aria-modal
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+        >
+          <div className="mb-3 flex items-center justify-between gap-3 text-white">
+            <ScreenChrome
+              {...chromeProps}
+              className="flex-1 [&_button]:border-white/20 [&_button]:bg-white/10 [&_button]:text-white [&_p]:text-white"
+            />
+            <button
+              type="button"
+              onClick={() => setFullscreen(false)}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white"
+              aria-label="Close fullscreen"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
-            className="max-h-full max-w-full object-contain"
+            className="mx-auto max-h-[calc(100%-5rem)] max-w-full object-contain"
+            draggable={false}
           />
         </div>
       ) : null}
@@ -458,8 +627,7 @@ export function SoftwarePreviewSkeleton() {
           <div key={i} className="h-16 animate-pulse rounded-xl bg-background-soft" />
         ))}
       </div>
-      <div className="mt-10 hidden gap-5 lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
-        <div className="h-80 animate-pulse rounded-2xl bg-background-soft" />
+      <div className="mt-10 space-y-3">
         <div className="aspect-[16/10] animate-pulse rounded-2xl bg-background-soft" />
       </div>
     </div>

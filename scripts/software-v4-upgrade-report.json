@@ -1,0 +1,89 @@
+{
+  "completed_at": "2026-09-05T03:15:00.000Z",
+  "premiumUpgradeVersion": 4,
+  "asset_version": 4,
+  "storage_prefix": "admin-showcase/software-showcase/{slug}/v4/",
+  "covers": {
+    "strategy": "preserved_lifestyle_v2",
+    "note": "Existing seed-assets/software/{slug}/cover/*.avif kept; screens-only generation never wiped covers"
+  },
+  "generator": {
+    "engine": "scripts/software-screen-engine/",
+    "entry": "scripts/generate-software-showcases.ts",
+    "primitives": [
+      "KpiCard",
+      "QuickActionCard",
+      "FilterToolbar",
+      "EnterpriseTable",
+      "StatusBadge",
+      "ChartCard",
+      "FormSection",
+      "SummaryPanel",
+      "PaginationBar",
+      "PremiumAppShell via chrome.ts"
+    ],
+    "visual_families": [
+      "retail-pos",
+      "manufacturing",
+      "garments",
+      "healthcare",
+      "logistics",
+      "crm-sales",
+      "agro",
+      "education",
+      "real-estate",
+      "saas-admin",
+      "distribution",
+      "finance",
+      "operations-erp"
+    ],
+    "catalog": {
+      "brandName": true,
+      "logoText": true,
+      "retail_pos_brand": "RetailPro"
+    }
+  },
+  "screens_regenerated": 536,
+  "products": 50,
+  "average_preview_avif_kb": 19.3,
+  "average_thumb_avif_kb": 5.3,
+  "preview_range_kb": { "min": 13.7, "max": 28.4 },
+  "note_on_size": "AVIF quality raised (preview ~66–72); SVG still compresses efficiently. Larger than v3 ~11KB previews; below photographic cover sizes by design.",
+  "sync": { "ok": 50, "fail": 0 },
+  "preview_ux": {
+    "component": "src/features/software-showcase/public/SoftwarePreview.tsx",
+    "arrow_navigation": true,
+    "swipe": true,
+    "counter": "n / N",
+    "thumbnail_rail": true,
+    "view_all": true,
+    "fullscreen_prev_next": true,
+    "keyboard_arrows": true,
+    "url_screen_param": "?screen=",
+    "prefetch_neighbors": true,
+    "manage_chips_compact_2col": true,
+    "no_loop_default": true,
+    "reduced_motion": "fade/transition only"
+  },
+  "accessibility": {
+    "svg_body_px": 15,
+    "svg_table_px": 14,
+    "svg_kpi_px": 24,
+    "svg_button_min_h": 44,
+    "aria_labels_on_arrows": true,
+    "aria_current_on_thumbs": true
+  },
+  "retailpro_gate": {
+    "slug": "retail-pos",
+    "brandName": "RetailPro",
+    "screens": 10,
+    "synced": true,
+    "cover_preserved": true
+  },
+  "v3_cleanup": "deferred — leave software-showcase/*/v3 until confirmed unused",
+  "qa": {
+    "contact_sheets": "seed-assets/software/_qa/",
+    "local_manifests_all_v4": true
+  },
+  "typecheck": "pass"
+}
