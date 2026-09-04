@@ -13,6 +13,11 @@ function screenImageUrl(screen: SoftwareProjectScreen | null | undefined): strin
   return screen.image_url || screen.thumbnail_url || null;
 }
 
+function screenThumbUrl(screen: SoftwareProjectScreen | null | undefined): string | null {
+  if (!screen) return null;
+  return screen.thumbnail_url || screen.image_url || null;
+}
+
 function preloadImage(url: string): void {
   if (!url || typeof window === 'undefined') return;
   const img = new Image();
@@ -224,6 +229,7 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                 >
                   {screens.map((screen) => {
                     const active = screen.screen_key === selected?.screen_key;
+                    const thumb = screenThumbUrl(screen);
                     return (
                       <button
                         key={screen.id}
@@ -236,12 +242,24 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                           if (url) preloadImage(url);
                         }}
                         className={cn(
-                          'shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors',
+                          'flex shrink-0 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3.5 text-sm font-semibold transition-colors',
                           active
                             ? 'bg-[#0f2744] text-white'
                             : 'border border-border-subtle text-text-secondary hover:border-[#2563eb]/40'
                         )}
                       >
+                        {thumb ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={thumb}
+                            alt=""
+                            width={36}
+                            height={24}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-6 w-9 rounded-md object-cover"
+                          />
+                        ) : null}
                         {screen.screen_name}
                       </button>
                     );
@@ -345,6 +363,30 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
           >
             Free Demo
           </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SoftwarePreviewSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-4 sm:px-6 lg:px-8" aria-busy="true" aria-label="Loading software">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.65fr)_minmax(280px,0.35fr)]">
+        <div className="order-2 space-y-3 lg:order-2">
+          <div className="h-3 w-24 animate-pulse rounded bg-background-soft" />
+          <div className="h-8 w-3/4 animate-pulse rounded bg-background-soft" />
+          <div className="h-4 w-1/2 animate-pulse rounded bg-background-soft" />
+          <div className="h-20 w-full animate-pulse rounded bg-background-soft" />
+        </div>
+        <div className="order-1 space-y-3 lg:order-1">
+          <div className="aspect-[16/10] w-full animate-pulse rounded-2xl bg-background-soft" />
+          <div className="flex gap-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-8 w-24 animate-pulse rounded-full bg-background-soft" />
+            ))}
+          </div>
+          <div className="aspect-[16/10] w-full animate-pulse rounded-2xl bg-background-soft" />
         </div>
       </div>
     </div>

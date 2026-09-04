@@ -101,7 +101,14 @@ export default async function AdminSoftwareProjectsPage() {
                   </td>
                   <td className="px-4 py-3 tabular-nums text-text-secondary">{formatPrice(project)}</td>
                   <td className="px-4 py-3 tabular-nums text-text-secondary">{project.screen_count}</td>
-                  <td className="px-4 py-3 text-text-muted">Soon</td>
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`${ROUTES.adminSoftwareProjects}/${project.slug}`}
+                      className="font-semibold text-[#2563eb] hover:underline"
+                    >
+                      Edit
+                    </Link>
+                  </td>
                 </tr>
               ))
             )}
