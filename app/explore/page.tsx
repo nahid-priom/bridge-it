@@ -25,8 +25,8 @@ import { SoftwareCatalog } from '@/src/features/software-showcase/public/Softwar
 import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
 import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
 import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
+import { ExploreFilterChrome } from '@/components/explore/ExploreFilterChrome';
 import { ExploreMarketingPanel } from '@/components/explore/ExploreMarketingPanel';
-import { ExploreTypeTabs } from '@/components/explore/ExploreTypeTabs';
 import { parseExploreType } from '@/components/explore/explore-types';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 import {
@@ -142,6 +142,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
               view: view === 'all' ? 'all' : view,
             }}
             initialData={result}
+            hideChrome
           />
         </Suspense>
       </HydrationBoundary>
@@ -278,11 +279,11 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
           <p className="mt-2 text-sm text-text-secondary sm:text-base">{description}</p>
         </header>
 
-        <Suspense fallback={<div className="mb-6 h-10 animate-pulse rounded-full bg-background-soft" />}>
-          <ExploreTypeTabs active={type} />
+        <Suspense fallback={<div className="mb-6 h-24 animate-pulse rounded-2xl bg-background-soft" />}>
+          <ExploreFilterChrome active={type} />
         </Suspense>
 
-        <div className="mt-6">
+        <div className="mt-5 sm:mt-6">
           {type === 'websites' ? websitesBlock : null}
           {type === 'software' ? softwareBlock : null}
           {type === 'marketing' ? marketingBlock : null}

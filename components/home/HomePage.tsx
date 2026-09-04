@@ -1,5 +1,5 @@
 import { HomepageHero } from '@/components/home/hero/HomepageHero';
-import { HomeBusinessPillars } from '@/components/home/hero/HomeBusinessPillars';
+import { MainCategoryStrip } from '@/components/home/hero/MainCategoryStrip';
 import { HomeGallery } from '@/src/features/ecommerce-showcase/public/HomeGallery';
 import type { HomepageLegacyCategorySection, HomepageSectionsResult } from '@/src/features/ecommerce-showcase/types';
 import { SoftwareHomeGallery } from '@/src/features/software-showcase/public/SoftwareHomeGallery';
@@ -21,7 +21,7 @@ export function HomePage({
   return (
     <>
       <HomepageHero />
-      <HomeBusinessPillars />
+      <MainCategoryStrip />
       <HomeGallery sections={sections} legacySections={legacySections} />
       {softwareSections ? <SoftwareHomeGallery sections={softwareSections} /> : null}
       {creativeSections ? <CreativeMarketingHomeGallery sections={creativeSections} /> : null}

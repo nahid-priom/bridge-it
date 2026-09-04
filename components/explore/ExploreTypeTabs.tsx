@@ -26,6 +26,7 @@ export function ExploreTypeTabs({ active }: { active: ExploreTypeId }) {
         params.delete('industry');
         params.delete('group');
         params.delete('more');
+        params.delete('child');
         params.delete('solutionGroup');
         params.delete('serviceGroup');
         params.delete('page');
@@ -41,9 +42,9 @@ export function ExploreTypeTabs({ active }: { active: ExploreTypeId }) {
             title={tab.label}
             scroll={false}
             className={cn(
-              'flex min-h-[40px] w-full min-w-0 items-center justify-center rounded-full px-2.5 py-2 text-center text-[12px] font-semibold leading-tight transition-colors sm:min-h-[42px] sm:px-3 sm:text-sm',
+              'flex min-h-[32px] w-full min-w-0 items-center justify-center rounded-full px-2 py-1.5 text-center text-[11px] font-semibold leading-tight transition-colors sm:min-h-[34px] sm:px-2.5 sm:text-xs',
               isActive
-                ? 'bg-[#2563eb] text-white'
+                ? 'bg-[#2563eb] text-white shadow-[0_0_14px_-2px_rgba(37,99,235,0.4)] dark:bg-[#3b82f6] dark:shadow-[0_0_16px_-1px_rgba(96,165,250,0.45)]'
                 : 'border border-border-subtle bg-surface text-text-secondary hover:border-[#2563eb]/40 hover:text-text-primary'
             )}
           >

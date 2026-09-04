@@ -23,18 +23,9 @@ export function HomeGallery({
   return (
     <section
       id="website-designs"
-      aria-labelledby="website-designs-heading"
+      aria-label="Website Designs"
       className="mt-2 border-t border-border-subtle/70 pt-4 md:mt-4 md:pt-6"
     >
-      <div className="mx-auto mb-4 w-full max-w-[1480px] px-4 text-center sm:px-6 md:mb-6 md:text-left lg:px-8 xl:px-10">
-        <h2
-          id="website-designs-heading"
-          className="font-display text-2xl font-black text-text-primary md:text-3xl"
-        >
-          Website Designs
-        </h2>
-      </div>
-
       {websiteSections.map((section) => (
         <HomeShowcaseSection
           key={section.key}

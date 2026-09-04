@@ -68,18 +68,9 @@ export function SoftwareHomeGallery({
   return (
     <section
       id="software-solutions"
-      aria-labelledby="software-solutions-heading"
+      aria-label="Software Solutions"
       className="mt-2 border-t border-border-subtle/70 pt-4 md:mt-4 md:pt-6"
     >
-      <div className="mx-auto mb-4 w-full max-w-[1480px] px-4 text-center sm:px-6 md:mb-6 md:text-left lg:px-8 xl:px-10">
-        <h2
-          id="software-solutions-heading"
-          className="font-display text-2xl font-black text-text-primary md:text-3xl"
-        >
-          Software Solutions
-        </h2>
-      </div>
-
       {softwareSections.map((section) => (
         <SoftwareHomeSection
           key={section.key}

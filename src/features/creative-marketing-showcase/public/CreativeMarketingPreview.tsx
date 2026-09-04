@@ -132,22 +132,6 @@ export function CreativeMarketingPreview({ project }: { project: CreativeMarketi
           </section>
         ) : null}
 
-        {project.deliverables.length > 0 ? (
-          <section className="mt-10 max-w-3xl lg:mt-14">
-            <h2 className="mb-3 font-display text-xl font-black">Deliverables</h2>
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {project.deliverables.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-xl border border-border-subtle bg-surface px-4 py-3 text-sm font-medium"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
         {project.packages.length > 0 ? (
           <section className="mt-10 lg:mt-14">
             <h2 className="mb-4 font-display text-xl font-black">Packages</h2>

@@ -27,6 +27,7 @@ import { useAuthProfile } from '@/components/auth/AuthProfileContext';
 import { resolveDashboardHref } from '@/lib/auth/dashboard-routes';
 import { useDashboardModeStore } from '@/store/dashboardModeStore';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { SocialLinks } from '@/components/shared/SocialLinks';
 import { cn } from '@/lib/cn';
 
 const PILLAR_ICONS = {
@@ -280,6 +281,13 @@ export function MobileDrawerMenu({
 
               <div className="mt-6 pb-4">
                 <ThemeSwitcher variant="mobile" />
+              </div>
+
+              <div className="mt-2 border-t border-slate-100/90 pb-6 pt-4 dark:border-white/[0.08]">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                  Follow Us
+                </p>
+                <SocialLinks variant="light" size="sm" />
               </div>
             </div>
           </motion.div>

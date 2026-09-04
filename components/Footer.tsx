@@ -1,27 +1,39 @@
 'use client';
 
-import React from 'react';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { BridgeLogo } from '@/components/brand/BridgeLogo';
-import { FOOTER_BRAND_DESCRIPTION, FOOTER_COLUMNS } from '@/data/homeContent';
+import { SocialLinks } from '@/components/shared/SocialLinks';
+import {
+  FOOTER_BRAND_DESCRIPTION,
+  FOOTER_BRAND_HEADLINE,
+  FOOTER_BRAND_TAGLINE,
+  FOOTER_COLUMNS,
+} from '@/data/homeContent';
+import {
+  OFFICIAL_WEBSITE,
+  WHATSAPP_CHAT_CTA,
+  WHATSAPP_ORDER_CTA,
+} from '@/lib/config/social-links';
+import { ROUTES } from '@/lib/routes';
+import { cn } from '@/lib/cn';
 
-const SOCIAL = [
-  { label: 'Facebook', letter: 'f', href: '#' },
-  { label: 'Instagram', letter: 'ig', href: '#' },
-  { label: 'LinkedIn', letter: 'in', href: '#' },
-  { label: 'YouTube', letter: 'yt', href: '#' },
-] as const;
-
-function FooterColumn({ title, links }: { title: string; links: readonly { label: string; href: string }[] }) {
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: readonly { label: string; href: string }[];
+}) {
   return (
-    <div>
-      <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-4">{title}</h3>
+    <div className="min-w-0">
+      <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">{title}</h3>
       <ul className="space-y-2.5">
         {links.map((link) => (
           <li key={link.label}>
             <Link
               href={link.href}
-              className="text-sm text-slate-400 hover:text-deshi-green transition-colors"
+              className="text-sm text-slate-400 transition-colors hover:text-[#60a5fa]"
             >
               {link.label}
             </Link>
@@ -32,72 +44,126 @@ function FooterColumn({ title, links }: { title: string; links: readonly { label
   );
 }
 
-export const Footer: React.FC = () => {
+function ExternalTextLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
   return (
-    <footer className="deshi-footer text-slate-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        {/* 5 columns: brand (2) + buyers + sellers + categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-10">
-          <div className="sm:col-span-2">
-            <BridgeLogo variant="footer" theme="dark" className="mb-4" />
-            <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-xs">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sm text-slate-400 transition-colors hover:text-[#60a5fa]"
+    >
+      {children}
+    </a>
+  );
+}
+
+function WhatsAppCta({
+  href,
+  label,
+  variant = 'primary',
+}: {
+  href: string;
+  label: string;
+  variant?: 'primary' | 'outline';
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        'inline-flex min-h-11 w-full items-center justify-center rounded-xl px-4 text-sm font-semibold transition-colors sm:w-auto',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60a5fa] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1220]',
+        variant === 'primary'
+          ? 'bg-[#25D366] text-[#052e16] hover:bg-[#1ebe57]'
+          : 'border border-white/15 bg-white/5 text-white hover:border-[#25D366]/50 hover:bg-white/10'
+      )}
+    >
+      {label}
+    </a>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="deshi-footer max-w-full min-w-0 overflow-x-hidden text-slate-300">
+      <div className="mx-auto w-full max-w-[1480px] min-w-0 px-4 py-10 sm:px-6 md:py-12 lg:px-8 xl:px-10">
+        <div className="grid min-w-0 grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          <div className="min-w-0 sm:col-span-2 lg:col-span-4">
+            <BridgeLogo variant="footer" theme="dark" className="mb-3" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#60a5fa]">
+              {FOOTER_BRAND_TAGLINE}
+            </p>
+            <p className="mt-3 max-w-sm font-display text-lg font-bold leading-snug text-white">
+              {FOOTER_BRAND_HEADLINE}
+            </p>
+            <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-slate-400">
               {FOOTER_BRAND_DESCRIPTION}
             </p>
-            <div className="flex gap-2">
-              {SOCIAL.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-slate-400 hover:text-deshi-green hover:border-deshi-green/30 transition-colors"
-                >
-                  {s.letter}
-                </a>
-              ))}
+
+            <div className="mt-5 flex max-w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <WhatsAppCta href={WHATSAPP_CHAT_CTA.url} label={WHATSAPP_CHAT_CTA.label} />
+              <WhatsAppCta
+                href={WHATSAPP_ORDER_CTA.url}
+                label={WHATSAPP_ORDER_CTA.label}
+                variant="outline"
+              />
             </div>
           </div>
 
-          <FooterColumn title="Websites" links={FOOTER_COLUMNS.solutions} />
-          <FooterColumn title="Support" links={FOOTER_COLUMNS.support} />
-          <FooterColumn title="Popular" links={FOOTER_COLUMNS.categories} />
+          <div className="lg:col-span-2">
+            <FooterColumn title="Solutions" links={FOOTER_COLUMNS.solutions} />
+          </div>
+          <div className="lg:col-span-2">
+            <FooterColumn title="Quick Links" links={FOOTER_COLUMNS.quickLinks} />
+          </div>
+
+          <div className="min-w-0 lg:col-span-4">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">Contact</h3>
+            <ul className="space-y-2.5">
+              <li>
+                <ExternalTextLink href={OFFICIAL_WEBSITE}>Website</ExternalTextLink>
+              </li>
+              <li>
+                <ExternalTextLink href={WHATSAPP_CHAT_CTA.url}>WhatsApp</ExternalTextLink>
+              </li>
+              <li>
+                <ExternalTextLink href={WHATSAPP_ORDER_CTA.url}>
+                  Order Directly on WhatsApp
+                </ExternalTextLink>
+              </li>
+            </ul>
+
+            <h3 className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-white">
+              Follow Us
+            </h3>
+            <SocialLinks />
+          </div>
         </div>
 
-        {/* Company links + copyright — single row */}
-        <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2">
-              <span className="text-xs font-bold text-white uppercase tracking-wider shrink-0">
-                Company
-              </span>
-              <nav
-                className="flex flex-wrap items-center gap-x-4 gap-y-2"
-                aria-label="Company"
-              >
-                {FOOTER_COLUMNS.company.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-deshi-green transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-            <div className="flex flex-col gap-1.5 shrink-0 lg:items-end lg:text-right">
-              <p className="text-xs text-slate-500">
-                © {new Date().getFullYear()} Bridge IT Park. All rights reserved.
-              </p>
-              <p className="text-xs text-slate-500">
-                Powered by{' '}
-                <span className="powered-by-brand font-semibold tracking-wide">
-                  CODE BONDHU IT
-                </span>
-              </p>
-            </div>
-          </div>
+        <div className="mt-8 flex max-w-full min-w-0 flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-slate-500">
+            © {new Date().getFullYear()} Bridge IT Park. All Rights Reserved.
+          </p>
+          <nav
+            className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500"
+            aria-label="Legal"
+          >
+            <Link href={ROUTES.about} className="transition-colors hover:text-[#60a5fa]">
+              Privacy Policy
+            </Link>
+            <Link href={ROUTES.about} className="transition-colors hover:text-[#60a5fa]">
+              Terms & Conditions
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>
   );
-};
+}

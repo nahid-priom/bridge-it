@@ -5,6 +5,7 @@ import type { BitpProductDetail } from '@/types/bitp';
 import { ROUTES } from '@/lib/routes';
 
 import { BRANDING } from '@/lib/config/branding';
+import { SOCIAL_SAME_AS } from '@/lib/config/social-links';
 
 export function organizationJsonLd() {
   return {
@@ -30,7 +31,7 @@ export function organizationJsonLd() {
       addressCountry: 'BD',
       addressLocality: 'Dhaka',
     },
-    sameAs: [],
+    sameAs: [...SOCIAL_SAME_AS],
   };
 }
 

@@ -59,11 +59,13 @@ export function WebsiteFilterGroups({
   categories,
   onViewsChange,
   onCategoriesChange,
+  hideCategories = false,
 }: {
   views: string[];
   categories: string[];
   onViewsChange: (next: string[]) => void;
   onCategoriesChange: (next: string[]) => void;
+  hideCategories?: boolean;
 }) {
   return (
     <div className="space-y-3.5">
@@ -81,24 +83,28 @@ export function WebsiteFilterGroups({
         </div>
       </FilterRow>
 
-      <div className="border-t border-border-subtle" />
+      {!hideCategories ? (
+        <>
+          <div className="border-t border-border-subtle" />
 
-      <FilterRow label="Category" labelledBy="websites-filter-category">
-        <div className="flex w-max gap-2.5" role="group" aria-labelledby="websites-filter-category">
-          {LISTING_CATEGORIES.map((item) => {
-            const value = item.slug ?? 'all';
-            return (
-              <Chip
-                key={item.id}
-                active={item.id === 'all' ? categories.length === 0 : categories.includes(value)}
-                onClick={() => onCategoriesChange(toggleFilterValue(categories, value))}
-              >
-                {item.id === 'all' ? 'All categories' : item.label}
-              </Chip>
-            );
-          })}
-        </div>
-      </FilterRow>
+          <FilterRow label="Category" labelledBy="websites-filter-category">
+            <div className="flex w-max gap-2.5" role="group" aria-labelledby="websites-filter-category">
+              {LISTING_CATEGORIES.map((item) => {
+                const value = item.slug ?? 'all';
+                return (
+                  <Chip
+                    key={item.id}
+                    active={item.id === 'all' ? categories.length === 0 : categories.includes(value)}
+                    onClick={() => onCategoriesChange(toggleFilterValue(categories, value))}
+                  >
+                    {item.id === 'all' ? 'All categories' : item.label}
+                  </Chip>
+                );
+              })}
+            </div>
+          </FilterRow>
+        </>
+      ) : null}
     </div>
   );
 }

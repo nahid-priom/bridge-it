@@ -155,6 +155,7 @@ export function SoftwareCatalog({
   }, [q]);
 
   useEffect(() => {
+    if (isExploreSoftware) return;
     const handle = window.setTimeout(() => {
       const next = searchInput.trim();
       if (next === q) return;
@@ -267,42 +268,46 @@ export function SoftwareCatalog({
 
   return (
     <>
-      <div className="mb-2.5 sm:mb-3">
-        <label htmlFor="software-catalog-search" className="sr-only">
-          Search software solutions
-        </label>
-        <input
-          id="software-catalog-search"
-          type="search"
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-          placeholder="Search software solutions..."
-          className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
-        />
-      </div>
+      {!isExploreSoftware ? (
+        <div className="mb-2.5 sm:mb-3">
+          <label htmlFor="software-catalog-search" className="sr-only">
+            Search software solutions
+          </label>
+          <input
+            id="software-catalog-search"
+            type="search"
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+            placeholder="Search software solutions..."
+            className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
+          />
+        </div>
+      ) : null}
 
       <div
         className="flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="group"
-        aria-label="Category filters"
+        aria-label={isExploreSoftware ? 'More filters' : 'Category filters'}
       >
-        {SOFTWARE_PRIMARY_FILTERS.map((item) => {
-          const active = category === item.id || (item.taxonomySlug != null && category === item.taxonomySlug);
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => writeCategory(item.id)}
-              className={
-                active
-                  ? 'shrink-0 rounded-full bg-[#0f2744] px-2.5 py-1 text-xs font-semibold text-white'
-                  : 'shrink-0 rounded-full border border-border-subtle px-2.5 py-1 text-xs font-medium text-text-secondary hover:border-[#2563eb]/40'
-              }
-            >
-              {item.label}
-            </button>
-          );
-        })}
+        {!isExploreSoftware
+          ? SOFTWARE_PRIMARY_FILTERS.map((item) => {
+              const active = category === item.id || (item.taxonomySlug != null && category === item.taxonomySlug);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => writeCategory(item.id)}
+                  className={
+                    active
+                      ? 'shrink-0 rounded-full bg-[#0f2744] px-2.5 py-1 text-xs font-semibold text-white'
+                      : 'shrink-0 rounded-full border border-border-subtle px-2.5 py-1 text-xs font-medium text-text-secondary hover:border-[#2563eb]/40'
+                  }
+                >
+                  {item.label}
+                </button>
+              );
+            })
+          : null}
         <SoftwareMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
       </div>
 

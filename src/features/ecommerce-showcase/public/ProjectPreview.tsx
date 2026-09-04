@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { DevicePreview } from './DevicePreview';
 import { PackageCards } from './PackageCards';
-import { CardTechIcons } from './CardTechIcons';
 import { LeadForm } from './LeadForm';
 import type { EcommerceProjectDetail } from '../types';
 import { INDUSTRIES } from '../config/constants';
@@ -32,42 +31,6 @@ export function ProjectPreview({ project }: { project: EcommerceProjectDetail })
       {project.short_description ? (
         <p className="mt-3 text-sm leading-relaxed text-text-secondary lg:text-[15px]">{project.short_description}</p>
       ) : null}
-      <div className="mt-4 flex min-w-0 max-w-full flex-col gap-1.5 lg:hidden">
-        <p className="flex min-h-5 items-baseline gap-2 text-sm leading-none">
-          <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">
-            Delivery
-          </span>
-          <span className="font-semibold text-text-primary">3–7 Days</span>
-        </p>
-        <div className="min-w-0">
-          <CardTechIcons
-            seed={project.id}
-            stack={project.technology_stack}
-            count={Math.max(project.technology_stack.length, 4)}
-            size="sm"
-            showLabels
-            scrollable
-          />
-        </div>
-      </div>
-      <dl className="mt-5 hidden space-y-4 lg:block">
-        <div>
-          <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">Technology</dt>
-          <dd>
-            <CardTechIcons
-              seed={project.id}
-              stack={project.technology_stack}
-              count={4}
-              size="md"
-              showLabels
-            />
-          </dd>
-        </div>
-        <div>
-          <dt className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">Delivery time</dt>
-          <dd className="text-sm font-semibold text-text-primary">3–7 Days</dd>
-        </div>
-      </dl>
       <div className="mt-5 hidden flex-col gap-2.5 lg:flex">
         <Link
           href={orderHref}

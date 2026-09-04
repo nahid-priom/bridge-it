@@ -107,6 +107,7 @@ export function CreativeMarketingCatalog({
   useEffect(() => setSearchInput(q), [q]);
 
   useEffect(() => {
+    if (isExplore) return;
     const handle = window.setTimeout(() => {
       const next = searchInput.trim();
       if (next === q) return;
@@ -196,38 +197,46 @@ export function CreativeMarketingCatalog({
 
   return (
     <>
-      <div className="mb-3 max-w-xl sm:mb-4">
-        <label htmlFor="cm-catalog-search" className="sr-only">
-          Search services
-        </label>
-        <input
-          id="cm-catalog-search"
-          type="search"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search creative & marketing…"
-          className="w-full rounded-xl border border-border-subtle bg-surface px-4 py-2.5 text-sm outline-none focus:border-[#2563eb]"
-        />
-      </div>
+      {!isExplore ? (
+        <div className="mb-3 max-w-xl sm:mb-4">
+          <label htmlFor="cm-catalog-search" className="sr-only">
+            Search services
+          </label>
+          <input
+            id="cm-catalog-search"
+            type="search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search creative & marketing…"
+            className="w-full rounded-xl border border-border-subtle bg-surface px-4 py-2.5 text-sm outline-none focus:border-[#2563eb]"
+          />
+        </div>
+      ) : null}
 
-      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Service type filters">
-        {CREATIVE_PRIMARY_FILTERS.map((item) => {
-          const active = group === item.id;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => writeGroup(item.id)}
-              className={
-                active
-                  ? 'rounded-full bg-[#0f2744] px-3.5 py-1.5 text-sm font-semibold text-white'
-                  : 'rounded-full border border-border-subtle px-3.5 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40'
-              }
-            >
-              {item.label}
-            </button>
-          );
-        })}
+      <div
+        className="flex flex-wrap items-center gap-2"
+        role="group"
+        aria-label={isExplore ? 'More filters' : 'Service type filters'}
+      >
+        {!isExplore
+          ? CREATIVE_PRIMARY_FILTERS.map((item) => {
+              const active = group === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => writeGroup(item.id)}
+                  className={
+                    active
+                      ? 'rounded-full bg-[#0f2744] px-3.5 py-1.5 text-sm font-semibold text-white'
+                      : 'rounded-full border border-border-subtle px-3.5 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40'
+                  }
+                >
+                  {item.label}
+                </button>
+              );
+            })
+          : null}
         <CreativeMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
       </div>
 

@@ -180,16 +180,26 @@ export const TRUST_SECURITY_ITEMS = [
 ];
 
 /* ─── Footer links ─── */
-export const FOOTER_BRAND_DESCRIPTION =
-  'Custom websites, software solutions, and creative & digital marketing for growing Bangladeshi businesses.';
+export const FOOTER_BRAND_TAGLINE = 'BUILD • MARKET • GROW';
+
+export const FOOTER_BRAND_HEADLINE = 'Control Your Business in One Dashboard';
+
+export const FOOTER_BRAND_DESCRIPTION = 'Grow Smarter with Bridge IT Park';
 
 export const FOOTER_COLUMNS = {
   solutions: [
-    { label: 'All Websites', href: ROUTES.websites },
-    { label: 'Software Solutions', href: ROUTES.softwareShowroom },
+    { label: 'Websites', href: ROUTES.websites },
+    { label: 'Software', href: ROUTES.softwareShowroom },
     { label: 'Creative & Marketing', href: ROUTES.creativeMarketingShowroom },
-    { label: 'Fashion', href: '/ecommerce/fashion' },
-    { label: 'Free Demo', href: ROUTES.consultation },
+    { label: 'Explore', href: ROUTES.explore },
+    { label: 'Free Consultation', href: ROUTES.consultation },
+  ],
+  quickLinks: [
+    { label: 'About Us', href: ROUTES.about },
+    { label: 'Pricing', href: ROUTES.pricing },
+    { label: 'Portfolio', href: ROUTES.portfolio },
+    { label: 'Client Dashboard', href: ROUTES.dashboard },
+    { label: 'Free Consultation', href: ROUTES.consultation },
   ],
   company: [
     { label: 'About Us', href: ROUTES.about },

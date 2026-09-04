@@ -7,13 +7,15 @@ export function WebsiteFilterToolbar({
   categories,
   onViewsChange,
   onCategoriesChange,
+  hideCategories = false,
 }: {
   views: string[];
   categories: string[];
   onViewsChange: (next: string[]) => void;
   onCategoriesChange: (next: string[]) => void;
+  hideCategories?: boolean;
 }) {
-  const hasActiveFilters = views.length > 0 || categories.length > 0;
+  const hasActiveFilters = views.length > 0 || (!hideCategories && categories.length > 0);
 
   return (
     <div
@@ -28,7 +30,7 @@ export function WebsiteFilterToolbar({
             type="button"
             onClick={() => {
               onViewsChange([]);
-              onCategoriesChange([]);
+              if (!hideCategories) onCategoriesChange([]);
             }}
             className="text-sm font-semibold text-[#2563eb] hover:underline dark:text-[#60a5fa]"
           >
@@ -41,6 +43,7 @@ export function WebsiteFilterToolbar({
         categories={categories}
         onViewsChange={onViewsChange}
         onCategoriesChange={onCategoriesChange}
+        hideCategories={hideCategories}
       />
     </div>
   );

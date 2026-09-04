@@ -38,14 +38,18 @@ type ListingFilters = { q: string; category: string; view: string };
 export function WebsitesCatalog({
   initialFilters,
   initialData,
+  hideChrome = false,
 }: {
   initialFilters: ListingFilters;
   initialData: ShowcaseListResult;
+  /** When true, search + industry chips are provided by ExploreFilterChrome. */
+  hideChrome?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const isExplore = hideChrome || pathname.includes('/explore');
 
   const views = parseFilterList(searchParams.get('view') || searchParams.get('page') || initialFilters.view);
   const categories = parseFilterList(searchParams.get('category') || initialFilters.category);
@@ -62,6 +66,7 @@ export function WebsitesCatalog({
   }, [q]);
 
   useEffect(() => {
+    if (isExplore) return;
     const handle = window.setTimeout(() => {
       const next = searchInput.trim();
       if (next === q) return;
@@ -74,7 +79,7 @@ export function WebsitesCatalog({
       });
     }, 320);
     return () => window.clearTimeout(handle);
-  }, [searchInput, q, pathname, router, searchParams]);
+  }, [searchInput, q, pathname, router, searchParams, isExplore]);
 
   useEffect(() => {
     setExtraItems([]);
@@ -89,6 +94,7 @@ export function WebsitesCatalog({
     params.delete('page');
     if (category) params.set('category', category);
     else params.delete('category');
+    if (isExplore) params.set('type', 'websites');
     const qs = params.toString();
     const href = qs ? `${pathname}?${qs}` : pathname;
     startTransition(() => {
@@ -132,20 +138,23 @@ export function WebsitesCatalog({
 
   return (
     <>
-      <WebsiteSearch
-        id="websites-catalog-search"
-        value={searchInput}
-        onChange={setSearchInput}
-        className="mb-5 max-w-xl"
-      />
+      {!isExplore ? (
+        <WebsiteSearch
+          id="websites-catalog-search"
+          value={searchInput}
+          onChange={setSearchInput}
+          className="mb-5 max-w-xl"
+        />
+      ) : null}
       <WebsiteFilterToolbar
         views={views}
         categories={categories}
         onViewsChange={(next) => writeFilters(next, categories)}
         onCategoriesChange={(next) => writeFilters(views, next)}
+        hideCategories={isExplore}
       />
 
-      <div className="mt-6 md:mt-8">
+      <div className={isExplore ? 'mt-4 md:mt-5' : 'mt-6 md:mt-8'}>
         {isError && !data ? (
           <ProjectGridError onRetry={() => void refetch()} />
         ) : showGridSkeleton ? (
