@@ -1,6 +1,4 @@
-import Link from 'next/link';
-import { cn, focusVisibleRing } from '@/lib/cn';
-import { ROUTES } from '@/lib/routes';
+import { cn } from '@/lib/cn';
 import { SectionContainer } from './SectionContainer';
 
 export function PortfolioIntro({ className }: { className?: string }) {
@@ -8,7 +6,7 @@ export function PortfolioIntro({ className }: { className?: string }) {
     <section
       aria-labelledby="explore-our-work-heading"
       className={cn(
-        'scroll-mt-[calc(var(--header-offset)+0.75rem)] pt-[4.5rem] md:pt-[6.875rem]',
+        'scroll-mt-[calc(var(--header-offset)+0.75rem)] pt-[3.5rem]',
         className
       )}
     >
@@ -26,17 +24,6 @@ export function PortfolioIntro({ className }: { className?: string }) {
         <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-text-muted sm:mt-4 sm:text-base">
           View 500+ live websites, software &amp; marketing projects
         </p>
-        <Link
-          href={ROUTES.explore}
-          className={cn(
-            'mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-bridge-primary sm:mt-6',
-            'transition-colors hover:text-bridge-primary-dark',
-            'dark:text-bridge-primary-light dark:hover:text-white',
-            focusVisibleRing
-          )}
-        >
-          View all projects →
-        </Link>
       </SectionContainer>
     </section>
   );

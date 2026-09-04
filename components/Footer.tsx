@@ -11,6 +11,7 @@ import {
   FOOTER_BRAND_TAGLINE,
   FOOTER_COLUMNS,
 } from '@/data/homeContent';
+import { BRANDING, whatsappUrl } from '@/lib/config/branding';
 import { OFFICIAL_WEBSITE } from '@/lib/config/social-links';
 import { ROUTES } from '@/lib/routes';
 
@@ -63,6 +64,8 @@ function ExternalTextLink({
 }
 
 export function Footer() {
+  const wa = whatsappUrl('Hi Bridge IT Park — I need a free consultation.');
+
   return (
     <footer className="deshi-footer max-w-full min-w-0 overflow-x-hidden text-slate-300">
       <div className="mx-auto w-full max-w-[1480px] min-w-0 px-4 py-10 sm:px-6 md:py-12 lg:px-8 xl:px-10">
@@ -99,9 +102,6 @@ export function Footer() {
             <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">Contact</h3>
             <ul className="space-y-2.5">
               <li>
-                <ExternalTextLink href={OFFICIAL_WEBSITE}>Website</ExternalTextLink>
-              </li>
-              <li>
                 <Link
                   href={ROUTES.consultation}
                   className="text-sm text-slate-400 transition-colors hover:text-[#60a5fa]"
@@ -109,6 +109,24 @@ export function Footer() {
                   Free Consultation
                 </Link>
               </li>
+              {BRANDING.whatsappNumber ? (
+                <li>
+                  <ExternalTextLink href={wa}>WhatsApp</ExternalTextLink>
+                </li>
+              ) : null}
+              <li>
+                <ExternalTextLink href={OFFICIAL_WEBSITE}>Website</ExternalTextLink>
+              </li>
+              {BRANDING.supportEmail ? (
+                <li>
+                  <a
+                    href={`mailto:${BRANDING.supportEmail}`}
+                    className="text-sm text-slate-400 transition-colors hover:text-[#60a5fa]"
+                  >
+                    {BRANDING.supportEmail}
+                  </a>
+                </li>
+              ) : null}
             </ul>
 
             <h3 className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-white">
@@ -124,16 +142,24 @@ export function Footer() {
 
         <div className="mt-8 flex max-w-full min-w-0 flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} Bridge IT Park. All Rights Reserved.
+            Powered by{' '}
+            <a
+              href="https://www.codebondhuit.com"
+              target="_blank"
+              rel="noopener"
+              className="footer-powered-glow font-semibold tracking-wide text-[#7dd3fc] transition-colors hover:text-[#bae6fd]"
+            >
+              CODE BONDHU IT
+            </a>
           </p>
           <nav
             className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500"
             aria-label="Legal"
           >
-            <Link href={ROUTES.about} className="transition-colors hover:text-[#60a5fa]">
+            <Link href={ROUTES.privacy} className="transition-colors hover:text-[#60a5fa]">
               Privacy Policy
             </Link>
-            <Link href={ROUTES.about} className="transition-colors hover:text-[#60a5fa]">
+            <Link href={ROUTES.terms} className="transition-colors hover:text-[#60a5fa]">
               Terms & Conditions
             </Link>
           </nav>

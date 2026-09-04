@@ -77,6 +77,7 @@ export function AppShell({
       <>
         {scrollWatcher}
         {children}
+        <Notification />
       </>
     );
   }

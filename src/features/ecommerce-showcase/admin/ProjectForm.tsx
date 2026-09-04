@@ -13,7 +13,7 @@ import {
   updateProjectAction,
 } from '@/app/actions/ecommerce-showcase';
 import { FieldSelect } from '@/components/ui/FieldSelect';
-import { HOMEPAGE_SECTIONS, INDUSTRIES, TECHNOLOGY_OPTIONS, WEBSITE_TYPES } from '../config/constants';
+import { HOMEPAGE_SECTION_MAX, HOMEPAGE_SECTIONS, INDUSTRIES, TECHNOLOGY_OPTIONS, WEBSITE_TYPES } from '../config/constants';
 import type { DeviceViewport } from '../config/constants';
 import { defaultPreviewPage, pageHasImage } from '../config/page-types';
 import { projectFormSchema, slugifyTitle, type ProjectFormValues } from '../schemas/project';
@@ -284,7 +284,8 @@ export function ProjectForm({
       <section className={cmsSection}>
         <h2 className="font-display font-bold">Homepage Visibility</h2>
         <p className="text-sm text-text-muted">
-          Show this template in curated homepage sections. Each section allows at most 6 templates.
+          Show this template in curated homepage sections. Each section allows at most{' '}
+          {HOMEPAGE_SECTION_MAX} templates.
         </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
           {HOMEPAGE_SECTIONS.map((section) => {

@@ -9,12 +9,6 @@ const SHORT_TITLES: Record<NavCategoryPillarId, string> = {
   marketing: 'Marketing',
 };
 
-const SUPPORTING: Record<NavCategoryPillarId, string> = {
-  websites: 'Modern & Responsive',
-  software: 'Powerful & Scalable',
-  marketing: 'Grow Your Brand',
-};
-
 const PILLAR_ICONS: Record<NavCategoryPillarId, LucideIcon> = {
   websites: LayoutTemplate,
   software: Code2,
@@ -24,7 +18,6 @@ const PILLAR_ICONS: Record<NavCategoryPillarId, LucideIcon> = {
 const mainCategories = NAV_CATEGORY_PILLARS.map((pillar) => ({
   key: pillar.id,
   title: SHORT_TITLES[pillar.id],
-  supporting: SUPPORTING[pillar.id],
   href: pillar.href,
   Icon: PILLAR_ICONS[pillar.id],
 }));
@@ -48,9 +41,9 @@ export function MainCategoryStrip({ className }: { className?: string }) {
           What We Build
         </h2>
 
-        <nav aria-label="Main solution categories" className="mt-5 w-full min-w-0 sm:mt-6 md:mt-7">
+        <nav aria-label="Main solution categories" className="mt-3 w-full min-w-0 sm:mt-3.5">
           <ul className="grid w-full min-w-0 grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-            {mainCategories.map(({ key, title, supporting, href, Icon }) => (
+            {mainCategories.map(({ key, title, href, Icon }) => (
               <li key={key} className="min-w-0">
                 <Link
                   href={href}
@@ -69,13 +62,8 @@ export function MainCategoryStrip({ className }: { className?: string }) {
                   >
                     <Icon className="h-5 w-5 sm:h-[1.375rem] sm:w-[1.375rem]" strokeWidth={2} />
                   </span>
-                  <span className="relative z-[1] flex min-w-0 flex-col items-center gap-0.5 text-center">
-                    <span className="text-[0.8125rem] font-bold tracking-[-0.015em] text-text-primary sm:text-base md:text-lg">
-                      {title}
-                    </span>
-                    <span className="text-[0.625rem] leading-snug text-text-muted sm:text-xs md:text-[0.8125rem]">
-                      {supporting}
-                    </span>
+                  <span className="relative z-[1] text-center text-[0.8125rem] font-bold tracking-[-0.015em] text-text-primary sm:text-base md:text-lg">
+                    {title}
                   </span>
                 </Link>
               </li>

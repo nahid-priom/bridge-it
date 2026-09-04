@@ -6,7 +6,7 @@ export const SHOWCASE_CURRENCY = 'BDT';
 
 export const GALLERY_PAGE_SIZE = 12;
 
-export const HOMEPAGE_SECTION_MAX = 6;
+export const HOMEPAGE_SECTION_MAX = 8;
 
 /** Public homepage: exactly 3 website design category rows (admin-curated). */
 export const HOMEPAGE_SECTIONS = [

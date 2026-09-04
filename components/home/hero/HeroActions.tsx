@@ -16,7 +16,6 @@ export function HeroActions({ className }: { className?: string }) {
       <HeroSearch
         className="w-full"
         variant="premium"
-        staticPlaceholder="Search Website, Software or Business Type..."
       />
 
       <Link

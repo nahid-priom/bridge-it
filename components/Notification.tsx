@@ -17,13 +17,15 @@ export const Notification: React.FC = () => {
   if (!notification) return null;
 
   return (
-    <div className="fixed top-24 right-4 z-[100] animate-slide-up">
+    <div className="fixed top-4 right-4 z-[200] animate-slide-up">
       <div className="glass-strong rounded-xl p-4 flex items-center gap-3 border border-bridge-secondary/30 shadow-2xl shadow-bridge-secondary/10 max-w-sm">
         <CheckCircle className="w-5 h-5 text-bridge-secondary flex-shrink-0" />
         <p className="text-sm text-text-primary flex-1">{notification}</p>
-        <button 
+        <button
+          type="button"
           onClick={() => setNotification(null)}
           className="p-1 text-text-muted hover:text-text-primary cursor-pointer"
+          aria-label="Dismiss notification"
         >
           <X className="w-4 h-4" />
         </button>

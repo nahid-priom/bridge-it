@@ -704,8 +704,8 @@ function isHomepageKey(value: string): value is HomepageSectionKey {
 }
 
 function placementLimitMessage(message: string) {
-  if (message.includes('already has 6')) {
-    return 'This homepage section already has 6 templates. Remove one before adding another.';
+  if (message.includes('already has')) {
+    return `This homepage section already has ${HOMEPAGE_SECTION_MAX} templates. Remove one before adding another.`;
   }
   return message;
 }
@@ -723,7 +723,9 @@ export async function setHomepagePlacementAction(sectionKey: string, projectId: 
     .eq('section_key', sectionKey)
     .eq('active', true);
   if ((count ?? 0) >= HOMEPAGE_SECTION_MAX) {
-    return { error: 'This homepage section already has 6 templates. Remove one before adding another.' };
+    return {
+      error: `This homepage section already has ${HOMEPAGE_SECTION_MAX} templates. Remove one before adding another.`,
+    };
   }
 
   const { data: last } = await supabase

@@ -25,8 +25,9 @@ export function QuotePageClient({ product }: QuotePageClientProps) {
         name: form.get('name') as string,
         phone: form.get('phone') as string,
         business_name: form.get('business_name') as string,
-        service_interested: product.name,
+        service_interested_in: product.name,
         message: form.get('message') as string,
+        product_id: product.id,
       });
 
       if (result.error) setError(result.error);

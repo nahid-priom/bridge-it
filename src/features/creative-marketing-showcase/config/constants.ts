@@ -1,7 +1,7 @@
 export const CREATIVE_MARKETING_BUCKET = 'creative-marketing-showcase';
 export const CREATIVE_MARKETING_CURRENCY = 'BDT';
 export const CREATIVE_MARKETING_GALLERY_PAGE_SIZE = 12;
-export const CREATIVE_MARKETING_HOMEPAGE_SECTION_MAX = 6;
+export const CREATIVE_MARKETING_HOMEPAGE_SECTION_MAX = 8;
 
 /** Native cover-card encode size (1536×1024 → 720×480). */
 export const CREATIVE_COVER_CARD = {

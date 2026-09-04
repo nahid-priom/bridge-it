@@ -592,9 +592,11 @@ export interface BitpConsultationRequest {
   id: string;
   name: string;
   phone: string;
+  email: string | null;
   business_name: string | null;
-  service_interested: string | null;
+  service_interested_in: string | null;
   message: string | null;
+  product_id: string | null;
   status: ConsultationStatus;
   created_at: string;
   updated_at: string;
@@ -663,7 +665,12 @@ export interface OrderStatusHistoryRow {
 export interface CreateConsultationInput {
   name: string;
   phone: string;
+  email?: string;
   business_name?: string;
+  /** Preferred DB field */
+  service_interested_in?: string;
+  /** @deprecated Alias — mapped to service_interested_in */
   service_interested?: string;
   message?: string;
+  product_id?: string;
 }

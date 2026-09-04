@@ -4,16 +4,20 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { signupSchema, type SignupInput } from '@/lib/validations/auth';
 import { signUpAction } from '@/app/actions/auth';
 import { AuthField, authInputClass } from '@/components/auth/AuthField';
+import { useStore } from '@/store/useStore';
 
 export function SignupForm() {
   const searchParams = useSearchParams();
   const nextPath = searchParams.get('next') ?? undefined;
+  const setNotification = useStore((s) => s.setNotification);
   const [serverError, setServerError] = useState<string | null>(null);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingLabel, setLoadingLabel] = useState('Creating account…');
 
   const {
     register,
@@ -23,6 +27,7 @@ export function SignupForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
+    setLoadingLabel('Creating account…');
     setServerError(null);
     try {
       const result = await signUpAction({
@@ -32,12 +37,22 @@ export function SignupForm() {
         phone: data.phone,
         next: nextPath,
       });
-      if (result && 'error' in result) setServerError(result.error ?? 'Sign up failed');
-      if (result && 'needsConfirmation' in result) setNeedsConfirmation(true);
+      if (result && 'error' in result) {
+        setServerError(result.error ?? 'Sign up failed');
+        setLoading(false);
+        return;
+      }
+      if (result && 'needsConfirmation' in result) {
+        setNeedsConfirmation(true);
+        setLoading(false);
+        return;
+      }
+      setLoadingLabel('Opening dashboard…');
+      setNotification('Welcome — manage orders from Dashboard');
+      // Keep spinner until redirect completes (redirect throws)
     } catch {
-      // redirect
-    } finally {
-      setLoading(false);
+      setLoadingLabel('Opening dashboard…');
+      setNotification('Welcome — manage orders from Dashboard');
     }
   });
 
@@ -77,9 +92,16 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 rounded-xl bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold text-sm disabled:opacity-60 cursor-pointer"
+        className="w-full py-3 rounded-xl bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold text-sm disabled:opacity-60 cursor-pointer inline-flex items-center justify-center gap-2"
       >
-        {loading ? 'Creating account…' : 'Create account'}
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            {loadingLabel}
+          </>
+        ) : (
+          'Create account'
+        )}
       </button>
     </form>
   );

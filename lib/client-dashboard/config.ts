@@ -8,6 +8,7 @@ import {
   Settings,
   LifeBuoy,
   FileQuestion,
+  ClipboardList,
   type LucideIcon,
 } from 'lucide-react';
 import { ROUTES } from '@/lib/routes';
@@ -23,6 +24,7 @@ export type ClientNavItem = {
 export const clientNavItems: ClientNavItem[] = [
   { id: 'overview', label: 'Dashboard', href: ROUTES.dashboard, icon: LayoutDashboard },
   { id: 'orders', label: 'Orders', href: ROUTES.clientOrders, icon: ShoppingBag },
+  { id: 'consultations', label: 'My Requests', href: ROUTES.clientConsultations, icon: ClipboardList },
   { id: 'projects', label: 'Projects', href: ROUTES.clientProjects, icon: FolderKanban },
   { id: 'quotations', label: 'Quotations', href: ROUTES.clientQuotations, icon: FileQuestion },
   { id: 'payments', label: 'Payments', href: ROUTES.clientPayments, icon: CreditCard },

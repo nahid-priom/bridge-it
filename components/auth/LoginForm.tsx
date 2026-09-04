@@ -4,13 +4,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { loginSchema, type LoginInput } from '@/lib/validations/auth';
 import { signInAction } from '@/app/actions/auth';
 import { AuthField, authInputClass } from '@/components/auth/AuthField';
+import { useStore } from '@/store/useStore';
 
 export function LoginForm({ next }: { next?: string }) {
+  const setNotification = useStore((s) => s.setNotification);
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingLabel, setLoadingLabel] = useState('Signing in…');
 
   const {
     register,
@@ -20,14 +24,20 @@ export function LoginForm({ next }: { next?: string }) {
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
+    setLoadingLabel('Signing in…');
     setServerError(null);
     try {
       const result = await signInAction({ ...data, next });
-      if (result && 'error' in result) setServerError(result.error ?? 'Sign in failed');
+      if (result && 'error' in result) {
+        setServerError(result.error ?? 'Sign in failed');
+        setLoading(false);
+        return;
+      }
+      setLoadingLabel('Opening dashboard…');
+      setNotification('Welcome back');
     } catch {
-      // redirect throws
-    } finally {
-      setLoading(false);
+      setLoadingLabel('Opening dashboard…');
+      setNotification('Welcome back');
     }
   });
 
@@ -50,9 +60,16 @@ export function LoginForm({ next }: { next?: string }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 rounded-xl bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold text-sm hover:shadow-lg transition-all disabled:opacity-60 cursor-pointer"
+        className="w-full py-3 rounded-xl bg-gradient-to-r from-bridge-primary to-bridge-primary-light text-white font-bold text-sm hover:shadow-lg transition-all disabled:opacity-60 cursor-pointer inline-flex items-center justify-center gap-2"
       >
-        {loading ? 'Signing in…' : 'Sign in'}
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            {loadingLabel}
+          </>
+        ) : (
+          'Sign in'
+        )}
       </button>
       <p className="text-center text-sm">
         <Link href="/forgot-password" className="text-bridge-primary hover:underline">

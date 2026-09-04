@@ -15,6 +15,8 @@ const POPULAR = [
   'crm-system',
   'garments-erp',
   'hospital-management',
+  'feed-mill-erp',
+  'school-management',
 ];
 
 const INDUSTRY = [
@@ -24,6 +26,8 @@ const INDUSTRY = [
   'factory-management',
   'textile-erp',
   'wholesale-erp',
+  'construction-erp',
+  'real-estate-erp',
 ];
 
 async function main() {

@@ -192,31 +192,12 @@ export const FOOTER_COLUMNS = {
     { label: 'Software', href: ROUTES.softwareShowroom },
     { label: 'Creative & Marketing', href: ROUTES.creativeMarketingShowroom },
     { label: 'Explore', href: ROUTES.explore },
-    { label: 'Free Consultation', href: ROUTES.consultation },
   ],
   quickLinks: [
     { label: 'About Us', href: ROUTES.about },
     { label: 'Pricing', href: ROUTES.pricing },
     { label: 'Portfolio', href: ROUTES.portfolio },
     { label: 'Client Dashboard', href: ROUTES.dashboard },
-    { label: 'Free Consultation', href: ROUTES.consultation },
-  ],
-  company: [
-    { label: 'About Us', href: ROUTES.about },
-    { label: 'Free Consultation', href: ROUTES.consultation },
-    { label: 'Contact', href: ROUTES.about },
-  ],
-  support: [
-    { label: 'Client Dashboard', href: ROUTES.dashboard },
-    { label: 'Help & Support', href: ROUTES.about },
-    { label: 'Terms of Service', href: ROUTES.about },
-    { label: 'Privacy Policy', href: ROUTES.about },
-  ],
-  categories: [
-    { label: 'Facebook Ads', href: '/creative-marketing?more=facebook-instagram-ads' },
-    { label: 'Social Media Design', href: '/creative-marketing?more=social-media-design' },
-    { label: 'POS & Retail', href: '/software?group=pos' },
-    { label: 'CRM & Sales', href: '/software?group=crm' },
   ],
 } as const;
 

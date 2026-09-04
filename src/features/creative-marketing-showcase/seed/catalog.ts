@@ -465,4 +465,6 @@ export const CREATIVE_MARKETING_POPULAR_SLUGS = [
   'ecommerce-marketing-package',
   'packaging-design',
   'lead-generation-campaigns',
+  'facebook-ads-creative',
+  'social-media-management',
 ] as const;
