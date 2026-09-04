@@ -13,6 +13,7 @@ import { AuthProfileProvider } from '@/components/auth/AuthProfileContext';
 import { SellerActivationListener } from '@/components/seller/SellerActivationListener';
 import { unlockBodyScroll } from '@/hooks/useBodyScrollLock';
 import { useStore } from '@/store/useStore';
+import { cn } from '@/lib/cn';
 
 const GlobalSearchModal = dynamic(
   () =>
@@ -87,7 +88,7 @@ export function AppShell({
     <AuthProfileProvider profile={authProfile}>
     <SellerActivationListener />
     {scrollWatcher}
-    <div className="min-h-screen bg-background text-text-primary">
+    <div className={cn('min-h-screen text-text-primary', isHome ? 'bg-transparent' : 'bg-background')}>
       <Navbar categories={categories} authProfile={authProfile} />
       <main
         id="main-content"
@@ -98,7 +99,7 @@ export function AppShell({
         {!hideBreadcrumb && <SiteBreadcrumb />}
         {children}
       </main>
-      {!hideBreadcrumb ? <Footer /> : null}
+      <Footer />
       <GlobalSearchModal />
       <Notification />
     </div>

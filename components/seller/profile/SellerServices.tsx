@@ -20,7 +20,7 @@ export function SellerServices({ services, horizontal = true }: SellerServicesPr
   }
 
   const grid = horizontal
-    ? 'flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin'
+    ? 'scrollbar-none flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory'
     : 'grid grid-cols-1 sm:grid-cols-2 gap-4';
 
   return (

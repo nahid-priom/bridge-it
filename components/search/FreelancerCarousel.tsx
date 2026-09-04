@@ -66,7 +66,7 @@ export function FreelancerCarousel({ sellers }: FreelancerCarouselProps) {
 
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin"
+          className="scrollbar-none flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory"
         >
           {sellers.map((f, i) => (
             <motion.div

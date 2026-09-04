@@ -16,8 +16,7 @@ export function CategoryFilter({
     <div className={cn('mt-8 md:mt-10', className)} role="navigation" aria-label="Portfolio categories">
       <div
         className={cn(
-          'flex gap-2 overflow-x-auto pb-1',
-          '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+          'scrollbar-none flex gap-2 overflow-x-auto',
           'snap-x snap-mandatory md:flex-wrap md:justify-center md:overflow-visible'
         )}
       >

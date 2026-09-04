@@ -35,7 +35,7 @@ export function MainCategoryStrip({ className }: { className?: string }) {
       id="business-solutions"
       aria-labelledby="business-solutions-heading"
       className={cn(
-        'scroll-mt-[calc(var(--header-offset)+0.75rem)] border-y border-border-subtle bg-background-soft/40',
+        'scroll-mt-[calc(var(--header-offset)+0.75rem)] border-y border-border-subtle/60 bg-transparent',
         'py-10 md:py-12 lg:py-14',
         className
       )}

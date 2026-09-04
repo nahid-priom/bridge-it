@@ -11,7 +11,7 @@ const ICON_MAP = {
 export function WhyBridgeItParkSection() {
   return (
     <section
-      className="scroll-mt-[calc(var(--header-offset)+0.75rem)] border-t border-border-subtle/70 bg-surface py-16 md:py-24"
+      className="scroll-mt-[calc(var(--header-offset)+0.75rem)] border-t border-border-subtle/50 bg-transparent py-16 md:py-24"
       aria-labelledby="benefits-heading"
     >
       <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10">

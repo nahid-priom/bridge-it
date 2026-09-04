@@ -100,7 +100,7 @@ export function FilterBar({
       )}
     >
       <div className="py-3 space-y-2">
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin flex-nowrap">
+        <div className="scrollbar-none flex flex-nowrap items-center gap-2 overflow-x-auto">
           <p className="shrink-0 text-xs sm:text-sm font-medium text-text-muted whitespace-nowrap pr-1">
             <span className="text-text-primary font-bold">{resultCount.toLocaleString()}</span>{' '}
             {resultCount === 1 ? 'service' : 'services'}
