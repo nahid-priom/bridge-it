@@ -3,7 +3,9 @@ import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/p
 import {
   parseSoftwareGroupParam,
   parseSoftwareMoreParam,
+  primaryFilterToTaxonomySlug,
   SOFTWARE_GALLERY_PAGE_SIZE,
+  SOFTWARE_PRIMARY_FILTERS,
 } from '@/src/features/software-showcase/config/constants';
 
 export async function GET(request: NextRequest) {
@@ -14,20 +16,30 @@ export async function GET(request: NextRequest) {
     Math.min(Number(params.get('pageSize') ?? SOFTWARE_GALLERY_PAGE_SIZE) || SOFTWARE_GALLERY_PAGE_SIZE, 48)
   );
   const q = params.get('q')?.trim() || undefined;
-  const industry =
-    params.get('industry')?.trim() || params.get('category')?.trim() || undefined;
-  const group = parseSoftwareGroupParam(
-    params.get('group'),
-    params.get('solutionGroup')
-    // intentionally ignore `type` — reserved for explore pillars
-  );
+  const child = params.get('child')?.trim() || undefined;
   const more = parseSoftwareMoreParam(params.get('more'));
+
+  const categoryRaw = params.get('category')?.trim();
+  const group = parseSoftwareGroupParam(params.get('group'), params.get('solutionGroup'));
+
+  let taxonomyCategory: string | undefined;
+  if (categoryRaw && categoryRaw !== 'all') {
+    const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
+    if (primaryIds.has(categoryRaw as (typeof SOFTWARE_PRIMARY_FILTERS)[number]['id'])) {
+      taxonomyCategory = primaryFilterToTaxonomySlug(categoryRaw) ?? categoryRaw;
+    } else {
+      taxonomyCategory = categoryRaw;
+    }
+  } else if (group !== 'all') {
+    taxonomyCategory = primaryFilterToTaxonomySlug(group) ?? group;
+  }
 
   const result = await listSoftwareProjectCards({
     page,
     pageSize,
     q,
-    category: industry && industry !== 'all' ? industry : undefined,
+    taxonomyCategory,
+    child: child && child !== 'all' ? child : undefined,
     group: group === 'all' ? undefined : group,
     more: more.length ? more : undefined,
   });

@@ -99,20 +99,41 @@ async function main() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const dbBySlug = new Map<
     string,
-    { published: boolean; cover_card_url: string | null; screen_count: number | null }
+    {
+      published: boolean;
+      cover_card_url: string | null;
+      screen_count: number | null;
+      caption_gaps: number;
+    }
   >();
   if (url && key) {
     try {
       const supabase = createClient(url, key, { auth: { persistSession: false } });
       const { data } = await supabase
         .from('software_project_cards')
-        .select('slug, published, cover_card_url, screen_count')
+        .select('id, slug, published, cover_card_url, screen_count')
         .is('deleted_at', null);
+      const projectIds = (data ?? []).map((row) => String(row.id));
+      const captionGaps = new Map<string, number>();
+      if (projectIds.length) {
+        const { data: screens } = await supabase
+          .from('software_project_screens')
+          .select('project_id, module_name, short_caption')
+          .in('project_id', projectIds)
+          .is('deleted_at', null)
+          .eq('published', true);
+        for (const screen of screens ?? []) {
+          const pid = String(screen.project_id);
+          const missing = !screen.module_name || !screen.short_caption;
+          if (missing) captionGaps.set(pid, (captionGaps.get(pid) ?? 0) + 1);
+        }
+      }
       for (const row of data ?? []) {
         dbBySlug.set(String(row.slug), {
           published: Boolean(row.published),
           cover_card_url: (row.cover_card_url as string | null) ?? null,
           screen_count: row.screen_count == null ? null : Number(row.screen_count),
+          caption_gaps: captionGaps.get(String(row.id)) ?? 0,
         });
       }
     } catch (err) {
@@ -273,12 +294,17 @@ async function main() {
       statuses.push('needs_major_upgrade');
     }
 
-    // SEO
+    // SEO — fail if public SEO still mentions prices
     const titleKey = product.seoTitle.trim().toLowerCase();
     const descKey = product.seoDescription.trim().toLowerCase();
     if (!product.seoTitle || !product.seoDescription || product.seoKeywords.length < 2) {
       seoStatus = 'fail';
       issues.push('incomplete SEO fields');
+      statuses.push('needs_minor_upgrade');
+    }
+    if (/৳|starting\s*৳|bdt\s*\d/i.test(`${product.seoTitle} ${product.seoDescription}`)) {
+      seoStatus = 'fail';
+      issues.push('SEO still contains public price text');
       statuses.push('needs_minor_upgrade');
     }
     if (seoTitles.has(titleKey)) {
@@ -292,12 +318,8 @@ async function main() {
       statuses.push('needs_minor_upgrade');
     } else seoDescs.set(descKey, product.slug);
 
-    // Pricing
-    if (product.startingPrice < 20000 || product.startingPrice > 200000) {
-      pricingStatus = 'fail';
-      issues.push(`startingPrice ${product.startingPrice} outside 20k–200k band`);
-      statuses.push('needs_minor_upgrade');
-    }
+    // Pricing kept internal — do not fail public catalog on price band
+    pricingStatus = 'pass';
 
     // Catalog DNA quality
     if (product.dashboardKPIs.filter(genericKpi).length >= 3) {
@@ -309,7 +331,7 @@ async function main() {
       statuses.push('needs_minor_upgrade');
     }
 
-    // Admin / DB
+    // Admin / DB + caption completeness
     const db = dbBySlug.get(product.slug);
     if (dbBySlug.size > 0) {
       if (!db) {
@@ -325,6 +347,12 @@ async function main() {
         if (!db.published) {
           issues.push('DB published=false');
           statuses.push('needs_minor_upgrade');
+        }
+        const captionGap = Number((db as { caption_gaps?: number }).caption_gaps ?? 0);
+        if (captionGap > 0) {
+          issues.push(`${captionGap} screens missing module_name/short_caption`);
+          statuses.push('needs_minor_upgrade');
+          if (screensStatus === 'pass') screensStatus = 'warn';
         }
       }
     }

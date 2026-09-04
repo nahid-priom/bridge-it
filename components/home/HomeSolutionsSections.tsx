@@ -48,7 +48,7 @@ export function HomeShowroomPromos() {
               <div>
                 <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wide">Software Solutions</p>
                 <h3 className="text-lg font-black mt-1 group-hover:text-emerald-600 transition-colors">Try Live ERP Demos</h3>
-                <p className="text-sm text-text-secondary mt-2">Stock, ledger, production & enterprise workflows — ৳10K to ৳200K+</p>
+                <p className="text-sm text-text-secondary mt-2">Stock, ledger, production & enterprise workflows for growing teams</p>
               </div>
               <Play className="w-8 h-8 text-emerald-500 shrink-0" aria-hidden />
             </div>
@@ -61,7 +61,7 @@ export function HomeShowroomPromos() {
               <div>
                 <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wide">E-commerce Solutions</p>
                 <h3 className="text-lg font-black mt-1 group-hover:text-emerald-600 transition-colors">Explore Store Demos</h3>
-                <p className="text-sm text-text-secondary mt-2">Landing pages to full stores — ৳2K to ৳50K with live checkout</p>
+                <p className="text-sm text-text-secondary mt-2">Landing pages to full stores with live checkout demos</p>
               </div>
               <Play className="w-8 h-8 text-emerald-500 shrink-0" aria-hidden />
             </div>

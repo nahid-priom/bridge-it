@@ -21,7 +21,7 @@ async function listAdminSoftwareProjects(): Promise<SoftwareProjectCard[]> {
   const { data, error } = await supabase
     .from('software_project_cards')
     .select(
-      'id, title, slug, short_description, category_id, category_name, category_slug, industry, business_type, solution_group, software_type, platform_type, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, created_at, updated_at, deleted_at, screen_count'
+      'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, created_at, updated_at, deleted_at, screen_count'
     )
     .is('deleted_at', null)
     .order('sort_order', { ascending: true })

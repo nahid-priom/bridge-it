@@ -58,6 +58,7 @@ export const ROUTES = {
   adminEcommerceProjects: '/admin/ecommerce-projects',
   adminEcommerceLeads: '/admin/ecommerce-leads',
   adminSoftwareProjects: '/admin/software-projects',
+  adminShowcaseTaxonomy: '/admin/showcase-taxonomy',
   adminCreativeMarketingProjects: '/admin/creative-marketing-projects',
   /** @deprecated Seller hub removed — redirects via middleware */
   sellerDashboard: '/seller-dashboard',

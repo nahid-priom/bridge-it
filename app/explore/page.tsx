@@ -11,10 +11,16 @@ import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/Websit
 import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
 import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
 import {
-  listSoftwareCategories,
+  listShowcaseTaxonomy,
   listSoftwareProjectCards,
 } from '@/src/features/software-showcase/api/projects';
-import { SOFTWARE_GALLERY_PAGE_SIZE, parseSoftwareGroupParam, parseSoftwareMoreParam } from '@/src/features/software-showcase/config/constants';
+import {
+  SOFTWARE_GALLERY_PAGE_SIZE,
+  SOFTWARE_PRIMARY_FILTERS,
+  parseSoftwareGroupParam,
+  parseSoftwareMoreParam,
+  primaryFilterToTaxonomySlug,
+} from '@/src/features/software-showcase/config/constants';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
 import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
@@ -145,36 +151,65 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
   if (type === 'software') {
     const page = Math.max(1, Number(first(sp.page)) || 1);
     const group = parseSoftwareGroupParam(first(sp.group), first(sp.solutionGroup));
-    const industry = first(sp.industry).trim() || first(sp.category).trim() || 'all';
+    const categoryRaw = first(sp.category).trim();
+    const child = first(sp.child).trim() || 'all';
     const more = parseSoftwareMoreParam(first(sp.more));
-    const [result, categories] = await Promise.all([
+
+    const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
+    let category = 'all';
+    let taxonomyCategory: string | undefined;
+    if (categoryRaw && categoryRaw !== 'all') {
+      if (primaryIds.has(categoryRaw as (typeof SOFTWARE_PRIMARY_FILTERS)[number]['id'])) {
+        category = categoryRaw;
+        taxonomyCategory = primaryFilterToTaxonomySlug(categoryRaw);
+      } else {
+        const byTax = SOFTWARE_PRIMARY_FILTERS.find((f) => f.taxonomySlug === categoryRaw);
+        category = byTax?.id ?? categoryRaw;
+        taxonomyCategory = categoryRaw;
+      }
+    } else if (group !== 'all') {
+      category = group;
+      taxonomyCategory = primaryFilterToTaxonomySlug(group);
+    }
+
+    const [result, taxonomy] = await Promise.all([
       listSoftwareProjectCards({
         q: q || undefined,
+        taxonomyCategory,
+        child: child === 'all' ? undefined : child,
         group: group === 'all' ? undefined : group,
         more: more.length ? more : undefined,
-        category: industry === 'all' ? undefined : industry,
         page,
         pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
       }),
-      listSoftwareCategories(),
+      listShowcaseTaxonomy(),
     ]);
-    const industries = categories.map((cat) => ({
-      id: cat.slug,
-      label: cat.name,
-      slug: cat.slug,
-    }));
+
+    const softwareMain = taxonomy.mains.find((m) => m.slug === 'software');
+    const softwareCats = taxonomy.categories.filter((c) => c.main_category_id === softwareMain?.id);
+    const catById = new Map(softwareCats.map((c) => [c.id, c]));
+    const childOptions = taxonomy.children
+      .filter((ch) => catById.has(ch.category_id))
+      .map((ch) => ({
+        id: ch.id,
+        label: ch.name,
+        slug: ch.slug,
+        categorySlug: catById.get(ch.category_id)?.slug,
+      }));
+
     softwareBlock = (
       <Suspense fallback={<SoftwareFallback />}>
         <SoftwareCatalog
           initialFilters={{
             q: q || '',
+            category,
             group,
-            industry,
+            child,
             more,
             page,
           }}
           initialData={result}
-          industries={industries}
+          childOptions={childOptions}
         />
       </Suspense>
     );

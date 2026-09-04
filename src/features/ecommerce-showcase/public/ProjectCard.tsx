@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import type { EcommerceProjectCard } from '../types';
 import { websiteDetailUrl } from '../utils/filters';
-import { CardStartingPrice, CardTechIcons } from './CardTechIcons';
+import { CardTechIcons } from './CardTechIcons';
 import { ShowcaseImage } from './ShowcaseImage';
 
 export function ProjectCard({
@@ -91,8 +91,7 @@ export function ProjectCard({
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <CardStartingPrice />
+          <div className="flex items-center justify-end gap-3">
             <CardTechIcons seed={project.id} stack={project.technology_stack} />
           </div>
         </div>
@@ -148,8 +147,7 @@ export function ProjectCard({
             <p className="mt-1.5 line-clamp-1 text-sm text-text-secondary">{project.short_description}</p>
           ) : null}
         </div>
-        <div className="mt-auto flex items-center justify-between gap-3">
-          <CardStartingPrice />
+        <div className="mt-auto flex items-center justify-end gap-3">
           <CardTechIcons seed={project.id} stack={project.technology_stack} />
         </div>
         <Link

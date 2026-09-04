@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
 import {
   parseSoftwareGroupParam,
   parseSoftwareMoreParam,
-  serializeSoftwareMoreParam,
+  primaryFilterToTaxonomySlug,
   SOFTWARE_GALLERY_PAGE_SIZE,
   SOFTWARE_MORE_FILTERS,
   SOFTWARE_PRIMARY_FILTERS,
@@ -24,8 +24,8 @@ const SOFTWARE_LISTING_KEY = 'software-listing' as const;
 
 type CatalogFilters = {
   q: string;
-  group: string;
-  industry: string;
+  category: string;
+  child: string;
   more: SoftwareMoreFilterId[];
   page: number;
 };
@@ -35,8 +35,8 @@ function softwareListingQueryKey(filters: CatalogFilters & { pageSize: number })
     SOFTWARE_LISTING_KEY,
     {
       q: filters.q || '',
-      group: filters.group || 'all',
-      industry: filters.industry || 'all',
+      category: filters.category || 'all',
+      child: filters.child || 'all',
       more: filters.more.slice().sort().join(','),
       page: filters.page,
       pageSize: filters.pageSize,
@@ -49,10 +49,9 @@ async function fetchListing(params: CatalogFilters & { pageSize: number }): Prom
   search.set('page', String(params.page));
   search.set('pageSize', String(params.pageSize));
   if (params.q) search.set('q', params.q);
-  if (params.group && params.group !== 'all') search.set('group', params.group);
-  if (params.industry && params.industry !== 'all') search.set('industry', params.industry);
-  const more = serializeSoftwareMoreParam(params.more);
-  if (more) search.set('more', more);
+  if (params.category && params.category !== 'all') search.set('category', params.category);
+  if (params.child && params.child !== 'all') search.set('child', params.child);
+  if (params.more.length) search.set('more', params.more.join(','));
   const res = await fetch(`/api/software/projects?${search.toString()}`);
   if (!res.ok) throw new Error('Failed to load software');
   return (await res.json()) as SoftwareListResult;
@@ -72,41 +71,55 @@ function SoftwareGridSkeleton({ count = 6 }: { count?: number }) {
   );
 }
 
+function resolveCategoryFromUrl(
+  searchParams: URLSearchParams,
+  initialCategory: string
+): string {
+  const category = (searchParams.get('category') ?? '').trim();
+  if (category && category !== 'all') {
+    // New taxonomy param — ignore legacy industry collision when it matches a primary filter id
+    const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
+    if (primaryIds.has(category as (typeof SOFTWARE_PRIMARY_FILTERS)[number]['id'])) {
+      return category;
+    }
+    // If category looks like taxonomy slug from primary filters
+    const byTax = SOFTWARE_PRIMARY_FILTERS.find((f) => f.taxonomySlug === category);
+    if (byTax) return byTax.id;
+  }
+  const group = parseSoftwareGroupParam(searchParams.get('group'), searchParams.get('solutionGroup'));
+  if (group !== 'all') return group;
+  return initialCategory || 'all';
+}
+
 function readCatalogFilters(
   searchParams: URLSearchParams,
   initial: CatalogFilters
 ): CatalogFilters {
-  const group = parseSoftwareGroupParam(
-    searchParams.get('group'),
-    searchParams.get('solutionGroup'),
-    initial.group
-  );
-  const industry =
-    (searchParams.get('industry') ?? searchParams.get('category') ?? initial.industry ?? 'all').trim() ||
-    'all';
+  const category = resolveCategoryFromUrl(searchParams, initial.category);
+  const child = (searchParams.get('child') ?? initial.child ?? 'all').trim() || 'all';
   const moreFromUrl = parseSoftwareMoreParam(searchParams.get('more'));
   const more = searchParams.has('more') ? moreFromUrl : initial.more;
   const q = (searchParams.get('q') ?? initial.q).trim();
   const page = Math.max(1, Number(searchParams.get('page') ?? initial.page ?? 1) || 1);
-  return { q, group, industry, more, page };
+  return { q, category, child, more, page };
 }
 
 export function SoftwareCatalog({
   initialFilters,
   initialData,
-  industries = [],
+  childOptions = [],
 }: {
   initialFilters: {
     q: string;
+    category?: string;
     group?: string;
     solutionGroup?: string;
-    industry?: string;
-    category?: string;
+    child?: string;
     more?: SoftwareMoreFilterId[];
     page: number;
   };
   initialData: SoftwareListResult;
-  industries?: Array<{ id: string; label: string; slug?: string }>;
+  childOptions?: Array<{ id: string; label: string; slug: string; categorySlug?: string }>;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -116,20 +129,23 @@ export function SoftwareCatalog({
 
   const normalizedInitial: CatalogFilters = {
     q: initialFilters.q || '',
-    group: parseSoftwareGroupParam(initialFilters.group, initialFilters.solutionGroup),
-    industry: (initialFilters.industry ?? initialFilters.category ?? 'all').trim() || 'all',
+    category:
+      initialFilters.category ||
+      parseSoftwareGroupParam(initialFilters.group, initialFilters.solutionGroup) ||
+      'all',
+    child: (initialFilters.child ?? 'all').trim() || 'all',
     more: initialFilters.more ?? [],
     page: initialFilters.page || 1,
   };
 
-  const { q, group, industry, more, page } = readCatalogFilters(searchParams, normalizedInitial);
+  const { q, category, child, more, page } = readCatalogFilters(searchParams, normalizedInitial);
   const pageSize = SOFTWARE_GALLERY_PAGE_SIZE;
   const [searchInput, setSearchInput] = useState(q);
 
-  /** Drop legacy aliases; keep explore pillar `type=software` when on /explore. */
   const sanitizeListingParams = (params: URLSearchParams) => {
     params.delete('solutionGroup');
-    params.delete('category');
+    params.delete('group');
+    params.delete('industry');
     if (isExploreSoftware) params.set('type', 'software');
     else params.delete('type');
   };
@@ -153,7 +169,6 @@ export function SoftwareCatalog({
       });
     }, 300);
     return () => window.clearTimeout(handle);
-    // sanitizeListingParams is stable for the pathname lifetime
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput, q, pathname, router, searchParams, isExploreSoftware]);
 
@@ -168,24 +183,26 @@ export function SoftwareCatalog({
     });
   };
 
-  const writeGroup = (next: string) => {
+  const writeCategory = (next: string) => {
     writeParams((params) => {
-      if (next && next !== 'all') params.set('group', next);
-      else params.delete('group');
+      const slug = primaryFilterToTaxonomySlug(next) ?? (next !== 'all' ? next : undefined);
+      if (slug) params.set('category', slug);
+      else params.delete('category');
+      params.delete('child');
+      params.delete('more');
     });
   };
 
-  const writeIndustry = (next: string) => {
+  const writeChild = (next: string) => {
     writeParams((params) => {
-      if (next && next !== 'all') params.set('industry', next);
-      else params.delete('industry');
+      if (next && next !== 'all') params.set('child', next);
+      else params.delete('child');
     });
   };
 
   const writeMore = (next: SoftwareMoreFilterId[]) => {
     writeParams((params) => {
-      const serialized = serializeSoftwareMoreParam(next);
-      if (serialized) params.set('more', serialized);
+      if (next.length) params.set('more', next.join(','));
       else params.delete('more');
     });
   };
@@ -215,18 +232,25 @@ export function SoftwareCatalog({
     });
   };
 
-  const queryKey = softwareListingQueryKey({ q, group, industry, more, page, pageSize });
+  const taxonomySlug = primaryFilterToTaxonomySlug(category) ?? (category !== 'all' ? category : undefined);
+
+  const visibleChildren = useMemo(() => {
+    if (!taxonomySlug) return childOptions;
+    return childOptions.filter((c) => !c.categorySlug || c.categorySlug === taxonomySlug);
+  }, [childOptions, taxonomySlug]);
+
+  const queryKey = softwareListingQueryKey({ q, category, child, more, page, pageSize });
 
   const matchesInitial =
     q === normalizedInitial.q &&
-    group === normalizedInitial.group &&
-    industry === normalizedInitial.industry &&
+    category === normalizedInitial.category &&
+    child === normalizedInitial.child &&
     more.slice().sort().join(',') === normalizedInitial.more.slice().sort().join(',') &&
     page === normalizedInitial.page;
 
   const { data, isFetching, isError, isPending, refetch, isPlaceholderData, isLoading } = useQuery({
     queryKey,
-    queryFn: () => fetchListing({ q, group, industry, more, page, pageSize }),
+    queryFn: () => fetchListing({ q, category, child, more, page, pageSize }),
     initialData: matchesInitial ? initialData : undefined,
     placeholderData: keepPreviousData,
     staleTime: STALE_PUBLIC_LISTING,
@@ -235,9 +259,7 @@ export function SoftwareCatalog({
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const hasFilters = Boolean(
-    q || (group && group !== 'all') || (industry && industry !== 'all') || more.length > 0
-  );
+  const hasFilters = Boolean(q || (category && category !== 'all') || (child && child !== 'all') || more.length > 0);
   const showGridSkeleton = isPending || isLoading || (isFetching && isPlaceholderData);
   const showEmpty = !showGridSkeleton && !isError && items.length === 0;
   const showingFrom = items.length === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -245,60 +267,32 @@ export function SoftwareCatalog({
 
   return (
     <>
-      <div
-        className={
-          industries.length > 0
-            ? 'mb-2.5 grid grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-2 sm:mb-3'
-            : 'mb-2.5 sm:mb-3'
-        }
-      >
-        <div className="min-w-0">
-          <label htmlFor="software-catalog-search" className="sr-only">
-            Search software solutions
-          </label>
-          <input
-            id="software-catalog-search"
-            type="search"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Search software solutions..."
-            className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
-          />
-        </div>
-        {industries.length > 0 ? (
-          <div className="min-w-0">
-            <label htmlFor="software-industry-filter" className="sr-only">
-              Industry
-            </label>
-            <select
-              id="software-industry-filter"
-              value={industry}
-              onChange={(event) => writeIndustry(event.target.value)}
-              className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-2.5 text-xs text-text-primary outline-none focus:border-[#2563eb] sm:px-3 sm:text-sm"
-            >
-              <option value="all">All industries</option>
-              {industries.map((item) => (
-                <option key={item.id} value={item.slug ?? item.id}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        ) : null}
+      <div className="mb-2.5 sm:mb-3">
+        <label htmlFor="software-catalog-search" className="sr-only">
+          Search software solutions
+        </label>
+        <input
+          id="software-catalog-search"
+          type="search"
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+          placeholder="Search software solutions..."
+          className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary outline-none focus:border-[#2563eb] sm:px-4"
+        />
       </div>
 
       <div
         className="flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="group"
-        aria-label="Solution type filters"
+        aria-label="Category filters"
       >
         {SOFTWARE_PRIMARY_FILTERS.map((item) => {
-          const active = group === item.id;
+          const active = category === item.id || (item.taxonomySlug != null && category === item.taxonomySlug);
           return (
             <button
               key={item.id}
               type="button"
-              onClick={() => writeGroup(item.id)}
+              onClick={() => writeCategory(item.id)}
               className={
                 active
                   ? 'shrink-0 rounded-full bg-[#0f2744] px-2.5 py-1 text-xs font-semibold text-white'
@@ -311,6 +305,39 @@ export function SoftwareCatalog({
         })}
         <SoftwareMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
       </div>
+
+      {visibleChildren.length > 0 && category !== 'all' ? (
+        <div className="mt-2.5 flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <button
+            type="button"
+            onClick={() => writeChild('all')}
+            className={
+              child === 'all'
+                ? 'shrink-0 rounded-full bg-emerald-700 px-2.5 py-1 text-xs font-semibold text-white'
+                : 'shrink-0 rounded-full border border-border-subtle px-2.5 py-1 text-xs font-medium text-text-secondary'
+            }
+          >
+            All
+          </button>
+          {visibleChildren.map((item) => {
+            const active = child === item.slug;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => writeChild(item.slug)}
+                className={
+                  active
+                    ? 'shrink-0 rounded-full bg-emerald-700 px-2.5 py-1 text-xs font-semibold text-white'
+                    : 'shrink-0 rounded-full border border-border-subtle px-2.5 py-1 text-xs font-medium text-text-secondary'
+                }
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
 
       {more.length > 0 ? (
         <div className="mt-2.5 flex flex-wrap gap-1.5">

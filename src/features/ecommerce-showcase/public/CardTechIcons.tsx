@@ -156,6 +156,7 @@ export function CardTechIcons({
   );
 }
 
+/** @deprecated Public pricing removed — kept as no-op for any residual imports. */
 export function CardStartingPrice() {
-  return <p className="text-sm font-semibold text-text-primary">Starting from ৳10K</p>;
+  return null;
 }

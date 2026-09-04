@@ -2,11 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { solutionGroupLabel } from '../config/constants';
 import type { SoftwareProjectCard } from '../types';
-import { formatStartingPrice } from './format-price';
 
 export function softwareDetailUrl(slug: string): string {
   return `/software/${slug}`;
@@ -25,8 +23,11 @@ export function SoftwareCard({
   const href = softwareDetailUrl(project.slug);
   const cover = project.cover_card_url ?? project.cover_detail_url;
   const loadEager = eager || priority;
-  const groupLabel = solutionGroupLabel(project.solution_group);
-  const industryLine = project.industry ?? project.business_type ?? project.short_description;
+  const categoryLabel =
+    project.taxonomy_category_name ?? project.child_category_name ?? project.category_name ?? 'Software';
+  const outcome =
+    project.feature_summary ?? project.short_description ?? project.industry ?? project.business_type;
+  const features = project.primary_features?.slice(0, 3) ?? [];
 
   const prefetchDetail = () => {
     router.prefetch(href);
@@ -68,7 +69,7 @@ export function SoftwareCard({
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-            {groupLabel}
+            {categoryLabel}
           </p>
           <h4 className="mt-1 font-display text-lg font-bold leading-snug text-text-primary">
             <Link
@@ -81,24 +82,29 @@ export function SoftwareCard({
               {project.title}
             </Link>
           </h4>
-          {industryLine ? (
-            <p className="mt-1 line-clamp-2 text-sm text-text-secondary">{industryLine}</p>
-          ) : null}
+          {outcome ? <p className="mt-1 line-clamp-2 text-sm text-text-secondary">{outcome}</p> : null}
         </div>
-        <p className="mt-auto text-sm font-semibold text-text-primary">
-          {formatStartingPrice(project.starting_price, project.price_suffix, project.currency)}
-        </p>
+        {features.length > 0 ? (
+          <ul className="mt-1 space-y-1.5">
+            {features.map((feature) => (
+              <li key={feature.id} className="flex items-start gap-2 text-sm text-text-secondary">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden />
+                <span className="line-clamp-1">{feature.title}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <Link
           href={href}
           prefetch={false}
           onMouseEnter={prefetchDetail}
           onFocus={prefetchDetail}
           className={cn(
-            'inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold',
+            'mt-auto inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold',
             'bg-[#0f2744] text-white transition-colors hover:bg-[#16375f]'
           )}
         >
-          View Software
+          Explore Software
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
@@ -117,8 +123,9 @@ export function SoftwareCardSkeleton() {
         <div className="h-3 w-24 animate-pulse rounded bg-background-soft" />
         <div className="mt-1 h-5 w-3/4 animate-pulse rounded bg-background-soft" />
         <div className="h-4 w-full animate-pulse rounded bg-background-soft" />
-        <div className="mt-auto h-4 w-32 animate-pulse rounded bg-background-soft" />
-        <div className="h-10 w-full animate-pulse rounded-xl bg-background-soft" />
+        <div className="h-3 w-5/6 animate-pulse rounded bg-background-soft" />
+        <div className="h-3 w-4/6 animate-pulse rounded bg-background-soft" />
+        <div className="mt-auto h-10 w-full animate-pulse rounded-xl bg-background-soft" />
       </div>
     </div>
   );

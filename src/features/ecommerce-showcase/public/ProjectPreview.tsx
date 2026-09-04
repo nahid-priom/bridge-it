@@ -8,6 +8,7 @@ import { CardTechIcons } from './CardTechIcons';
 import { LeadForm } from './LeadForm';
 import type { EcommerceProjectDetail } from '../types';
 import { INDUSTRIES } from '../config/constants';
+import { ROUTES } from '@/lib/routes';
 
 function industryLabel(value: string | null | undefined) {
   if (!value) return null;
@@ -110,6 +111,21 @@ export function ProjectPreview({ project }: { project: EcommerceProjectDetail })
             <p className="whitespace-pre-line leading-relaxed text-text-secondary">{project.full_description}</p>
           </section>
         ) : null}
+
+        <section className="mt-10 max-w-3xl rounded-2xl border border-border-subtle bg-surface px-6 py-6 lg:mt-14">
+          <h2 className="font-display text-lg font-black text-text-primary">
+            Need the complete business system?
+          </h2>
+          <p className="mt-1 text-sm text-text-secondary">
+            Pair this storefront with an E-commerce Admin for products, orders, inventory, courier and analytics.
+          </p>
+          <Link
+            href={`${ROUTES.softwareShowroom}?category=ecommerce-admin`}
+            className="mt-4 inline-flex h-10 items-center justify-center rounded-xl bg-[#0f2744] px-4 text-sm font-semibold text-white hover:bg-[#16375f]"
+          >
+            Explore E-commerce Admin
+          </Link>
+        </section>
       </div>
 
       <div className="fixed bottom-0 inset-x-0 z-40 border-t border-border-subtle bg-background/95 px-4 py-3 backdrop-blur lg:hidden">

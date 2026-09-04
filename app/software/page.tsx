@@ -6,13 +6,15 @@ import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { ROUTES } from '@/lib/routes';
 import {
-  listSoftwareCategories,
+  listShowcaseTaxonomy,
   listSoftwareProjectCards,
 } from '@/src/features/software-showcase/api/projects';
 import {
   parseSoftwareGroupParam,
   parseSoftwareMoreParam,
+  primaryFilterToTaxonomySlug,
   SOFTWARE_GALLERY_PAGE_SIZE,
+  SOFTWARE_PRIMARY_FILTERS,
 } from '@/src/features/software-showcase/config/constants';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
@@ -64,27 +66,52 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
   const sp = await searchParams;
   const q = first(sp.q).trim();
   const group = parseSoftwareGroupParam(first(sp.group), first(sp.solutionGroup));
-  const industry = first(sp.industry).trim() || first(sp.category).trim() || 'all';
+  const categoryRaw = first(sp.category).trim();
+  const child = first(sp.child).trim() || 'all';
   const more = parseSoftwareMoreParam(first(sp.more));
   const page = Math.max(1, Number(first(sp.page)) || 1);
 
-  const [result, categories] = await Promise.all([
+  const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
+  let category = 'all';
+  let taxonomyCategory: string | undefined;
+  if (categoryRaw && categoryRaw !== 'all') {
+    if (primaryIds.has(categoryRaw as (typeof SOFTWARE_PRIMARY_FILTERS)[number]['id'])) {
+      category = categoryRaw;
+      taxonomyCategory = primaryFilterToTaxonomySlug(categoryRaw);
+    } else {
+      const byTax = SOFTWARE_PRIMARY_FILTERS.find((f) => f.taxonomySlug === categoryRaw);
+      category = byTax?.id ?? categoryRaw;
+      taxonomyCategory = categoryRaw;
+    }
+  } else if (group !== 'all') {
+    category = group;
+    taxonomyCategory = primaryFilterToTaxonomySlug(group);
+  }
+
+  const [result, taxonomy] = await Promise.all([
     listSoftwareProjectCards({
       q: q || undefined,
+      taxonomyCategory,
+      child: child === 'all' ? undefined : child,
       group: group === 'all' ? undefined : group,
       more: more.length ? more : undefined,
-      category: industry === 'all' ? undefined : industry,
       page,
       pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
     }),
-    listSoftwareCategories(),
+    listShowcaseTaxonomy(),
   ]);
 
-  const industries = categories.map((cat) => ({
-    id: cat.slug,
-    label: cat.name,
-    slug: cat.slug,
-  }));
+  const softwareMain = taxonomy.mains.find((m) => m.slug === 'software');
+  const softwareCats = taxonomy.categories.filter((c) => c.main_category_id === softwareMain?.id);
+  const catById = new Map(softwareCats.map((c) => [c.id, c]));
+  const childOptions = taxonomy.children
+    .filter((ch) => catById.has(ch.category_id))
+    .map((ch) => ({
+      id: ch.id,
+      label: ch.name,
+      slug: ch.slug,
+      categorySlug: catById.get(ch.category_id)?.slug,
+    }));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -134,9 +161,9 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
         <div id="software-catalog">
           <Suspense fallback={<CatalogFallback />}>
             <SoftwareCatalog
-              initialFilters={{ q, group, industry, more, page }}
+              initialFilters={{ q, category, group, child, more, page }}
               initialData={result}
-              industries={industries}
+              childOptions={childOptions}
             />
           </Suspense>
         </div>

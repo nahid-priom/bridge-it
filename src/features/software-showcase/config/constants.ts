@@ -62,14 +62,33 @@ export type SoftwareSolutionGroupSlug = (typeof SOFTWARE_SOLUTION_GROUPS)[number
 export const SOFTWARE_PLATFORM_TYPES = ['web', 'mobile', 'web-mobile', 'saas'] as const;
 export type SoftwarePlatformType = (typeof SOFTWARE_PLATFORM_TYPES)[number];
 
-/** Primary listing chips — maps to one or more solution_group slugs. */
+/** Primary listing chips — maps to showcase taxonomy_category slug (+ legacy solution_group). */
 export const SOFTWARE_PRIMARY_FILTERS = [
-  { id: 'all', label: 'All', groups: undefined as SoftwareSolutionGroupSlug[] | undefined },
-  { id: 'erp', label: 'ERP', groups: ['erp-business-management'] as SoftwareSolutionGroupSlug[] },
-  { id: 'pos', label: 'POS', groups: ['pos-retail'] as SoftwareSolutionGroupSlug[] },
-  { id: 'crm', label: 'CRM', groups: ['crm-sales'] as SoftwareSolutionGroupSlug[] },
-  { id: 'hrm', label: 'HRM', groups: ['hrm-payroll'] as SoftwareSolutionGroupSlug[] },
+  { id: 'all', label: 'All', taxonomySlug: undefined as string | undefined, groups: undefined as SoftwareSolutionGroupSlug[] | undefined },
+  { id: 'erp', label: 'ERP', taxonomySlug: 'erp', groups: ['erp-business-management'] as SoftwareSolutionGroupSlug[] },
+  { id: 'pos', label: 'POS', taxonomySlug: 'pos', groups: ['pos-retail'] as SoftwareSolutionGroupSlug[] },
+  { id: 'crm', label: 'CRM', taxonomySlug: 'crm', groups: ['crm-sales'] as SoftwareSolutionGroupSlug[] },
+  { id: 'hrm', label: 'HRM', taxonomySlug: 'hrm', groups: ['hrm-payroll'] as SoftwareSolutionGroupSlug[] },
+  {
+    id: 'business-automation',
+    label: 'Automation',
+    taxonomySlug: 'business-automation',
+    groups: ['business-automation', 'inventory-warehouse', 'saas-platforms'] as SoftwareSolutionGroupSlug[],
+  },
+  {
+    id: 'ecommerce-admin',
+    label: 'E-com Admin',
+    taxonomySlug: 'ecommerce-admin',
+    groups: undefined as SoftwareSolutionGroupSlug[] | undefined,
+  },
 ] as const;
+
+/** Map legacy group id → taxonomy category slug for URL `category`. */
+export function primaryFilterToTaxonomySlug(id: string | null | undefined): string | undefined {
+  if (!id || id === 'all') return undefined;
+  const found = SOFTWARE_PRIMARY_FILTERS.find((f) => f.id === id);
+  return found?.taxonomySlug;
+}
 
 /** Secondary filters shown inside More Filters sheet. */
 export const SOFTWARE_MORE_FILTERS = [
