@@ -1,3 +1,4 @@
+import { ExploreOurWorkHeader } from '@/components/home/hero/ExploreOurWorkHeader';
 import { HomepageHero } from '@/components/home/hero/HomepageHero';
 import { MainCategoryStrip } from '@/components/home/hero/MainCategoryStrip';
 import { HomeGallery } from '@/src/features/ecommerce-showcase/public/HomeGallery';
@@ -22,6 +23,7 @@ export function HomePage({
     <>
       <HomepageHero />
       <MainCategoryStrip />
+      <ExploreOurWorkHeader />
       <HomeGallery sections={sections} legacySections={legacySections} />
       {softwareSections ? <SoftwareHomeGallery sections={softwareSections} /> : null}
       {creativeSections ? <CreativeMarketingHomeGallery sections={creativeSections} /> : null}

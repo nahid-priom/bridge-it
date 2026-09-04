@@ -290,18 +290,18 @@ body {
   }
 }
 
-/* Light theme: lighter blues; darkest stops = Explore Us primary (#2563eb / #1d4ed8) */
+/* Hero highlight: light blue → cyan → emerald (no muddy dark stops) */
 .hero-solutions-wave {
   background-image: linear-gradient(
     90deg,
-    #93c5fd 0%,
-    #60a5fa 22%,
-    #2563eb 48%,
-    #1d4ed8 72%,
-    #60a5fa 88%,
-    #93c5fd 100%
+    #7dd3fc 0%,
+    #38bdf8 18%,
+    #14c8e6 42%,
+    #22d3ee 58%,
+    #21d47b 82%,
+    #34d399 100%
   );
-  background-size: 250% 100%;
+  background-size: 220% 100%;
   background-position: 0% 50%;
   background-repeat: no-repeat;
   color: transparent;
@@ -310,17 +310,137 @@ body {
   background-clip: text;
 }
 
-/* Dark theme: bright/light blues; darkest stops still Explore Us primary */
 .dark .hero-solutions-wave {
   background-image: linear-gradient(
     90deg,
-    #bfdbfe 0%,
-    #7dd3fc 20%,
-    #60a5fa 40%,
-    #2563eb 62%,
-    #1d4ed8 78%,
-    #7dd3fc 100%
+    #93c5fd 0%,
+    #60a5fa 16%,
+    #14c8e6 40%,
+    #22d3ee 58%,
+    #21d47b 80%,
+    #6ee7b7 100%
   );
+}
+
+/* Compact hero benefit icons — supporting accents, not primary content */
+.hero-benefit-icon {
+  display: inline-flex;
+  height: 1.625rem;
+  width: 1.625rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  transition: filter 200ms ease;
+}
+
+@media (min-width: 640px) {
+  .hero-benefit-icon {
+    height: 1.75rem;
+    width: 1.75rem;
+  }
+}
+
+.hero-benefit-icon--websites {
+  color: #146bff;
+  filter: drop-shadow(0 0 6px rgba(20, 107, 255, 0.35));
+}
+
+.hero-benefit-icon--software {
+  color: #14c8e6;
+  filter: drop-shadow(0 0 6px rgba(20, 200, 230, 0.35));
+}
+
+.hero-benefit-icon--marketing {
+  color: #21d47b;
+  filter: drop-shadow(0 0 6px rgba(33, 212, 123, 0.35));
+}
+
+.group:hover .hero-benefit-icon--websites {
+  filter: drop-shadow(0 0 10px rgba(20, 107, 255, 0.5));
+}
+
+.group:hover .hero-benefit-icon--software {
+  filter: drop-shadow(0 0 10px rgba(20, 200, 230, 0.5));
+}
+
+.group:hover .hero-benefit-icon--marketing {
+  filter: drop-shadow(0 0 10px rgba(33, 212, 123, 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-benefit-icon,
+  .group:hover .hero-benefit-icon--websites,
+  .group:hover .hero-benefit-icon--software,
+  .group:hover .hero-benefit-icon--marketing {
+    filter: none;
+    transition: none;
+  }
+}
+
+/* Smaller service category icons for What We Build cards */
+.service-category-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  transition: filter 200ms ease, transform 200ms ease;
+}
+
+@media (min-width: 640px) {
+  .service-category-icon {
+    height: 2.25rem;
+    width: 2.25rem;
+  }
+}
+
+.service-category-icon--websites {
+  color: #60a5fa;
+  background: rgba(37, 99, 235, 0.12);
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.25));
+}
+
+.service-category-icon--software {
+  color: #22d3ee;
+  background: rgba(6, 182, 212, 0.12);
+  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.25));
+}
+
+.service-category-icon--marketing {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.25));
+}
+
+.group:hover .service-category-icon {
+  transform: translateY(-1px);
+}
+
+.dark .service-category-icon--websites {
+  color: #7dd3fc;
+  background: rgba(37, 99, 235, 0.18);
+}
+
+.dark .service-category-icon--software {
+  color: #67e8f9;
+  background: rgba(6, 182, 212, 0.18);
+}
+
+.dark .service-category-icon--marketing {
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-category-icon,
+  .group:hover .service-category-icon {
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -388,12 +508,12 @@ body {
   overflow: hidden;
   isolation: isolate;
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.92) 0%, rgba(239, 246, 255, 0.88) 48%, rgba(219, 234, 254, 0.72) 100%);
-  border: 1px solid rgba(37, 99, 235, 0.16);
+    linear-gradient(165deg, rgba(255, 255, 255, 0.94) 0%, rgba(241, 245, 249, 0.9) 100%);
+  border: 1px solid rgba(37, 99, 235, 0.14);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 10px 24px -16px rgba(37, 99, 235, 0.28),
-    0 2px 6px -2px rgba(15, 23, 42, 0.06);
+    0 10px 24px -16px rgba(15, 23, 42, 0.12),
+    0 2px 6px -2px rgba(15, 23, 42, 0.05);
 }
 
 .main-category-card::before {
@@ -401,85 +521,96 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background: radial-gradient(120% 80% at 50% -10%, rgba(37, 99, 235, 0.14), transparent 55%);
+  background: radial-gradient(120% 80% at 50% -10%, rgba(37, 99, 235, 0.1), transparent 55%);
   opacity: 1;
   z-index: 0;
 }
 
+/* Soft category accent glow along the bottom edge */
 .main-category-card::after {
   content: '';
   pointer-events: none;
   position: absolute;
-  top: -40%;
-  left: 0;
-  width: 42%;
-  height: 180%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(37, 99, 235, 0) 20%,
-    rgba(37, 99, 235, 0.14) 48%,
-    rgba(6, 182, 212, 0.1) 58%,
-    transparent 82%
-  );
-  opacity: 0;
+  left: 12%;
+  right: 12%;
+  bottom: -20%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--card-accent-glow, rgba(37, 99, 235, 0.28)), transparent 70%);
+  opacity: 0.7;
   z-index: 0;
-  animation: diamond-card-sheen 6.5s ease-in-out infinite;
 }
 
-li:nth-child(1) .main-category-card::after {
-  animation-delay: 0s;
+.main-category-card--websites {
+  --card-accent-glow: rgba(37, 99, 235, 0.32);
+  border-color: rgba(37, 99, 235, 0.18);
 }
 
-li:nth-child(2) .main-category-card::after {
-  animation-delay: 2.1s;
+.main-category-card--software {
+  --card-accent-glow: rgba(6, 182, 212, 0.3);
+  border-color: rgba(6, 182, 212, 0.18);
 }
 
-li:nth-child(3) .main-category-card::after {
-  animation-delay: 4s;
+.main-category-card--marketing {
+  --card-accent-glow: rgba(16, 185, 129, 0.28);
+  border-color: rgba(16, 185, 129, 0.18);
 }
 
 .dark .main-category-card {
   background:
-    linear-gradient(165deg, rgba(49, 63, 110, 0.78) 0%, rgba(36, 48, 88, 0.86) 52%, rgba(30, 41, 75, 0.8) 100%);
-  border-color: rgba(96, 165, 250, 0.28);
+    linear-gradient(165deg, rgba(9, 23, 45, 0.92) 0%, rgba(7, 18, 38, 0.96) 100%);
+  border-color: rgba(96, 165, 250, 0.2);
   box-shadow:
-    0 1px 0 rgba(147, 197, 253, 0.12) inset,
-    0 14px 28px -18px rgba(56, 189, 248, 0.45),
+    0 1px 0 rgba(147, 197, 253, 0.08) inset,
+    0 14px 28px -18px rgba(0, 0, 0, 0.45),
     0 2px 8px -2px rgba(0, 0, 0, 0.28);
 }
 
 .dark .main-category-card::before {
-  background: radial-gradient(120% 80% at 50% -10%, rgba(56, 189, 248, 0.22), transparent 55%);
+  background: radial-gradient(120% 80% at 50% -10%, rgba(56, 189, 248, 0.1), transparent 55%);
 }
 
-.dark .main-category-card::after {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(56, 189, 248, 0) 20%,
-    rgba(56, 189, 248, 0.22) 48%,
-    rgba(34, 211, 238, 0.14) 58%,
-    transparent 82%
-  );
+.dark .main-category-card--websites {
+  border-color: rgba(96, 165, 250, 0.28);
+  --card-accent-glow: rgba(37, 99, 235, 0.4);
+}
+
+.dark .main-category-card--software {
+  border-color: rgba(34, 211, 238, 0.28);
+  --card-accent-glow: rgba(6, 182, 212, 0.38);
+}
+
+.dark .main-category-card--marketing {
+  border-color: rgba(52, 211, 153, 0.28);
+  --card-accent-glow: rgba(16, 185, 129, 0.36);
 }
 
 .main-category-card:hover {
-  border-color: rgba(37, 99, 235, 0.42);
+  border-color: rgba(37, 99, 235, 0.36);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 16px 32px -16px rgba(37, 99, 235, 0.4),
-    0 0 24px -8px rgba(37, 99, 235, 0.35),
-    0 4px 10px -3px rgba(15, 23, 42, 0.1);
+    0 16px 32px -16px rgba(37, 99, 235, 0.28),
+    0 4px 10px -3px rgba(15, 23, 42, 0.08);
 }
 
 .dark .main-category-card:hover {
-  border-color: rgba(125, 211, 252, 0.55);
   box-shadow:
-    0 1px 0 rgba(186, 230, 253, 0.16) inset,
-    0 18px 36px -16px rgba(56, 189, 248, 0.5),
-    0 0 28px -6px rgba(56, 189, 248, 0.4),
-    0 4px 12px -3px rgba(0, 0, 0, 0.35);
+    0 1px 0 rgba(186, 230, 253, 0.12) inset,
+    0 18px 36px -16px rgba(0, 0, 0, 0.5),
+    0 0 24px -8px var(--card-accent-glow, rgba(56, 189, 248, 0.35)),
+    0 4px 12px -3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .main-category-card--websites:hover {
+  border-color: rgba(125, 211, 252, 0.45);
+}
+
+.dark .main-category-card--software:hover {
+  border-color: rgba(103, 232, 249, 0.45);
+}
+
+.dark .main-category-card--marketing:hover {
+  border-color: rgba(110, 231, 183, 0.45);
 }
 
 .main-category-icon {
@@ -667,8 +798,7 @@ li:nth-child(3) .main-category-card::after {
     animation: none;
   }
 
-  .main-category-icon::after,
-  .main-category-card::after {
+  .main-category-icon::after {
     animation: none;
     opacity: 0;
   }

@@ -24,7 +24,7 @@ export function HomeGallery({
     <section
       id="website-designs"
       aria-label="Website Designs"
-      className="mt-2 border-t border-border-subtle/70 pt-4 md:mt-4 md:pt-6"
+      className="border-t-0 pt-2 md:pt-4"
     >
       {websiteSections.map((section) => (
         <HomeShowcaseSection
