@@ -16,11 +16,6 @@ import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
 import { LISTING_LIMIT, websitesListingCopy } from '@/src/features/ecommerce-showcase/public/websites-listing';
 import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
-import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
-
-function CatalogFallback() {
-  return <ProjectGridSkeleton count={6} />;
-}
 
 export const revalidate = 60;
 
@@ -132,7 +127,7 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
         resultCount={result.total}
       >
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<CatalogFallback />}>
+          <Suspense fallback={null}>
             <WebsitesCatalog
               initialFilters={{
                 q: filters.q ?? '',

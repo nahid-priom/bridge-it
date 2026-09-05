@@ -18,12 +18,10 @@ import {
   lookupRedirect,
   productPath,
 } from '@/src/features/catalog';
-import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 import { CREATIVE_MARKETING_GALLERY_PAGE_SIZE } from '@/src/features/creative-marketing-showcase/config/constants';
 import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
 import { creativeMarketingListingQueryKey } from '@/src/features/creative-marketing-showcase/utils/query-keys';
-import { CreativeMarketingCardSkeleton } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
 
 export const revalidate = 60;
 
@@ -144,15 +142,7 @@ export default async function MarketingIndustryPage({ params, searchParams }: Pr
         resultCount={result.total}
       >
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense
-            fallback={
-              <div className={CATALOG_LISTING_GRID_CLASS}>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <CreativeMarketingCardSkeleton key={i} />
-                ))}
-              </div>
-            }
-          >
+          <Suspense fallback={null}>
             <CreativeMarketingCatalog
               initialFilters={{ q, page, industrySlug: industry.slug }}
               initialData={result}

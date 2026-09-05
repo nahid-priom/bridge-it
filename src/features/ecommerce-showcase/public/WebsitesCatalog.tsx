@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
@@ -69,9 +69,10 @@ export function WebsitesCatalog({
   const viewParam = serializeFilterList(views) ?? '';
 
   const matchesInitial =
-    q === initialFilters.q &&
+    q === (initialFilters.q || '') &&
     categoryKey === (initialFilters.industrySlug || initialFilters.category || 'all') &&
-    viewKey === (initialFilters.view || 'all');
+    viewKey === (initialFilters.view || 'all') &&
+    industrySlug === (lockedIndustrySlug || initialFilters.industrySlug || '');
 
   const {
     data,
@@ -82,6 +83,7 @@ export function WebsitesCatalog({
     refetch,
     fetchNextPage,
     hasNextPage,
+    isPlaceholderData,
   } = useInfiniteQuery({
     queryKey: showcaseListingQueryKey({
       q,
@@ -110,7 +112,9 @@ export function WebsitesCatalog({
           pageParams: [0],
         }
       : undefined,
+    placeholderData: keepPreviousData,
     staleTime: STALE_PUBLIC_LISTING,
+    refetchOnMount: false,
   });
 
   const items = useMemo(
@@ -119,8 +123,11 @@ export function WebsitesCatalog({
   );
   const total = data?.pages[0]?.total ?? 0;
   const hasFilters = Boolean(q || views.length || categories.length || industrySlug);
-  const showGridSkeleton = isPending && !data;
-  const isFilterRefreshing = Boolean(isFetching && !isFetchingNextPage && data);
+  // Never skeleton on isFetching — keep previous cards + opacity.
+  const showGridSkeleton = Boolean(isPending && !data);
+  const isFilterRefreshing = Boolean(
+    isFetching && !isFetchingNextPage && (isPlaceholderData || data)
+  );
   const showEmpty = !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);
   const remaining = Math.max(0, total - items.length);
   const showingFrom = items.length === 0 ? 0 : 1;

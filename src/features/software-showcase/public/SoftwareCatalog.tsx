@@ -65,7 +65,9 @@ function SoftwareGridSkeleton({ count = 6 }: { count?: number }) {
       aria-label="Loading software"
     >
       {Array.from({ length: count }).map((_, index) => (
-        <SoftwareCardSkeleton key={index} />
+        <div key={index} className={index >= 4 ? 'max-md:hidden' : undefined}>
+          <SoftwareCardSkeleton />
+        </div>
       ))}
     </div>
   );
@@ -230,6 +232,7 @@ export function SoftwareCatalog({
     initialData: matchesInitial ? initialData : undefined,
     placeholderData: keepPreviousData,
     staleTime: STALE_PUBLIC_LISTING,
+    refetchOnMount: false,
   });
 
   const queryClient = useQueryClient();
@@ -288,7 +291,8 @@ export function SoftwareCatalog({
       businessSizes.length > 0 ||
       (sort && sort !== 'popular')
   );
-  const showGridSkeleton = isPending && !data;
+  // Never skeleton on isFetching — keep previous cards (placeholderData) + opacity.
+  const showGridSkeleton = Boolean(isPending && !data);
   const isFilterRefreshing = Boolean(isFetching && isPlaceholderData && data);
   const showEmpty =
     !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);

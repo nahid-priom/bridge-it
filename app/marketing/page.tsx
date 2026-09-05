@@ -21,7 +21,6 @@ import {
 } from '@/src/features/creative-marketing-showcase/config/constants';
 import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
 import { creativeMarketingListingQueryKey } from '@/src/features/creative-marketing-showcase/utils/query-keys';
-import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;
 
@@ -133,7 +132,7 @@ export default async function MarketingShowroomPage({ searchParams }: { searchPa
         resultCount={result.total}
       >
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<CatalogGridSkeleton count={6} />}>
+          <Suspense fallback={null}>
             <CreativeMarketingCatalog
               initialFilters={{ q, group, more, page }}
               initialData={result}

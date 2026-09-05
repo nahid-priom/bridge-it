@@ -1,5 +1,5 @@
-import { CatalogPageSkeleton } from '@/src/components/skeletons/CatalogPageSkeleton';
+import { CatalogAboveFoldSkeleton } from '@/src/components/skeletons/CatalogPageSkeleton';
 
 export default function SoftwareLoading() {
-  return <CatalogPageSkeleton />;
+  return <CatalogAboveFoldSkeleton />;
 }

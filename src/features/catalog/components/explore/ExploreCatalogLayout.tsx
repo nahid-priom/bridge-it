@@ -5,7 +5,6 @@ import { CatalogSidebar } from './CatalogSidebar';
 import { CatalogToolbar } from './CatalogToolbar';
 import { CatalogResultsProvider } from './CatalogResultsContext';
 import type { CatalogSidebarIndustry } from './types';
-import { SidebarSkeleton } from '@/src/components/skeletons/SidebarSkeleton';
 
 export function ExploreCatalogLayout({
   activeRoot,
@@ -44,9 +43,8 @@ export function ExploreCatalogLayout({
               }
             >
               <div className="rounded-2xl border border-border-subtle bg-surface/95 p-3 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:bg-surface/85 dark:shadow-black/25 sm:p-4">
-                <Suspense
-                  fallback={<SidebarSkeleton className="border-0 bg-transparent p-0 shadow-none" />}
-                >
+                {/* Suspense for useSearchParams; null avoids filter-rail skeleton flash */}
+                <Suspense fallback={null}>
                   <CatalogSidebar
                     activeRoot={activeRoot}
                     activeIndustrySlug={activeIndustrySlug}
@@ -73,11 +71,7 @@ export function ExploreCatalogLayout({
             {beforeToolbar}
 
             {toolbarSlot ?? (
-              <Suspense
-                fallback={
-                  <div className="mb-4 h-10 max-w-md animate-pulse rounded-xl bg-surface motion-reduce:animate-none md:mb-5" />
-                }
-              >
+              <Suspense fallback={null}>
                 <CatalogToolbar
                   activeRoot={activeRoot}
                   activeIndustrySlug={activeIndustrySlug}

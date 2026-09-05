@@ -15,7 +15,12 @@ export { TabRowSkeleton } from './TabRowSkeleton';
 export { FilterSkeleton } from './FilterSkeleton';
 export { SidebarSkeleton } from './SidebarSkeleton';
 export { CatalogCardSkeleton, CatalogGridSkeleton } from './CatalogCardSkeleton';
-export { CatalogPageSkeleton, ExplorePortfolioSkeleton } from './CatalogPageSkeleton';
+export {
+  CatalogPageSkeleton,
+  CatalogAboveFoldSkeleton,
+  ExplorePortfolioSkeleton,
+  ProductAboveFoldSkeleton,
+} from './CatalogPageSkeleton';
 export { ProductHeroSkeleton } from './ProductHeroSkeleton';
 export { ListSkeleton } from './ListSkeleton';
 export { DashboardSkeleton } from './DashboardSkeleton';

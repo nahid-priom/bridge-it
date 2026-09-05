@@ -22,7 +22,6 @@ import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
 import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
 import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
-import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
 
 export const revalidate = 60;
 
@@ -153,7 +152,7 @@ export default async function WebsitesIndustryPage({ params, searchParams }: Pro
         resultCount={result.total}
       >
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<ProjectGridSkeleton count={6} />}>
+          <Suspense fallback={null}>
             <WebsitesCatalog
               initialFilters={{
                 q: q ?? '',

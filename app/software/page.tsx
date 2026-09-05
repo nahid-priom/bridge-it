@@ -33,7 +33,6 @@ import {
 } from '@/src/features/software-showcase/config/constants';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
-import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;
 
@@ -78,10 +77,6 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
     ],
     noIndex,
   });
-}
-
-function CatalogFallback() {
-  return <CatalogGridSkeleton count={6} />;
 }
 
 export default async function SoftwareShowroomPage({ searchParams }: { searchParams: SearchParams }) {
@@ -198,7 +193,8 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
         resultCount={result.total}
       >
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<CatalogFallback />}>
+          {/* Suspense required for useSearchParams; null avoids stacked grid skeletons */}
+          <Suspense fallback={null}>
             <SoftwareCatalog
               initialFilters={{
                 q,

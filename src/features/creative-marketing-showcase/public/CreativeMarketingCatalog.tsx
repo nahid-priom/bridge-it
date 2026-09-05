@@ -138,6 +138,7 @@ export function CreativeMarketingCatalog({
     initialData: matchesInitial ? initialData : undefined,
     placeholderData: keepPreviousData,
     staleTime: STALE_PUBLIC_LISTING,
+    refetchOnMount: false,
   });
 
   const queryClient = useQueryClient();
@@ -165,7 +166,8 @@ export function CreativeMarketingCatalog({
   const hasFilters = Boolean(
     q || (!industrySlug && group && group !== 'all') || (!industrySlug && more.length > 0) || industrySlug
   );
-  const showGridSkeleton = isPending && !data;
+  // Never skeleton on isFetching — keep previous cards (placeholderData) + opacity.
+  const showGridSkeleton = Boolean(isPending && !data);
   const isFilterRefreshing = Boolean(isFetching && isPlaceholderData && data);
   const showEmpty =
     !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);
@@ -187,7 +189,9 @@ export function CreativeMarketingCatalog({
       ) : showGridSkeleton ? (
         <div className={CATALOG_LISTING_GRID_CLASS} aria-busy="true">
           {Array.from({ length: 6 }).map((_, i) => (
-            <CreativeMarketingCardSkeleton key={i} />
+            <div key={i} className={i >= 4 ? 'max-md:hidden' : undefined}>
+              <CreativeMarketingCardSkeleton />
+            </div>
           ))}
         </div>
       ) : showEmpty ? (

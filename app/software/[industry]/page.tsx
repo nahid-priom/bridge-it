@@ -25,14 +25,13 @@ import {
 import {
   parseSoftwareBusinessSizeParam,
   parseSoftwareSortParam,
-  CATALOG_LISTING_GRID_CLASS,
 } from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { SOFTWARE_GALLERY_PAGE_SIZE } from '@/src/features/software-showcase/config/constants';
 import { specializedSlugsForIndustry } from '@/src/features/software-showcase/config/specialized-solutions';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
-import { SoftwareCard, SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
+import { SoftwareCard } from '@/src/features/software-showcase/public/SoftwareCard';
 import { SpecializedSolutionsSection } from '@/src/features/software-showcase/public/SpecializedSolutionsSection';
 import {
   FEED_MILL_ERP_SLUG,
@@ -264,15 +263,7 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
           </>
         ) : (
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <Suspense
-              fallback={
-                <div className={CATALOG_LISTING_GRID_CLASS}>
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <SoftwareCardSkeleton key={i} />
-                  ))}
-                </div>
-              }
-            >
+            <Suspense fallback={null}>
               <SoftwareCatalog
                 initialFilters={{
                   q,

@@ -47,7 +47,9 @@ export function CatalogGridSkeleton({
       aria-label="Loading catalog"
     >
       {Array.from({ length: count }).map((_, index) => (
-        <CatalogCardSkeleton key={index} />
+        <div key={index} className={index >= 4 ? 'max-md:hidden' : undefined}>
+          <CatalogCardSkeleton />
+        </div>
       ))}
     </div>
   );

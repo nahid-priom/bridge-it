@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
@@ -21,7 +20,6 @@ import {
   productPath,
 } from '@/src/features/catalog';
 import { DeferredRelatedSection } from '@/src/features/catalog/components/DeferredRelatedSection';
-import { ProductHeroSkeleton } from '@/src/components/skeletons/ProductHeroSkeleton';
 
 export const revalidate = 60;
 
@@ -141,9 +139,7 @@ export default async function WebsiteProductPage({ params, searchParams }: Props
       {!project.published ? (
         <p className="bg-amber-100 py-2 text-center text-sm text-amber-900">Draft preview — not public</p>
       ) : null}
-      <Suspense fallback={<ProductHeroSkeleton />}>
-        <ProjectPreview project={project} reviews={reviews} />
-      </Suspense>
+      <ProjectPreview project={project} reviews={reviews} />
       <DeferredRelatedSection>
         <WebsiteRelatedRail projectId={project.id} industryId={catalogProduct.industry_id} />
       </DeferredRelatedSection>

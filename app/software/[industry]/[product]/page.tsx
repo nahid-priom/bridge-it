@@ -1,14 +1,10 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { getCurrentProfile } from '@/lib/auth/get-current-user';
 import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/roles';
 import { getSoftwareProjectBySlug } from '@/src/features/software-showcase/api/projects';
-import {
-  SoftwarePreview,
-  SoftwarePreviewSkeleton,
-} from '@/src/features/software-showcase/public/SoftwarePreview';
+import { SoftwarePreview } from '@/src/features/software-showcase/public/SoftwarePreview';
 import {
   softwareShowcaseBreadcrumbJsonLd,
   softwareShowcaseServiceJsonLd,
@@ -154,9 +150,7 @@ export default async function SoftwareProductPage({ params, searchParams }: Prop
           Draft preview — not public
         </p>
       ) : null}
-      <Suspense fallback={<SoftwarePreviewSkeleton />}>
-        <SoftwarePreview project={project} reviews={reviews} faqs={faqs} />
-      </Suspense>
+      <SoftwarePreview project={project} reviews={reviews} faqs={faqs} />
       <DeferredRelatedSection>
         <SoftwareRelatedRail projectId={project.id} industryId={catalogProduct.industry_id} />
       </DeferredRelatedSection>
