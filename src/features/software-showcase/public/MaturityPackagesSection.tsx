@@ -35,7 +35,7 @@ export function MaturityPackagesSection({
       <p className="mt-1 max-w-2xl text-sm text-text-secondary">{intro}</p>
       <ul className={`mt-5 ${CATALOG_LISTING_GRID_CLASS}`}>
         {packages.map((project) => (
-          <li key={project.id}>
+          <li key={project.id} className="min-w-0 list-none">
             <SoftwareCard project={project} variant="home" />
           </li>
         ))}

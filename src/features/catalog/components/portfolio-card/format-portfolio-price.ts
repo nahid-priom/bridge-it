@@ -13,10 +13,9 @@ export function formatBDTPrice(amount: number): string {
  * custom → Custom Package
  * hidden → null
  */
-export function formatPortfolioPriceLabel(data: Pick<
-  PortfolioCardData,
-  'pricingMode' | 'price' | 'currency' | 'priceSuffix'
->): string | null {
+export function formatPortfolioPriceLabel(
+  data: Pick<PortfolioCardData, 'pricingMode' | 'price' | 'currency' | 'priceSuffix'>
+): string | null {
   const mode: PortfolioPricingMode = data.pricingMode;
   if (mode === 'hidden') return null;
   if (mode === 'custom') return 'Custom Package';
@@ -37,6 +36,29 @@ export function formatPortfolioPriceLabel(data: Pick<
   return suffix.startsWith('+') || suffix === '+'
     ? `${formatted}+`
     : `${formatted}${suffix}`;
+}
+
+export type PortfolioPriceDisplay = {
+  primary: string;
+  /** "Starting price" | "Pricing" — muted caption under the primary amount. */
+  caption: string;
+};
+
+/**
+ * Normalized price display for listing cards.
+ * Returns null when pricing should be hidden.
+ */
+export function formatPortfolioPrice(
+  data: Pick<PortfolioCardData, 'pricingMode' | 'price' | 'currency' | 'priceSuffix'>
+): PortfolioPriceDisplay | null {
+  const primary = formatPortfolioPriceLabel(data);
+  if (!primary) return null;
+
+  const mode = data.pricingMode;
+  if (mode === 'custom' || primary === 'Custom Package') {
+    return { primary, caption: 'Pricing' };
+  }
+  return { primary, caption: 'Starting price' };
 }
 
 export function resolvePricingMode(input: {

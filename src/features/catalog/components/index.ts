@@ -1,13 +1,12 @@
 export { CatalogBreadcrumb } from './CatalogBreadcrumb';
 export { IndustryCard } from './IndustryCard';
 export { IndustryGrid } from './IndustryGrid';
-export { CatalogProductCard } from './CatalogProductCard';
-export type { CatalogProductFeature } from './CatalogProductCard';
 export { CatalogPrice, formatCatalogPrice } from './CatalogPrice';
 export {
   PortfolioCard,
   PortfolioCardSkeleton,
   formatBDTPrice,
+  formatPortfolioPrice,
   formatPortfolioPriceLabel,
   resolvePricingMode,
   normalizePortfolioCardData,
@@ -15,18 +14,20 @@ export {
   normalizeSoftwareProject,
   normalizeMarketingProject,
   normalizeCatalogProductRef,
+  softwareDetailUrl,
+  creativeDetailUrl,
 } from './portfolio-card';
 export type {
   PortfolioCardData,
   PortfolioContentType,
   PortfolioPricingMode,
+  PortfolioPriceDisplay,
 } from './portfolio-card';
 export { PackageBadge } from './PackageBadge';
 export { CatalogCTA, consultationDeepLink } from './CatalogCTA';
 export { CatalogEmptyState } from './CatalogEmptyState';
 export { CatalogFaqList } from './CatalogFaqList';
 export { RelatedProducts } from './RelatedProducts';
-export { FeaturedBadge } from './FeaturedBadge';
 export { CatalogCoverImage } from './CatalogCoverImage';
 export { StarRating } from './StarRating';
 export { ProductReviews } from './ProductReviews';

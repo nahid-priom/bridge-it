@@ -43,7 +43,7 @@ export function ProjectGrid({
   }
 
   return (
-    <div
+    <ul
       className={cn(
         columns === 'home'
           ? `${CATALOG_LISTING_GRID_CLASS} max-md:[&>*:nth-child(n+5)]:hidden`
@@ -52,14 +52,15 @@ export function ProjectGrid({
       aria-busy={busy || undefined}
     >
       {projects.map((project, index) => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          eager={index < eagerCount}
-          priority={priorityFirst && index === 0}
-          variant={variant}
-        />
+        <li key={project.id} className="min-w-0 list-none">
+          <ProjectCard
+            project={project}
+            eager={index < eagerCount}
+            priority={priorityFirst && index === 0}
+            variant={variant}
+          />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

@@ -123,7 +123,13 @@ export function SoftwarePreview({
     project.child_category?.name ??
     project.category?.name ??
     'Software';
-  const outcome = project.feature_summary ?? project.short_description;
+  /** Prefer SEO / full copy on the detail hero; short blurb is for listing cards only. */
+  const heroDescription =
+    project.seo_description?.trim() ||
+    project.full_description?.trim() ||
+    project.feature_summary?.trim() ||
+    project.short_description?.trim() ||
+    null;
   const industrySlug =
     softwareIndustryForProduct(project.slug) ||
     (project as { industry_slug?: string | null }).industry_slug;
@@ -153,20 +159,20 @@ export function SoftwarePreview({
           Mobile: identity → gallery → features → trust → packages
           Desktop: identity+CTA | gallery, then features / packages below
         */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-start lg:gap-10">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-stretch lg:gap-10">
           <SoftwareDetailsHero
             categoryLabel={categoryLabel}
             title={project.title}
             ratingAvg={ratingAvg}
             reviewCount={reviewCount}
-            description={outcome}
+            description={heroDescription}
             industrySlug={industrySlug}
             onOrder={() => openLead('order')}
             onTalk={() => openLead('demo')}
             ctaDisabled={ctaDisabled}
             showCtas
           />
-          <div className="min-w-0 lg:pt-1">{gallery}</div>
+          <div className="min-w-0 lg:flex lg:h-full lg:flex-col lg:pt-1">{gallery}</div>
         </div>
 
         <ImportantFeatureGrid features={features} className="mt-8 lg:mt-12" />

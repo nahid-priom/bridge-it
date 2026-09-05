@@ -5,10 +5,17 @@ import { useRouter } from 'next/navigation';
 import { Bookmark, Star } from 'lucide-react';
 import { cn, focusVisibleRing } from '@/lib/cn';
 import { CatalogCoverImage } from '@/src/features/catalog/components/CatalogCoverImage';
-import { formatPortfolioPriceLabel } from './format-portfolio-price';
+import { formatPortfolioPrice } from './format-portfolio-price';
 import type { PortfolioCardData } from './types';
 
-function CompactRating({
+/** Keep card blurbs short enough to read fully in ~2 small lines. */
+function truncateCardDescription(text: string, maxWords = 12): string {
+  const words = text.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+  if (words.length <= maxWords) return words.join(' ');
+  return `${words.slice(0, maxWords).join(' ').replace(/[.,;:!?…]+$/u, '')}…`;
+}
+
+function PortfolioRating({
   rating,
   reviewCount,
 }: {
@@ -22,14 +29,32 @@ function CompactRating({
       : `${safe.toFixed(1)} out of 5`;
 
   return (
-    <p className="inline-flex min-w-0 items-center gap-1 text-xs text-text-secondary sm:text-sm" title={label}>
-      <Star className="h-3.5 w-3.5 shrink-0 fill-amber-400 text-amber-400" aria-hidden />
-      <span className="font-semibold tabular-nums text-text-primary">{safe.toFixed(1)}</span>
-      {typeof reviewCount === 'number' && reviewCount > 0 ? (
-        <span className="text-text-muted">({reviewCount})</span>
-      ) : null}
+    <div className="min-w-0 text-right" title={label}>
+      <p className="inline-flex items-center justify-end gap-1 text-sm text-text-secondary">
+        <Star className="h-3.5 w-3.5 shrink-0 fill-amber-400 text-amber-400" aria-hidden />
+        <span className="font-semibold tabular-nums text-text-primary">{safe.toFixed(1)}</span>
+        {typeof reviewCount === 'number' && reviewCount > 0 ? (
+          <span className="text-text-muted">({reviewCount})</span>
+        ) : null}
+      </p>
+      <p className="mt-0.5 text-[0.6875rem] text-text-muted sm:text-xs">Reviews</p>
       <span className="sr-only">{label}</span>
-    </p>
+    </div>
+  );
+}
+
+function PortfolioPrice({
+  primary,
+  caption,
+}: {
+  primary: string;
+  caption: string;
+}) {
+  return (
+    <div className="min-w-0">
+      <p className="text-base font-semibold tabular-nums text-text-primary sm:text-lg">{primary}</p>
+      <p className="mt-0.5 text-[0.6875rem] text-text-muted sm:text-xs">{caption}</p>
+    </div>
   );
 }
 
@@ -46,8 +71,9 @@ export function PortfolioCard({
 }) {
   const router = useRouter();
   const loadEager = eager || priority;
-  const priceLabel = formatPortfolioPriceLabel(data);
+  const price = formatPortfolioPrice(data);
   const hasRating = data.rating != null && data.rating > 0;
+  const description = data.shortDescription?.trim() || null;
 
   const prefetchDetail = () => {
     router.prefetch(data.href);
@@ -56,7 +82,7 @@ export function PortfolioCard({
   return (
     <article
       className={cn(
-        'group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface sm:rounded-2xl',
+        'group flex h-full min-w-0 w-full max-w-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface',
         'transition-[transform,border-color] duration-200 ease-out',
         'hover:-translate-y-0.5 hover:border-bridge-primary/40',
         'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
@@ -89,46 +115,48 @@ export function PortfolioCard({
             priority={priority}
             fit="cover"
             width={800}
-            height={600}
-            sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw"
-            className="aspect-[4/3] w-full"
+            height={500}
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="aspect-[16/10] w-full"
             imgClassName="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-1 border-t border-border-subtle/70 px-3 py-2.5 sm:px-3.5 sm:py-3">
+        <div className="flex min-w-0 flex-1 flex-col px-4 pb-4 pt-3.5 sm:px-4 sm:pb-4 sm:pt-3.5">
           {data.categoryLabel ? (
-            <p className="truncate text-[0.625rem] font-bold uppercase tracking-wider text-bridge-primary sm:text-[0.6875rem]">
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-bridge-primary">
               {data.categoryLabel}
             </p>
           ) : null}
 
-          <h3 className="min-w-0 font-display text-base font-bold leading-snug tracking-[-0.02em] text-text-primary line-clamp-2 sm:text-lg">
+          <h3
+            className={cn(
+              'min-w-0 font-display text-xl font-bold leading-snug tracking-[-0.02em] text-text-primary line-clamp-2 lg:text-lg xl:text-xl',
+              data.categoryLabel ? 'mt-1' : null
+            )}
+          >
             {data.title}
           </h3>
 
-          {hasRating ? (
-            <CompactRating rating={data.rating!} reviewCount={data.reviewCount} />
+          {description ? (
+            <p className="mt-1 line-clamp-2 text-xs leading-snug text-text-secondary">
+              {truncateCardDescription(description)}
+            </p>
           ) : null}
 
-          {priceLabel ? (
-            <p className="mt-auto pt-1 text-base font-semibold tabular-nums text-text-primary sm:text-lg">
-              {priceLabel}
-              <span
-                aria-hidden
-                className="ml-1 inline-block text-sm font-medium text-bridge-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:hidden"
-              >
-                →
-              </span>
-            </p>
-          ) : (
-            <span
-              aria-hidden
-              className="mt-auto pt-1 text-sm font-medium text-bridge-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:hidden"
+          {price || hasRating ? (
+            <div
+              className={cn(
+                'mt-auto grid grid-cols-[1fr_auto] items-end gap-3',
+                description ? 'pt-4' : 'pt-3.5'
+              )}
             >
-              View details →
-            </span>
-          )}
+              {price ? <PortfolioPrice primary={price.primary} caption={price.caption} /> : <span />}
+              {hasRating ? (
+                <PortfolioRating rating={data.rating!} reviewCount={data.reviewCount} />
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </Link>
     </article>
@@ -140,16 +168,26 @@ export function PortfolioCardSkeleton({ className }: { className?: string }) {
     <div
       aria-hidden
       className={cn(
-        'flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface sm:rounded-2xl',
+        'flex h-full min-w-0 w-full max-w-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface',
         className
       )}
     >
-      <div className="aspect-[4/3] w-full animate-pulse bg-background-soft" />
-      <div className="flex flex-1 flex-col gap-1.5 border-t border-border-subtle/70 px-3 py-2.5">
-        <div className="h-3 w-16 animate-pulse rounded bg-background-soft" />
-        <div className="h-5 w-3/4 animate-pulse rounded bg-background-soft" />
-        <div className="h-3.5 w-20 animate-pulse rounded bg-background-soft" />
-        <div className="mt-1 h-5 w-24 animate-pulse rounded bg-background-soft" />
+      <div className="aspect-[16/10] w-full animate-pulse bg-background-soft" />
+      <div className="flex flex-1 flex-col px-4 pb-4 pt-3.5">
+        <div className="h-2.5 w-14 animate-pulse rounded bg-background-soft" />
+        <div className="mt-1 h-6 w-3/4 animate-pulse rounded bg-background-soft" />
+        <div className="mt-1 h-3.5 w-full animate-pulse rounded bg-background-soft" />
+        <div className="mt-0.5 h-3.5 w-2/3 animate-pulse rounded bg-background-soft" />
+        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
+          <div className="space-y-1">
+            <div className="h-5 w-24 animate-pulse rounded bg-background-soft" />
+            <div className="h-3 w-16 animate-pulse rounded bg-background-soft" />
+          </div>
+          <div className="space-y-1 text-right">
+            <div className="ml-auto h-4 w-16 animate-pulse rounded bg-background-soft" />
+            <div className="ml-auto h-3 w-12 animate-pulse rounded bg-background-soft" />
+          </div>
+        </div>
       </div>
     </div>
   );

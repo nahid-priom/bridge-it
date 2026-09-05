@@ -65,11 +65,9 @@ export {
   CatalogEmptyState,
   CatalogFaqList,
   CatalogPrice,
-  CatalogProductCard,
   ExploreCatalogLayout,
   CatalogSidebar,
   CatalogToolbar,
-  FeaturedBadge,
   CatalogCoverImage,
   IndustryCard,
   IndustryGrid,
@@ -82,6 +80,7 @@ export {
   consultationDeepLink,
   formatBDTPrice,
   formatCatalogPrice,
+  formatPortfolioPrice,
   formatPortfolioPriceLabel,
   normalizeCatalogProductRef,
   normalizeMarketingProject,
@@ -91,14 +90,16 @@ export {
   parseSoftwarePriceParam,
   resolvePricingMode,
   softwarePriceBounds,
+  softwareDetailUrl,
+  creativeDetailUrl,
 } from './components';
 export type {
   CatalogAnalyticsPayload,
-  CatalogProductFeature,
   CatalogSidebarIndustry,
   PortfolioCardData,
   PortfolioContentType,
   PortfolioPricingMode,
+  PortfolioPriceDisplay,
 } from './components';
 export { listApprovedReviews, submitCatalogReview } from './api/reviews';
 export type { CatalogProductReview, CatalogReviewKind } from './types/reviews';

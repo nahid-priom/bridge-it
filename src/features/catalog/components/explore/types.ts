@@ -1,8 +1,8 @@
 import type { CatalogCategoryRoot } from '../../types';
 
-/** Explore listing grids: 2-up mobile, up to 4-up desktop. */
+/** Catalog listing grids: 1-up mobile, 2-up tablet, 3-up desktop. */
 export const CATALOG_LISTING_GRID_CLASS =
-  'grid grid-cols-2 gap-3 min-w-0 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
+  'grid grid-cols-1 gap-5 min-w-0 md:grid-cols-2 lg:grid-cols-3 lg:gap-6';
 
 export type CatalogSidebarIndustry = {
   slug: string;

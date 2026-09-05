@@ -79,6 +79,7 @@ export function CatalogToolbar({
 
   const placeholder = catalogSearchPlaceholder(activeRoot, industryName);
   const searchId = `catalog-search-${activeRoot}`;
+  const isSoftware = activeRoot === 'software';
   const resultNoun =
     activeRoot === 'software'
       ? 'Software Solution'
@@ -86,65 +87,91 @@ export function CatalogToolbar({
         ? 'template'
         : 'service';
 
+  const resultsLabel =
+    typeof displayCount === 'number'
+      ? `${displayCount} ${resultNoun}${displayCount === 1 ? '' : 's'}`
+      : null;
+
   return (
     <>
-      <div className="mb-4 flex flex-wrap items-center gap-2 md:mb-5 md:gap-3">
-        <div className="min-w-0 flex-1 sm:max-w-lg">
-          <label htmlFor={searchId} className="sr-only">
-            {placeholder}
-          </label>
-          <input
-            id={searchId}
-            type="search"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder={placeholder}
-            className={cn(
-              focusVisibleInput,
-              'h-10 w-full rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary sm:px-4'
-            )}
-          />
-        </div>
-
-        {activeRoot === 'software' ? (
-          <div className="shrink-0">
-            <label htmlFor="software-sort" className="sr-only">
-              Sort
-            </label>
-            <select
-              id="software-sort"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className={cn(
-                focusVisibleInput,
-                'h-10 rounded-xl border border-border-subtle bg-surface px-3 text-sm font-medium text-text-primary'
-              )}
-            >
-              {SOFTWARE_SORT_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(true)}
+      <div className="mb-4 space-y-2 md:mb-5">
+        {/*
+          Mobile: search 60% / filter 20% / popular 20% (software).
+          Non-software: search 80% / filter 20%.
+          Desktop: flex row — search + popular + results count.
+        */}
+        <div
           className={cn(
-            focusVisibleRing,
-            'inline-flex h-10 items-center gap-2 rounded-xl border border-border-subtle px-3 text-sm font-semibold text-text-secondary lg:hidden'
+            'grid w-full items-center gap-2',
+            isSoftware
+              ? 'grid-cols-[minmax(0,3fr)_minmax(0,1fr)_minmax(0,1fr)]'
+              : 'grid-cols-[minmax(0,4fr)_minmax(0,1fr)]',
+            'lg:flex lg:flex-wrap lg:gap-3'
           )}
         >
-          <Filter className="h-4 w-4" aria-hidden />
-          Filters
-        </button>
+          <div className="min-w-0 lg:max-w-xl lg:flex-1">
+            <label htmlFor={searchId} className="sr-only">
+              {placeholder}
+            </label>
+            <input
+              id={searchId}
+              type="search"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder={placeholder}
+              className={cn(
+                focusVisibleInput,
+                'h-10 w-full min-w-0 rounded-xl border border-border-subtle bg-surface px-3 text-sm text-text-primary'
+              )}
+            />
+          </div>
 
-        {typeof displayCount === 'number' ? (
-          <p className="ml-auto hidden text-sm text-text-muted sm:block">
-            {displayCount} {resultNoun}
-            {displayCount === 1 ? '' : 's'}
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open filters"
+            className={cn(
+              focusVisibleRing,
+              'inline-flex h-10 min-w-0 w-full items-center justify-center gap-1.5 rounded-xl border border-border-subtle px-2 text-xs font-semibold text-text-secondary sm:text-sm lg:hidden'
+            )}
+          >
+            <Filter className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="truncate">Filter</span>
+          </button>
+
+          {isSoftware ? (
+            <div className="min-w-0 lg:shrink-0">
+              <label htmlFor="software-sort" className="sr-only">
+                Sort
+              </label>
+              <select
+                id="software-sort"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className={cn(
+                  focusVisibleInput,
+                  'h-10 w-full min-w-0 rounded-xl border border-border-subtle bg-surface px-2 text-xs font-medium text-text-primary sm:px-3 sm:text-sm lg:w-auto'
+                )}
+              >
+                {SOFTWARE_SORT_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
+
+          {resultsLabel ? (
+            <p className="ml-auto hidden shrink-0 text-sm tabular-nums text-text-muted lg:block">
+              {resultsLabel}
+            </p>
+          ) : null}
+        </div>
+
+        {resultsLabel ? (
+          <p className="text-sm tabular-nums text-text-muted lg:hidden" aria-live="polite">
+            {resultsLabel}
           </p>
         ) : null}
       </div>

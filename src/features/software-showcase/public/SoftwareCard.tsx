@@ -1,24 +1,14 @@
 'use client';
 
-import { ROUTES } from '@/lib/routes';
-import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
 import {
   PortfolioCard,
   PortfolioCardSkeleton,
   normalizeSoftwareProject,
+  softwareDetailUrl,
 } from '@/src/features/catalog/components/portfolio-card';
 import type { SoftwareProjectCard } from '../types';
 
-export function softwareDetailUrl(
-  slug: string,
-  industrySlug?: string | null,
-  canonicalPath?: string | null
-): string {
-  if (canonicalPath?.trim()) return canonicalPath.trim();
-  const industry = industrySlug?.trim() || softwareIndustryForProduct(slug);
-  if (industry) return ROUTES.softwareProduct(industry, slug);
-  return ROUTES.softwareSolution(slug);
-}
+export { softwareDetailUrl };
 
 export function SoftwareCard({
   project,

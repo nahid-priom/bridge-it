@@ -57,19 +57,19 @@ async function fetchListing(
   return (await res.json()) as SoftwareListResult;
 }
 
-function SoftwareGridSkeleton({ count = 6 }: { count?: number }) {
+function SoftwareGridSkeleton({ count = 3 }: { count?: number }) {
   return (
-    <div
+    <ul
       className={CATALOG_LISTING_GRID_CLASS}
       aria-busy="true"
       aria-label="Loading software"
     >
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className={index >= 4 ? 'max-md:hidden' : undefined}>
+        <li key={index} className={cn('min-w-0 list-none', index >= 3 && 'max-md:hidden')}>
           <SoftwareCardSkeleton />
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -345,7 +345,7 @@ export function SoftwareCatalog({
           </div>
         </div>
       ) : (
-        <div
+        <ul
           className={cn(
             CATALOG_LISTING_GRID_CLASS,
             'transition-opacity duration-200 motion-reduce:transition-none',
@@ -354,15 +354,16 @@ export function SoftwareCatalog({
           aria-busy={isFilterRefreshing || undefined}
         >
           {items.map((project, index) => (
-            <SoftwareCard
-              key={project.id}
-              project={project}
-              eager={index < 3}
-              priority={index === 0}
-              variant="home"
-            />
+            <li key={project.id} className="min-w-0 list-none">
+              <SoftwareCard
+                project={project}
+                eager={index < 3}
+                priority={index === 0}
+                variant="home"
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {!showGridSkeleton && (total > 0 || items.length > 0) ? (

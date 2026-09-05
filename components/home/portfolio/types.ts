@@ -46,7 +46,7 @@ export type PortfolioSection =
   | CreativePortfolioSection;
 
 export const PORTFOLIO_FILTERS: { id: PortfolioFilterId; label: string }[] = [
-  { id: 'all', label: 'All' },
+  { id: 'all', label: 'All work' },
   { id: 'websites', label: 'Websites' },
   { id: 'ecommerce', label: 'E-commerce' },
   { id: 'software', label: 'Software' },

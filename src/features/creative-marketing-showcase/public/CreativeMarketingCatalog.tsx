@@ -187,13 +187,13 @@ export function CreativeMarketingCatalog({
           </button>
         </div>
       ) : showGridSkeleton ? (
-        <div className={CATALOG_LISTING_GRID_CLASS} aria-busy="true">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className={i >= 4 ? 'max-md:hidden' : undefined}>
+        <ul className={CATALOG_LISTING_GRID_CLASS} aria-busy="true">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <li key={i} className={cn('min-w-0 list-none', i >= 3 && 'max-md:hidden')}>
               <CreativeMarketingCardSkeleton />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       ) : showEmpty ? (
         <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-white/15">
           <h3 className="font-display text-xl font-bold">
@@ -218,7 +218,7 @@ export function CreativeMarketingCatalog({
           </div>
         </div>
       ) : (
-        <div
+        <ul
           className={cn(
             CATALOG_LISTING_GRID_CLASS,
             'transition-opacity duration-200 motion-reduce:transition-none',
@@ -227,15 +227,16 @@ export function CreativeMarketingCatalog({
           aria-busy={isFilterRefreshing || undefined}
         >
           {items.map((project, index) => (
-            <CreativeMarketingCard
-              key={project.id}
-              project={project}
-              eager={index < 3}
-              variant="home"
-              priority={index === 0}
-            />
+            <li key={project.id} className="min-w-0 list-none">
+              <CreativeMarketingCard
+                project={project}
+                eager={index < 3}
+                variant="home"
+                priority={index === 0}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {!showGridSkeleton && total > 0 ? (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { CREATIVE_MARKETING_HOMEPAGE_SECTIONS } from '../config/constants';
 import type { CreativeMarketingHomepageSectionsResult, CreativeMarketingProjectCard } from '../types';
 import { CreativeMarketingCard } from './CreativeMarketingCard';
@@ -34,16 +35,17 @@ function Section({
             {viewAllLabel} →
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ul className={CATALOG_LISTING_GRID_CLASS}>
           {projects.map((project, index) => (
-            <CreativeMarketingCard
-              key={project.id}
-              project={project}
-              eager={index < 3}
-              priority={index === 0}
-            />
+            <li key={project.id} className="min-w-0 list-none">
+              <CreativeMarketingCard
+                project={project}
+                eager={index < 3}
+                priority={index === 0}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

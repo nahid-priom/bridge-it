@@ -12,10 +12,42 @@ import { ProductReviews } from '@/src/features/catalog/components/ProductReviews
 import { StarRating } from '@/src/features/catalog/components/StarRating';
 import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
 import type { CatalogProductReview } from '@/src/features/catalog/types/reviews';
+import { cn } from '@/lib/cn';
 
 function industryLabel(value: string | null | undefined) {
   if (!value) return null;
   return INDUSTRIES.find((item) => item.id === value)?.label ?? value;
+}
+
+function ExpandableSeoDescription({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const needsToggle = text.length > 140 || text.split(/\s+/).length > 28;
+
+  return (
+    <div className="mt-3 min-w-0">
+      <p className="hidden text-[15px] leading-relaxed text-text-secondary lg:block">{text}</p>
+      <div className="lg:hidden">
+        <p
+          className={cn(
+            'text-sm leading-relaxed text-text-secondary',
+            !expanded && needsToggle && 'line-clamp-3'
+          )}
+        >
+          {text}
+        </p>
+        {needsToggle ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="mt-1.5 text-sm font-semibold text-[#2563eb] hover:underline"
+            aria-expanded={expanded}
+          >
+            {expanded ? 'View less' : 'View more'}
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
 }
 
 export function ProjectPreview({
@@ -34,18 +66,25 @@ export function ProjectPreview({
   const ratingFallback = fallbackRatingFromSlug(project.slug);
   const ratingAvg = project.rating_avg ?? ratingFallback.rating_avg;
   const reviewCount = project.review_count ?? ratingFallback.review_count;
+  const heroDescription =
+    project.seo_description?.trim() ||
+    project.full_description?.trim() ||
+    project.short_description?.trim() ||
+    null;
 
   const info = (
-    <div className="flex min-w-0 flex-col">
+    <div className="flex min-w-0 flex-col lg:h-full">
       <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] dark:text-[#60a5fa]">{category}</p>
       <h1 className="mt-2 font-display text-[1.75rem] font-black leading-tight text-text-primary sm:text-3xl lg:text-[1.85rem] xl:text-3xl">
         {project.title}
       </h1>
       <StarRating rating={ratingAvg} reviewCount={reviewCount} size="md" className="mt-2" />
-      {project.short_description ? (
-        <p className="mt-3 text-sm leading-relaxed text-text-secondary lg:text-[15px]">{project.short_description}</p>
+      {heroDescription ? (
+        <div className="flex-1">
+          <ExpandableSeoDescription text={heroDescription} />
+        </div>
       ) : null}
-      <div className="mt-5 hidden flex-col gap-2.5 lg:flex">
+      <div className="mt-5 hidden flex-col gap-2.5 lg:mt-auto lg:flex lg:pt-8">
         <Link
           href={orderHref}
           className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#2563eb] px-5 py-3 text-center font-semibold text-white hover:bg-[#1d4ed8]"
@@ -66,7 +105,7 @@ export function ProjectPreview({
   return (
     <div className="pb-28 lg:pb-16">
       <div className="mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] xl:px-10">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(280px,0.3fr)] lg:items-start lg:gap-8 xl:gap-10">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(280px,0.3fr)] lg:items-stretch lg:gap-8 xl:gap-10">
           <aside className="min-w-0 lg:order-2 lg:sticky lg:top-[calc(var(--header-offset)+0.75rem)]">
             {info}
           </aside>

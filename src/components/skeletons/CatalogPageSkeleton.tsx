@@ -37,7 +37,7 @@ export function CatalogAboveFoldSkeleton({ className }: { className?: string }) 
             <Skeleton className="mt-2 h-4 w-full max-w-xl" />
           </header>
           {/* Static primary chips — no skeleton strip (appear instantly on real page) */}
-          <CatalogGridSkeleton count={6} />
+          <CatalogGridSkeleton count={3} />
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@ export function ExplorePortfolioSkeleton({ className }: { className?: string }) 
         ))}
       </div>
       <div className="mt-6">
-        <CatalogGridSkeleton count={6} className="xl:grid-cols-4" />
+        <CatalogGridSkeleton count={3} />
       </div>
     </div>
   );

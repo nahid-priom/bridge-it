@@ -9,7 +9,7 @@ import type { SoftwareProjectCard } from '@/src/features/software-showcase/types
 import { resolvePricingMode } from './format-portfolio-price';
 import type { PortfolioCardData, PortfolioContentType } from './types';
 
-function softwareDetailUrl(
+export function softwareDetailUrl(
   slug: string,
   industrySlug?: string | null,
   canonicalPath?: string | null
@@ -20,7 +20,7 @@ function softwareDetailUrl(
   return ROUTES.softwareSolution(slug);
 }
 
-function creativeDetailUrl(
+export function creativeDetailUrl(
   slug: string,
   industrySlug?: string | null,
   canonicalPath?: string | null
@@ -28,6 +28,11 @@ function creativeDetailUrl(
   if (canonicalPath?.trim()) return canonicalPath.trim();
   if (industrySlug?.trim()) return ROUTES.marketingProduct(industrySlug.trim(), slug);
   return ROUTES.marketingIndustry(slug);
+}
+
+function cleanShortDescription(value?: string | null): string | null {
+  const trimmed = (value ?? '').replace(/\s+/g, ' ').trim();
+  return trimmed || null;
 }
 
 function cleanRating(
@@ -54,6 +59,7 @@ export function normalizeWebsiteProject(project: EcommerceProjectCard): Portfoli
     slug: project.slug,
     contentType: 'website',
     title: project.title,
+    shortDescription: cleanShortDescription(project.short_description),
     categoryLabel: project.industry_name ?? project.category_name ?? project.industry ?? 'Website',
     categorySlug: project.industry_slug ?? project.category_slug ?? undefined,
     coverImageUrl: project.coverImageUrl,
@@ -79,6 +85,7 @@ export function normalizeSoftwareProject(project: SoftwareProjectCard): Portfoli
     slug: project.slug,
     contentType: 'software',
     title: project.title,
+    shortDescription: cleanShortDescription(project.short_description),
     categoryLabel:
       project.industry_name ??
       project.taxonomy_category_name ??
@@ -115,6 +122,7 @@ export function normalizeMarketingProject(project: CreativeMarketingProjectCard)
     slug: project.slug,
     contentType: 'marketing',
     title: project.title,
+    shortDescription: cleanShortDescription(project.short_description),
     categoryLabel:
       project.industry_name ?? creativeServiceGroupLabel(project.service_group) ?? 'Marketing',
     categorySlug: project.industry_slug ?? undefined,
@@ -157,6 +165,7 @@ export function normalizeCatalogProductRef(product: CatalogProductRef): Portfoli
     slug: product.slug,
     contentType,
     title: product.title,
+    shortDescription: cleanShortDescription(product.short_description),
     categoryLabel: product.industry_name ?? product.badge ?? contentType,
     categorySlug: product.industry_slug ?? undefined,
     coverImageUrl: product.coverImageUrl ?? product.cover_url,

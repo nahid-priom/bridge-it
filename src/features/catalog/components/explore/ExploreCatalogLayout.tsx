@@ -34,7 +34,23 @@ export function ExploreCatalogLayout({
   return (
     <CatalogResultsProvider initialTotal={resultCount ?? null}>
       <div className="mx-auto w-full max-w-[1480px] min-w-0 overflow-x-hidden px-4 pb-16 pt-[calc(var(--header-offset)+1.5rem)] sm:px-6 sm:pt-[calc(var(--header-offset)+0.75rem)] lg:px-8 xl:px-10">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(230px,22%)_minmax(0,1fr)] lg:gap-8 xl:gap-10">
+        {/* Section start: breadcrumb → title, then sidebar aligns with search */}
+        <CatalogBreadcrumb items={breadcrumbs} className="mb-3" />
+
+        <header className="mb-5 md:mb-6">
+          <h1 className="font-display text-2xl font-black tracking-tight text-[#0f2744] dark:text-white sm:text-3xl">
+            {title}
+          </h1>
+          {description ? (
+            <p className="mt-1.5 max-w-2xl text-sm text-text-secondary md:text-[0.95rem]">
+              {description}
+            </p>
+          ) : null}
+        </header>
+
+        {beforeToolbar}
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(230px,22%)_minmax(0,1fr)] lg:items-start lg:gap-8 xl:gap-10">
           <div className="hidden min-w-0 max-w-[300px] lg:block">
             <div
               className={
@@ -43,7 +59,6 @@ export function ExploreCatalogLayout({
               }
             >
               <div className="rounded-2xl border border-border-subtle bg-surface/95 p-3 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:bg-surface/85 dark:shadow-black/25 sm:p-4">
-                {/* Suspense for useSearchParams; null avoids filter-rail skeleton flash */}
                 <Suspense fallback={null}>
                   <CatalogSidebar
                     activeRoot={activeRoot}
@@ -56,20 +71,6 @@ export function ExploreCatalogLayout({
           </div>
 
           <div className="min-w-0">
-            <CatalogBreadcrumb items={breadcrumbs} className="mb-3" />
-            <header className="mb-4 md:mb-5">
-              <h1 className="font-display text-2xl font-black tracking-tight text-[#0f2744] dark:text-white sm:text-3xl">
-                {title}
-              </h1>
-              {description ? (
-                <p className="mt-1.5 max-w-2xl text-sm text-text-secondary md:text-[0.95rem]">
-                  {description}
-                </p>
-              ) : null}
-            </header>
-
-            {beforeToolbar}
-
             {toolbarSlot ?? (
               <Suspense fallback={null}>
                 <CatalogToolbar

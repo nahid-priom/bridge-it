@@ -9,7 +9,7 @@ export function DeferredRelatedSection({ children }: { children: ReactNode }) {
         fallback={
           <div className="mt-8" aria-busy="true" aria-label="Loading related products">
             <div className="mb-4 h-6 w-48 animate-pulse rounded bg-background-soft motion-reduce:animate-none" />
-            <CatalogGridSkeleton count={4} className="xl:grid-cols-4" />
+            <CatalogGridSkeleton count={3} />
           </div>
         }
       >

@@ -1,14 +1,51 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { StarRating } from '@/src/features/catalog/components/StarRating';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 import { OrderButton, TalkToExpertButton } from './ProductCtaButtons';
 
+function HeroDescription({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const needsToggle = text.length > 140 || text.split(/\s+/).length > 28;
+
+  return (
+    <div className="min-w-0">
+      {/* Desktop: full SEO copy — fills the left column */}
+      <p className="hidden text-[0.9375rem] leading-relaxed text-text-secondary lg:block lg:text-base lg:leading-[1.65]">
+        {text}
+      </p>
+
+      {/* Mobile: truncated with View more */}
+      <div className="lg:hidden">
+        <p
+          className={cn(
+            'text-sm leading-relaxed text-text-secondary',
+            !expanded && needsToggle && 'line-clamp-3'
+          )}
+        >
+          {text}
+        </p>
+        {needsToggle ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="mt-1.5 text-sm font-semibold text-bridge-primary hover:underline"
+            aria-expanded={expanded}
+          >
+            {expanded ? 'View less' : 'View more'}
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 /**
- * Compact product identity — breadcrumb, badge, H1, rating, short summary.
- * Features / trust / gallery live outside this hero (screens-first layout).
+ * Product identity — breadcrumb, badge, H1, rating, SEO description, CTAs.
+ * Desktop stretches with the gallery so the left column is not empty.
  */
 export function SoftwareDetailsHero({
   categoryLabel,
@@ -42,7 +79,7 @@ export function SoftwareDetailsHero({
   const hasRating = ratingAvg != null && ratingAvg > 0;
 
   return (
-    <header className={cn('min-w-0', className)}>
+    <header className={cn('flex min-h-0 min-w-0 flex-col lg:h-full', className)}>
       <nav aria-label="Breadcrumb" className="mb-3 text-xs text-text-muted sm:mb-4 sm:text-sm">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>
@@ -86,13 +123,15 @@ export function SoftwareDetailsHero({
       ) : null}
 
       {description ? (
-        <p className="mt-3 max-w-xl text-sm leading-snug text-text-secondary line-clamp-2 sm:text-base">
-          {description}
-        </p>
-      ) : null}
+        <div className="mt-3 min-w-0 flex-1 lg:mt-4">
+          <HeroDescription text={description} />
+        </div>
+      ) : (
+        <div className="hidden flex-1 lg:block" aria-hidden />
+      )}
 
       {showCtas && onOrder && onTalk ? (
-        <div className="mt-5 hidden gap-2 lg:mt-6 lg:flex lg:flex-row">
+        <div className="mt-5 hidden gap-2 lg:mt-auto lg:flex lg:flex-row lg:gap-3 lg:pt-8">
           <OrderButton onClick={onOrder} disabled={ctaDisabled} fullWidth={false} className="min-w-[10rem]" />
           <TalkToExpertButton
             onClick={onTalk}

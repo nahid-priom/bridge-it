@@ -222,7 +222,7 @@ async function listProjectCardsUncached(
   let query = supabase
     .from('ecommerce_project_cards')
     .select(
-      'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count',
+      'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count, rating_avg, review_count',
       { count: 'exact' }
     )
     .is('deleted_at', null);
@@ -417,45 +417,64 @@ function emptyHomepageSections(): HomepageSectionsResult {
   };
 }
 
+const HOMEPAGE_WEBSITE_CARD_SELECT =
+  'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count, rating_avg, review_count';
+
 async function listHomepageSectionsUncached(): Promise<HomepageSectionsResult> {
   const supabase = await getServerClient();
   if (!supabase) return emptyHomepageSections();
 
-  const { data, error } = await supabase
-    .from('ecommerce_homepage_section_cards')
-    .select(
-      'section_key, sort_order, placement_id, id, title, slug, industry, cover_image_url, cover_fallback_url, starting_price, currency'
-    )
+  // Placements for order, then hydrate full PortfolioCard fields from cards view.
+  const { data: placements, error: placementError } = await supabase
+    .from('ecommerce_homepage_placements')
+    .select('section_key, sort_order, project_id')
+    .eq('active', true)
     .order('section_key', { ascending: true })
     .order('sort_order', { ascending: true });
 
-  if (error) {
-    console.error('[showcase] listHomepageSections', error.message);
+  if (placementError) {
+    console.error('[showcase] listHomepageSections placements', placementError.message);
     return emptyHomepageSections();
   }
 
+  const projectIds = [
+    ...new Set(
+      (placements ?? [])
+        .map((row) => String((row as { project_id: string }).project_id))
+        .filter(Boolean)
+    ),
+  ];
+
+  if (projectIds.length === 0) return emptyHomepageSections();
+
+  const { data: cardRows, error: cardsError } = await supabase
+    .from('ecommerce_project_cards')
+    .select(HOMEPAGE_WEBSITE_CARD_SELECT)
+    .in('id', projectIds)
+    .eq('published', true)
+    .is('deleted_at', null);
+
+  if (cardsError) {
+    console.error('[showcase] listHomepageSections cards', cardsError.message);
+    return emptyHomepageSections();
+  }
+
+  const cardById = new Map(
+    (cardRows ?? []).map((row) => {
+      const card = mapCard(row as Record<string, unknown>);
+      return [card.id, card] as const;
+    })
+  );
+
   const grouped = emptyHomepageSections();
-  for (const row of data ?? []) {
+  for (const row of placements ?? []) {
     const key = String((row as { section_key: string }).section_key) as HomepageSectionKey;
     if (!HOMEPAGE_SECTIONS.some((section) => section.key === key)) continue;
     if (!grouped[key] || grouped[key].length >= HOMEPAGE_SECTION_MAX) continue;
-    grouped[key].push({
-      ...mapCard({
-        ...(row as Record<string, unknown>),
-        short_description: null,
-        category_id: null,
-        technology_stack: [],
-        website_type: null,
-        featured: false,
-        published: true,
-        sort_order: Number((row as { sort_order: number }).sort_order ?? 0),
-        created_at: '',
-        updated_at: '',
-        category_name: null,
-        category_slug: null,
-        page_count: 0,
-      }),
-    });
+    const projectId = String((row as { project_id: string }).project_id);
+    const card = cardById.get(projectId);
+    if (!card) continue;
+    grouped[key].push(card);
   }
   return grouped;
 }

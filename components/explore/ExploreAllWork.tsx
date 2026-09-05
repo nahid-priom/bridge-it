@@ -46,8 +46,8 @@ export function ExploreAllWork({ items }: { items: ExploreWorkItem[] }) {
   return (
     <div>
       <div
-        className="mb-6 flex flex-wrap items-center gap-2 md:mb-8"
-        role="navigation"
+        className="mb-8 flex flex-wrap items-center justify-center gap-2 md:mb-10"
+        role="tablist"
         aria-label="Portfolio categories"
       >
         {FILTERS.map((chip) => {
@@ -56,10 +56,11 @@ export function ExploreAllWork({ items }: { items: ExploreWorkItem[] }) {
             <button
               key={chip.id}
               type="button"
+              role="tab"
+              aria-selected={active}
               onClick={() => setFilter(chip.id)}
-              aria-pressed={active}
               className={cn(
-                'rounded-full border px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-colors sm:text-sm',
+                'rounded-full border px-4 py-2 text-sm font-semibold tracking-wide transition-colors',
                 active
                   ? 'border-[#0f2744]/90 bg-[#0f2744] text-white dark:border-white dark:bg-white dark:text-[#0f2744]'
                   : 'border-border-subtle bg-surface/80 text-text-secondary hover:border-[#2563eb]/35 hover:text-text-primary'

@@ -3,23 +3,23 @@ import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/ex
 import { ProjectCardSkeleton } from './ProjectCardSkeleton';
 
 export function ProjectGridSkeleton({
-  count = 6,
+  count = 3,
   className,
 }: {
   count?: number;
   className?: string;
 }) {
   return (
-    <div
+    <ul
       className={cn(CATALOG_LISTING_GRID_CLASS, className)}
       aria-busy="true"
       aria-label="Loading projects"
     >
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className={index >= 4 ? 'max-md:hidden' : undefined}>
+        <li key={index} className={cn('min-w-0 list-none', index >= 3 && 'max-md:hidden')}>
           <ProjectCardSkeleton />
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

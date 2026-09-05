@@ -1,22 +1,14 @@
 'use client';
 
-import { ROUTES } from '@/lib/routes';
 import {
   PortfolioCard,
   PortfolioCardSkeleton,
   normalizeMarketingProject,
+  creativeDetailUrl,
 } from '@/src/features/catalog/components/portfolio-card';
 import type { CreativeMarketingProjectCard } from '../types';
 
-export function creativeDetailUrl(
-  slug: string,
-  industrySlug?: string | null,
-  canonicalPath?: string | null
-): string {
-  if (canonicalPath?.trim()) return canonicalPath.trim();
-  if (industrySlug?.trim()) return ROUTES.marketingProduct(industrySlug.trim(), slug);
-  return ROUTES.marketingIndustry(slug);
-}
+export { creativeDetailUrl };
 
 export function CreativeMarketingCard({
   project,

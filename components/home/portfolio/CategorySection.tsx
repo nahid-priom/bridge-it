@@ -5,12 +5,22 @@ import {
   normalizeWebsiteProject,
   normalizeSoftwareProject,
   normalizeMarketingProject,
+  type PortfolioCardData,
 } from '@/src/features/catalog/components/portfolio-card';
 import { CategoryHeader } from './CategoryHeader';
 import { SectionContainer, portfolioCategorySpacing } from './SectionContainer';
 import type { PortfolioSection } from './types';
 
+/** Max cards per homepage category section (desktop / tablet). */
+const HOME_SECTION_MAX = 6;
+/** Mobile shows first 4; hide 5+. */
 const HOME_GRID_CLASS = `${CATALOG_LISTING_GRID_CLASS} max-md:[&>*:nth-child(n+5)]:hidden`;
+
+function toCardData(section: PortfolioSection, projectIndex: number): PortfolioCardData {
+  if (section.kind === 'website') return normalizeWebsiteProject(section.projects[projectIndex]!);
+  if (section.kind === 'software') return normalizeSoftwareProject(section.projects[projectIndex]!);
+  return normalizeMarketingProject(section.projects[projectIndex]!);
+}
 
 export function CategorySection({
   section,
@@ -19,7 +29,8 @@ export function CategorySection({
   section: PortfolioSection;
   className?: string;
 }) {
-  if (section.projects.length === 0) return null;
+  const projects = section.projects.slice(0, HOME_SECTION_MAX);
+  if (projects.length === 0) return null;
 
   return (
     <section
@@ -39,39 +50,15 @@ export function CategorySection({
           headingId={section.headingId}
         />
         <ul className={HOME_GRID_CLASS}>
-          {section.kind === 'website'
-            ? section.projects.map((project, index) => (
-                <li key={project.id} className="min-w-0 list-none">
-                  <PortfolioCard
-                    data={normalizeWebsiteProject(project)}
-                    eager={index < section.eagerCount}
-                    priority={section.eagerCount > 0 && index === 0}
-                  />
-                </li>
-              ))
-            : null}
-          {section.kind === 'software'
-            ? section.projects.map((project, index) => (
-                <li key={project.id} className="min-w-0 list-none">
-                  <PortfolioCard
-                    data={normalizeSoftwareProject(project)}
-                    eager={index < section.eagerCount}
-                    priority={section.eagerCount > 0 && index === 0}
-                  />
-                </li>
-              ))
-            : null}
-          {section.kind === 'creative'
-            ? section.projects.map((project, index) => (
-                <li key={project.id} className="min-w-0 list-none">
-                  <PortfolioCard
-                    data={normalizeMarketingProject(project)}
-                    eager={index < section.eagerCount}
-                    priority={section.eagerCount > 0 && index === 0}
-                  />
-                </li>
-              ))
-            : null}
+          {projects.map((project, index) => (
+            <li key={project.id} className="min-w-0 list-none">
+              <PortfolioCard
+                data={toCardData(section, index)}
+                eager={index < Math.min(section.eagerCount, 4)}
+                priority={section.eagerCount > 0 && index === 0}
+              />
+            </li>
+          ))}
         </ul>
       </SectionContainer>
     </section>

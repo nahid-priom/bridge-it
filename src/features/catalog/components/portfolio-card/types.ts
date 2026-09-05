@@ -7,6 +7,8 @@ export type PortfolioCardData = {
   slug: string;
   contentType: PortfolioContentType;
   title: string;
+  /** Short benefit line under the title; omit when empty (no filler copy). */
+  shortDescription?: string | null;
   categoryLabel?: string;
   categorySlug?: string;
   coverImageUrl: string | null;
