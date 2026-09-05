@@ -270,7 +270,7 @@ export type SoftwareListFilters = {
   /** Project-level business_size values (small | growing | professional | enterprise) */
   businessSizes?: string[];
   /** Listing sort — default popular (featured → sort_order → created_at) */
-  sort?: 'popular' | 'newest' | 'price-asc';
+  sort?: 'popular' | 'newest' | 'price-asc' | 'relevance';
   featured?: boolean;
   popular?: boolean;
   published?: boolean | 'all';

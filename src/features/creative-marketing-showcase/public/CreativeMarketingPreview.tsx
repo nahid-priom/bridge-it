@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
+import { StarRating } from '@/src/features/catalog/components/StarRating';
 import { creativeServiceGroupLabel } from '../config/constants';
 import type { CreativeMarketingAsset, CreativeMarketingProjectDetail } from '../types';
 import { CreativeMarketingCard } from './CreativeMarketingCard';
@@ -41,6 +42,15 @@ export function CreativeMarketingPreview({ project }: { project: CreativeMarketi
             <h1 className="mt-2 font-display text-[1.75rem] font-black leading-tight text-text-primary sm:text-3xl">
               {project.title}
             </h1>
+            {project.rating_avg != null && project.rating_avg > 0 ? (
+              <StarRating
+                rating={project.rating_avg}
+                reviewCount={project.review_count}
+                size="md"
+                compact
+                className="mt-2"
+              />
+            ) : null}
             {project.outcome_line ? (
               <p className="mt-2 text-sm text-text-secondary">{project.outcome_line}</p>
             ) : null}

@@ -8,7 +8,7 @@ import type { CatalogCategoryRoot } from '../../types';
 import { MobileFilterDrawer } from './MobileFilterDrawer';
 import {
   catalogSearchPlaceholder,
-  parseSoftwareSortParam,
+  effectiveSoftwareSort,
   SOFTWARE_SORT_OPTIONS,
   type CatalogSidebarIndustry,
 } from './types';
@@ -31,7 +31,7 @@ export function CatalogToolbar({
   const [, startTransition] = useTransition();
   const resultsCtx = useCatalogResults();
   const q = (searchParams.get('q') ?? '').trim();
-  const sort = parseSoftwareSortParam(searchParams.get('sort'));
+  const sort = effectiveSoftwareSort(searchParams.get('sort'), q);
   const [searchInput, setSearchInput] = useState(q);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -68,8 +68,13 @@ export function CatalogToolbar({
 
   const setSort = (next: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (!next || next === 'popular') params.delete('sort');
+    if (!next || next === 'popular' || next === 'relevance') params.delete('sort');
     else params.set('sort', next);
+    // Choosing a non-relevance sort while searching clears q so the sort can take effect.
+    if (next && next !== 'relevance' && params.get('q')) {
+      params.delete('q');
+      setSearchInput('');
+    }
     params.delete('page');
     const qs = params.toString();
     startTransition(() => {
@@ -153,7 +158,10 @@ export function CatalogToolbar({
                   'h-10 w-full min-w-0 rounded-xl border border-border-subtle bg-surface px-2 text-xs font-medium text-text-primary sm:px-3 sm:text-sm lg:w-auto'
                 )}
               >
-                {SOFTWARE_SORT_OPTIONS.map((opt) => (
+                {(q
+                  ? SOFTWARE_SORT_OPTIONS
+                  : SOFTWARE_SORT_OPTIONS.filter((opt) => opt.id !== 'relevance')
+                ).map((opt) => (
                   <option key={opt.id} value={opt.id}>
                     {opt.label}
                   </option>

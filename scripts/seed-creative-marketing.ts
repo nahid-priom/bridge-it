@@ -47,6 +47,17 @@ async function sleep(ms: number) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/** Stable 4.7–5.0 rating from slug (matches migration backfill). */
+function ratingFromSlug(slug: string): { rating_avg: number; review_count: number } {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) hash = (Math.imul(31, hash) + slug.charCodeAt(i)) | 0;
+  const abs = Math.abs(hash);
+  return {
+    rating_avg: Number((4.7 + (abs % 4) * 0.1).toFixed(1)),
+    review_count: 6 + (abs % 19),
+  };
+}
+
 async function upload(objectPath: string, buffer: Buffer) {
   if (!force) {
     const folder = objectPath.split('/').slice(0, -1).join('/');
@@ -134,6 +145,7 @@ async function main() {
       .maybeSingle();
 
     let projectId = existing?.id as string | undefined;
+    const ratings = ratingFromSlug(product.slug);
     const payload = {
       title: product.title,
       slug: product.slug,
@@ -157,18 +169,37 @@ async function main() {
       seo_description: product.seoDescription,
       seo_keywords: product.seoKeywords,
       sort_order: product.sortOrder,
+      rating_avg: ratings.rating_avg,
+      review_count: ratings.review_count,
       deleted_at: null,
     };
 
     if (projectId) {
-      const { error } = await supabase.from('creative_marketing_projects').update(payload).eq('id', projectId);
+      let { error } = await supabase.from('creative_marketing_projects').update(payload).eq('id', projectId);
+      if (error && /rating_avg|review_count/i.test(error.message)) {
+        const { rating_avg: _a, review_count: _c, ...withoutRatings } = payload;
+        ({ error } = await supabase
+          .from('creative_marketing_projects')
+          .update(withoutRatings)
+          .eq('id', projectId));
+        console.warn(`  ratings columns missing — apply migration 20260923120000_creative_marketing_ratings.sql`);
+      }
       if (error) throw error;
     } else {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('creative_marketing_projects')
         .insert(payload)
         .select('id')
         .single();
+      if (error && /rating_avg|review_count/i.test(error.message)) {
+        const { rating_avg: _a, review_count: _c, ...withoutRatings } = payload;
+        ({ data, error } = await supabase
+          .from('creative_marketing_projects')
+          .insert(withoutRatings)
+          .select('id')
+          .single());
+        console.warn(`  ratings columns missing — apply migration 20260923120000_creative_marketing_ratings.sql`);
+      }
       if (error) throw error;
       projectId = data.id as string;
     }
@@ -238,6 +269,22 @@ async function main() {
         await supabase.from('creative_marketing_assets').update(row).eq('id', existingAsset.id);
       } else {
         await supabase.from('creative_marketing_assets').insert(row);
+      }
+    }
+
+    // Soft-delete gallery screens no longer in the premium 4-screen set
+    const keepKeys = product.assets.map((a) => a.key);
+    const { data: allAssets } = await supabase
+      .from('creative_marketing_assets')
+      .select('id, asset_key')
+      .eq('project_id', projectId)
+      .is('deleted_at', null);
+    for (const stale of allAssets ?? []) {
+      if (!keepKeys.includes(String((stale as { asset_key: string }).asset_key))) {
+        await supabase
+          .from('creative_marketing_assets')
+          .update({ deleted_at: new Date().toISOString(), published: false })
+          .eq('id', (stale as { id: string }).id);
       }
     }
 

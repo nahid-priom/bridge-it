@@ -1,22 +1,17 @@
 import type { SeedCreativeMarketingProduct } from '../types';
 
 const designAssets = (prefix: string, names: string[]): SeedCreativeMarketingProduct['assets'] =>
-  names.map((name, i) => ({
+  names.slice(0, 4).map((name, i) => ({
     key: `${prefix}-${i + 1}`,
     name,
     kind: i === 0 ? 'mockup' : 'portfolio',
   }));
 
+/** Four premium gallery screens per digital-marketing product (AI-generated). */
 const marketingScreens: SeedCreativeMarketingProduct['assets'] = [
   { key: 'campaign-overview', name: 'Campaign Overview', kind: 'dashboard' },
-  { key: 'ad-set-performance', name: 'Ad Set Performance', kind: 'dashboard' },
   { key: 'creative-performance', name: 'Creative Performance', kind: 'dashboard' },
-  { key: 'lead-funnel', name: 'Lead Funnel', kind: 'dashboard' },
-  { key: 'pixel-events', name: 'Pixel Events', kind: 'dashboard' },
-  { key: 'audience-breakdown', name: 'Audience Breakdown', kind: 'dashboard' },
-  { key: 'budget-overview', name: 'Budget Overview', kind: 'dashboard' },
-  { key: 'conversion-report', name: 'Conversion Report', kind: 'dashboard' },
-  { key: 'retargeting-setup', name: 'Retargeting Setup', kind: 'dashboard' },
+  { key: 'audience-insights', name: 'Audience Insights', kind: 'dashboard' },
   { key: 'monthly-report', name: 'Monthly Report', kind: 'dashboard' },
 ];
 
@@ -314,7 +309,7 @@ export const CREATIVE_MARKETING_SEED_PRODUCTS: SeedCreativeMarketingProduct[] = 
     sortOrder: 80,
     deliverables: ['Pixel install', 'CAPI setup', 'Event testing', 'Documentation'],
     relatedSlugs: ['meta-ads-management', 'ecommerce-marketing-package', 'facebook-ads-creative'],
-    assets: marketingScreens.slice(0, 8),
+    assets: marketingScreens,
     theme: { primary: '#0F766E', accent: '#2563EB' },
     seoTitle: 'Meta Pixel and Conversion API Setup Bangladesh',
     seoDescription: 'Meta Pixel and Conversion API setup for accurate ad tracking.',
@@ -339,7 +334,10 @@ export const CREATIVE_MARKETING_SEED_PRODUCTS: SeedCreativeMarketingProduct[] = 
     sortOrder: 90,
     deliverables: ['Ads structure', 'Creative set', 'Pixel checklist', 'Retargeting plan', 'Reporting'],
     relatedSlugs: ['meta-ads-management', 'facebook-ads-creative', 'meta-pixel-capi-setup', 'social-media-post-design'],
-    assets: [...marketingScreens.slice(0, 6), ...designAssets('ecom', ['Product Ad', 'Collection Ad', 'Offer Banner', 'Retargeting'])],
+    assets: [
+      ...marketingScreens.slice(0, 2),
+      ...designAssets('ecom', ['Product Ad', 'Collection Ad']),
+    ],
     theme: { primary: '#059669', accent: '#F59E0B' },
     seoTitle: 'E-commerce Marketing Services Bangladesh',
     seoDescription: 'E-commerce marketing packages with Meta ads, creatives and tracking.',
@@ -450,7 +448,7 @@ export const CREATIVE_MARKETING_SEED_PRODUCTS: SeedCreativeMarketingProduct[] = 
     sortOrder: 130,
     deliverables: ['Strategy doc', 'Test matrix', 'KPI definitions', 'Review call'],
     relatedSlugs: ['meta-ads-management', 'facebook-ads-creative', 'lead-generation-campaigns'],
-    assets: marketingScreens.slice(0, 6),
+    assets: marketingScreens,
     theme: { primary: '#4338CA', accent: '#F59E0B' },
     seoTitle: 'Meta Ads Campaign Strategy and Creative Testing',
     seoDescription: 'Campaign strategy and creative testing plans for Facebook and Instagram ads.',

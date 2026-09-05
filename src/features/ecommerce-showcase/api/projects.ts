@@ -2,6 +2,11 @@ import 'server-only';
 
 import { cache } from 'react';
 import { getAdminClient, getServerClient } from '@/lib/services/client';
+import {
+  applyTokenizedIlikeFilter,
+  ECOMMERCE_SEARCH_FIELDS,
+  sanitizeShowcaseQuery,
+} from '@/lib/search/showcaseSearch';
 import { GALLERY_PAGE_SIZE, HOMEPAGE_LEGACY_CATEGORY_SECTIONS, HOMEPAGE_SECTIONS, HOMEPAGE_SECTION_MAX, TECHNOLOGY_OPTIONS } from '../config/constants';
 import { parseFilterList } from '../utils/filters';
 import type {
@@ -207,24 +212,22 @@ async function pageTypesByProjectIds(
   return map;
 }
 
-async function listProjectCardsUncached(
-  filters: ShowcaseListFilters = {},
-  options: { includeDrafts?: boolean } = {}
+const ECOMMERCE_CARD_SELECT =
+  'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count, rating_avg, review_count';
+
+async function listProjectCardsViaFallback(
+  supabase: Db,
+  filters: ShowcaseListFilters,
+  options: { includeDrafts?: boolean },
+  limit: number,
+  offset: number,
+  pageTypes: string[],
+  categories: string[],
+  q: string
 ): Promise<ShowcaseListResult> {
-  const supabase = await getServerClient();
-  if (!supabase) return { items: [], total: 0 };
-
-  const limit = filters.limit ?? GALLERY_PAGE_SIZE;
-  const offset = filters.offset ?? 0;
-  const pageTypes = parseFilterList(filters.view || filters.page);
-  const categories = parseFilterList(filters.category);
-
   let query = supabase
     .from('ecommerce_project_cards')
-    .select(
-      'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count, rating_avg, review_count',
-      { count: 'exact' }
-    )
+    .select(ECOMMERCE_CARD_SELECT, { count: 'exact' })
     .is('deleted_at', null);
 
   if (!options.includeDrafts) {
@@ -235,11 +238,8 @@ async function listProjectCardsUncached(
     query = query.eq('published', false);
   }
 
-  if (filters.q) {
-    const q = filters.q.replace(/,/g, ' ');
-    query = query.or(
-      `title.ilike.%${q}%,industry.ilike.%${q}%,short_description.ilike.%${q}%,category_name.ilike.%${q}%,category_slug.ilike.%${q}%`
-    );
+  if (q) {
+    query = applyTokenizedIlikeFilter(query, q, ECOMMERCE_SEARCH_FIELDS);
   }
   if (categories.length === 1) query = query.eq('category_slug', categories[0]);
   else if (categories.length > 1) query = query.in('category_slug', categories);
@@ -273,7 +273,7 @@ async function listProjectCardsUncached(
     .range(offset, offset + limit - 1);
 
   if (error) {
-    console.error('[showcase] listProjectCards', error.message);
+    console.error('[showcase] listProjectCards fallback', error.message);
     return { items: [], total: 0 };
   }
 
@@ -289,6 +289,71 @@ async function listProjectCardsUncached(
       return { ...card, page_types: pageTypesMap.get(card.id) ?? [] };
     }),
     total: count ?? 0,
+  };
+}
+
+async function listProjectCardsUncached(
+  filters: ShowcaseListFilters = {},
+  options: { includeDrafts?: boolean } = {}
+): Promise<ShowcaseListResult> {
+  const supabase = await getServerClient();
+  if (!supabase) return { items: [], total: 0 };
+
+  const limit = filters.limit ?? GALLERY_PAGE_SIZE;
+  const offset = filters.offset ?? 0;
+  const pageTypes = parseFilterList(filters.view || filters.page);
+  const categories = parseFilterList(filters.category);
+  const q = sanitizeShowcaseQuery(filters.q);
+
+  const techName = filters.tech
+    ? TECHNOLOGY_OPTIONS.find((item) => item.slug === filters.tech || item.id === filters.tech)?.id ??
+      filters.tech
+    : null;
+
+  const { data: rpcRows, error: rpcError } = await supabase.rpc('search_ecommerce_project_cards', {
+    p_q: q || null,
+    p_category_slugs: categories.length > 0 ? categories : null,
+    p_industry_slug: filters.industrySlug && filters.industrySlug !== 'all' ? filters.industrySlug : null,
+    p_tech: techName,
+    p_industry: filters.industry || null,
+    p_website_type: filters.websiteType || null,
+    p_featured: filters.featured ? true : null,
+    p_min_price: filters.minPrice ?? null,
+    p_max_price: filters.maxPrice ?? null,
+    p_page_types: pageTypes.length > 0 ? pageTypes : null,
+    p_include_drafts: Boolean(options.includeDrafts),
+    p_published: filters.published ?? null,
+    p_limit: limit,
+    p_offset: offset,
+  });
+
+  if (rpcError) {
+    console.warn('[showcase] listProjectCards RPC fallback', rpcError.message);
+    return listProjectCardsViaFallback(
+      supabase,
+      filters,
+      options,
+      limit,
+      offset,
+      pageTypes,
+      categories,
+      q
+    );
+  }
+
+  const rows = (rpcRows ?? []) as Record<string, unknown>[];
+  const total = rows.length > 0 ? Number(rows[0]!.total_count ?? 0) : 0;
+  const pageTypesMap = await pageTypesByProjectIds(
+    supabase,
+    rows.map((row) => String(row.id))
+  );
+
+  return {
+    items: rows.map((row) => {
+      const card = mapCard(row);
+      return { ...card, page_types: pageTypesMap.get(card.id) ?? [] };
+    }),
+    total,
   };
 }
 

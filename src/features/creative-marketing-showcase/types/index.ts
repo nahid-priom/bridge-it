@@ -39,6 +39,8 @@ export type CreativeMarketingProject = {
   seo_description: string | null;
   seo_keywords: string[];
   sort_order: number;
+  rating_avg?: number | null;
+  review_count?: number | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
@@ -107,6 +109,8 @@ export type CreativeMarketingProjectCard = {
   popular: boolean;
   published: boolean;
   sort_order: number;
+  rating_avg?: number | null;
+  review_count?: number | null;
   created_at: string;
   updated_at: string;
   asset_count: number;

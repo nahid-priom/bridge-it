@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   parseSoftwareBusinessSizeParam,
-  parseSoftwareSortParam,
+  effectiveSoftwareSort,
 } from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const child = params.get('child')?.trim() || undefined;
   const more = parseSoftwareMoreParam(params.get('more'));
   const businessSizes = parseSoftwareBusinessSizeParam(params.get('size'));
-  const sort = parseSoftwareSortParam(params.get('sort'));
+  const sort = effectiveSoftwareSort(params.get('sort'), q);
 
   const categoryRaw = params.get('category')?.trim();
   const group = parseSoftwareGroupParam(params.get('group'), params.get('solutionGroup'));

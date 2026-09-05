@@ -24,7 +24,7 @@ import {
 } from '@/src/features/catalog';
 import {
   parseSoftwareBusinessSizeParam,
-  parseSoftwareSortParam,
+  effectiveSoftwareSort,
 } from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { SOFTWARE_GALLERY_PAGE_SIZE } from '@/src/features/software-showcase/config/constants';
@@ -128,9 +128,9 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
   const priceId = parseSoftwarePriceParam(first(sp.price));
   const priceBounds = softwarePriceBounds(priceId);
   const businessSizes = parseSoftwareBusinessSizeParam(first(sp.size));
-  const sort = parseSoftwareSortParam(first(sp.sort));
+  const sort = effectiveSoftwareSort(first(sp.sort), q);
 
-  const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular'));
+  const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular' && sort !== 'relevance'));
   const useSectionedListing =
     (industry.slug === 'garments' || industry.slug === 'feed-mill') &&
     !hasActiveFilters &&

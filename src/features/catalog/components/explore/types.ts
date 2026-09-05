@@ -81,6 +81,7 @@ export const SOFTWARE_SORT_OPTIONS = [
   { id: 'popular', label: 'Popular' },
   { id: 'newest', label: 'Newest' },
   { id: 'price-asc', label: 'Price: Low to High' },
+  { id: 'relevance', label: 'Best match' },
 ] as const;
 
 export type SoftwareSortId = (typeof SOFTWARE_SORT_OPTIONS)[number]['id'];
@@ -102,8 +103,17 @@ export function serializeSoftwareBusinessSizes(sizes: SoftwareBusinessSizeId[]):
 
 export function parseSoftwareSortParam(value: string | null | undefined): SoftwareSortId {
   const v = (value ?? '').trim();
-  if (v === 'newest' || v === 'price-asc') return v;
+  if (v === 'newest' || v === 'price-asc' || v === 'relevance') return v;
   return 'popular';
+}
+
+/** Effective sort for listings: active search always uses relevance. */
+export function effectiveSoftwareSort(
+  sortParam: string | null | undefined,
+  q: string | null | undefined
+): SoftwareSortId {
+  if ((q ?? '').trim()) return 'relevance';
+  return parseSoftwareSortParam(sortParam);
 }
 
 export function catalogSearchPlaceholder(

@@ -20,7 +20,7 @@ import {
 } from '@/src/features/catalog';
 import {
   parseSoftwareBusinessSizeParam,
-  parseSoftwareSortParam,
+  effectiveSoftwareSort,
 } from '@/src/features/catalog/components/explore/types';
 import { SOFTWARE_HUB_PRIORITY_SLUGS } from '@/src/features/catalog/config/software-industries-45';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
@@ -90,7 +90,7 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
   const priceId = parseSoftwarePriceParam(first(sp.price));
   const priceBounds = softwarePriceBounds(priceId);
   const businessSizes = parseSoftwareBusinessSizeParam(first(sp.size));
-  const sort = parseSoftwareSortParam(first(sp.sort));
+  const sort = effectiveSoftwareSort(first(sp.sort), q);
 
   const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
   let category = 'all';

@@ -11,9 +11,9 @@ import { useReportCatalogTotal } from '@/src/features/catalog/components/explore
 import { cn } from '@/lib/cn';
 import {
   CATALOG_LISTING_GRID_CLASS,
+  effectiveSoftwareSort,
   parseSoftwareBusinessSizeParam,
   parseSoftwarePriceParam,
-  parseSoftwareSortParam,
   serializeSoftwareBusinessSizes,
   softwarePriceBounds,
   type SoftwareSortId,
@@ -110,9 +110,10 @@ function readCatalogFilters(
   const size = searchParams.has('size')
     ? serializeSoftwareBusinessSizes(sizeFromUrl)
     : initial.size || '';
-  const sort = searchParams.has('sort')
-    ? parseSoftwareSortParam(searchParams.get('sort'))
-    : initial.sort || 'popular';
+  const sort = effectiveSoftwareSort(
+    searchParams.has('sort') ? searchParams.get('sort') : initial.sort || 'popular',
+    q
+  );
   return { q, category, child, more, page, industrySlug, price, size, sort };
 }
 

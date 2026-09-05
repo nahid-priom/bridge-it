@@ -12,6 +12,7 @@ export {
   CATALOG_LISTING_GRID_CLASS,
   CATALOG_MOTHER_NAV,
   catalogSearchPlaceholder,
+  effectiveSoftwareSort,
   parseSoftwareBusinessSizeParam,
   parseSoftwarePriceParam,
   parseSoftwareSortParam,

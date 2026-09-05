@@ -2,6 +2,11 @@ import 'server-only';
 
 import { cache } from 'react';
 import { getServerClient } from '@/lib/services/client';
+import {
+  applyTokenizedIlikeFilter,
+  sanitizeShowcaseQuery,
+  SOFTWARE_SEARCH_FIELDS,
+} from '@/lib/search/showcaseSearch';
 import { SOFTWARE_FLAGSHIP_BY_INDUSTRY } from '@/src/features/catalog/config/software-industries-45';
 import {
   SOFTWARE_GALLERY_PAGE_SIZE,
@@ -320,19 +325,15 @@ export async function listShowcaseTaxonomy(): Promise<{
   };
 }
 
-async function listSoftwareProjectCardsUncached(
-  filters: SoftwareListFilters = {},
-  options: { includeDrafts?: boolean } = {}
+async function listSoftwareProjectCardsViaFallback(
+  supabase: NonNullable<Awaited<ReturnType<typeof getServerClient>>>,
+  filters: SoftwareListFilters,
+  options: { includeDrafts?: boolean },
+  page: number,
+  pageSize: number,
+  offset: number,
+  q: string
 ): Promise<SoftwareListResult> {
-  const supabase = await getServerClient();
-  const page = Math.max(1, filters.page ?? 1);
-  const pageSize = Math.max(1, Math.min(filters.pageSize ?? SOFTWARE_GALLERY_PAGE_SIZE, 48));
-  const offset = (page - 1) * pageSize;
-
-  if (!supabase) {
-    return { items: [], total: 0, page, pageSize };
-  }
-
   let query = supabase
     .from('software_project_cards')
     .select(CARD_SELECT, { count: 'exact' })
@@ -346,11 +347,8 @@ async function listSoftwareProjectCardsUncached(
     query = query.eq('published', false);
   }
 
-  if (filters.q) {
-    const q = filters.q.replace(/,/g, ' ');
-    query = query.or(
-      `title.ilike.%${q}%,industry.ilike.%${q}%,short_description.ilike.%${q}%,feature_summary.ilike.%${q}%,category_name.ilike.%${q}%,taxonomy_category_name.ilike.%${q}%,child_category_name.ilike.%${q}%,business_type.ilike.%${q}%,solution_group.ilike.%${q}%,software_type.ilike.%${q}%`
-    );
+  if (q) {
+    query = applyTokenizedIlikeFilter(query, q, SOFTWARE_SEARCH_FIELDS);
   }
 
   const taxonomySlug =
@@ -383,7 +381,6 @@ async function listSoftwareProjectCardsUncached(
     query = query.in('business_size', filters.businessSizes);
   }
 
-  // Legacy more filters → solution_group OR when no taxonomy/child set
   if (!taxonomySlug && !filters.child) {
     const groupSlugs = resolveSoftwareGroupSlugs({
       group: filters.group ?? filters.solutionGroup,
@@ -400,14 +397,13 @@ async function listSoftwareProjectCardsUncached(
       }
     }
   } else if (filters.more && filters.more.length > 0 && !filters.child) {
-    // Treat more as child category slug candidates when taxonomy is set
     query = query.in('child_category_slug', filters.more);
   }
 
   if (filters.featured) query = query.eq('featured', true);
   if (filters.popular) query = query.eq('popular', true);
 
-  const sort = filters.sort ?? 'popular';
+  const sort = q ? 'relevance' : (filters.sort ?? 'popular');
   if (sort === 'newest') {
     query = query.order('created_at', { ascending: false }).order('id', { ascending: true });
   } else if (sort === 'price-asc') {
@@ -425,7 +421,7 @@ async function listSoftwareProjectCardsUncached(
   const { data, count, error } = await query.range(offset, offset + pageSize - 1);
 
   if (error) {
-    console.error('[software-showcase] listSoftwareProjectCards', error.message);
+    console.error('[software-showcase] listSoftwareProjectCards fallback', error.message);
     return { items: [], total: 0, page, pageSize };
   }
 
@@ -435,6 +431,91 @@ async function listSoftwareProjectCardsUncached(
   return {
     items: withFeatures,
     total: count ?? 0,
+    page,
+    pageSize,
+  };
+}
+
+async function listSoftwareProjectCardsUncached(
+  filters: SoftwareListFilters = {},
+  options: { includeDrafts?: boolean } = {}
+): Promise<SoftwareListResult> {
+  const supabase = await getServerClient();
+  const page = Math.max(1, filters.page ?? 1);
+  const pageSize = Math.max(1, Math.min(filters.pageSize ?? SOFTWARE_GALLERY_PAGE_SIZE, 48));
+  const offset = (page - 1) * pageSize;
+
+  if (!supabase) {
+    return { items: [], total: 0, page, pageSize };
+  }
+
+  const q = sanitizeShowcaseQuery(filters.q);
+
+  const taxonomySlug =
+    filters.taxonomyCategory && filters.taxonomyCategory !== 'all'
+      ? filters.taxonomyCategory
+      : filters.group && filters.group !== 'all'
+        ? filters.group
+        : null;
+
+  let solutionGroups: string[] | null = null;
+  let childSlugs: string[] | null = null;
+
+  if (!taxonomySlug && !(filters.child && filters.child !== 'all')) {
+    const groupSlugs = resolveSoftwareGroupSlugs({
+      group: filters.group ?? filters.solutionGroup,
+      more: filters.more,
+    });
+    if (groupSlugs && groupSlugs.length > 0) {
+      solutionGroups = groupSlugs;
+    } else if (filters.solutionGroup && filters.solutionGroup !== 'all') {
+      const mapped = listingFilterGroups(filters.solutionGroup);
+      if (mapped && mapped.length > 0) {
+        solutionGroups = mapped;
+      } else if (!['software', 'websites', 'marketing', 'creative-marketing'].includes(filters.solutionGroup)) {
+        solutionGroups = [filters.solutionGroup];
+      }
+    }
+  } else if (filters.more && filters.more.length > 0 && !(filters.child && filters.child !== 'all')) {
+    childSlugs = filters.more;
+  }
+
+  const sort = q ? 'relevance' : (filters.sort ?? 'popular');
+
+  const { data: rpcRows, error: rpcError } = await supabase.rpc('search_software_project_cards', {
+    p_q: q || null,
+    p_taxonomy_slug: taxonomySlug,
+    p_child_slug: filters.child && filters.child !== 'all' ? filters.child : null,
+    p_industry: filters.industry && filters.industry !== 'all' ? filters.industry : null,
+    p_industry_slug: filters.industrySlug && filters.industrySlug !== 'all' ? filters.industrySlug : null,
+    p_min_price: filters.minPrice ?? null,
+    p_max_price: filters.maxPrice ?? null,
+    p_business_sizes:
+      filters.businessSizes && filters.businessSizes.length > 0 ? filters.businessSizes : null,
+    p_solution_groups: solutionGroups,
+    p_child_slugs: childSlugs,
+    p_featured: filters.featured ? true : null,
+    p_popular: filters.popular ? true : null,
+    p_include_drafts: Boolean(options.includeDrafts),
+    p_published: filters.published ?? null,
+    p_sort: sort,
+    p_limit: pageSize,
+    p_offset: offset,
+  });
+
+  if (rpcError) {
+    console.warn('[software-showcase] listSoftwareProjectCards RPC fallback', rpcError.message);
+    return listSoftwareProjectCardsViaFallback(supabase, filters, options, page, pageSize, offset, q);
+  }
+
+  const rows = (rpcRows ?? []) as Record<string, unknown>[];
+  const total = rows.length > 0 ? Number(rows[0]!.total_count ?? 0) : 0;
+  const cards = rows.map((row) => mapCard(row));
+  const withFeatures = await attachPrimaryFeatures(supabase, cards);
+
+  return {
+    items: withFeatures,
+    total,
     page,
     pageSize,
   };

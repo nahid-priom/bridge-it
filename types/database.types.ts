@@ -894,6 +894,73 @@ export interface Database {
         Args: { p_product_id: string };
         Returns: undefined;
       };
+      ecommerce_projects_refresh_search_vector: {
+        Args: { p_project_id: string };
+        Returns: undefined;
+      };
+      software_projects_refresh_search_vector: {
+        Args: { p_project_id: string };
+        Returns: undefined;
+      };
+      creative_marketing_projects_refresh_search_vector: {
+        Args: { p_project_id: string };
+        Returns: undefined;
+      };
+      search_ecommerce_project_cards: {
+        Args: {
+          p_q?: string | null;
+          p_category_slugs?: string[] | null;
+          p_industry_slug?: string | null;
+          p_tech?: string | null;
+          p_industry?: string | null;
+          p_website_type?: string | null;
+          p_featured?: boolean | null;
+          p_min_price?: number | null;
+          p_max_price?: number | null;
+          p_page_types?: string[] | null;
+          p_include_drafts?: boolean;
+          p_published?: boolean | null;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: Record<string, unknown>[];
+      };
+      search_software_project_cards: {
+        Args: {
+          p_q?: string | null;
+          p_taxonomy_slug?: string | null;
+          p_child_slug?: string | null;
+          p_industry?: string | null;
+          p_industry_slug?: string | null;
+          p_min_price?: number | null;
+          p_max_price?: number | null;
+          p_business_sizes?: string[] | null;
+          p_solution_groups?: string[] | null;
+          p_child_slugs?: string[] | null;
+          p_featured?: boolean | null;
+          p_popular?: boolean | null;
+          p_include_drafts?: boolean;
+          p_published?: boolean | null;
+          p_sort?: string;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: Record<string, unknown>[];
+      };
+      search_creative_marketing_project_cards: {
+        Args: {
+          p_q?: string | null;
+          p_service_groups?: string[] | null;
+          p_industry_slug?: string | null;
+          p_featured?: boolean | null;
+          p_popular?: boolean | null;
+          p_include_drafts?: boolean;
+          p_published?: boolean | null;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: Record<string, unknown>[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

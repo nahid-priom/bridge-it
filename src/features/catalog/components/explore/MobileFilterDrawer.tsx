@@ -8,6 +8,7 @@ import type { CatalogCategoryRoot } from '../../types';
 import { CatalogSidebar } from './CatalogSidebar';
 import {
   catalogSearchPlaceholder,
+  effectiveSoftwareSort,
   parseSoftwareSortParam,
   SOFTWARE_SORT_OPTIONS,
   type CatalogSidebarIndustry,
@@ -32,7 +33,7 @@ export function MobileFilterDrawer({
   const searchParams = useSearchParams();
 
   const urlQ = (searchParams.get('q') ?? '').trim();
-  const urlSort = parseSoftwareSortParam(searchParams.get('sort'));
+  const urlSort = effectiveSoftwareSort(searchParams.get('sort'), urlQ);
   const [searchInput, setSearchInput] = useState(urlQ);
   const [sort, setSort] = useState<SoftwareSortId>(urlSort);
 
@@ -71,14 +72,22 @@ export function MobileFilterDrawer({
 
   const applyQueryFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
-    const nextQ = searchInput.trim();
-    if (nextQ) params.set('q', nextQ);
-    else params.delete('q');
+    let nextQ = searchInput.trim();
 
     if (activeRoot === 'software') {
-      if (!sort || sort === 'popular') params.delete('sort');
-      else params.set('sort', sort);
+      // Picking a non-relevance sort while a query is present clears search so that sort applies.
+      if (nextQ && sort !== 'relevance' && sort !== 'popular') {
+        nextQ = '';
+      }
+      if (!sort || sort === 'popular' || (nextQ && sort === 'relevance')) {
+        params.delete('sort');
+      } else {
+        params.set('sort', sort);
+      }
     }
+
+    if (nextQ) params.set('q', nextQ);
+    else params.delete('q');
 
     params.delete('page');
     const qs = params.toString();
@@ -172,7 +181,10 @@ export function MobileFilterDrawer({
                   onChange={(e) => setSort(parseSoftwareSortParam(e.target.value))}
                   className={cn(fieldClass, 'font-medium')}
                 >
-                  {SOFTWARE_SORT_OPTIONS.map((opt) => (
+                  {(searchInput.trim()
+                    ? SOFTWARE_SORT_OPTIONS
+                    : SOFTWARE_SORT_OPTIONS.filter((opt) => opt.id !== 'relevance')
+                  ).map((opt) => (
                     <option key={opt.id} value={opt.id}>
                       {opt.label}
                     </option>
