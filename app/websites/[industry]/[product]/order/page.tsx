@@ -4,34 +4,47 @@ import { requireAuth } from '@/lib/auth/require-auth';
 import { buildPageMetadata } from '@/lib/metadata';
 import { getProjectBySlug } from '@/src/features/ecommerce-showcase/api/projects';
 import { WebsiteOrderForm } from '@/src/features/ecommerce-showcase/public/WebsiteOrderForm';
+import { getProductByPath, productPath } from '@/src/features/catalog';
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ industry: string; product: string }>;
   searchParams: Promise<{ package?: string }>;
 };
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const { industry, product: productSlug } = await params;
+  const catalogProduct = await getProductByPath('websites', industry, productSlug);
+  const project = catalogProduct
+    ? await getProjectBySlug(productSlug)
+    : null;
+  const path = productPath('websites', industry, productSlug) + '/order';
   return buildPageMetadata({
     title: project ? `Order ${project.title}` : 'Order website',
-    path: `/websites/${slug}/order`,
+    path,
     noIndex: true,
   });
 }
 
-export default async function WebsiteOrderPage({ params, searchParams }: Props) {
-  const { slug } = await params;
+export default async function WebsiteNestedOrderPage({ params, searchParams }: Props) {
+  const { industry, product: productSlug } = await params;
   const { package: packageId } = await searchParams;
-  const orderPath = `/websites/${slug}/order${packageId ? `?package=${packageId}` : ''}`;
+
+  const catalogProduct = await getProductByPath('websites', industry, productSlug);
+  if (!catalogProduct) notFound();
+
+  const orderPath = `${productPath('websites', industry, productSlug)}/order${
+    packageId ? `?package=${packageId}` : ''
+  }`;
   const profile = await requireAuth(orderPath);
-  const project = await getProjectBySlug(slug);
+  const project = await getProjectBySlug(productSlug);
   if (!project || project.packages.length === 0) notFound();
 
   const selected =
     project.packages.find((pkg) => pkg.id === packageId)?.id ??
     project.packages.find((pkg) => pkg.is_popular)?.id ??
     project.packages[0]?.id;
+
+  const backHref = catalogProduct.canonical_path || productPath('websites', industry, productSlug);
 
   return (
     <div className="container mx-auto max-w-xl px-4 pb-16 sm:px-6">
@@ -53,7 +66,7 @@ export default async function WebsiteOrderPage({ params, searchParams }: Props) 
       </div>
 
       <p className="mt-6 text-center text-sm">
-        <Link href={`/websites/${project.slug}`} className="font-semibold text-[#2563eb] hover:underline">
+        <Link href={backHref} className="font-semibold text-[#2563eb] hover:underline">
           Back to preview
         </Link>
       </p>

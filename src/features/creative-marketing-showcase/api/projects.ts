@@ -21,7 +21,7 @@ import type {
 } from '../types';
 
 const CARD_SELECT =
-  'id, title, slug, short_description, outcome_line, service_group, service_type, service_subcategory, target_business, pricing_model, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, created_at, updated_at, deleted_at, asset_count';
+  'id, title, slug, short_description, outcome_line, service_group, service_type, service_subcategory, target_business, pricing_model, industry_id, industry_slug, industry_name, canonical_path, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, created_at, updated_at, deleted_at, asset_count';
 
 function mapCard(row: Record<string, unknown>): CreativeMarketingProjectCard {
   return {
@@ -35,6 +35,10 @@ function mapCard(row: Record<string, unknown>): CreativeMarketingProjectCard {
     service_subcategory: (row.service_subcategory as string | null) ?? null,
     target_business: (row.target_business as string | null) ?? null,
     pricing_model: String(row.pricing_model ?? 'one_time'),
+    industry_id: (row.industry_id as string | null) ?? null,
+    industry_slug: (row.industry_slug as string | null) ?? null,
+    industry_name: (row.industry_name as string | null) ?? null,
+    canonical_path: (row.canonical_path as string | null) ?? null,
     cover_card_url: (row.cover_card_url as string | null) ?? null,
     cover_detail_url: (row.cover_detail_url as string | null) ?? null,
     starting_price: Number(row.starting_price ?? 0),

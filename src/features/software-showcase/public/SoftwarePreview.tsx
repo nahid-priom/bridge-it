@@ -1,17 +1,41 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
-import type { SoftwareProductFeature, SoftwareProjectDetail, SoftwareProjectScreen } from '../types';
+import { consultationDeepLink } from '@/src/features/catalog/components/CatalogCTA';
+import { formatCatalogPrice } from '@/src/features/catalog/components/CatalogPrice';
+import { PackageBadge } from '@/src/features/catalog/components/PackageBadge';
+import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
+import type {
+  SoftwarePackage,
+  SoftwareProductFeature,
+  SoftwareProjectDetail,
+  SoftwareProjectScreen,
+} from '../types';
 import {
   resolveSoftwareCover,
   resolveSoftwareScreen,
   withCacheBust,
 } from '../utils/resolve-software-asset';
+import { SoftwareEmptyPreview } from './SoftwareEmptyPreview';
+import { SoftwarePackageSelector } from './SoftwarePackageSelector';
+import {
+  packageDisplayName,
+  paymentTypeLabel,
+  pickDefaultPackage,
+} from './package-utils';
 
 function screenImageUrl(
   screen: SoftwareProjectScreen | null | undefined,
@@ -135,9 +159,45 @@ function ScreenChrome({
 }
 
 export function SoftwarePreview({ project }: { project: SoftwareProjectDetail }) {
+  const industrySlug = softwareIndustryForProduct(project.slug);
+  const activePackages = useMemo(
+    () => project.packages.filter((pkg) => pkg.active !== false),
+    [project.packages]
+  );
+  const hasPackages = activePackages.length > 0;
+
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+
+  const [selectedPackage, setSelectedPackage] = useState<SoftwarePackage | null>(() =>
+    pickDefaultPackage(activePackages, searchParams.get('package'))
+  );
+
+  // Keep selection in sync when ?package= changes (back/forward) without scrolling.
+  useEffect(() => {
+    if (activePackages.length === 0) return;
+    const fromUrl = searchParams.get('package');
+    const next = pickDefaultPackage(activePackages, fromUrl);
+    if (!next) return;
+    setSelectedPackage((prev) => (prev?.id === next.id ? prev : next));
+  }, [activePackages, searchParams]);
+
+  const packageParam = selectedPackage?.name || selectedPackage?.tier || null;
+  const demoHref = consultationDeepLink({
+    intent: 'demo',
+    product: project.slug,
+    industry: industrySlug,
+    kind: 'software',
+    package: packageParam,
+  });
+  const orderHref = consultationDeepLink({
+    intent: 'order',
+    product: project.slug,
+    industry: industrySlug,
+    kind: 'software',
+    package: packageParam,
+  });
 
   const screens = useMemo(
     () => project.screens.filter((screen) => screen.published).sort((a, b) => a.sort_order - b.sort_order),
@@ -172,7 +232,13 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
     project.taxonomy_category?.name ?? project.child_category?.name ?? project.category?.name ?? 'Software';
   const coverResolved = resolveSoftwareCover(project, 'detail');
   const cover = coverResolved ? withCacheBust(coverResolved.url, coverResolved.assetVersion) : null;
-  const outcome = project.feature_summary ?? project.short_description;
+  const outcome =
+    selectedPackage?.short_description ?? project.feature_summary ?? project.short_description;
+
+  const displayPrice = selectedPackage
+    ? selectedPackage.price
+    : project.starting_price;
+  const displayCurrency = selectedPackage?.currency ?? project.currency;
 
   useEffect(() => {
     reducedMotion.current =
@@ -273,22 +339,19 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
     else goRelative(-1);
   };
 
+  const packageFeatures = selectedPackage?.features.slice(0, 8) ?? [];
   const keyFeatures =
-    features.length > 0
-      ? features
-      : project.modules.map((title, index) => ({
-          id: `module-${index}`,
-          project_id: project.id,
+    packageFeatures.length > 0
+      ? packageFeatures.map((title, index) => ({
+          id: `pkg-feat-${index}`,
           title,
-          short_description: null,
-          icon_key: null,
-          sort_order: index,
-          is_primary: index < 3,
-          published: true,
-          created_at: '',
-          updated_at: '',
-          deleted_at: null,
-        }));
+        }))
+      : features.length > 0
+        ? features.map((f) => ({ id: f.id, title: f.title }))
+        : project.modules.map((title, index) => ({
+            id: `module-${index}`,
+            title,
+          }));
 
   const chromeProps = {
     title: selected ? screenLabel(selected) : 'Screen',
@@ -313,7 +376,33 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
           {outcome ? (
             <p className="mt-3 text-sm leading-relaxed text-text-secondary sm:text-base">{outcome}</p>
           ) : null}
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <p className="text-xl font-black tabular-nums text-text-primary sm:text-2xl">
+              {formatCatalogPrice(displayPrice, {
+                currency: displayCurrency,
+                suffix: selectedPackage ? null : project.price_suffix,
+              })}
+            </p>
+            {selectedPackage ? (
+              <span className="text-sm text-text-secondary">
+                {paymentTypeLabel(selectedPackage.payment_type)}
+                {selectedPackage.name ? ` · ${packageDisplayName(selectedPackage)}` : null}
+              </span>
+            ) : null}
+            <PackageBadge badge={selectedPackage?.badge} />
+          </div>
         </header>
+
+        {hasPackages ? (
+          <SoftwarePackageSelector
+            className="mt-5"
+            packages={activePackages}
+            productSlug={project.slug}
+            value={selectedPackage}
+            onChange={setSelectedPackage}
+          />
+        ) : null}
 
         {cover ? (
           <div className="mt-6 overflow-hidden rounded-2xl border border-border-subtle bg-background-soft">
@@ -328,11 +417,33 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
               className="h-auto w-full object-cover object-top"
             />
           </div>
+        ) : screens.length === 0 ? (
+          <SoftwareEmptyPreview className="mt-6" />
         ) : (
-          <div className="mt-6 aspect-[16/10] animate-pulse rounded-2xl bg-background-soft" aria-hidden />
+          <SoftwareEmptyPreview
+            className="mt-6"
+            title="Preview coming soon"
+            description="Cover art is being prepared. Explore system screens below or request a free demo."
+          />
         )}
 
-        <ManageChips features={features} />
+        {packageFeatures.length > 0 ? (
+          <Section title={`${packageDisplayName(selectedPackage!)} Includes`}>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2.5">
+              {packageFeatures.map((feature) => (
+                <li
+                  key={feature}
+                  className="flex items-start gap-2 rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3"
+                >
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        ) : (
+          <ManageChips features={features} />
+        )}
 
         {screens.length > 0 ? (
           <section className="mt-10 lg:mt-14" aria-label="Explore the system">
@@ -350,7 +461,6 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
             </div>
 
             <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-6">
-              {/* Desktop sidebar */}
               <nav className="hidden lg:block" aria-label="Modules">
                 <ul className="sticky top-24 space-y-1 rounded-2xl border border-border-subtle bg-surface p-2">
                   {screens.map((screen) => {
@@ -422,9 +532,11 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                       </button>
                     </>
                   ) : (
-                    <div className="flex min-h-[240px] items-center justify-center text-sm text-text-muted lg:min-h-[360px]">
-                      Screen preview unavailable
-                    </div>
+                    <SoftwareEmptyPreview
+                      className="min-h-[240px] rounded-none border-0 lg:min-h-[360px]"
+                      title="Preview coming soon"
+                      description="This screen image is not available yet."
+                    />
                   )}
                   {selected?.short_caption ? (
                     <p className="border-t border-border-subtle px-4 py-2.5 text-sm text-text-secondary">
@@ -435,7 +547,6 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
 
                 <p className="mt-2 text-center text-xs text-text-muted lg:hidden">Swipe to browse</p>
 
-                {/* Thumbnail strip */}
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Screen thumbnails">
                   {screens.map((screen, i) => {
                     const thumb = screenThumbUrl(screen, assetVersion);
@@ -469,22 +580,31 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
               </div>
             </div>
           </section>
+        ) : cover ? (
+          <section className="mt-10 lg:mt-14" aria-label="System preview">
+            <h2 className="mb-3 font-display text-xl font-black text-text-primary md:text-2xl">
+              System Preview
+            </h2>
+            <SoftwareEmptyPreview description="Detailed screen walkthroughs are coming soon. Book a free demo to see the live system." />
+          </section>
         ) : null}
 
-        <Section title="Key Features">
-          {keyFeatures.length > 0 ? (
-            <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
-              {keyFeatures.map((feature) => (
-                <li
-                  key={feature.id}
-                  className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3 sm:text-sm"
-                >
-                  {feature.title}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </Section>
+        {!hasPackages ? (
+          <Section title="Key Features">
+            {keyFeatures.length > 0 ? (
+              <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                {keyFeatures.map((feature) => (
+                  <li
+                    key={feature.id}
+                    className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3 sm:text-sm"
+                  >
+                    {feature.title}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </Section>
+        ) : null}
 
         {project.full_description ? (
           <Section title="Business Workflow">
@@ -514,26 +634,41 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
             <div>
               <h2 className="font-display text-xl font-black text-text-primary">Ready for a free demo?</h2>
               <p className="mt-1 text-sm text-text-secondary">
-                See how this {project.software_type || 'software'} solution fits your business.
+                See how this {project.software_type || 'software'}
+                {selectedPackage ? ` (${packageDisplayName(selectedPackage)})` : ''} solution fits your business.
               </p>
             </div>
-            <Link
-              href={ROUTES.consultation}
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2563eb] px-6 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
-            >
-              Free Demo
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={demoHref}
+                className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2563eb] px-6 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
+              >
+                Free Demo
+              </Link>
+              <Link
+                href={orderHref}
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-border-subtle px-6 text-sm font-semibold hover:border-[#2563eb]/40"
+              >
+                Order Now
+              </Link>
+            </div>
           </div>
         </section>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
-        <div className="mx-auto max-w-lg">
+        <div className="mx-auto flex max-w-lg gap-2">
           <Link
-            href={ROUTES.consultation}
-            className="flex w-full items-center justify-center rounded-xl bg-[#2563eb] py-3 font-semibold text-white"
+            href={demoHref}
+            className="flex flex-1 items-center justify-center rounded-xl bg-[#2563eb] py-3 font-semibold text-white"
           >
             Free Demo
+          </Link>
+          <Link
+            href={orderHref}
+            className="flex flex-1 items-center justify-center rounded-xl border border-border-subtle py-3 font-semibold"
+          >
+            Order Now
           </Link>
         </div>
       </div>

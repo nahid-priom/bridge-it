@@ -142,6 +142,14 @@ export type SoftwareProjectScreen = {
   deleted_at: string | null;
 };
 
+export type SoftwarePackageTier =
+  | 'starter'
+  | 'basic'
+  | 'standard'
+  | 'professional'
+  | 'enterprise'
+  | 'advanced';
+
 export type SoftwarePackage = {
   id: string;
   project_id: string;
@@ -153,6 +161,14 @@ export type SoftwarePackage = {
   is_popular: boolean;
   sort_order: number;
   active: boolean;
+  /** Package tier slug (starter → enterprise). */
+  tier: SoftwarePackageTier | string | null;
+  /** Payment model — typically one_time. */
+  payment_type: string | null;
+  /** Target segment: small | growing | professional | enterprise. */
+  target_business_size: string | null;
+  badge: string | null;
+  is_recommended: boolean;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
@@ -173,6 +189,11 @@ export type SoftwareProjectCard = {
   main_category_id: string | null;
   taxonomy_category_id: string | null;
   child_category_id: string | null;
+  industry_id?: string | null;
+  industry_slug?: string | null;
+  industry_name?: string | null;
+  canonical_path?: string | null;
+  badge?: string | null;
   cover_card_url: string | null;
   cover_detail_url: string | null;
   starting_price: number;

@@ -92,6 +92,10 @@ export type CreativeMarketingProjectCard = {
   service_subcategory: string | null;
   target_business: string | null;
   pricing_model: string;
+  industry_id?: string | null;
+  industry_slug?: string | null;
+  industry_name?: string | null;
+  canonical_path?: string | null;
   cover_card_url: string | null;
   cover_detail_url: string | null;
   starting_price: number;

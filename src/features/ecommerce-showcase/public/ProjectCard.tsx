@@ -23,8 +23,9 @@ export function ProjectCard({
   variant?: 'default' | 'home';
 }) {
   const router = useRouter();
-  const href = websiteDetailUrl(project.slug);
-  const categoryLabel = project.category_name ?? project.industry ?? 'E-commerce';
+  const href = websiteDetailUrl(project.slug, project.industry_slug, project.canonical_path);
+  const categoryLabel =
+    project.industry_name ?? project.category_name ?? project.industry ?? 'E-commerce';
 
   const prefetchDetail = () => {
     router.prefetch(href);

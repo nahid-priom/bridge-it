@@ -16,7 +16,7 @@ export const CREATIVE_MARKETING_HOMEPAGE_SECTIONS = [
     title: 'Featured creative packages',
     eyebrow: 'Popular',
     description: 'Branding, social creatives and campaigns ready to brief.',
-    viewAllHref: '/creative-marketing',
+    viewAllHref: '/marketing',
     viewAllLabel: 'View all creative services',
   },
 ] as const;

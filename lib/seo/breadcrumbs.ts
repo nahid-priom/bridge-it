@@ -16,6 +16,7 @@ export const BREADCRUMB_SEGMENT_LABELS: Record<string, string> = {
   websites: 'Websites',
   software: 'Software Solutions',
   'creative-marketing': 'Creative & Digital Marketing',
+  marketing: 'Creative & Digital Marketing',
   ecommerce: 'E-commerce',
   pricing: 'Pricing',
   portfolio: 'Portfolio',

@@ -6,6 +6,7 @@ import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
+import { IndustryGrid, listIndustries, productPath } from '@/src/features/catalog';
 import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
 import { WebsitesPageHeader } from '@/src/features/ecommerce-showcase/public/WebsitesPageHeader';
@@ -79,6 +80,7 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
     offset: 0,
   };
   const result = await listProjectCards(listingFilters);
+  const industries = await listIndustries('websites');
 
   const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
@@ -106,7 +108,12 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
       itemListElement: result.items.slice(0, 12).map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: `${SITE_URL}/websites/${item.slug}`,
+        url: `${SITE_URL}${
+          item.canonical_path ||
+          (item.industry_slug
+            ? productPath('websites', item.industry_slug, item.slug)
+            : `/websites/${item.slug}`)
+        }`,
         name: item.title,
       })),
     },
@@ -118,6 +125,17 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
       <PageBreadcrumbJsonLd path="/websites" />
       <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
         <WebsitesPageHeader title={title} description={description} />
+        {industries.length > 0 ? (
+          <section className="mb-8 md:mb-10" aria-labelledby="websites-industries-heading">
+            <h2
+              id="websites-industries-heading"
+              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
+            >
+              Browse by industry
+            </h2>
+            <IndustryGrid industries={industries} root="websites" />
+          </section>
+        ) : null}
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<CatalogFallback />}>
             <WebsitesCatalog

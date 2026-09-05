@@ -4,11 +4,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Check } from 'lucide-react';
 import { cn, focusVisibleRing } from '@/lib/cn';
+import { ROUTES } from '@/lib/routes';
+import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
 import type { SoftwareProjectCard } from '../types';
 import { SoftwareShowcaseImage } from './SoftwareShowcaseImage';
 
-export function softwareDetailUrl(slug: string): string {
-  return `/software/${slug}`;
+export function softwareDetailUrl(
+  slug: string,
+  industrySlug?: string | null,
+  canonicalPath?: string | null
+): string {
+  if (canonicalPath?.trim()) return canonicalPath.trim();
+  const industry = industrySlug?.trim() || softwareIndustryForProduct(slug);
+  if (industry) return ROUTES.softwareProduct(industry, slug);
+  return ROUTES.softwareSolution(slug);
 }
 
 export function SoftwareCard({
@@ -23,10 +32,14 @@ export function SoftwareCard({
   variant?: 'default' | 'home';
 }) {
   const router = useRouter();
-  const href = softwareDetailUrl(project.slug);
+  const href = softwareDetailUrl(project.slug, project.industry_slug, project.canonical_path);
   const loadEager = eager || priority;
   const categoryLabel =
-    project.taxonomy_category_name ?? project.child_category_name ?? project.category_name ?? 'Software';
+    project.industry_name ??
+    project.taxonomy_category_name ??
+    project.child_category_name ??
+    project.category_name ??
+    'Software';
   const outcome =
     project.feature_summary ?? project.short_description ?? project.industry ?? project.business_type;
   const features = project.primary_features?.slice(0, 3) ?? [];

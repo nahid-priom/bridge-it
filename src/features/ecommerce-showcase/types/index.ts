@@ -116,6 +116,10 @@ export type EcommerceProjectCard = {
   technology_stack: string[];
   website_type: string | null;
   industry: string | null;
+  industry_id?: string | null;
+  industry_slug?: string | null;
+  industry_name?: string | null;
+  canonical_path?: string | null;
   cover_image_url: string | null;
   cover_fallback_url: string | null;
   starting_price: number;

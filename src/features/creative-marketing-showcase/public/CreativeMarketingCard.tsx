@@ -4,12 +4,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { cn, focusVisibleRing } from '@/lib/cn';
+import { ROUTES } from '@/lib/routes';
 import { CREATIVE_COVER_CARD, creativeServiceGroupLabel } from '../config/constants';
 import type { CreativeMarketingProjectCard } from '../types';
 import { formatCreativeStartingPrice } from './format-price';
 
-export function creativeDetailUrl(slug: string): string {
-  return `/creative-marketing/${slug}`;
+export function creativeDetailUrl(
+  slug: string,
+  industrySlug?: string | null,
+  canonicalPath?: string | null
+): string {
+  if (canonicalPath?.trim()) return canonicalPath.trim();
+  if (industrySlug?.trim()) return ROUTES.marketingProduct(industrySlug.trim(), slug);
+  return ROUTES.marketingIndustry(slug);
 }
 
 export function CreativeMarketingCard({
@@ -24,10 +31,11 @@ export function CreativeMarketingCard({
   variant?: 'default' | 'home';
 }) {
   const router = useRouter();
-  const href = creativeDetailUrl(project.slug);
+  const href = creativeDetailUrl(project.slug, project.industry_slug, project.canonical_path);
   const cover = project.cover_card_url;
   const loadEager = eager || priority;
-  const categoryLabel = creativeServiceGroupLabel(project.service_group);
+  const categoryLabel =
+    project.industry_name ?? creativeServiceGroupLabel(project.service_group);
 
   const prefetchDetail = () => router.prefetch(href);
 

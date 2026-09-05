@@ -273,8 +273,15 @@ export function showcaseTemplateServiceJsonLd(project: {
   currency: string;
   starting_price: number;
   category?: { name: string } | null;
+  industry_slug?: string | null;
+  canonical_path?: string | null;
 }) {
-  const url = `${SITE_URL}${ROUTES.website(project.slug)}`;
+  const path =
+    project.canonical_path?.trim() ||
+    (project.industry_slug
+      ? ROUTES.websiteProduct(project.industry_slug, project.slug)
+      : ROUTES.website(project.slug));
+  const url = `${SITE_URL}${path}`;
   const image = project.cover_image_url || project.cover_fallback_url;
   return {
     '@context': 'https://schema.org',
@@ -307,12 +314,31 @@ export function showcaseTemplateServiceJsonLd(project: {
   };
 }
 
-export function showcaseTemplateBreadcrumbJsonLd(title: string, slug: string) {
-  return breadcrumbJsonLd([
+export function showcaseTemplateBreadcrumbJsonLd(
+  title: string,
+  slug: string,
+  industry?: { industryName: string; industrySlug: string } | null
+) {
+  const crumbs: Array<{ name: string; url: string }> = [
     { name: 'Home', url: SITE_URL },
     { name: 'Websites', url: `${SITE_URL}${ROUTES.websites}` },
-    { name: title, url: `${SITE_URL}${ROUTES.website(slug)}` },
-  ]);
+  ];
+  if (industry?.industrySlug && industry.industryName) {
+    crumbs.push({
+      name: industry.industryName,
+      url: `${SITE_URL}${ROUTES.websiteIndustry(industry.industrySlug)}`,
+    });
+    crumbs.push({
+      name: title,
+      url: `${SITE_URL}${ROUTES.websiteProduct(industry.industrySlug, slug)}`,
+    });
+  } else {
+    crumbs.push({
+      name: title,
+      url: `${SITE_URL}${ROUTES.website(slug)}`,
+    });
+  }
+  return breadcrumbJsonLd(crumbs);
 }
 
 export function softwareShowcaseServiceJsonLd(project: {
@@ -327,8 +353,15 @@ export function softwareShowcaseServiceJsonLd(project: {
   software_type?: string | null;
   solution_group?: string | null;
   category?: { name: string } | null;
+  industry_slug?: string | null;
+  canonical_path?: string | null;
 }) {
-  const url = `${SITE_URL}${ROUTES.softwareSolution(project.slug)}`;
+  const path =
+    project.canonical_path?.trim() ||
+    (project.industry_slug
+      ? ROUTES.softwareProduct(project.industry_slug, project.slug)
+      : ROUTES.softwareSolution(project.slug));
+  const url = `${SITE_URL}${path}`;
   const image = project.cover_detail_url || project.cover_card_url || project.og_image_url;
   return {
     '@context': 'https://schema.org',
@@ -359,10 +392,29 @@ export function softwareShowcaseServiceJsonLd(project: {
   };
 }
 
-export function softwareShowcaseBreadcrumbJsonLd(title: string, slug: string) {
-  return breadcrumbJsonLd([
+export function softwareShowcaseBreadcrumbJsonLd(
+  title: string,
+  slug: string,
+  industry?: { industryName: string; industrySlug: string } | null
+) {
+  const crumbs: Array<{ name: string; url: string }> = [
     { name: 'Home', url: SITE_URL },
     { name: 'Software Solutions', url: `${SITE_URL}${ROUTES.softwareShowroom}` },
-    { name: title, url: `${SITE_URL}${ROUTES.softwareSolution(slug)}` },
-  ]);
+  ];
+  if (industry?.industrySlug && industry.industryName) {
+    crumbs.push({
+      name: industry.industryName,
+      url: `${SITE_URL}${ROUTES.softwareIndustry(industry.industrySlug)}`,
+    });
+    crumbs.push({
+      name: title,
+      url: `${SITE_URL}${ROUTES.softwareProduct(industry.industrySlug, slug)}`,
+    });
+  } else {
+    crumbs.push({
+      name: title,
+      url: `${SITE_URL}${ROUTES.softwareSolution(slug)}`,
+    });
+  }
+  return breadcrumbJsonLd(crumbs);
 }

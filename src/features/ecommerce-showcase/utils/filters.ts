@@ -127,7 +127,13 @@ export function websitesUrl(filters: ShowcaseListFilters = {}): string {
   return `/websites${showcaseQueryString(filters)}`;
 }
 
-export function websiteDetailUrl(slug: string): string {
+export function websiteDetailUrl(
+  slug: string,
+  industrySlug?: string | null,
+  canonicalPath?: string | null
+): string {
+  if (canonicalPath?.trim()) return canonicalPath.trim();
+  if (industrySlug?.trim()) return `/websites/${industrySlug.trim()}/${slug}`;
   return `/websites/${slug}`;
 }
 

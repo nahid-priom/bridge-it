@@ -31,6 +31,10 @@ function mapCard(row: Record<string, unknown>): EcommerceProjectCard {
     technology_stack: (row.technology_stack as string[]) ?? [],
     website_type: (row.website_type as string | null) ?? null,
     industry: (row.industry as string | null) ?? null,
+    industry_id: (row.industry_id as string | null) ?? null,
+    industry_slug: (row.industry_slug as string | null) ?? null,
+    industry_name: (row.industry_name as string | null) ?? null,
+    canonical_path: (row.canonical_path as string | null) ?? null,
     cover_image_url: (row.cover_image_url as string | null) ?? null,
     cover_fallback_url: (row.cover_fallback_url as string | null) ?? null,
     starting_price: Number(row.starting_price ?? 0),
@@ -208,7 +212,7 @@ async function listProjectCardsUncached(
   let query = supabase
     .from('ecommerce_project_cards')
     .select(
-      'id, title, slug, short_description, category_id, category_name, category_slug, industry, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count',
+      'id, title, slug, short_description, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, technology_stack, cover_image_url, cover_fallback_url, starting_price, currency, featured, published, sort_order, created_at, updated_at, deleted_at, page_count',
       { count: 'exact' }
     )
     .is('deleted_at', null);

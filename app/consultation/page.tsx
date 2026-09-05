@@ -41,19 +41,39 @@ function ConsultationForm() {
   const searchParams = useSearchParams();
   const setNotification = useStore((s) => s.setNotification);
   const productPrefill = searchParams.get('product') ?? '';
+  const intent = searchParams.get('intent') ?? 'demo';
+  const kind = searchParams.get('kind') ?? '';
+  const industry = searchParams.get('industry') ?? '';
+
+  const kindService =
+    kind === 'software'
+      ? 'Software'
+      : kind === 'websites'
+        ? 'Websites'
+        : kind === 'marketing'
+          ? 'Creative & Marketing'
+          : '';
+
+  const intentLabel = intent === 'order' ? 'Order interest' : 'Free demo request';
 
   const initial = useMemo<FormState>(
     () => ({
       ...EMPTY,
-      service_interested_in: productPrefill
+      service_interested_in: kindService || (productPrefill
         ? productPrefill.length > 40
           ? 'Other'
           : productPrefill
-        : '',
-      message: productPrefill ? `Interested in: ${productPrefill}` : '',
+        : ''),
+      message: [
+        productPrefill ? `${intentLabel}: ${productPrefill}` : '',
+        industry ? `Industry: ${industry}` : '',
+        kind ? `Catalog: ${kind}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n'),
       product_id: searchParams.get('product_id') ?? '',
     }),
-    [productPrefill, searchParams]
+    [productPrefill, searchParams, kindService, intentLabel, industry, kind]
   );
 
   const [step, setStep] = useState<1 | 2>(1);

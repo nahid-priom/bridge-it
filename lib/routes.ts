@@ -5,6 +5,10 @@ export const ROUTES = {
   website: (slug: string) => `/websites/${slug}`,
   websiteOrder: (slug: string, packageId?: string) =>
     packageId ? `/websites/${slug}/order?package=${packageId}` : `/websites/${slug}/order`,
+  websiteProductOrder: (industry: string, product: string, packageId?: string) =>
+    packageId
+      ? `/websites/${industry}/${product}/order?package=${packageId}`
+      : `/websites/${industry}/${product}/order`,
   ecommerceCategory: (slug: string) => `/ecommerce/${slug}`,
   solutions: '/explore',
   solution: (slug: string) => `/websites/${slug}`,
@@ -24,10 +28,19 @@ export const ROUTES = {
   ecommerceDemo: (demoSlug: string) => `/demo/ecommerce/${demoSlug}`,
   softwareShowroom: '/software',
   softwareSolution: (slug: string) => `/software/${slug}`,
+  softwareIndustry: (slug: string) => `/software/${slug}`,
+  softwareProduct: (industry: string, product: string) => `/software/${industry}/${product}`,
   softwareSolutionOrder: (slug: string) => `/consultation`,
   softwareDemo: (demoSlug: string) => `/demo/software/${demoSlug}`,
-  creativeMarketingShowroom: '/creative-marketing',
-  creativeMarketingSolution: (slug: string) => `/creative-marketing/${slug}`,
+  websiteIndustry: (slug: string) => `/websites/${slug}`,
+  websiteProduct: (industry: string, product: string) => `/websites/${industry}/${product}`,
+  marketingShowroom: '/marketing',
+  marketingIndustry: (slug: string) => `/marketing/${slug}`,
+  marketingProduct: (industry: string, product: string) => `/marketing/${industry}/${product}`,
+  /** @deprecated Alias → marketingShowroom during /creative-marketing → /marketing transition */
+  creativeMarketingShowroom: '/marketing',
+  /** @deprecated Prefer marketingProduct(industry, slug); flat path redirects via catalog_url_redirects */
+  creativeMarketingSolution: (slug: string) => `/marketing/${slug}`,
   creativeMarketingOrder: (slug: string) => `/consultation`,
   search: '/explore',
   /** @deprecated Use solutions */
@@ -64,6 +77,7 @@ export const ROUTES = {
   adminEcommerceLeads: '/admin/ecommerce-leads',
   adminSoftwareProjects: '/admin/software-projects',
   adminShowcaseTaxonomy: '/admin/showcase-taxonomy',
+  adminCatalogIndustries: '/admin/catalog-industries',
   adminCreativeMarketingProjects: '/admin/creative-marketing-projects',
   /** @deprecated Seller hub removed — redirects via middleware */
   sellerDashboard: '/seller-dashboard',

@@ -1,4 +1,5 @@
-import { ROUTES } from '@/lib/routes';
+import { ROUTES } from '../routes';
+import { buildCatalogHierarchyRedirects } from './catalog-redirects';
 
 export const GOOGLE_SITE_VERIFICATION = 'f2F2jc6bDCd4G1gsde7UfIW83Bnow_32Kfr2Sv6HUtw';
 
@@ -60,6 +61,7 @@ export const RESERVED_SLUGS = [
   'websites',
   'software',
   'creative-marketing',
+  'marketing',
   'ecommerce',
   'demo',
   'order',
@@ -149,10 +151,13 @@ export const LEGACY_REDIRECTS: ReadonlyArray<{
   { source: '/free-demo', destination: ROUTES.consultation, permanent: true },
   { source: '/book-demo', destination: ROUTES.consultation, permanent: true },
   { source: '/consult', destination: ROUTES.consultation, permanent: true },
-  // Marketing aliases
-  { source: '/marketing', destination: ROUTES.creativeMarketingShowroom, permanent: true },
-  { source: '/digital-marketing', destination: ROUTES.creativeMarketingShowroom, permanent: true },
-  { source: '/creative', destination: ROUTES.creativeMarketingShowroom, permanent: true },
+  // Hierarchical catalog flat→nested FIRST (more specific than catch-alls)
+  ...buildCatalogHierarchyRedirects(),
+  // Marketing aliases — /marketing is canonical
+  { source: '/creative-marketing', destination: ROUTES.marketingShowroom, permanent: true },
+  { source: '/creative-marketing/:path*', destination: '/marketing/:path*', permanent: true },
+  { source: '/digital-marketing', destination: ROUTES.marketingShowroom, permanent: true },
+  { source: '/creative', destination: ROUTES.marketingShowroom, permanent: true },
   // Software aliases
   { source: '/software-solutions', destination: ROUTES.softwareShowroom, permanent: true },
   { source: '/admin-software', destination: ROUTES.softwareShowroom, permanent: true },

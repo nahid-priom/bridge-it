@@ -10,6 +10,9 @@ import {
 import { listCategories, listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
+import { listIndustries } from '@/src/features/catalog/api/industries';
+import { industryPath } from '@/src/features/catalog/utils/paths';
+import type { CatalogCategoryRoot } from '@/src/features/catalog/types';
 
 function canonicalOrigin(): string {
   try {
@@ -97,12 +100,27 @@ async function listAllPublishedCreativeCards() {
   return items;
 }
 
+async function listAllIndustries(root: CatalogCategoryRoot) {
+  return listIndustries(root);
+}
+
 export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
-  const [categories, projects, softwareProjects, creativeProjects] = await Promise.all([
+  const [
+    categories,
+    projects,
+    softwareProjects,
+    creativeProjects,
+    softwareIndustries,
+    websiteIndustries,
+    marketingIndustries,
+  ] = await Promise.all([
     listCategories(),
     listAllPublishedProjectCards(),
     listAllPublishedSoftwareCards(),
     listAllPublishedCreativeCards(),
+    listAllIndustries('software'),
+    listAllIndustries('websites'),
+    listAllIndustries('marketing'),
   ]);
 
   const staticEntries = STATIC_SITEMAP_ROUTES.map((route) =>
@@ -112,40 +130,87 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  const categoryEntries = categories.map((category) =>
-    entry(ROUTES.ecommerceCategory(category.slug), {
-      lastModified: category.updated_at,
-      changeFrequency: 'weekly',
-      priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
-    })
-  );
+  const industryEntries = [
+    ...softwareIndustries.map((ind) =>
+      entry(industryPath('software', ind.slug), {
+        lastModified: ind.updated_at,
+        changeFrequency: 'weekly' as const,
+        priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
+      })
+    ),
+    ...websiteIndustries.map((ind) =>
+      entry(industryPath('websites', ind.slug), {
+        lastModified: ind.updated_at,
+        changeFrequency: 'weekly' as const,
+        priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
+      })
+    ),
+    ...marketingIndustries.map((ind) =>
+      entry(industryPath('marketing', ind.slug), {
+        lastModified: ind.updated_at,
+        changeFrequency: 'weekly' as const,
+        priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
+      })
+    ),
+  ];
+
+  // Fallback website industries from ecommerce categories if catalog_industries empty
+  const websiteIndustrySlugs = new Set(websiteIndustries.map((i) => i.slug));
+  const categoryEntries = categories
+    .filter((category) => !websiteIndustrySlugs.has(category.slug))
+    .map((category) =>
+      entry(ROUTES.websiteIndustry(category.slug), {
+        lastModified: category.updated_at,
+        changeFrequency: 'weekly',
+        priority: SOLUTION_CATEGORY_FILTER_PRIORITY,
+      })
+    );
 
   const projectEntries = projects.map((project) =>
-    entry(ROUTES.website(project.slug), {
-      lastModified: project.updated_at,
-      changeFrequency: 'weekly',
-      priority: SOLUTION_DETAIL_PRIORITY,
-    })
+    entry(
+      project.canonical_path ||
+        (project.industry_slug
+          ? ROUTES.websiteProduct(project.industry_slug, project.slug)
+          : ROUTES.website(project.slug)),
+      {
+        lastModified: project.updated_at,
+        changeFrequency: 'weekly',
+        priority: SOLUTION_DETAIL_PRIORITY,
+      }
+    )
   );
 
   const softwareEntries = softwareProjects.map((project) =>
-    entry(ROUTES.softwareSolution(project.slug), {
-      lastModified: project.updated_at,
-      changeFrequency: 'weekly',
-      priority: SOLUTION_DETAIL_PRIORITY,
-    })
+    entry(
+      project.canonical_path ||
+        (project.industry_slug
+          ? ROUTES.softwareProduct(project.industry_slug, project.slug)
+          : ROUTES.softwareSolution(project.slug)),
+      {
+        lastModified: project.updated_at,
+        changeFrequency: 'weekly',
+        priority: SOLUTION_DETAIL_PRIORITY,
+      }
+    )
   );
 
   const creativeEntries = creativeProjects.map((project) =>
-    entry(ROUTES.creativeMarketingSolution(project.slug), {
-      lastModified: project.updated_at,
-      changeFrequency: 'weekly',
-      priority: SOLUTION_DETAIL_PRIORITY,
-    })
+    entry(
+      project.canonical_path ||
+        (project.industry_slug
+          ? ROUTES.marketingProduct(project.industry_slug, project.slug)
+          : ROUTES.marketingShowroom),
+      {
+        lastModified: project.updated_at,
+        changeFrequency: 'weekly',
+        priority: SOLUTION_DETAIL_PRIORITY,
+      }
+    )
   );
 
   return [
     ...staticEntries,
+    ...industryEntries,
     ...categoryEntries,
     ...projectEntries,
     ...softwareEntries,

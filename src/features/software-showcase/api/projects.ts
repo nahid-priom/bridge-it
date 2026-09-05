@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import { getServerClient } from '@/lib/services/client';
+import { SOFTWARE_FLAGSHIP_BY_INDUSTRY } from '@/src/features/catalog/config/software-industries-45';
 import {
   SOFTWARE_GALLERY_PAGE_SIZE,
   SOFTWARE_HOMEPAGE_SECTION_MAX,
@@ -27,7 +28,7 @@ import type {
 } from '../types';
 
 const CARD_SELECT =
-  'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, asset_version, created_at, updated_at, deleted_at, screen_count';
+  'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, badge, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, asset_version, created_at, updated_at, deleted_at, screen_count';
 
 function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
   return {
@@ -45,6 +46,11 @@ function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
     main_category_id: (row.main_category_id as string | null) ?? null,
     taxonomy_category_id: (row.taxonomy_category_id as string | null) ?? null,
     child_category_id: (row.child_category_id as string | null) ?? null,
+    industry_id: (row.industry_id as string | null) ?? null,
+    industry_slug: (row.industry_slug as string | null) ?? null,
+    industry_name: (row.industry_name as string | null) ?? null,
+    canonical_path: (row.canonical_path as string | null) ?? null,
+    badge: (row.badge as string | null) ?? null,
     cover_card_url: (row.cover_card_url as string | null) ?? null,
     cover_detail_url: (row.cover_detail_url as string | null) ?? null,
     starting_price: Number(row.starting_price ?? 0),
@@ -154,8 +160,18 @@ function mapFeature(row: Record<string, unknown>): SoftwareProductFeature {
 }
 
 function mapPackage(row: Record<string, unknown>): SoftwarePackage {
-  const features = Array.isArray(row.features)
-    ? (row.features as unknown[]).map((item) => String(item))
+  const rawFeatures = row.features;
+  const features = Array.isArray(rawFeatures)
+    ? (rawFeatures as unknown[]).map((item) => {
+        if (typeof item === 'string') return item;
+        if (item && typeof item === 'object' && 'title' in item) {
+          return String((item as { title: unknown }).title);
+        }
+        if (item && typeof item === 'object' && 'name' in item) {
+          return String((item as { name: unknown }).name);
+        }
+        return String(item);
+      })
     : [];
   return {
     id: String(row.id),
@@ -167,9 +183,14 @@ function mapPackage(row: Record<string, unknown>): SoftwarePackage {
     features,
     is_popular: Boolean(row.is_popular),
     sort_order: Number(row.sort_order ?? 0),
-    active: Boolean(row.active),
-    created_at: String(row.created_at),
-    updated_at: String(row.updated_at),
+    active: Boolean(row.active ?? true),
+    tier: (row.tier as string | null) ?? null,
+    payment_type: (row.payment_type as string | null) ?? 'one_time',
+    target_business_size: (row.target_business_size as string | null) ?? null,
+    badge: (row.badge as string | null) ?? null,
+    is_recommended: Boolean(row.is_recommended),
+    created_at: String(row.created_at ?? ''),
+    updated_at: String(row.updated_at ?? ''),
     deleted_at: (row.deleted_at as string | null) ?? null,
   };
 }
@@ -477,6 +498,57 @@ export async function getSoftwareProjectBySlug(
   options: { includeDrafts?: boolean } = {}
 ): Promise<SoftwareProjectDetail | null> {
   return getSoftwareProjectBySlugCached(slug, Boolean(options.includeDrafts));
+}
+
+/**
+ * Primary flagship project for an industry — preferred slug, else lowest sort_order
+ * published product that has active packages.
+ */
+export async function getIndustryFlagship(
+  industrySlug: string
+): Promise<SoftwareProjectDetail | null> {
+  const preferred = SOFTWARE_FLAGSHIP_BY_INDUSTRY[industrySlug];
+  if (preferred) {
+    const byPreferred = await getSoftwareProjectBySlug(preferred);
+    if (byPreferred && byPreferred.packages.length > 0) return byPreferred;
+    if (byPreferred) return byPreferred;
+  }
+
+  const erpGuess = `${industrySlug}-erp`;
+  const byErp = await getSoftwareProjectBySlug(erpGuess);
+  if (byErp) return byErp;
+
+  const supabase = await getServerClient();
+  if (!supabase) return null;
+
+  const { data: industry } = await supabase
+    .from('catalog_industries')
+    .select('id')
+    .eq('category_root', 'software')
+    .eq('slug', industrySlug)
+    .is('deleted_at', null)
+    .eq('active', true)
+    .maybeSingle();
+
+  if (!industry?.id) return null;
+
+  const { data: projects } = await supabase
+    .from('software_projects')
+    .select('slug')
+    .eq('industry_id', industry.id)
+    .eq('published', true)
+    .is('deleted_at', null)
+    .order('sort_order', { ascending: true })
+    .limit(8);
+
+  for (const row of projects ?? []) {
+    const detail = await getSoftwareProjectBySlug(String(row.slug));
+    if (detail && detail.packages.length > 0) return detail;
+  }
+
+  const first = projects?.[0];
+  if (first) return getSoftwareProjectBySlug(String(first.slug));
+  return null;
 }
 
 function emptyHomepageSections(): SoftwareHomepageSectionsResult {

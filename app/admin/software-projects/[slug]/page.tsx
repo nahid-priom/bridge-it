@@ -6,6 +6,7 @@ import { isShowcaseViewerRole } from '@/src/features/ecommerce-showcase/config/r
 import { getAdminClient } from '@/lib/services/client';
 import { getSoftwareProjectBySlug } from '@/src/features/software-showcase/api/projects';
 import { SoftwareAdminEditForm } from '@/src/features/software-showcase/admin/SoftwareAdminEditForm';
+import { SoftwarePackagesAdmin } from '@/src/features/software-showcase/admin/SoftwarePackagesAdmin';
 import type {
   ShowcaseCategory,
   ShowcaseChildCategory,
@@ -52,6 +53,11 @@ export default async function AdminSoftwareProjectEditPage({ params }: { params:
         }}
         features={project.features}
         screens={project.screens}
+      />
+      <SoftwarePackagesAdmin
+        projectId={project.id}
+        projectSlug={project.slug}
+        packages={project.packages}
       />
     </div>
   );
