@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { submitConsultationAction } from '@/app/actions/bitp';
-import { ConsultationAtmosphere } from '@/components/consultation/ConsultationAtmosphere';
 import { heroTypography, sectionSpacing } from '@/lib/styles/design-tokens';
 import { ROUTES } from '@/lib/routes';
 import { useStore } from '@/store/useStore';
@@ -296,8 +295,6 @@ export default function ConsultationPage() {
       className={cn('relative w-full overflow-x-hidden pb-12 md:pb-14', sectionSpacing.heroCompact)}
       aria-labelledby="consultation-heading"
     >
-      <ConsultationAtmosphere />
-
       <div className="relative z-[1] mx-auto flex w-full max-w-xl flex-col items-center gap-5 px-4 sm:gap-6 sm:px-6 lg:px-8">
         <ConsultationCopy />
 

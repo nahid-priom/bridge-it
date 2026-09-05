@@ -1170,47 +1170,148 @@ html[data-admin-route] body {
     radial-gradient(ellipse 60% 45% at 50% 95%, rgba(6, 214, 160, 0.12) 0%, transparent 50%);
 }
 
-/* ===== Site atmosphere (Portfolio canvas — used site-wide) ===== */
+/* ===== Site atmosphere (center-focused premium canvas) ===== */
 .site-atmosphere-bg,
 .marketplace-hero-bg {
   position: relative;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #f8fafc;
   background-image:
-    radial-gradient(ellipse 55% 45% at 0% 25%, rgba(167, 243, 208, 0.45) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 8% 55%, rgba(186, 230, 253, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse 45% 50% at 100% 30%, rgba(196, 181, 253, 0.2) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(224, 242, 254, 0.65) 0%, transparent 50%),
-    linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #f8fafc 100%);
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(186, 230, 253, 0.35) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 40% at 50% 55%, rgba(167, 243, 208, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 45% at 50% 100%, rgba(224, 242, 254, 0.45) 0%, transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 55%, #f1f5f9 100%);
 }
 
 .dark .site-atmosphere-bg,
 .dark .marketplace-hero-bg {
   background-color: #080b16;
   background-image:
-    radial-gradient(ellipse 55% 45% at 0% 25%, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 12% 48%, rgba(6, 182, 212, 0.1) 0%, transparent 52%),
-    radial-gradient(ellipse 45% 50% at 100% 30%, rgba(109, 53, 245, 0.15) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(15, 23, 42, 0.55) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 48% at 50% -5%, rgba(37, 99, 235, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 36% at 50% 42%, rgba(16, 185, 129, 0.07) 0%, transparent 58%),
+    radial-gradient(ellipse 65% 40% at 50% 100%, rgba(15, 23, 42, 0.65) 0%, transparent 55%),
     linear-gradient(180deg, #080b16 0%, #0b1f33 100%);
 }
 
-/* Fixed top-band glow so long pages keep the Portfolio feel */
+/* Legacy alias — prefer PublicPageAtmosphere layers */
 .site-atmosphere-glow {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 55% 40% at 0% 12%, rgba(167, 243, 208, 0.28) 0%, transparent 55%),
-    radial-gradient(ellipse 45% 35% at 100% 8%, rgba(196, 181, 253, 0.14) 0%, transparent 55%);
+  display: none;
 }
 
-.dark .site-atmosphere-glow {
-  background:
-    radial-gradient(ellipse 55% 40% at 0% 12%, rgba(16, 185, 129, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 36% at 14% 28%, rgba(6, 182, 212, 0.1) 0%, transparent 52%),
-    radial-gradient(ellipse 45% 35% at 100% 8%, rgba(109, 53, 245, 0.16) 0%, transparent 55%);
+/* ===== PublicPageAtmosphere layers (no side-edge color noise) ===== */
+.public-atmosphere__hero {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 58% 42% at 50% 8%,
+    rgba(56, 189, 248, 0.16) 0%,
+    transparent 62%
+  );
+}
+
+.dark .public-atmosphere__hero {
+  background: radial-gradient(
+    ellipse 58% 42% at 50% 6%,
+    rgba(37, 99, 235, 0.18) 0%,
+    transparent 62%
+  );
+}
+
+.public-atmosphere__mid {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 48% 36% at 50% 48%,
+    rgba(16, 185, 129, 0.05) 0%,
+    transparent 65%
+  );
+  opacity: 0.7;
+}
+
+.dark .public-atmosphere__mid {
+  background: radial-gradient(
+    ellipse 48% 36% at 50% 48%,
+    rgba(45, 212, 191, 0.06) 0%,
+    transparent 65%
+  );
+}
+
+.public-atmosphere__cta {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 55% 32% at 50% 92%,
+    rgba(37, 99, 235, 0.08) 0%,
+    transparent 60%
+  );
+}
+
+.dark .public-atmosphere__cta {
+  background: radial-gradient(
+    ellipse 55% 32% at 50% 94%,
+    rgba(59, 130, 246, 0.1) 0%,
+    transparent 60%
+  );
+}
+
+.public-atmosphere--medium .public-atmosphere__hero {
+  filter: saturate(1.05);
+}
+
+.public-atmosphere--medium .public-atmosphere__mid {
+  opacity: 0.9;
+}
+
+.public-atmosphere--consultation .public-atmosphere__hero {
+  background: radial-gradient(
+    ellipse 62% 44% at 50% 10%,
+    rgba(56, 189, 248, 0.14) 0%,
+    transparent 60%
+  );
+}
+
+.dark .public-atmosphere--consultation .public-atmosphere__hero {
+  background: radial-gradient(
+    ellipse 62% 44% at 50% 8%,
+    rgba(59, 130, 246, 0.2) 0%,
+    transparent 60%
+  );
+}
+
+.public-atmosphere--consultation .public-atmosphere__mid {
+  opacity: 0.85;
+}
+
+.public-atmosphere__ring {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: min(88vw, 28rem);
+  height: min(88vw, 28rem);
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+}
+
+.public-atmosphere__ring > svg {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: public-atmosphere-spin 64s linear infinite;
+}
+
+@keyframes public-atmosphere-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-atmosphere__ring > svg {
+    animation: none !important;
+  }
 }
 
 /* Deshi Fiverr hero — inherits site atmosphere; no second solid fill */
@@ -1697,93 +1798,6 @@ html[data-nav-scrolled='true'] .mobile-premium-navbar-shell,
   box-shadow:
     var(--toploader-shadow),
     0 0 8px var(--toploader-color) !important;
-}
-
-/* ===== Consultation page premium atmosphere ===== */
-.consultation-aurora {
-  background:
-    radial-gradient(ellipse 55% 45% at 50% 20%, rgba(148, 163, 184, 0.08), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(6, 182, 212, 0.06), transparent 55%);
-  animation: consultation-aurora-shift 18s ease-in-out infinite alternate;
-}
-
-.dark .consultation-aurora {
-  background:
-    radial-gradient(ellipse 55% 45% at 50% 18%, rgba(148, 163, 184, 0.1), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 82%, rgba(34, 211, 238, 0.07), transparent 55%);
-}
-
-@keyframes consultation-aurora-shift {
-  0% {
-    transform: scale(1) translate3d(0, 0, 0);
-    opacity: 0.85;
-  }
-  100% {
-    transform: scale(1.08) translate3d(-1.5%, 1%, 0);
-    opacity: 1;
-  }
-}
-
-.consultation-ring--lg {
-  width: min(110vw, 42rem);
-  height: min(110vw, 42rem);
-  opacity: 0.45;
-}
-
-.consultation-ring--lg > svg {
-  width: 100%;
-  height: 100%;
-  transform-origin: center;
-  animation: consultation-spin-plain 56s linear infinite;
-}
-
-.consultation-ring--sm {
-  width: 10rem;
-  height: 10rem;
-  opacity: 0.7;
-}
-
-.consultation-ring--sm > svg {
-  width: 100%;
-  height: 100%;
-  transform-origin: center;
-  animation: consultation-spin-reverse 32s linear infinite;
-}
-
-.consultation-orbit {
-  animation: consultation-spin-plain 22s linear infinite;
-}
-
-.consultation-orbit--slow {
-  animation-duration: 34s;
-  animation-direction: reverse;
-}
-
-@keyframes consultation-spin-plain {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes consultation-spin-reverse {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .consultation-aurora,
-  .consultation-ring--lg > svg,
-  .consultation-ring--sm > svg,
-  .consultation-orbit {
-    animation: none !important;
-  }
 }
 
 /* Homepage shell — atmosphere comes from AppShell site-atmosphere-bg */
