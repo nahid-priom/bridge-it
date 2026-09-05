@@ -125,6 +125,8 @@ export type CreativeMarketingListFilters = {
   more?: string[];
   /** @deprecated Prefer group + more */
   serviceGroup?: string;
+  /** Catalog industry path slug */
+  industrySlug?: string;
   featured?: boolean;
   popular?: boolean;
   published?: boolean | 'all';

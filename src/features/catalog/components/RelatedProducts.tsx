@@ -2,6 +2,9 @@ import Link from 'next/link';
 import type { CatalogProductRef, CatalogRelatedProduct } from '../types';
 import { productPath } from '../utils/paths';
 import { CatalogPrice } from './CatalogPrice';
+import { FeaturedBadge } from './FeaturedBadge';
+import { StarRating } from './StarRating';
+import { fallbackRatingFromSlug } from '../types/reviews';
 
 function relatedHref(product: CatalogProductRef): string {
   if (product.canonical_path?.trim()) return product.canonical_path.trim();
@@ -25,33 +28,64 @@ export function RelatedProducts({
   if (products.length === 0) return null;
 
   return (
-    <section className="mt-10 md:mt-14">
-      <h2 className="font-display text-xl font-black text-[#0f2744] dark:text-white md:text-2xl">
+    <section className="mt-10 md:mt-14" aria-labelledby="similar-products-heading">
+      <h2
+        id="similar-products-heading"
+        className="font-display text-xl font-black text-[#0f2744] dark:text-white md:text-2xl"
+      >
         {title}
       </h2>
-      <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <li key={product.id}>
-            <Link
-              href={relatedHref(product)}
-              className="flex h-full flex-col rounded-2xl border border-border-subtle bg-surface p-4 transition-colors hover:border-[#2563eb]/40"
-            >
-              {product.industry_name ? (
-                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-                  {product.industry_name}
-                </p>
-              ) : null}
-              <p className="mt-1 font-display font-bold text-text-primary">{product.title}</p>
-              <p className="mt-auto pt-2 text-sm font-semibold text-text-secondary">
-                <CatalogPrice
-                  amount={product.starting_price}
-                  suffix={product.price_suffix}
-                  currency={product.currency}
-                />
-              </p>
-            </Link>
-          </li>
-        ))}
+      <ul className="mt-4 flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 xl:grid-cols-4">
+        {products.map((product) => {
+          const rating =
+            product.rating_avg ?? fallbackRatingFromSlug(product.slug).rating_avg;
+          const reviewCount =
+            product.review_count ?? fallbackRatingFromSlug(product.slug).review_count;
+          return (
+            <li key={product.id} className="min-w-[240px] shrink-0 sm:min-w-0">
+              <Link
+                href={relatedHref(product)}
+                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface transition-colors hover:border-[#2563eb]/40"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-background-soft">
+                  {product.featured ? <FeaturedBadge /> : null}
+                  {product.cover_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={product.cover_url}
+                      alt=""
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#0f2744] to-[#1a3a5c]">
+                      <span className="font-display text-2xl font-bold text-white/80">
+                        {product.title.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col gap-1.5 p-3.5">
+                  {product.industry_name ? (
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[#2563eb]">
+                      {product.industry_name}
+                    </p>
+                  ) : null}
+                  <p className="font-display font-bold leading-snug text-text-primary line-clamp-2">
+                    {product.title}
+                  </p>
+                  <StarRating rating={rating} reviewCount={reviewCount} />
+                  <p className="mt-auto pt-1 text-sm font-semibold text-text-secondary">
+                    <CatalogPrice
+                      amount={product.starting_price}
+                      suffix={product.price_suffix}
+                      currency={product.currency}
+                    />
+                  </p>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

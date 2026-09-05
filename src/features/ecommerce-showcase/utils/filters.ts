@@ -66,6 +66,7 @@ export function parseShowcaseFilters(searchParams: URLSearchParams): ShowcaseLis
     view,
     page: view,
     industry: searchParams.get('industry')?.trim() || undefined,
+    industrySlug: searchParams.get('industrySlug')?.trim() || undefined,
     websiteType: searchParams.get('type')?.trim() || undefined,
     price,
     minPrice: minPrice ? Number(minPrice) : bounds.minPrice,

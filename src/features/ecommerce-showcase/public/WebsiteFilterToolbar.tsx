@@ -26,7 +26,7 @@ export function WebsiteFilterToolbar({
     <div
       className="flex w-full min-w-0 items-center gap-2"
       role="region"
-      aria-label="Filter website designs"
+      aria-label="Filter website templates"
     >
       <div className="scrollbar-none min-w-0 flex-1 overflow-x-auto overscroll-x-contain">
         <div className="flex w-max gap-2" role="group" aria-label="Category filters">

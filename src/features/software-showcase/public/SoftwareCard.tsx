@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight, Check } from 'lucide-react';
 import { cn, focusVisibleRing } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
+import { formatCatalogPrice } from '@/src/features/catalog/components/CatalogPrice';
+import { FeaturedBadge } from '@/src/features/catalog/components/FeaturedBadge';
+import { StarRating } from '@/src/features/catalog/components/StarRating';
+import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
 import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
 import type { SoftwareProjectCard } from '../types';
 import { SoftwareShowcaseImage } from './SoftwareShowcaseImage';
@@ -43,6 +47,9 @@ export function SoftwareCard({
   const outcome =
     project.feature_summary ?? project.short_description ?? project.industry ?? project.business_type;
   const features = project.primary_features?.slice(0, 3) ?? [];
+  const ratingFallback = fallbackRatingFromSlug(project.slug);
+  const ratingAvg = project.rating_avg ?? ratingFallback.rating_avg;
+  const reviewCount = project.review_count ?? ratingFallback.review_count;
 
   const prefetchDetail = () => {
     router.prefetch(href);
@@ -67,7 +74,8 @@ export function SoftwareCard({
           className={cn('flex h-full flex-col outline-none', focusVisibleRing)}
           aria-label={`View ${project.title}`}
         >
-          <div className="overflow-hidden rounded-t-xl sm:rounded-t-2xl">
+          <div className="relative overflow-hidden rounded-t-xl sm:rounded-t-2xl">
+            {project.featured ? <FeaturedBadge /> : null}
             <SoftwareShowcaseImage
               kind="card"
               project={project}
@@ -84,6 +92,7 @@ export function SoftwareCard({
                 {project.title}
               </h4>
               <p className="mt-0.5 text-xs text-text-muted line-clamp-1">{categoryLabel}</p>
+              <StarRating rating={ratingAvg} reviewCount={reviewCount} className="mt-1" />
             </div>
             <span
               aria-hidden
@@ -105,16 +114,12 @@ export function SoftwareCard({
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface">
       <Link
         href={href}
-        className="relative block aspect-card overflow-hidden bg-background-soft"
+        className="relative block overflow-hidden bg-background-soft"
         prefetch={false}
         onMouseEnter={prefetchDetail}
         onFocus={prefetchDetail}
       >
-        {project.featured ? (
-          <span className="absolute top-3 left-3 z-10 rounded-md bg-[#0f2744] px-2 py-0.5 text-[11px] font-semibold tracking-wide text-white">
-            Featured
-          </span>
-        ) : null}
+        {project.featured ? <FeaturedBadge /> : null}
         <SoftwareShowcaseImage
           kind="card"
           project={project}
@@ -126,13 +131,13 @@ export function SoftwareCard({
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb]">
             {categoryLabel}
           </p>
           <h4 className="mt-1 font-display text-lg font-bold leading-snug text-text-primary">
             <Link
               href={href}
-              className="hover:text-emerald-700 dark:hover:text-emerald-400"
+              className="hover:text-[#2563eb]"
               prefetch={false}
               onMouseEnter={prefetchDetail}
               onFocus={prefetchDetail}
@@ -140,31 +145,47 @@ export function SoftwareCard({
               {project.title}
             </Link>
           </h4>
+          <StarRating rating={ratingAvg} reviewCount={reviewCount} className="mt-1.5" />
           {outcome ? <p className="mt-1 line-clamp-2 text-sm text-text-secondary">{outcome}</p> : null}
         </div>
         {features.length > 0 ? (
           <ul className="mt-1 space-y-1.5">
             {features.map((feature) => (
               <li key={feature.id} className="flex items-start gap-2 text-sm text-text-secondary">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden />
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563eb]" aria-hidden />
                 <span className="line-clamp-1">{feature.title}</span>
               </li>
             ))}
           </ul>
         ) : null}
-        <Link
-          href={href}
-          prefetch={false}
-          onMouseEnter={prefetchDetail}
-          onFocus={prefetchDetail}
-          className={cn(
-            'mt-auto inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold',
-            'bg-[#0f2744] text-white transition-colors hover:bg-[#16375f]'
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-2">
+          {project.starting_price != null && project.starting_price > 0 ? (
+            <p className="text-sm text-text-secondary">
+              Starting from{' '}
+              <span className="font-semibold text-text-primary">
+                {formatCatalogPrice(project.starting_price, {
+                  suffix: project.price_suffix,
+                  currency: project.currency ?? 'BDT',
+                })}
+              </span>
+            </p>
+          ) : (
+            <span />
           )}
-        >
-          Explore Software
-          <ArrowRight className="h-4 w-4" aria-hidden />
-        </Link>
+          <Link
+            href={href}
+            prefetch={false}
+            onMouseEnter={prefetchDetail}
+            onFocus={prefetchDetail}
+            className={cn(
+              'inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold',
+              'bg-[#2563eb] text-white transition-colors hover:bg-[#1d4ed8]'
+            )}
+          >
+            View Software
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
       </div>
     </article>
   );

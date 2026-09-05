@@ -316,7 +316,12 @@ export function MobileDrawerMenu({
                 <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
                   Follow Us
                 </p>
-                <SocialLinks variant="light" size="sm" />
+                <SocialLinks
+                  variant="light"
+                  size="sm"
+                  className="flex flex-nowrap items-center justify-between gap-1"
+                  linkClassName="h-8 w-8 shrink-0 rounded-lg"
+                />
               </div>
             </div>
           </motion.div>

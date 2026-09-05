@@ -15,10 +15,10 @@ import { getIndustryByPath } from './industries';
 const DEFAULT_PAGE_SIZE = 12;
 
 const SOFTWARE_PRODUCT_SELECT =
-  'id, title, slug, short_description, industry_id, canonical_path, badge, business_size, package_tier, payment_type, cover_card_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, seo_title, seo_description, primary_keyword, secondary_keywords, deleted_at';
+  'id, title, slug, short_description, industry_id, canonical_path, badge, business_size, package_tier, payment_type, cover_card_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, seo_title, seo_description, primary_keyword, secondary_keywords, rating_avg, review_count, deleted_at';
 
 const WEBSITES_PRODUCT_SELECT =
-  'id, title, slug, short_description, industry_id, canonical_path, badge, business_size, package_tier, payment_type, cover_image_url, starting_price, currency, featured, published, sort_order, seo_title, seo_description, primary_keyword, secondary_keywords, deleted_at';
+  'id, title, slug, short_description, industry_id, canonical_path, badge, business_size, package_tier, payment_type, cover_image_url, starting_price, currency, featured, published, sort_order, seo_title, seo_description, primary_keyword, secondary_keywords, rating_avg, review_count, deleted_at';
 
 const MARKETING_PRODUCT_SELECT =
   'id, title, slug, short_description, industry_id, canonical_path, badge, business_size, package_tier, payment_type, cover_card_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, seo_title, seo_description, primary_keyword, secondary_keywords, deleted_at';
@@ -71,6 +71,8 @@ function mapProductRef(
     secondary_keywords: Array.isArray(row.secondary_keywords)
       ? (row.secondary_keywords as string[])
       : [],
+    rating_avg: row.rating_avg != null ? Number(row.rating_avg) : null,
+    review_count: row.review_count != null ? Number(row.review_count) : null,
   };
 }
 

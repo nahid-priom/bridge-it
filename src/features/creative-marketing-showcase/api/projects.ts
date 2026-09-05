@@ -171,6 +171,10 @@ async function listCreativeMarketingCardsUncached(
     query = query.in('service_group', groupSlugs);
   }
 
+  if (filters.industrySlug && filters.industrySlug !== 'all') {
+    query = query.eq('industry_slug', filters.industrySlug);
+  }
+
   if (filters.featured) query = query.eq('featured', true);
   if (filters.popular) query = query.eq('popular', true);
 
@@ -207,6 +211,7 @@ export async function listCreativeMarketingCards(
     group: filters.group ?? null,
     more: filters.more ?? null,
     serviceGroup: filters.serviceGroup ?? null,
+    industrySlug: filters.industrySlug ?? null,
     featured: filters.featured ?? null,
     popular: filters.popular ?? null,
     published: filters.published ?? null,

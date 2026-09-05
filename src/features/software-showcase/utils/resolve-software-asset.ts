@@ -12,7 +12,8 @@ export type ResolvedSoftwareAsset = {
 
 const DIMENSIONS: Record<SoftwareAssetKind, { width: number; height: number }> = {
   card: { width: 800, height: 600 },
-  detail: { width: 1200, height: 750 },
+  /** Match card / cover art at 4:3 so detail and listing crop identically */
+  detail: { width: 1200, height: 900 },
   thumb: { width: 480, height: 300 },
   preview: { width: 960, height: 600 },
   mobile: { width: 420, height: 860 },

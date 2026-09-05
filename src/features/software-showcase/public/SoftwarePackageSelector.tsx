@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/cn';
+import { formatCatalogPrice } from '@/src/features/catalog/components/CatalogPrice';
 import type { SoftwarePackage } from '../types';
 import {
   SOFTWARE_PACKAGE_TIER_ORDER,
@@ -81,8 +82,15 @@ export function SoftwarePackageSelector({
   const tabs = orderedTabs.length > 0 ? orderedTabs : sorted;
 
   return (
-    <div className={cn('w-full', className)} role="tablist" aria-label="Software packages">
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+    <div className={cn('w-full', className)}>
+      <h2 className="mb-3 font-display text-lg font-black text-[#0f2744] dark:text-white sm:text-xl">
+        Choose Your Package
+      </h2>
+      <div
+        className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+        role="tablist"
+        aria-label="Software packages"
+      >
         {tabs.map((pkg) => {
           const active = value?.id === pkg.id;
           return (
@@ -96,13 +104,21 @@ export function SoftwarePackageSelector({
                 syncUrl(pkg);
               }}
               className={cn(
-                'inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-4 text-sm font-semibold transition-colors',
+                'flex min-h-[4.5rem] flex-col items-start justify-center rounded-2xl border px-3 py-3 text-left transition-colors sm:min-h-[5rem] sm:px-4',
                 active
-                  ? 'bg-[#0f2744] text-white'
-                  : 'border border-border-subtle bg-surface text-text-secondary hover:border-[#2563eb]/40 hover:text-text-primary'
+                  ? 'border-[#0f2744] bg-[#0f2744] text-white dark:border-white dark:bg-white dark:text-[#0f2744]'
+                  : 'border-border-subtle bg-surface text-text-secondary hover:border-[#2563eb]/40 hover:text-text-primary'
               )}
             >
-              {packageDisplayName(pkg)}
+              <span className="text-sm font-bold sm:text-[0.9375rem]">{packageDisplayName(pkg)}</span>
+              <span
+                className={cn(
+                  'mt-1 text-xs tabular-nums sm:text-sm',
+                  active ? 'text-white/80 dark:text-[#0f2744]/80' : 'text-text-muted'
+                )}
+              >
+                {formatCatalogPrice(pkg.price, { currency: pkg.currency })}
+              </span>
             </button>
           );
         })}

@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
     q,
     group: group === 'all' ? undefined : group,
     more: more.length ? more : undefined,
+    industrySlug: params.get('industrySlug')?.trim() || undefined,
   });
 
   return NextResponse.json(result);

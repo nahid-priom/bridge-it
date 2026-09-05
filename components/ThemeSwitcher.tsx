@@ -24,7 +24,7 @@ interface ThemeSwitcherProps {
 }
 
 export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ variant = 'navbar' }) => {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -82,9 +82,6 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ variant = 'navbar'
             );
           })}
         </div>
-        <p className="px-1 text-[10px] text-text-muted">
-          Displaying {resolvedTheme === 'dark' ? 'dark' : 'light'} (device: {active === 'system' ? 'auto' : activeLabel.toLowerCase()})
-        </p>
       </div>
     );
   }

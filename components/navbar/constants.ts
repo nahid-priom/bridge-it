@@ -4,7 +4,7 @@ import { NAV_HOW_IT_WORKS_HREF } from '@/data/homeContent';
 /** Primary public navigation — catalog pillars live under Services. */
 export const MAIN_NAV_LINKS = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'Portfolio', href: ROUTES.portfolio },
+  { label: 'Portfolio', href: ROUTES.explore },
   { label: 'Consultation', href: ROUTES.consultation },
 ] as const;
 

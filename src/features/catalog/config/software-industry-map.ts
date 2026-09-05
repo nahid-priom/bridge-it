@@ -4,10 +4,18 @@
  */
 export const SOFTWARE_PRODUCT_INDUSTRY_MAP = {
   'garments-erp': 'garments',
+  'garments-starter-software': 'garments',
+  'garments-production-management': 'garments',
+  'garments-erp-professional': 'garments',
+  'garments-enterprise-erp': 'garments',
   'garments-accessories-erp': 'garments',
   'textile-erp': 'textile-dyeing',
   'dyeing-management': 'textile-dyeing',
   'feed-mill-erp': 'feed-mill',
+  'feed-mill-mini': 'feed-mill',
+  'feed-mill-basic': 'feed-mill',
+  'feed-mill-erp-professional': 'feed-mill',
+  'feed-mill-enterprise-erp': 'feed-mill',
   'poultry-management-erp': 'poultry-livestock',
   'layer-farm-management': 'poultry-livestock',
   'cattle-dairy-management': 'poultry-livestock',

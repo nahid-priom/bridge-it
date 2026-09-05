@@ -42,7 +42,7 @@ export function HomeShowcaseSection({
           priorityFirst={false}
           variant="home"
           columns="listing"
-          emptyTitle="No designs in this collection yet"
+          emptyTitle="No templates in this collection yet"
           emptyDescription="Browse the full website library or check back soon."
           emptyActionHref={viewAllHref}
           emptyActionLabel="Browse websites"

@@ -20,7 +20,7 @@ export function WebsiteSearch({
   return (
     <div className={cn('w-full', className)}>
       <label htmlFor={id} className="sr-only">
-        Search website designs
+        Search website templates
       </label>
       <div className="relative">
         <Search

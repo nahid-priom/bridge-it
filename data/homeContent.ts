@@ -195,7 +195,7 @@ export const FOOTER_COLUMNS = {
   ],
   explore: [
     { label: 'Explore Catalog', href: ROUTES.explore },
-    { label: 'Portfolio', href: ROUTES.portfolio },
+    { label: 'Portfolio', href: ROUTES.explore },
     { label: 'Pricing', href: ROUTES.pricing },
     { label: 'About', href: ROUTES.about },
   ],
@@ -221,7 +221,7 @@ export const FOOTER_COLUMNS = {
   quickLinks: [
     { label: 'About Us', href: ROUTES.about },
     { label: 'Pricing', href: ROUTES.pricing },
-    { label: 'Portfolio', href: ROUTES.portfolio },
+    { label: 'Portfolio', href: ROUTES.explore },
     { label: 'Client Dashboard', href: ROUTES.dashboard },
   ],
 } as const;

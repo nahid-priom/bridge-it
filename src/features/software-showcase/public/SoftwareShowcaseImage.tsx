@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/cn';
 import {
   resolveSoftwareCover,
@@ -50,6 +50,7 @@ function resolveProps(props: (CoverProps | ScreenProps) & Common): {
   aspect: string;
   className?: string;
   imgClassName?: string;
+  fallbackTitle: string;
 } {
   if (props.kind === 'card' || props.kind === 'detail') {
     const cover = props;
@@ -61,11 +62,12 @@ function resolveProps(props: (CoverProps | ScreenProps) & Common): {
       sizes:
         cover.sizes ??
         (cover.kind === 'card'
-          ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+          ? '(min-width: 1280px) 28vw, (min-width: 768px) 45vw, 100vw'
           : '100vw'),
-      aspect: cover.kind === 'card' ? 'aspect-card' : 'aspect-[16/10]',
+      aspect: 'aspect-card',
       className: cover.className,
       imgClassName: cover.imgClassName,
+      fallbackTitle: cover.project.title,
     };
   }
 
@@ -81,37 +83,103 @@ function resolveProps(props: (CoverProps | ScreenProps) & Common): {
     aspect: screen.kind === 'mobile' ? 'aspect-[420/860]' : 'aspect-[16/10]',
     className: screen.className,
     imgClassName: screen.imgClassName,
+    fallbackTitle: screen.productTitle || screen.screen.screen_name,
   };
+}
+
+function PremiumFallback({
+  title,
+  aspect,
+  className,
+  compact,
+}: {
+  title: string;
+  aspect: string;
+  className?: string;
+  compact?: boolean;
+}) {
+  const initial = title.trim().charAt(0).toUpperCase() || 'S';
+  return (
+    <div
+      className={cn(
+        'relative flex overflow-hidden',
+        compact ? 'min-h-[7.5rem] aspect-[16/10]' : aspect,
+        'bg-gradient-to-br from-[#0f2744] via-[#132f52] to-[#1a3a5c]',
+        className
+      )}
+      role="img"
+      aria-label={`${title} — preview unavailable`}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 20% 20%, rgba(37,99,235,0.35), transparent 45%), radial-gradient(circle at 80% 70%, rgba(59,130,246,0.2), transparent 40%)',
+        }}
+      />
+      <div className="relative z-[1] flex w-full flex-col items-center justify-center gap-2 px-4 py-5 text-center">
+        <span
+          className={cn(
+            'inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 font-display font-bold text-white/90',
+            compact ? 'h-10 w-10 text-lg' : 'h-12 w-12 text-xl'
+          )}
+          aria-hidden
+        >
+          {initial}
+        </span>
+        <p className="text-xs font-medium tracking-wide text-white/55">Preview unavailable</p>
+      </div>
+    </div>
+  );
 }
 
 /**
  * Shared Software showcase image — card / detail / thumb / preview / mobile.
- * Missing canonical asset → skeleton. Never silently shows legacy assets.
+ * Missing canonical asset → compact premium fallback. Never silently shows legacy assets.
  */
 export function SoftwareShowcaseImage(props: (CoverProps | ScreenProps) & Common) {
   const [failed, setFailed] = useState(false);
-  const { resolved, alt, eager, priority, sizes, aspect, className, imgClassName } =
+  const [loaded, setLoaded] = useState(false);
+  const { resolved, alt, eager, priority, sizes, aspect, className, imgClassName, fallbackTitle } =
     resolveProps(props);
+
+  const isCover = props.kind === 'card' || props.kind === 'detail';
+  const src = resolved ? withCacheBust(resolved.url, resolved.assetVersion) : '';
+
+  useEffect(() => {
+    setLoaded(false);
+    setFailed(false);
+  }, [src]);
 
   if (!resolved || failed) {
     return (
-      <div
-        className={cn('relative overflow-hidden bg-background-soft', aspect, className)}
-        aria-hidden={!resolved}
-        role={resolved ? undefined : 'img'}
-        aria-label={resolved ? undefined : 'Image unavailable'}
-      >
-        <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-background-soft via-border-subtle/40 to-background-soft" />
-      </div>
+      <PremiumFallback
+        title={fallbackTitle}
+        aspect={aspect}
+        className={className}
+        compact={isCover && props.kind === 'card'}
+      />
     );
   }
 
-  const src = withCacheBust(resolved.url, resolved.assetVersion);
-
   return (
-    <div className={cn('relative overflow-hidden bg-background-soft', aspect, className)}>
+    <div
+      className={cn(
+        'relative overflow-hidden',
+        isCover ? 'bg-[#0b1220]' : 'bg-background-soft',
+        aspect,
+        className
+      )}
+    >
+      {!loaded ? (
+        <span
+          aria-hidden
+          className="absolute inset-0 z-[1] animate-pulse bg-background-soft motion-reduce:animate-none dark:bg-white/10"
+        />
+      ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        key={src}
         src={src}
         alt={alt}
         width={resolved.width}
@@ -120,8 +188,16 @@ export function SoftwareShowcaseImage(props: (CoverProps | ScreenProps) & Common
         decoding="async"
         fetchPriority={priority ? 'high' : 'auto'}
         sizes={sizes}
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
-        className={cn('h-full w-full object-cover object-top', imgClassName)}
+        className={cn(
+          'relative transition-opacity duration-200 ease-out motion-reduce:transition-none',
+          loaded ? 'opacity-100' : 'opacity-0',
+          isCover
+            ? 'h-full w-full object-contain object-center'
+            : 'h-full w-full object-cover object-top',
+          imgClassName
+        )}
       />
     </div>
   );

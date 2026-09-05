@@ -6,24 +6,20 @@ import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
-import { IndustryGrid, listIndustries, productPath } from '@/src/features/catalog';
+import {
+  ExploreCatalogLayout,
+  buildCategoryBreadcrumbs,
+  listIndustries,
+  productPath,
+} from '@/src/features/catalog';
 import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
 import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
-import { WebsitesPageHeader } from '@/src/features/ecommerce-showcase/public/WebsitesPageHeader';
 import { LISTING_LIMIT, websitesListingCopy } from '@/src/features/ecommerce-showcase/public/websites-listing';
 import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
-import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
 import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
 
 function CatalogFallback() {
-  return (
-    <>
-      <FilterSkeleton />
-      <div className="mt-6">
-        <ProjectGridSkeleton count={6} />
-      </div>
-    </>
-  );
+  return <ProjectGridSkeleton count={6} />;
 }
 
 export const revalidate = 60;
@@ -51,7 +47,7 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const { title, description } = websitesListingCopy(filters);
   const keywords = [
     'custom ecommerce website Bangladesh',
-    'ecommerce website designs',
+    'ecommerce website templates',
     'Next.js ecommerce website',
   ];
   if (filters.category) keywords.unshift(`${filters.category} ecommerce website`);
@@ -79,8 +75,10 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
     limit: LISTING_LIMIT,
     offset: 0,
   };
-  const result = await listProjectCards(listingFilters);
-  const industries = await listIndustries('websites');
+  const [result, industries] = await Promise.all([
+    listProjectCards(listingFilters),
+    listIndustries('websites'),
+  ]);
 
   const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
@@ -119,23 +117,20 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
     },
   };
 
+  const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
+
   return (
     <>
       <JsonLd data={jsonLd} />
       <PageBreadcrumbJsonLd path="/websites" />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
-        <WebsitesPageHeader title={title} description={description} />
-        {industries.length > 0 ? (
-          <section className="mb-8 md:mb-10" aria-labelledby="websites-industries-heading">
-            <h2
-              id="websites-industries-heading"
-              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-            >
-              Browse by industry
-            </h2>
-            <IndustryGrid industries={industries} root="websites" />
-          </section>
-        ) : null}
+      <ExploreCatalogLayout
+        activeRoot="websites"
+        industries={sidebarIndustries}
+        breadcrumbs={buildCategoryBreadcrumbs('websites')}
+        title={title}
+        description={description}
+        resultCount={result.total}
+      >
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<CatalogFallback />}>
             <WebsitesCatalog
@@ -145,10 +140,11 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
                 view: filters.view ?? 'all',
               }}
               initialData={result}
+              hideChrome
             />
           </Suspense>
         </HydrationBoundary>
-      </div>
+      </ExploreCatalogLayout>
     </>
   );
 }

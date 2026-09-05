@@ -53,6 +53,8 @@ export interface CatalogProductRef {
   seo_description: string | null;
   primary_keyword: string | null;
   secondary_keywords: string[];
+  rating_avg?: number | null;
+  review_count?: number | null;
 }
 
 export interface CatalogUrlRedirect {

@@ -1,44 +1,25 @@
-import { Suspense, type ReactNode } from 'react';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/metadata';
-import { listingHasSeoFilters } from '@/lib/seo/listing-index';
-import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
-import { SITE_URL } from '@/lib/site';
-import { ROUTES } from '@/lib/routes';
-import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
-import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
-import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
-import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
-import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
-import {
-  listShowcaseTaxonomy,
-  listSoftwareProjectCards,
-} from '@/src/features/software-showcase/api/projects';
-import {
-  SOFTWARE_GALLERY_PAGE_SIZE,
-  SOFTWARE_PRIMARY_FILTERS,
-  parseSoftwareGroupParam,
-  parseSoftwareMoreParam,
-  primaryFilterToTaxonomySlug,
-} from '@/src/features/software-showcase/config/constants';
-import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
-import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
-import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
-import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
-import { ExploreFilterChrome } from '@/components/explore/ExploreFilterChrome';
-import { ExploreMarketingPanel } from '@/components/explore/ExploreMarketingPanel';
 import { parseExploreType } from '@/components/explore/explore-types';
-import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 import {
-  CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
-  parseCreativeGroupParam,
-  parseCreativeMoreParam,
-} from '@/src/features/creative-marketing-showcase/config/constants';
-import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
-import { CreativeMarketingCardSkeleton } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
+  ExploreAllWork,
+  type ExploreWorkItem,
+} from '@/components/explore/ExploreAllWork';
+import { ROUTES } from '@/lib/routes';
+import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
+import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
+import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 
 export const revalidate = 60;
+
+export const metadata = buildPageMetadata({
+  title: 'Portfolio',
+  description:
+    'Explore Bridge IT Park work across websites, software, and creative marketing — a mixed showcase of live projects for Bangladesh businesses.',
+  path: ROUTES.explore,
+});
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -47,270 +28,121 @@ function first(value: string | string[] | undefined): string {
   return value ?? '';
 }
 
-function CatalogFallback() {
-  return (
-    <>
-      <FilterSkeleton />
-      <div className="mt-6">
-        <ProjectGridSkeleton count={6} />
-      </div>
-    </>
-  );
+/** Daily-stable shuffle so the mix feels random without layout flicker on refresh. */
+function seededShuffle<T>(items: T[], seed: number): T[] {
+  const arr = [...items];
+  let s = seed >>> 0;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    const j = s % (i + 1);
+    const tmp = arr[i]!;
+    arr[i] = arr[j]!;
+    arr[j] = tmp;
+  }
+  return arr;
 }
 
-function SoftwareFallback() {
-  return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <SoftwareCardSkeleton key={i} />
-      ))}
-    </div>
-  );
+function daySeed(): number {
+  const now = new Date();
+  return now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
 }
 
-function MarketingFallback() {
-  return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <CreativeMarketingCardSkeleton key={i} />
-      ))}
-    </div>
-  );
+async function loadMixedPortfolio(): Promise<ExploreWorkItem[]> {
+  const [websites, software, marketing] = await Promise.all([
+    listProjectCards({ limit: 16 }),
+    listSoftwareProjectCards({ pageSize: 16, page: 1 }),
+    listCreativeMarketingCards({ pageSize: 16, page: 1 }),
+  ]);
+
+  const mixed: ExploreWorkItem[] = [
+    ...websites.items.map((project) => ({
+      kind: 'website' as const,
+      id: `website-${project.id}`,
+      project,
+    })),
+    ...software.items.map((project) => ({
+      kind: 'software' as const,
+      id: `software-${project.id}`,
+      project,
+    })),
+    ...marketing.items.map((project) => ({
+      kind: 'marketing' as const,
+      id: `marketing-${project.id}`,
+      project,
+    })),
+  ];
+
+  return seededShuffle(mixed, daySeed());
 }
 
-export async function generateMetadata({ searchParams }: { searchParams: SearchParams }) {
-  const sp = await searchParams;
-  const type = parseExploreType(first(sp.type));
-  const q = first(sp.q).trim() || first(sp.search).trim();
-  const view = first(sp.view) || first(sp.page);
-  const category = first(sp.category);
-  const group = first(sp.group) || first(sp.solutionGroup) || first(sp.serviceGroup);
-  const more = first(sp.more);
-  const page = first(sp.page);
-  const titles = {
-    websites: 'E-commerce Website Designs in Bangladesh',
-    software: 'ERP & Business Software Solutions',
-    marketing: 'Digital Marketing & Creative Design Services',
-  } as const;
-  const noIndex = listingHasSeoFilters({
-    q,
-    page,
-    filters: [view, category, group, more],
-  });
-  return buildPageMetadata({
-    title: titles[type],
-    description:
-      type === 'software'
-        ? 'Browse ERP, POS, CRM, HRM and custom business software solutions for growing companies in Bangladesh.'
-        : type === 'marketing'
-          ? 'Explore digital marketing, branding, social media design and creative services for your brand.'
-          : 'Browse premium custom e-commerce website designs for fashion, electronics, beauty and more.',
-    path: ROUTES.explore,
-    keywords: [
-      'ecommerce website designs Bangladesh',
-      'custom ecommerce website',
-      'ERP software Bangladesh',
-      'business software solutions',
-      'digital marketing services Bangladesh',
-      'creative design services',
-      'explore bridge it park',
-    ],
-    noIndex,
-  });
-}
-
+/**
+ * Portfolio hub at /explore — mixed catalog when no type.
+ * Search still uses ?type= to land on a dedicated showroom.
+ */
 export default async function ExplorePage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;
-  const type = parseExploreType(first(sp.type));
-  const q = first(sp.q).trim() || first(sp.search).trim();
+  const typeRaw = first(sp.type).trim();
 
-  const view = serializeFilterList(parseFilterList(first(sp.view) || first(sp.page))) ?? 'all';
-  const category = serializeFilterList(parseFilterList(first(sp.category))) ?? 'all';
+  if (typeRaw) {
+    const type = parseExploreType(typeRaw);
+    const target =
+      type === 'software' ? '/software' : type === 'marketing' ? '/marketing' : '/websites';
 
-  let websitesBlock: ReactNode = null;
-  let softwareBlock: ReactNode = null;
-  let marketingBlock: ReactNode = null;
-
-  if (type === 'websites') {
-    const listingFilters = {
-      q: q || undefined,
-      category: category === 'all' ? undefined : category,
-      view: view === 'all' ? undefined : view,
-      limit: LISTING_LIMIT,
-      offset: 0,
-    };
-    const result = await listProjectCards(listingFilters);
-    const queryClient = new QueryClient({
-      defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
-    });
-    queryClient.setQueryData(
-      showcaseListingQueryKey({
-        q: q || undefined,
-        category: category === 'all' ? 'all' : category,
-        view: view === 'all' ? 'all' : view,
-        limit: LISTING_LIMIT,
-        offset: 0,
-      }),
-      result
-    );
-    websitesBlock = (
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<CatalogFallback />}>
-          <WebsitesCatalog
-            initialFilters={{
-              q: q || '',
-              category: category === 'all' ? 'all' : category,
-              view: view === 'all' ? 'all' : view,
-            }}
-            initialData={result}
-            hideChrome
-          />
-        </Suspense>
-      </HydrationBoundary>
-    );
-  }
-
-  if (type === 'software') {
-    const page = Math.max(1, Number(first(sp.page)) || 1);
-    const group = parseSoftwareGroupParam(first(sp.group), first(sp.solutionGroup));
-    const categoryRaw = first(sp.category).trim();
-    const child = first(sp.child).trim() || 'all';
-    const more = parseSoftwareMoreParam(first(sp.more));
-
-    const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
-    let category = 'all';
-    let taxonomyCategory: string | undefined;
-    if (categoryRaw && categoryRaw !== 'all') {
-      if (primaryIds.has(categoryRaw as (typeof SOFTWARE_PRIMARY_FILTERS)[number]['id'])) {
-        category = categoryRaw;
-        taxonomyCategory = primaryFilterToTaxonomySlug(categoryRaw);
-      } else {
-        const byTax = SOFTWARE_PRIMARY_FILTERS.find((f) => f.taxonomySlug === categoryRaw);
-        category = byTax?.id ?? categoryRaw;
-        taxonomyCategory = categoryRaw;
-      }
-    } else if (group !== 'all') {
-      category = group;
-      taxonomyCategory = primaryFilterToTaxonomySlug(group);
+    const params = new URLSearchParams();
+    for (const key of ['q', 'view', 'category', 'group', 'more', 'child', 'page', 'price'] as const) {
+      const value = first(sp[key]).trim();
+      if (value) params.set(key, value);
     }
-
-    const [result, taxonomy] = await Promise.all([
-      listSoftwareProjectCards({
-        q: q || undefined,
-        taxonomyCategory,
-        child: child === 'all' ? undefined : child,
-        group: group === 'all' ? undefined : group,
-        more: more.length ? more : undefined,
-        page,
-        pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
-      }),
-      listShowcaseTaxonomy(),
-    ]);
-
-    const softwareMain = taxonomy.mains.find((m) => m.slug === 'software');
-    const softwareCats = taxonomy.categories.filter((c) => c.main_category_id === softwareMain?.id);
-    const catById = new Map(softwareCats.map((c) => [c.id, c]));
-    const childOptions = taxonomy.children
-      .filter((ch) => catById.has(ch.category_id))
-      .map((ch) => ({
-        id: ch.id,
-        label: ch.name,
-        slug: ch.slug,
-        categorySlug: catById.get(ch.category_id)?.slug,
-      }));
-
-    softwareBlock = (
-      <Suspense fallback={<SoftwareFallback />}>
-        <SoftwareCatalog
-          initialFilters={{
-            q: q || '',
-            category,
-            group,
-            child,
-            more,
-            page,
-          }}
-          initialData={result}
-          childOptions={childOptions}
-        />
-      </Suspense>
-    );
+    const qs = params.toString();
+    redirect(qs ? `${target}?${qs}` : target);
   }
 
-  if (type === 'marketing') {
-    const page = Math.max(1, Number(first(sp.page)) || 1);
-    const group = parseCreativeGroupParam(first(sp.group), first(sp.serviceGroup));
-    const more = parseCreativeMoreParam(first(sp.more));
-    const result = await listCreativeMarketingCards({
-      q: q || undefined,
-      group: group === 'all' ? undefined : group,
-      more: more.length ? more : undefined,
-      page,
-      pageSize: CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
-    });
-
-    marketingBlock =
-      result.total > 0 || result.items.length > 0 ? (
-        <Suspense fallback={<MarketingFallback />}>
-          <CreativeMarketingCatalog
-            initialFilters={{
-              q: q || '',
-              group,
-              more,
-              page,
-            }}
-            initialData={result}
-          />
-        </Suspense>
-      ) : (
-        <ExploreMarketingPanel />
-      );
-  }
-
-  const heading =
-    type === 'software'
-      ? 'ERP & Business Software Solutions'
-      : type === 'marketing'
-        ? 'Digital Marketing & Creative Design Services'
-        : 'E-commerce Website Designs';
-
-  const description =
-    type === 'software'
-      ? 'Ready ERP, POS, CRM, HRM and custom admin systems for real business operations.'
-      : type === 'marketing'
-        ? 'Branding, social creatives and digital marketing services matched to your growth goals.'
-        : '100+ premium custom e-commerce website designs for fashion, electronics, beauty and more.';
+  const items = await loadMixedPortfolio();
 
   return (
-    <>
-      <JsonLd
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: heading,
-          description,
-          url: `${SITE_URL}${ROUTES.explore}`,
-        }}
-      />
+    <div className="relative min-w-0 overflow-x-hidden pb-16">
       <PageBreadcrumbJsonLd path={ROUTES.explore} />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-0 sm:px-6 lg:px-8 xl:px-10">
-        <header className="mb-5 max-w-3xl pt-4 sm:mb-6 sm:pt-5 md:pt-6">
-          <h1 className="font-display text-2xl font-black tracking-tight text-text-primary sm:text-3xl md:text-[2rem]">
-            {heading}
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.10),_transparent_55%),linear-gradient(180deg,rgba(15,39,68,0.04),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top,_rgba(96,165,250,0.12),_transparent_55%),linear-gradient(180deg,rgba(15,39,68,0.35),transparent_70%)]"
+      />
+
+      <div className="relative mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 xl:px-10">
+        <header className="mx-auto max-w-3xl text-center">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-400 sm:text-xs">
+            Portfolio
+          </p>
+          <h1
+            className="mt-3 font-display font-bold tracking-[-0.03em] text-[#0f2744] dark:text-white"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.08 }}
+          >
+            Explore our work
           </h1>
-          <p className="mt-2 text-sm text-text-secondary sm:text-base">{description}</p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:mt-4 sm:text-base">
+            Websites, industry software, and creative marketing — mixed from live showrooms so you can
+            browse the full range in one place.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={ROUTES.consultation}
+              className="inline-flex items-center justify-center rounded-xl bg-[#0f2744] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-[#0f2744]"
+            >
+              Free consultation
+            </Link>
+            <Link
+              href={ROUTES.websites}
+              className="inline-flex items-center justify-center rounded-xl border border-border-subtle bg-surface/80 px-5 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-[#2563eb]/40"
+            >
+              Browse catalogs
+            </Link>
+          </div>
         </header>
 
-        <Suspense fallback={<div className="mb-6 h-24 animate-pulse rounded-2xl bg-background-soft" />}>
-          <ExploreFilterChrome active={type} />
-        </Suspense>
-
-        <div className="mt-5 sm:mt-6">
-          {type === 'websites' ? websitesBlock : null}
-          {type === 'software' ? softwareBlock : null}
-          {type === 'marketing' ? marketingBlock : null}
+        <div className="mt-10 md:mt-14">
+          <ExploreAllWork items={items} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

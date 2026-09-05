@@ -18,9 +18,9 @@ export const metadata = buildPageMetadata({
 const PILLARS = [
   {
     title: 'Custom Website',
-    body: 'E-commerce and business websites scoped to your industry. Browse published designs, then confirm pages, integrations, and launch plan in a free consultation.',
+    body: 'E-commerce and business websites scoped to your industry. Browse published templates, then confirm pages, integrations, and launch plan in a free consultation.',
     href: ROUTES.websites,
-    cta: 'Explore website designs',
+    cta: 'Explore website templates',
   },
   {
     title: 'Software Solution',

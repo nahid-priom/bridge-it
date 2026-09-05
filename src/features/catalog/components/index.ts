@@ -9,5 +9,20 @@ export { CatalogCTA, consultationDeepLink } from './CatalogCTA';
 export { CatalogEmptyState } from './CatalogEmptyState';
 export { CatalogFaqList } from './CatalogFaqList';
 export { RelatedProducts } from './RelatedProducts';
+export { FeaturedBadge } from './FeaturedBadge';
+export { StarRating } from './StarRating';
+export { ProductReviews } from './ProductReviews';
 export { CatalogAnalytics } from './CatalogAnalytics';
 export type { CatalogAnalyticsPayload } from './CatalogAnalytics';
+export {
+  ExploreCatalogLayout,
+  CatalogSidebar,
+  CatalogToolbar,
+  parseSoftwarePriceParam,
+  softwarePriceBounds,
+} from './explore';
+export type { CatalogSidebarIndustry } from './explore';
+export {
+  parseSoftwareBusinessSizeParam,
+  parseSoftwareSortParam,
+} from './explore/types';

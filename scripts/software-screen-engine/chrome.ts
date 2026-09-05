@@ -1,6 +1,6 @@
 import type { SeedSoftwareProduct, SoftwareScreenSeed } from '../../src/features/software-showcase/types';
 import { COLOR, TYPE, W, H, SIDEBAR_W, HEADER_H } from './typography';
-import { brandOf, logoOf, type VisualFamily } from './datasets';
+import { brandOf, logoOf, maturityProfile, type VisualFamily } from './datasets';
 import { iconAt } from './icons';
 import { rect, t } from './primitives';
 
@@ -14,6 +14,15 @@ function sideMuted(theme: SeedSoftwareProduct['theme']) {
   return theme.sidebar === 'light' ? '#64748b' : '#cbd5e1';
 }
 
+function navLimit(product: SeedSoftwareProduct) {
+  const m = maturityProfile(product);
+  if (m === 'starter') return 7;
+  if (m === 'production') return 9;
+  if (m === 'professional') return 12;
+  if (m === 'enterprise') return 14;
+  return 10;
+}
+
 export function renderAppChrome(
   product: SeedSoftwareProduct,
   screen: SoftwareScreenSeed,
@@ -22,9 +31,9 @@ export function renderAppChrome(
   const brand = brandOf(product);
   const logo = logoOf(product);
   const side = sideFill(product.theme);
-  const compact = product.theme.density === 'compact';
-  const navStep = compact ? 36 : 40;
-  const nav = product.screens.slice(0, 10).map((s, i) => {
+  const compact = product.theme.density === 'compact' || maturityProfile(product) === 'enterprise';
+  const navStep = compact ? 32 : 40;
+  const nav = product.screens.slice(0, navLimit(product)).map((s, i) => {
     const y = 100 + i * navStep;
     const on = s.key === screen.key;
     return `${on ? rect(12, y, SIDEBAR_W - 24, 34, product.theme.accent, ' opacity="0.22" rx="10"') : ''}

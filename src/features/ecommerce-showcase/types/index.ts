@@ -46,6 +46,8 @@ export type EcommerceProject = {
   seo_description: string | null;
   seo_keywords: string[];
   sort_order: number;
+  rating_avg?: number;
+  review_count?: number;
   created_by: string | null;
   updated_by: string | null;
   created_at: string;
@@ -127,6 +129,8 @@ export type EcommerceProjectCard = {
   featured: boolean;
   published: boolean;
   sort_order: number;
+  rating_avg?: number;
+  review_count?: number;
   created_at: string;
   updated_at: string;
   category_name: string | null;
@@ -149,6 +153,8 @@ export type ShowcaseListFilters = {
   page?: string;
   view?: string;
   industry?: string;
+  /** Catalog industry path slug → match industry_slug or category_slug */
+  industrySlug?: string;
   websiteType?: string;
   price?: string;
   minPrice?: number;

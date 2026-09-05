@@ -3,10 +3,10 @@ import { parseFilterList } from '../utils/filters';
 
 export const LISTING_LIMIT = 24;
 
-export const WEBSITES_PAGE_TITLE = 'E-commerce Website Designs';
+export const WEBSITES_PAGE_TITLE = 'E-commerce Website Templates';
 
 export const WEBSITES_PAGE_DESCRIPTION =
-  'Browse premium custom e-commerce website designs. Filter by page type and category, then preview a storefront for your brand.';
+  'Browse premium website templates for fashion, electronics, food, beauty and more.';
 
 export function websitesListingCopy(filters: { view?: string; category?: string; q?: string }) {
   const viewLabels = parseFilterList(filters.view)
@@ -20,14 +20,18 @@ export function websitesListingCopy(filters: { view?: string; category?: string;
   const categoryLabel = categoryLabels.join(', ') || undefined;
 
   const titleParts = [categoryLabel, viewLabel].filter(Boolean);
-  const title = titleParts.length ? `${titleParts.join(' ')} E-commerce Website Designs` : WEBSITES_PAGE_TITLE;
+  const title = titleParts.length
+    ? `${titleParts.join(' ')} E-commerce Website Templates`
+    : WEBSITES_PAGE_TITLE;
 
   let description = WEBSITES_PAGE_DESCRIPTION;
   if (filters.q) {
     description = `Search results for “${filters.q}”. ${WEBSITES_PAGE_DESCRIPTION}`;
   } else if (categoryLabel || viewLabel) {
-    const scope = [categoryLabel, viewLabel ? `${viewLabel.toLowerCase()} pages` : null].filter(Boolean).join(', ');
-    description = `Browse ${scope} among premium custom e-commerce website designs in Bangladesh.`;
+    const scope = [categoryLabel, viewLabel ? `${viewLabel.toLowerCase()} pages` : null]
+      .filter(Boolean)
+      .join(', ');
+    description = `Browse ${scope} among premium e-commerce website templates in Bangladesh.`;
   }
 
   return { title, description };

@@ -1,31 +1,40 @@
-import Link from 'next/link';
+import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { SITE_URL } from '@/lib/site';
+import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import {
   CatalogAnalytics,
-  CatalogBreadcrumb,
-  CatalogCTA,
-  CatalogEmptyState,
   CatalogFaqList,
-  CatalogProductCard,
+  ExploreCatalogLayout,
   buildIndustryBreadcrumbs,
   buildIndustryMetadata,
-  categoryPath,
   getIndustryByPath,
   industryPath,
   listFaqs,
-  listProducts,
+  listIndustries,
   lookupRedirect,
   productPath,
 } from '@/src/features/catalog';
+import { listProjectCards } from '@/src/features/ecommerce-showcase/api/projects';
+import { WebsitesCatalog } from '@/src/features/ecommerce-showcase/public/WebsitesCatalog';
+import { LISTING_LIMIT } from '@/src/features/ecommerce-showcase/public/websites-listing';
+import { parseFilterList, serializeFilterList } from '@/src/features/ecommerce-showcase/utils/filters';
+import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
 
 export const revalidate = 60;
 
 type Props = {
   params: Promise<{ industry: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+function first(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
+}
 
 export async function generateMetadata({ params }: Props) {
   const { industry: industrySlug } = await params;
@@ -37,15 +46,24 @@ export async function generateMetadata({ params }: Props) {
     });
   }
   const meta = buildIndustryMetadata('websites', industry);
+  const title =
+    industry.seo_title?.trim() ||
+    `${industry.name} E-commerce Templates | Bridge IT Park`;
+  const description = (
+    industry.seo_description?.trim() ||
+    industry.short_description?.trim() ||
+    `Browse ${industry.name.toLowerCase()} e-commerce website templates for Bangladesh brands.`
+  ).replace(/website designs?/gi, 'website templates');
   return buildPageMetadata({
-    title: meta.title,
-    description: meta.description,
+    title: industry.seo_title?.trim() || title,
+    description,
     path: meta.canonicalPath,
   });
 }
 
-export default async function WebsitesIndustryPage({ params }: Props) {
+export default async function WebsitesIndustryPage({ params, searchParams }: Props) {
   const { industry: industrySlug } = await params;
+  const sp = await searchParams;
   const industry = await getIndustryByPath('websites', industrySlug);
 
   if (!industry) {
@@ -54,18 +72,46 @@ export default async function WebsitesIndustryPage({ params }: Props) {
     notFound();
   }
 
-  const [products, faqs] = await Promise.all([
-    listProducts({ root: 'websites', industryId: industry.id, pageSize: 48 }),
+  const view = serializeFilterList(parseFilterList(first(sp.view) || first(sp.page))) ?? undefined;
+  const q = first(sp.q).trim() || first(sp.search).trim() || undefined;
+
+  const [result, faqs, industries] = await Promise.all([
+    listProjectCards({
+      q,
+      view: view === 'all' ? undefined : view,
+      industrySlug: industry.slug,
+      limit: LISTING_LIMIT,
+      offset: 0,
+    }),
     listFaqs({ industryId: industry.id }),
+    listIndustries('websites'),
   ]);
 
   const crumbs = buildIndustryBreadcrumbs('websites', industry);
-  const h1 = industry.seo_h1?.trim() || industry.name;
+  const h1 =
+    industry.seo_h1?.trim() ||
+    (industry.slug === 'fashion'
+      ? 'Fashion E-commerce Templates'
+      : `${industry.name} E-commerce Templates`);
   const intro =
     industry.seo_intro?.trim() ||
     industry.description?.trim() ||
     industry.short_description?.trim() ||
-    `${industry.name} e-commerce website designs from Bridge IT Park.`;
+    `Browse ${industry.name.toLowerCase()} e-commerce website templates from Bridge IT Park.`;
+
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
+  });
+  queryClient.setQueryData(
+    showcaseListingQueryKey({
+      q: q ?? '',
+      category: industry.slug,
+      view: view ?? 'all',
+      limit: LISTING_LIMIT,
+      offset: 0,
+    }),
+    result
+  );
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -75,8 +121,8 @@ export default async function WebsitesIndustryPage({ params }: Props) {
     url: `${SITE_URL}${industryPath('websites', industry.slug)}`,
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: products.total,
-      itemListElement: products.items.slice(0, 12).map((item, index) => ({
+      numberOfItems: result.total,
+      itemListElement: result.items.slice(0, 12).map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         url: `${SITE_URL}${item.canonical_path || productPath('websites', industry.slug, item.slug)}`,
@@ -84,6 +130,8 @@ export default async function WebsitesIndustryPage({ params }: Props) {
       })),
     },
   };
+
+  const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
 
   return (
     <>
@@ -95,46 +143,32 @@ export default async function WebsitesIndustryPage({ params }: Props) {
           industry: industry.slug,
         }}
       />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
-        <CatalogBreadcrumb items={crumbs} className="mb-4" />
-        <header className="mb-6 md:mb-8">
-          <h1 className="font-display text-2xl font-black tracking-tight text-[#0f2744] dark:text-white sm:text-3xl md:text-4xl">
-            {h1}
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-text-secondary md:text-base">{intro}</p>
-          <CatalogCTA
-            className="mt-5"
-            productSlug={industry.slug}
-            industrySlug={industry.slug}
-            kind="websites"
-            demoLabel="Free Demo"
-            orderLabel="Order Now"
-          />
-        </header>
-
-        {products.items.length === 0 ? (
-          <CatalogEmptyState
-            title="No websites in this industry yet"
-            description="Browse other industries or request a custom storefront."
-            actionHref={categoryPath('websites')}
-            actionLabel="Browse websites"
-          />
-        ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-            {products.items.map((product) => (
-              <CatalogProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-
+      <ExploreCatalogLayout
+        activeRoot="websites"
+        activeIndustrySlug={industry.slug}
+        industries={sidebarIndustries}
+        breadcrumbs={crumbs}
+        title={h1}
+        description={intro}
+        resultCount={result.total}
+      >
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Suspense fallback={<ProjectGridSkeleton count={6} />}>
+            <WebsitesCatalog
+              initialFilters={{
+                q: q ?? '',
+                category: 'all',
+                view: view ?? 'all',
+                industrySlug: industry.slug,
+              }}
+              initialData={result}
+              hideChrome
+              lockedIndustrySlug={industry.slug}
+            />
+          </Suspense>
+        </HydrationBoundary>
         <CatalogFaqList faqs={faqs} />
-
-        <p className="mt-10 text-sm">
-          <Link href={categoryPath('websites')} className="font-semibold text-[#2563eb] hover:underline">
-            ← All website designs
-          </Link>
-        </p>
-      </div>
+      </ExploreCatalogLayout>
     </>
   );
 }

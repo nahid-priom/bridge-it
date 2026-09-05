@@ -22,8 +22,8 @@ export function HomeGallery({
 
   return (
     <section
-      id="website-designs"
-      aria-label="Website Designs"
+      id="website-templates"
+      aria-label="Website Templates"
       className="border-t-0 pt-2 md:pt-4"
     >
       {websiteSections.map((section) => (

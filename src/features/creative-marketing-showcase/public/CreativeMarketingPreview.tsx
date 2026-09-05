@@ -32,7 +32,7 @@ export function CreativeMarketingPreview({ project }: { project: CreativeMarketi
 
   return (
     <div className="pb-28 lg:pb-16">
-      <div className="mx-auto w-full max-w-[1480px] px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8 xl:px-10">
+      <div className="mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] xl:px-10">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.65fr)_minmax(280px,0.35fr)] lg:gap-8">
           <aside className="min-w-0 lg:order-2 lg:sticky lg:top-[calc(var(--header-offset)+0.75rem)]">
             <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] dark:text-[#60a5fa]">

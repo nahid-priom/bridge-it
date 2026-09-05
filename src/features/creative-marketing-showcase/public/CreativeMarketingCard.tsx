@@ -8,6 +8,7 @@ import { ROUTES } from '@/lib/routes';
 import { CREATIVE_COVER_CARD, creativeServiceGroupLabel } from '../config/constants';
 import type { CreativeMarketingProjectCard } from '../types';
 import { formatCreativeStartingPrice } from './format-price';
+import { ShowcaseImage } from '@/src/features/ecommerce-showcase/public/ShowcaseImage';
 
 export function creativeDetailUrl(
   slug: string,
@@ -64,22 +65,17 @@ export function CreativeMarketingCard({
               CREATIVE_COVER_CARD.aspectClass
             )}
           >
-            {cover ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={cover}
-                alt={`${project.title} service`}
-                width={CREATIVE_COVER_CARD.width}
-                height={CREATIVE_COVER_CARD.height}
-                loading={loadEager ? 'eager' : 'lazy'}
-                decoding="async"
-                fetchPriority={priority ? 'high' : 'auto'}
-                sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw"
-                className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-background-soft" aria-hidden />
-            )}
+            <ShowcaseImage
+              src={cover}
+              alt={`${project.title} service`}
+              width={CREATIVE_COVER_CARD.width}
+              height={CREATIVE_COVER_CARD.height}
+              eager={loadEager}
+              priority={priority}
+              fit="contain"
+              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw"
+              imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            />
           </div>
           <div className="flex flex-1 items-start justify-between gap-2 p-3 sm:p-3.5">
             <div className="min-w-0 flex-1">
@@ -117,16 +113,15 @@ export function CreativeMarketingCard({
         onFocus={prefetchDetail}
       >
         {cover ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <ShowcaseImage
             src={cover}
             alt={`${project.title} service`}
             width={CREATIVE_COVER_CARD.width}
             height={CREATIVE_COVER_CARD.height}
-            loading={loadEager ? 'eager' : 'lazy'}
-            decoding="async"
-            fetchPriority={priority ? 'high' : 'auto'}
-            className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            eager={loadEager}
+            priority={priority}
+            fit="contain"
+            imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-background-soft" aria-hidden />

@@ -29,6 +29,13 @@ const NO_BREADCRUMB_PREFIXES = [
   '/unauthorized',
   '/search',
   '/seller',
+  // Catalog pages render their own CatalogBreadcrumb (avoid duplicates)
+  '/software',
+  '/websites',
+  '/marketing',
+  '/creative-marketing',
+  '/explore',
+  '/portfolio',
 ];
 
 export function AppShell({
@@ -65,7 +72,11 @@ export function AppShell({
               <main
                 id="main-content"
                 className={
-                  isHome || hideBreadcrumb ? '' : 'page-content page-content--with-breadcrumb'
+                  isHome
+                    ? 'min-h-[calc(100dvh-var(--header-offset))]'
+                    : hideBreadcrumb
+                      ? 'min-h-[calc(100dvh-var(--header-offset))]'
+                      : 'page-content page-content--with-breadcrumb min-h-[calc(100dvh-var(--header-offset))]'
                 }
               >
                 {!hideBreadcrumb && <SiteBreadcrumb />}

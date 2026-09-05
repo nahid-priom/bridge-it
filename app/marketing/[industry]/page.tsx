@@ -1,31 +1,37 @@
-import Link from 'next/link';
+import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { SITE_URL } from '@/lib/site';
 import {
   CatalogAnalytics,
-  CatalogBreadcrumb,
-  CatalogCTA,
-  CatalogEmptyState,
   CatalogFaqList,
-  CatalogProductCard,
+  ExploreCatalogLayout,
   buildIndustryBreadcrumbs,
   buildIndustryMetadata,
-  categoryPath,
   getIndustryByPath,
   industryPath,
   listFaqs,
-  listProducts,
+  listIndustries,
   lookupRedirect,
   productPath,
 } from '@/src/features/catalog';
+import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
+import { CREATIVE_MARKETING_GALLERY_PAGE_SIZE } from '@/src/features/creative-marketing-showcase/config/constants';
+import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
+import { CreativeMarketingCardSkeleton } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
 
 export const revalidate = 60;
 
 type Props = {
   params: Promise<{ industry: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+function first(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
+}
 
 export async function generateMetadata({ params }: Props) {
   const { industry: industrySlug } = await params;
@@ -44,8 +50,9 @@ export async function generateMetadata({ params }: Props) {
   });
 }
 
-export default async function MarketingIndustryPage({ params }: Props) {
+export default async function MarketingIndustryPage({ params, searchParams }: Props) {
   const { industry: industrySlug } = await params;
+  const sp = await searchParams;
   const industry = await getIndustryByPath('marketing', industrySlug);
 
   if (!industry) {
@@ -56,9 +63,18 @@ export default async function MarketingIndustryPage({ params }: Props) {
     notFound();
   }
 
-  const [products, faqs] = await Promise.all([
-    listProducts({ root: 'marketing', industryId: industry.id, pageSize: 48 }),
+  const q = first(sp.q).trim();
+  const page = Math.max(1, Number(first(sp.page)) || 1);
+
+  const [result, faqs, industries] = await Promise.all([
+    listCreativeMarketingCards({
+      q: q || undefined,
+      industrySlug: industry.slug,
+      page,
+      pageSize: CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
+    }),
     listFaqs({ industryId: industry.id }),
+    listIndustries('marketing'),
   ]);
 
   const crumbs = buildIndustryBreadcrumbs('marketing', industry);
@@ -77,8 +93,8 @@ export default async function MarketingIndustryPage({ params }: Props) {
     url: `${SITE_URL}${industryPath('marketing', industry.slug)}`,
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: products.total,
-      itemListElement: products.items.slice(0, 12).map((item, index) => ({
+      numberOfItems: result.total,
+      itemListElement: result.items.slice(0, 12).map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         url: `${SITE_URL}${item.canonical_path || productPath('marketing', industry.slug, item.slug)}`,
@@ -86,6 +102,8 @@ export default async function MarketingIndustryPage({ params }: Props) {
       })),
     },
   };
+
+  const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
 
   return (
     <>
@@ -97,46 +115,33 @@ export default async function MarketingIndustryPage({ params }: Props) {
           industry: industry.slug,
         }}
       />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
-        <CatalogBreadcrumb items={crumbs} className="mb-4" />
-        <header className="mb-6 md:mb-8">
-          <h1 className="font-display text-2xl font-black tracking-tight text-[#0f2744] dark:text-white sm:text-3xl md:text-4xl">
-            {h1}
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-text-secondary md:text-base">{intro}</p>
-          <CatalogCTA
-            className="mt-5"
-            productSlug={industry.slug}
-            industrySlug={industry.slug}
-            kind="marketing"
-            demoLabel="Free Demo"
-            orderLabel="Order Now"
+      <ExploreCatalogLayout
+        activeRoot="marketing"
+        activeIndustrySlug={industry.slug}
+        industries={sidebarIndustries}
+        breadcrumbs={crumbs}
+        title={h1}
+        description={intro}
+        resultCount={result.total}
+      >
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <CreativeMarketingCardSkeleton key={i} />
+              ))}
+            </div>
+          }
+        >
+          <CreativeMarketingCatalog
+            initialFilters={{ q, page, industrySlug: industry.slug }}
+            initialData={result}
+            hideChrome
+            lockedIndustrySlug={industry.slug}
           />
-        </header>
-
-        {products.items.length === 0 ? (
-          <CatalogEmptyState
-            title="No services in this industry yet"
-            description="Browse other marketing industries or request a custom package."
-            actionHref={categoryPath('marketing')}
-            actionLabel="Browse marketing"
-          />
-        ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-            {products.items.map((product) => (
-              <CatalogProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-
+        </Suspense>
         <CatalogFaqList faqs={faqs} />
-
-        <p className="mt-10 text-sm">
-          <Link href={categoryPath('marketing')} className="font-semibold text-[#2563eb] hover:underline">
-            ← All marketing services
-          </Link>
-        </p>
-      </div>
+      </ExploreCatalogLayout>
     </>
   );
 }

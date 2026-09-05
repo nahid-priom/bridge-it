@@ -54,7 +54,7 @@ export function MobileQuickActions({
   return (
     <div className={cn('grid grid-cols-2 gap-2', className)}>
       <QuickActionCard
-        href={ROUTES.portfolio}
+        href={ROUTES.explore}
         label="Portfolio"
         icon={<Briefcase className="w-4 h-4 text-[#2563eb] shrink-0" aria-hidden />}
         onNavigate={onNavigate}

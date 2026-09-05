@@ -64,11 +64,26 @@ export {
   CatalogFaqList,
   CatalogPrice,
   CatalogProductCard,
+  ExploreCatalogLayout,
+  CatalogSidebar,
+  CatalogToolbar,
+  FeaturedBadge,
   IndustryCard,
   IndustryGrid,
   PackageBadge,
+  ProductReviews,
   RelatedProducts,
+  StarRating,
   consultationDeepLink,
   formatCatalogPrice,
+  parseSoftwarePriceParam,
+  softwarePriceBounds,
 } from './components';
-export type { CatalogAnalyticsPayload, CatalogProductFeature } from './components';
+export type {
+  CatalogAnalyticsPayload,
+  CatalogProductFeature,
+  CatalogSidebarIndustry,
+} from './components';
+export { listApprovedReviews, submitCatalogReview } from './api/reviews';
+export type { CatalogProductReview, CatalogReviewKind } from './types/reviews';
+export { fallbackRatingFromSlug } from './types/reviews';

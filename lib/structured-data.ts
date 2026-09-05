@@ -355,6 +355,7 @@ export function softwareShowcaseServiceJsonLd(project: {
   category?: { name: string } | null;
   industry_slug?: string | null;
   canonical_path?: string | null;
+  packages?: Array<{ price: number; currency?: string | null; active?: boolean }> | null;
 }) {
   const path =
     project.canonical_path?.trim() ||
@@ -363,6 +364,16 @@ export function softwareShowcaseServiceJsonLd(project: {
       : ROUTES.softwareSolution(project.slug));
   const url = `${SITE_URL}${path}`;
   const image = project.cover_detail_url || project.cover_card_url || project.og_image_url;
+  const activePrices = (project.packages ?? [])
+    .filter((pkg) => pkg.active !== false && Number(pkg.price) > 0)
+    .map((pkg) => Number(pkg.price));
+  const lowPrice = activePrices.length
+    ? Math.min(...activePrices)
+    : project.starting_price > 0
+      ? project.starting_price
+      : null;
+  const highPrice = activePrices.length ? Math.max(...activePrices) : lowPrice;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -378,12 +389,14 @@ export function softwareShowcaseServiceJsonLd(project: {
       name: SITE_NAME,
       url: SITE_URL,
     },
-    ...(project.starting_price > 0
+    ...(lowPrice != null
       ? {
           offers: {
-            '@type': 'Offer',
+            '@type': activePrices.length > 1 ? 'AggregateOffer' : 'Offer',
             priceCurrency: project.currency || 'BDT',
-            price: project.starting_price,
+            ...(activePrices.length > 1
+              ? { lowPrice, highPrice, offerCount: activePrices.length }
+              : { price: lowPrice }),
             availability: 'https://schema.org/InStock',
             url,
           },

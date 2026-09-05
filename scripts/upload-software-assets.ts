@@ -81,7 +81,7 @@ async function validateLocal(slug: string, screens: Array<{ key: string }>) {
   if (!(await exists(path.join(dir, 'design-manifest.json')))) issues.push('missing design-manifest.json');
   if (!(await exists(path.join(dir, 'cover/card.avif')))) issues.push('missing cover/card.avif');
   if (!(await exists(path.join(dir, 'cover/detail.avif')))) issues.push('missing cover/detail.avif');
-  if (screens.length < 10) issues.push(`only ${screens.length} screens in catalog (<10)`);
+  if (screens.length < 6) issues.push(`only ${screens.length} screens in catalog (<6)`);
   for (const s of screens) {
     if (!(await exists(path.join(dir, 'screens', s.key, 'preview.avif')))) issues.push(`missing screens/${s.key}/preview.avif`);
     if (!(await exists(path.join(dir, 'screens', s.key, 'thumb.avif')))) issues.push(`missing screens/${s.key}/thumb.avif`);

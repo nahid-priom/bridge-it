@@ -21,7 +21,7 @@ export function FeaturedPortfolioSection({ items = [] }: FeaturedPortfolioSectio
             </h2>
             <p className="text-sm text-text-secondary mt-2">Real work delivered for growing businesses.</p>
           </div>
-          <Link href={ROUTES.portfolio} className="inline-flex items-center gap-2 text-sm font-bold text-deshi-green hover:underline">
+          <Link href={ROUTES.explore} className="inline-flex items-center gap-2 text-sm font-bold text-deshi-green hover:underline">
             View All Projects
             <ArrowRight className="w-4 h-4" aria-hidden />
           </Link>

@@ -14,10 +14,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Check, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
-import { consultationDeepLink } from '@/src/features/catalog/components/CatalogCTA';
 import { formatCatalogPrice } from '@/src/features/catalog/components/CatalogPrice';
 import { PackageBadge } from '@/src/features/catalog/components/PackageBadge';
-import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
+import { ProductReviews } from '@/src/features/catalog/components/ProductReviews';
+import { StarRating } from '@/src/features/catalog/components/StarRating';
+import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
+import type { CatalogFaq } from '@/src/features/catalog/types';
+import type { CatalogProductReview } from '@/src/features/catalog/types/reviews';
 import type {
   SoftwarePackage,
   SoftwareProductFeature,
@@ -30,10 +33,22 @@ import {
   withCacheBust,
 } from '../utils/resolve-software-asset';
 import { SoftwareEmptyPreview } from './SoftwareEmptyPreview';
+import { SoftwarePackageComparison } from './SoftwarePackageComparison';
+import { SoftwarePackageLeadModal } from './SoftwarePackageLeadModal';
 import { SoftwarePackageSelector } from './SoftwarePackageSelector';
+import { SoftwareProductFaq } from './SoftwareProductFaq';
+import { MaturityUpgradePath } from './MaturityUpgradePath';
+import { SoftwareShowcaseImage } from './SoftwareShowcaseImage';
+import { SelectedPackageSummary } from './SelectedPackageSummary';
+import {
+  groupPackageFeatures,
+  includedFeatureRows,
+  manageCardsFromPackage,
+  screensForPackage,
+  targetAudienceCopy,
+} from './package-features';
 import {
   packageDisplayName,
-  paymentTypeLabel,
   pickDefaultPackage,
 } from './package-utils';
 
@@ -158,8 +173,18 @@ function ScreenChrome({
   );
 }
 
-export function SoftwarePreview({ project }: { project: SoftwareProjectDetail }) {
-  const industrySlug = softwareIndustryForProduct(project.slug);
+export function SoftwarePreview({
+  project,
+  reviews = [],
+  faqs = [],
+}: {
+  project: SoftwareProjectDetail;
+  reviews?: CatalogProductReview[];
+  faqs?: CatalogFaq[];
+}) {
+  const ratingFallback = fallbackRatingFromSlug(project.slug);
+  const ratingAvg = project.rating_avg ?? ratingFallback.rating_avg;
+  const reviewCount = project.review_count ?? ratingFallback.review_count;
   const activePackages = useMemo(
     () => project.packages.filter((pkg) => pkg.active !== false),
     [project.packages]
@@ -183,25 +208,32 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
     setSelectedPackage((prev) => (prev?.id === next.id ? prev : next));
   }, [activePackages, searchParams]);
 
-  const packageParam = selectedPackage?.name || selectedPackage?.tier || null;
-  const demoHref = consultationDeepLink({
-    intent: 'demo',
-    product: project.slug,
-    industry: industrySlug,
-    kind: 'software',
-    package: packageParam,
-  });
-  const orderHref = consultationDeepLink({
-    intent: 'order',
-    product: project.slug,
-    industry: industrySlug,
-    kind: 'software',
-    package: packageParam,
-  });
+  const [leadOpen, setLeadOpen] = useState(false);
+  const [leadIntent, setLeadIntent] = useState<'demo' | 'order'>('order');
 
-  const screens = useMemo(
+  const openLead = useCallback((intent: 'demo' | 'order') => {
+    if (!selectedPackage) return;
+    setLeadIntent(intent);
+    setLeadOpen(true);
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: intent === 'demo' ? 'free_demo_click' : 'order_click',
+        category_root: 'software',
+        product: project.slug,
+        package: selectedPackage.name,
+        package_tier: selectedPackage.tier,
+      });
+    }
+  }, [project.slug, selectedPackage]);
+
+  const allScreens = useMemo(
     () => project.screens.filter((screen) => screen.published).sort((a, b) => a.sort_order - b.sort_order),
     [project.screens]
+  );
+  const screens = useMemo(
+    () => screensForPackage(allScreens, selectedPackage?.id),
+    [allScreens, selectedPackage?.id]
   );
   const features = useMemo(
     () => project.features.filter((f) => f.published).sort((a, b) => a.sort_order - b.sort_order),
@@ -231,19 +263,39 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
   const categoryLabel =
     project.taxonomy_category?.name ?? project.child_category?.name ?? project.category?.name ?? 'Software';
   const coverResolved = resolveSoftwareCover(project, 'detail');
-  const cover = coverResolved ? withCacheBust(coverResolved.url, coverResolved.assetVersion) : null;
+  const cover = coverResolved?.url ?? null;
   const outcome =
     selectedPackage?.short_description ?? project.feature_summary ?? project.short_description;
 
-  const displayPrice = selectedPackage
-    ? selectedPackage.price
-    : project.starting_price;
+  const startingFrom = useMemo(() => {
+    if (activePackages.length === 0) return project.starting_price;
+    return Math.min(...activePackages.map((p) => p.price));
+  }, [activePackages, project.starting_price]);
+
+  const displayPrice = selectedPackage ? selectedPackage.price : startingFrom;
   const displayCurrency = selectedPackage?.currency ?? project.currency;
+  const manageLabels = manageCardsFromPackage(selectedPackage);
+  const featureGroups = groupPackageFeatures(
+    includedFeatureRows(selectedPackage).length
+      ? includedFeatureRows(selectedPackage)
+      : []
+  );
 
   useEffect(() => {
     reducedMotion.current =
       typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
+
+  useEffect(() => {
+    // Reset selected screen when package changes screen set
+    const next =
+      (screenFromUrl ? screens.find((s) => s.screen_key === screenFromUrl) : null) ??
+      screens.find((screen) => screen.is_featured) ??
+      screens[0];
+    if (next && !screens.some((s) => s.screen_key === selectedKey)) {
+      setSelectedKey(next.screen_key);
+    }
+  }, [screens, screenFromUrl, selectedKey]);
 
   useEffect(() => {
     if (!selectedKey && initial?.screen_key) setSelectedKey(initial.screen_key);
@@ -339,64 +391,91 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
     else goRelative(-1);
   };
 
-  const packageFeatures = selectedPackage?.features.slice(0, 8) ?? [];
-  const keyFeatures =
-    packageFeatures.length > 0
-      ? packageFeatures.map((title, index) => ({
-          id: `pkg-feat-${index}`,
-          title,
-        }))
-      : features.length > 0
-        ? features.map((f) => ({ id: f.id, title: f.title }))
-        : project.modules.map((title, index) => ({
-            id: `module-${index}`,
-            title,
-          }));
-
   const chromeProps = {
     title: selected ? screenLabel(selected) : 'Screen',
-    index: selectedIndex + 1,
-    total: screens.length,
+    index: Math.max(1, selectedIndex + 1),
+    total: Math.max(1, screens.length),
     canPrev,
     canNext,
     onPrev: () => goRelative(-1),
     onNext: () => goRelative(1),
   };
 
-  return (
-    <div className="pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-16">
-      <div className="mx-auto w-full max-w-[1480px] px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8 xl:px-10">
-        <header className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] dark:text-[#60a5fa]">
-            {categoryLabel}
-          </p>
-          <h1 className="mt-2 font-display text-[1.75rem] font-black leading-tight text-text-primary sm:text-3xl lg:text-4xl">
-            {project.title}
-          </h1>
-          {outcome ? (
-            <p className="mt-3 text-sm leading-relaxed text-text-secondary sm:text-base">{outcome}</p>
-          ) : null}
+  const orderLabel = selectedPackage ? `Order ${packageDisplayName(selectedPackage)}` : 'Order Now';
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <p className="text-xl font-black tabular-nums text-text-primary sm:text-2xl">
-              {formatCatalogPrice(displayPrice, {
-                currency: displayCurrency,
-                suffix: selectedPackage ? null : project.price_suffix,
-              })}
+  return (
+    <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-16">
+      <div className="mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] xl:px-10">
+        {/* Hero */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-10">
+          <header className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] dark:text-[#60a5fa]">
+              {categoryLabel}
             </p>
-            {selectedPackage ? (
-              <span className="text-sm text-text-secondary">
-                {paymentTypeLabel(selectedPackage.payment_type)}
-                {selectedPackage.name ? ` · ${packageDisplayName(selectedPackage)}` : null}
-              </span>
+            <h1 className="mt-2 font-display text-[1.75rem] font-black leading-tight text-text-primary sm:text-3xl lg:text-4xl">
+              {project.title}
+            </h1>
+            <StarRating rating={ratingAvg} reviewCount={reviewCount} size="md" className="mt-2" />
+            {outcome ? (
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary sm:text-base">{outcome}</p>
             ) : null}
-            <PackageBadge badge={selectedPackage?.badge} />
+
+            <div className="mt-5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Starting from</p>
+              <p className="mt-1 text-2xl font-black tabular-nums text-text-primary sm:text-3xl">
+                {formatCatalogPrice(startingFrom, {
+                  currency: displayCurrency,
+                  suffix: selectedPackage ? null : project.price_suffix,
+                })}
+              </p>
+              <p className="mt-0.5 text-sm text-text-muted">One Time Payment</p>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => openLead('demo')}
+                disabled={!selectedPackage && hasPackages}
+                className="inline-flex flex-1 items-center justify-center rounded-xl border border-border-subtle px-4 py-3 text-sm font-semibold disabled:opacity-50"
+              >
+                Free Demo
+              </button>
+              <button
+                type="button"
+                onClick={() => openLead('order')}
+                disabled={!selectedPackage && hasPackages}
+                className="inline-flex flex-1 items-center justify-center rounded-xl bg-[#0f2744] px-4 py-3 text-sm font-semibold text-white hover:bg-[#16375f] disabled:opacity-50 dark:bg-white dark:text-[#0f2744]"
+              >
+                {orderLabel}
+              </button>
+            </div>
+          </header>
+
+          <div className="min-w-0 lg:order-none">
+            {cover ? (
+              <div className="overflow-hidden rounded-2xl border border-border-subtle bg-[#0b1220]">
+                <SoftwareShowcaseImage
+                  kind="detail"
+                  project={project}
+                  priority
+                  className="w-full"
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                />
+              </div>
+            ) : screens.length === 0 ? (
+              <SoftwareEmptyPreview />
+            ) : (
+              <SoftwareEmptyPreview
+                title="Preview coming soon"
+                description="Cover art is being prepared. Explore system screens below or request a free demo."
+              />
+            )}
           </div>
-        </header>
+        </div>
 
         {hasPackages ? (
           <SoftwarePackageSelector
-            className="mt-5"
+            className="mt-8"
             packages={activePackages}
             productSlug={project.slug}
             value={selectedPackage}
@@ -404,39 +483,24 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
           />
         ) : null}
 
-        {cover ? (
-          <div className="mt-6 overflow-hidden rounded-2xl border border-border-subtle bg-background-soft">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={cover}
-              alt={`${project.title} cover`}
-              width={1200}
-              height={750}
-              loading="eager"
-              decoding="async"
-              className="h-auto w-full object-cover object-top"
-            />
-          </div>
-        ) : screens.length === 0 ? (
-          <SoftwareEmptyPreview className="mt-6" />
-        ) : (
-          <SoftwareEmptyPreview
+        {selectedPackage ? (
+          <SelectedPackageSummary
             className="mt-6"
-            title="Preview coming soon"
-            description="Cover art is being prepared. Explore system screens below or request a free demo."
+            pkg={selectedPackage}
+            onDemo={() => openLead('demo')}
+            onOrder={() => openLead('order')}
           />
-        )}
+        ) : null}
 
-        {packageFeatures.length > 0 ? (
-          <Section title={`${packageDisplayName(selectedPackage!)} Includes`}>
-            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2.5">
-              {packageFeatures.map((feature) => (
+        {manageLabels.length > 0 ? (
+          <Section title="What You Can Manage">
+            <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+              {manageLabels.map((label) => (
                 <li
-                  key={feature}
-                  className="flex items-start gap-2 rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3"
+                  key={label}
+                  className="rounded-xl border border-border-subtle bg-surface px-3 py-3 text-center text-[0.9375rem] font-semibold text-text-primary sm:py-4 sm:text-base"
                 >
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
-                  <span>{feature}</span>
+                  {label}
                 </li>
               ))}
             </ul>
@@ -445,244 +509,65 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
           <ManageChips features={features} />
         )}
 
+        {featureGroups.length > 0 ? (
+          <Section title="Package Features">
+            <div className="space-y-5">
+              {featureGroups.map(({ group, features: groupFeatures }) => (
+                <div key={group}>
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-text-muted">{group}</h3>
+                  <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {groupFeatures.map((feature) => (
+                      <li
+                        key={feature.id}
+                        className="flex items-start gap-2 rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-sm text-text-primary"
+                      >
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                        <span>{feature.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </Section>
+        ) : null}
+
         {screens.length > 0 ? (
           <section className="mt-10 lg:mt-14" aria-label="Explore the system">
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-              <h2 className="font-display text-xl font-black text-text-primary md:text-2xl">
-                Explore The System
-              </h2>
+            <h2 className="mb-3 font-display text-xl font-black text-text-primary md:text-2xl">
+              Explore The System
+            </h2>
+            <ScreenChrome {...chromeProps} className="mb-3" />
+            <div
+              ref={previewRef}
+              className="relative overflow-hidden rounded-2xl border border-border-subtle bg-[#0b1220]"
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+            >
+              {imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={imageUrl}
+                  alt={selected ? screenLabel(selected) : project.title}
+                  className="mx-auto max-h-[70vh] w-full object-contain"
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : (
+                <div className="flex aspect-video items-center justify-center text-sm text-white/60">
+                  Preview unavailable
+                </div>
+              )}
               <button
                 type="button"
-                onClick={() => setViewAllOpen(true)}
-                className="text-sm font-semibold text-[#2563eb] hover:underline"
+                onClick={() => setFullscreen(true)}
+                className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-black/50 text-white"
+                aria-label="Fullscreen"
               >
-                View All Screens
+                <Maximize2 className="h-4 w-4" />
               </button>
             </div>
-
-            <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-6">
-              <nav className="hidden lg:block" aria-label="Modules">
-                <ul className="sticky top-24 space-y-1 rounded-2xl border border-border-subtle bg-surface p-2">
-                  {screens.map((screen) => {
-                    const active = screen.screen_key === selected?.screen_key;
-                    return (
-                      <li key={screen.id}>
-                        <button
-                          type="button"
-                          aria-current={active ? 'page' : undefined}
-                          onClick={() => selectScreen(screen)}
-                          onMouseEnter={() => {
-                            const url = screenImageUrl(screen, assetVersion);
-                            if (url) preloadImage(url);
-                          }}
-                          className={cn(
-                            'w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors',
-                            active
-                              ? 'bg-[#0f2744] text-white'
-                              : 'text-text-secondary hover:bg-background-soft hover:text-text-primary'
-                          )}
-                        >
-                          {screenLabel(screen)}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-
-              <div>
-                <ScreenChrome {...chromeProps} className="mb-3" />
-
-                <div
-                  ref={previewRef}
-                  tabIndex={0}
-                  className="relative overflow-hidden rounded-2xl border border-border-subtle bg-background-soft outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40"
-                  onPointerDown={onPointerDown}
-                  onPointerUp={onPointerUp}
-                >
-                  {imageUrl ? (
-                    <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        key={imageUrl}
-                        src={imageUrl}
-                        alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
-                        width={selected?.image_width ?? 1100}
-                        height={selected?.image_height ?? 688}
-                        loading="lazy"
-                        decoding="async"
-                        className={cn(
-                          'h-auto w-full cursor-zoom-in object-contain object-top lg:cursor-default',
-                          !reducedMotion.current && 'motion-safe:transition-opacity motion-safe:duration-200'
-                        )}
-                        onClick={() => {
-                          if (typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches) {
-                            setFullscreen(true);
-                          }
-                        }}
-                        draggable={false}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setFullscreen(true)}
-                        className="absolute right-3 top-3 hidden items-center gap-1.5 rounded-lg bg-black/60 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur lg:inline-flex"
-                      >
-                        <Maximize2 className="h-3.5 w-3.5" aria-hidden />
-                        Fullscreen
-                      </button>
-                    </>
-                  ) : (
-                    <SoftwareEmptyPreview
-                      className="min-h-[240px] rounded-none border-0 lg:min-h-[360px]"
-                      title="Preview coming soon"
-                      description="This screen image is not available yet."
-                    />
-                  )}
-                  {selected?.short_caption ? (
-                    <p className="border-t border-border-subtle px-4 py-2.5 text-sm text-text-secondary">
-                      {selected.short_caption}
-                    </p>
-                  ) : null}
-                </div>
-
-                <p className="mt-2 text-center text-xs text-text-muted lg:hidden">Swipe to browse</p>
-
-                <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Screen thumbnails">
-                  {screens.map((screen, i) => {
-                    const thumb = screenThumbUrl(screen, assetVersion);
-                    const active = screen.screen_key === selected?.screen_key;
-                    return (
-                      <button
-                        key={screen.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={active}
-                        aria-current={active ? 'true' : undefined}
-                        aria-label={screenLabel(screen)}
-                        onClick={() => selectScreen(screen)}
-                        className={cn(
-                          'shrink-0 overflow-hidden rounded-lg border-2 transition-colors',
-                          active ? 'border-[#2563eb]' : 'border-transparent opacity-80 hover:opacity-100'
-                        )}
-                      >
-                        {thumb ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={thumb} alt="" className="h-14 w-[88px] object-cover object-top" loading="lazy" />
-                        ) : (
-                          <div className="flex h-14 w-[88px] items-center justify-center bg-background-soft text-[10px] text-text-muted">
-                            {i + 1}
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </section>
-        ) : cover ? (
-          <section className="mt-10 lg:mt-14" aria-label="System preview">
-            <h2 className="mb-3 font-display text-xl font-black text-text-primary md:text-2xl">
-              System Preview
-            </h2>
-            <SoftwareEmptyPreview description="Detailed screen walkthroughs are coming soon. Book a free demo to see the live system." />
-          </section>
-        ) : null}
-
-        {!hasPackages ? (
-          <Section title="Key Features">
-            {keyFeatures.length > 0 ? (
-              <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
-                {keyFeatures.map((feature) => (
-                  <li
-                    key={feature.id}
-                    className="rounded-xl border border-border-subtle bg-surface px-3 py-2.5 text-[0.9375rem] font-medium text-text-primary sm:px-4 sm:py-3 sm:text-sm"
-                  >
-                    {feature.title}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </Section>
-        ) : null}
-
-        {project.full_description ? (
-          <Section title="Business Workflow">
-            <p className="leading-relaxed text-text-secondary whitespace-pre-line line-clamp-8">
-              {project.full_description.replace(/Starting\s*৳[\d,]+[+]?/gi, '').replace(/৳[\d,]+[+]?/g, '')}
-            </p>
-          </Section>
-        ) : null}
-
-        {project.related_websites_cta ? (
-          <section className="mt-10 rounded-2xl border border-border-subtle bg-surface px-6 py-6 lg:mt-14">
-            <h2 className="font-display text-lg font-black text-text-primary">Need a storefront too?</h2>
-            <p className="mt-1 text-sm text-text-secondary">
-              Pair this admin system with a ready e-commerce website.
-            </p>
-            <Link
-              href={ROUTES.websites}
-              className="mt-4 inline-flex h-10 items-center justify-center rounded-xl border border-border-subtle px-4 text-sm font-semibold hover:border-[#2563eb]/40"
-            >
-              Browse Websites
-            </Link>
-          </section>
-        ) : null}
-
-        <section className="mt-10 lg:mt-14">
-          <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border-subtle bg-surface px-6 py-8 md:flex-row md:items-center">
-            <div>
-              <h2 className="font-display text-xl font-black text-text-primary">Ready for a free demo?</h2>
-              <p className="mt-1 text-sm text-text-secondary">
-                See how this {project.software_type || 'software'}
-                {selectedPackage ? ` (${packageDisplayName(selectedPackage)})` : ''} solution fits your business.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href={demoHref}
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2563eb] px-6 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
-              >
-                Free Demo
-              </Link>
-              <Link
-                href={orderHref}
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-border-subtle px-6 text-sm font-semibold hover:border-[#2563eb]/40"
-              >
-                Order Now
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-lg gap-2">
-          <Link
-            href={demoHref}
-            className="flex flex-1 items-center justify-center rounded-xl bg-[#2563eb] py-3 font-semibold text-white"
-          >
-            Free Demo
-          </Link>
-          <Link
-            href={orderHref}
-            className="flex flex-1 items-center justify-center rounded-xl border border-border-subtle py-3 font-semibold"
-          >
-            Order Now
-          </Link>
-        </div>
-      </div>
-
-      {viewAllOpen ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-6" role="dialog" aria-modal>
-          <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-t-2xl bg-background p-4 sm:rounded-2xl sm:p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-display text-lg font-black">All Screens</h3>
-              <button type="button" onClick={() => setViewAllOpen(false)} className="rounded-lg p-2 hover:bg-background-soft" aria-label="Close">
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
               {screens.map((screen) => {
                 const thumb = screenThumbUrl(screen, assetVersion);
                 const active = screen.screen_key === selected?.screen_key;
@@ -690,11 +575,169 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                   <button
                     key={screen.id}
                     type="button"
-                    aria-current={active ? 'true' : undefined}
+                    onClick={() => selectScreen(screen)}
                     className={cn(
-                      'overflow-hidden rounded-xl border text-left',
-                      active ? 'border-[#2563eb]' : 'border-border-subtle'
+                      'relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border',
+                      active ? 'border-[#2563eb]' : 'border-border-subtle opacity-80 hover:opacity-100'
                     )}
+                    aria-label={screenLabel(screen)}
+                    aria-current={active ? 'true' : undefined}
+                  >
+                    {thumb ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
+                    ) : (
+                      <span className="flex h-full items-center justify-center bg-background-soft text-[10px]">
+                        N/A
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            {screens.length > 6 ? (
+              <button
+                type="button"
+                onClick={() => setViewAllOpen(true)}
+                className="mt-3 text-sm font-semibold text-[#2563eb] hover:underline"
+              >
+                View all screens
+              </button>
+            ) : null}
+          </section>
+        ) : null}
+
+        {hasPackages ? (
+          <SoftwarePackageComparison
+            packages={activePackages}
+            selectedPackageId={selectedPackage?.id}
+            className="mt-10 lg:mt-14"
+          />
+        ) : null}
+
+        {selectedPackage ? (
+          <Section title="Who This Package Is For">
+            <p className="max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
+              {targetAudienceCopy(selectedPackage)}
+            </p>
+          </Section>
+        ) : null}
+
+        {selectedPackage ? (
+          <Section title="What's Included">
+            <ul className="space-y-2">
+              {includedFeatureRows(selectedPackage)
+                .slice(0, 8)
+                .map((feature) => (
+                  <li key={feature.id} className="flex items-start gap-2 text-sm text-text-secondary">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                    {feature.label}
+                  </li>
+                ))}
+            </ul>
+            <p className="mt-4 text-sm text-text-muted">
+              You can upgrade later: Starter → Basic → Standard → Professional → Enterprise.
+            </p>
+          </Section>
+        ) : null}
+
+        <SoftwareProductFaq faqs={faqs} className="mt-10 lg:mt-14" />
+
+        <MaturityUpgradePath productSlug={project.slug} />
+
+        <section className="mt-10 rounded-2xl border border-border-subtle bg-surface px-5 py-6 lg:mt-14 sm:px-6">
+          <h2 className="font-display text-xl font-black text-text-primary">Ready to proceed?</h2>
+          <p className="mt-1 text-sm text-text-secondary">
+            {selectedPackage
+              ? `Request a demo or order ${packageDisplayName(selectedPackage)} with exact pricing.`
+              : 'Request a free demo or talk to our team.'}
+          </p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => openLead('demo')}
+              className="inline-flex flex-1 items-center justify-center rounded-xl border border-border-subtle px-4 py-3 text-sm font-semibold"
+            >
+              Free Demo
+            </button>
+            <button
+              type="button"
+              onClick={() => openLead('order')}
+              className="inline-flex flex-1 items-center justify-center rounded-xl bg-[#0f2744] px-4 py-3 text-sm font-semibold text-white dark:bg-white dark:text-[#0f2744]"
+            >
+              {orderLabel}
+            </button>
+          </div>
+        </section>
+
+        <div className="mt-10">
+          <ProductReviews
+            kind="software"
+            productId={project.id}
+            initialReviews={reviews}
+            ratingAvg={ratingAvg}
+            reviewCount={reviewCount}
+          />
+        </div>
+      </div>
+
+      {/* Mobile sticky CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-surface/95 px-4 py-3 backdrop-blur lg:hidden pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="mx-auto flex max-w-lg items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-black tabular-nums text-text-primary">
+              {formatCatalogPrice(displayPrice, { currency: displayCurrency })}
+            </p>
+            <p className="truncate text-xs text-text-muted">
+              {selectedPackage ? packageDisplayName(selectedPackage) : 'Software'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => openLead('demo')}
+            className="rounded-xl border border-border-subtle px-3 py-2.5 text-xs font-semibold"
+          >
+            Free Demo
+          </button>
+          <button
+            type="button"
+            onClick={() => openLead('order')}
+            className="rounded-xl bg-[#0f2744] px-3 py-2.5 text-xs font-semibold text-white dark:bg-white dark:text-[#0f2744]"
+          >
+            Order
+          </button>
+        </div>
+      </div>
+
+      {selectedPackage ? (
+        <SoftwarePackageLeadModal
+          open={leadOpen}
+          onClose={() => setLeadOpen(false)}
+          intent={leadIntent}
+          projectId={project.id}
+          productSlug={project.slug}
+          productTitle={project.title}
+          selectedPackage={selectedPackage}
+        />
+      ) : null}
+
+      {viewAllOpen ? (
+        <div className="fixed inset-0 z-[70] bg-black/60 p-4" role="dialog" aria-modal="true">
+          <div className="mx-auto flex max-h-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-surface">
+            <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+              <h3 className="font-display text-lg font-bold">All screens</h3>
+              <button type="button" onClick={() => setViewAllOpen(false)} aria-label="Close">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 overflow-y-auto p-4 sm:grid-cols-3">
+              {screens.map((screen) => {
+                const thumb = screenThumbUrl(screen, assetVersion);
+                return (
+                  <button
+                    key={screen.id}
+                    type="button"
+                    className="overflow-hidden rounded-xl border border-border-subtle text-left"
                     onClick={() => {
                       selectScreen(screen);
                       setViewAllOpen(false);
@@ -702,11 +745,9 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
                   >
                     {thumb ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={thumb} alt="" className="aspect-[16/10] w-full object-cover object-top" loading="lazy" />
-                    ) : (
-                      <div className="aspect-[16/10] bg-background-soft" />
-                    )}
-                    <p className="truncate px-2 py-2 text-xs font-semibold">{screenLabel(screen)}</p>
+                      <img src={thumb} alt="" className="aspect-video w-full object-cover" />
+                    ) : null}
+                    <span className="block truncate px-2 py-1.5 text-xs font-medium">{screenLabel(screen)}</span>
                   </button>
                 );
               })}
@@ -716,34 +757,17 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
       ) : null}
 
       {fullscreen && imageUrl ? (
-        <div
-          className="fixed inset-0 z-[60] flex flex-col bg-black/90 p-4"
-          role="dialog"
-          aria-modal
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-        >
-          <div className="mb-3 flex items-center justify-between gap-3 text-white">
-            <ScreenChrome
-              {...chromeProps}
-              className="flex-1 [&_button]:border-white/20 [&_button]:bg-white/10 [&_button]:text-white [&_p]:text-white"
-            />
-            <button
-              type="button"
-              onClick={() => setFullscreen(false)}
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white"
-              aria-label="Close fullscreen"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+        <div className="fixed inset-0 z-[75] flex items-center justify-center bg-black/90 p-4">
+          <button
+            type="button"
+            className="absolute right-4 top-4 rounded-xl bg-white/10 p-2 text-white"
+            onClick={() => setFullscreen(false)}
+            aria-label="Close fullscreen"
+          >
+            <X className="h-5 w-5" />
+          </button>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={imageUrl}
-            alt={`${project.title} — ${selected?.screen_name ?? 'screen'}`}
-            className="mx-auto max-h-[calc(100%-5rem)] max-w-full object-contain"
-            draggable={false}
-          />
+          <img src={imageUrl} alt="" className="max-h-full max-w-full object-contain" />
         </div>
       ) : null}
     </div>
@@ -752,19 +776,27 @@ export function SoftwarePreview({ project }: { project: SoftwareProjectDetail })
 
 export function SoftwarePreviewSkeleton() {
   return (
-    <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-4 sm:px-6 lg:px-8" aria-busy="true" aria-label="Loading software">
-      <div className="h-3 w-24 animate-pulse rounded bg-background-soft" />
-      <div className="mt-3 h-9 w-2/3 animate-pulse rounded bg-background-soft" />
-      <div className="mt-3 h-4 w-full max-w-xl animate-pulse rounded bg-background-soft" />
-      <div className="mt-6 aspect-[16/10] w-full animate-pulse rounded-2xl bg-background-soft" />
-      <div className="mt-10 grid gap-3 sm:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-16 animate-pulse rounded-xl bg-background-soft" />
+    <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8" aria-busy="true" aria-label="Loading software">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div>
+          <div className="h-3 w-24 animate-pulse rounded bg-background-soft" />
+          <div className="mt-3 h-9 w-2/3 animate-pulse rounded bg-background-soft" />
+          <div className="mt-3 h-4 w-full max-w-xl animate-pulse rounded bg-background-soft" />
+          <div className="mt-6 h-8 w-40 animate-pulse rounded bg-background-soft" />
+          <div className="mt-5 flex gap-2">
+            <div className="h-12 flex-1 animate-pulse rounded-xl bg-background-soft" />
+            <div className="h-12 flex-1 animate-pulse rounded-xl bg-background-soft" />
+          </div>
+        </div>
+        <div className="aspect-card w-full animate-pulse rounded-2xl bg-background-soft" />
+      </div>
+      <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-[4.5rem] animate-pulse rounded-2xl bg-background-soft" />
         ))}
       </div>
-      <div className="mt-10 space-y-3">
-        <div className="aspect-[16/10] animate-pulse rounded-2xl bg-background-soft" />
-      </div>
+      <div className="mt-6 h-48 animate-pulse rounded-2xl bg-background-soft" />
+      <div className="mt-10 aspect-[16/10] animate-pulse rounded-2xl bg-background-soft" />
     </div>
   );
 }

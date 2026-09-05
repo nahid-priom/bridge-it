@@ -597,6 +597,16 @@ export interface BitpConsultationRequest {
   service_interested_in: string | null;
   message: string | null;
   product_id: string | null;
+  software_project_id?: string | null;
+  package_id?: string | null;
+  package_name?: string | null;
+  package_tier?: string | null;
+  package_price?: number | null;
+  currency?: string | null;
+  product_slug?: string | null;
+  source_url?: string | null;
+  intent?: string | null;
+  business_location?: string | null;
   status: ConsultationStatus;
   created_at: string;
   updated_at: string;
@@ -666,10 +676,17 @@ export interface CreateConsultationInput {
   name: string;
   phone: string;
   business_name?: string;
+  business_location?: string;
   /** Preferred DB field */
   service_interested_in?: string;
   /** @deprecated Alias — mapped to service_interested_in */
   service_interested?: string;
   message?: string;
   product_id?: string;
+  /** Software showcase project id (software_projects.id) */
+  software_project_id?: string;
+  package_id?: string;
+  product_slug?: string;
+  source_url?: string;
+  intent?: 'demo' | 'order' | string;
 }

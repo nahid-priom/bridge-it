@@ -47,25 +47,22 @@ export function HeroContent({ className }: { className?: string }) {
 
       <ul
         className={cn(
-          'mt-6 flex w-full max-w-[36rem] flex-row items-center justify-center gap-0 sm:mt-7 sm:max-w-[44rem] lg:max-w-[52rem]',
+          'mt-6 grid w-full max-w-[22rem] grid-cols-3 items-start justify-items-center gap-x-2 sm:mt-7 sm:max-w-[32rem] sm:gap-x-4',
           'motion-safe:opacity-0 motion-safe:[animation:hero-fade-up_0.55s_ease-out_0.1s_forwards]'
         )}
       >
-        {TRUST_POINTS.map(({ label, Icon, tone }, index) => (
+        {TRUST_POINTS.map(({ label, Icon, tone }) => (
           <li
             key={label}
-            className={cn(
-              'group flex min-w-0 flex-1 items-center justify-center gap-2 px-2.5 py-1 sm:gap-2.5 sm:px-4',
-              index > 0 && 'border-l border-border-subtle'
-            )}
+            className="group flex w-full max-w-[7.5rem] flex-col items-center gap-2 text-center sm:max-w-[9rem] sm:gap-2.5"
           >
             <span
               className={cn('hero-benefit-icon shrink-0', `hero-benefit-icon--${tone}`)}
               aria-hidden
             >
-              <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2} />
+              <Icon className="h-[1.125rem] w-[1.125rem] sm:h-5 sm:w-5" strokeWidth={2} />
             </span>
-            <span className="whitespace-nowrap text-left text-[0.8125rem] font-bold leading-none tracking-[-0.015em] text-text-primary sm:text-[0.9375rem] lg:text-base">
+            <span className="text-balance text-[0.75rem] font-bold leading-snug tracking-[-0.015em] text-text-primary sm:text-[0.875rem] lg:text-[0.9375rem]">
               {label}
             </span>
           </li>

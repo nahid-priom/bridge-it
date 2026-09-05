@@ -18,8 +18,8 @@ export interface CatalogRootMeta {
 export const CATALOG_ROOTS: Record<CatalogCategoryRoot, CatalogRootMeta> = {
   software: {
     root: 'software',
-    label: 'Business Software',
-    shortLabel: 'Software',
+    label: 'Software Solutions',
+    shortLabel: 'Software Solutions',
     path: '/software',
     description: 'Industry ERP and operations software for Bangladesh businesses.',
     productTable: 'software_projects',
@@ -27,17 +27,17 @@ export const CATALOG_ROOTS: Record<CatalogCategoryRoot, CatalogRootMeta> = {
   },
   websites: {
     root: 'websites',
-    label: 'E-commerce Websites',
-    shortLabel: 'Websites',
+    label: 'Website Templates',
+    shortLabel: 'Website Templates',
     path: '/websites',
-    description: 'Premium e-commerce website designs ready to customize.',
+    description: 'Premium e-commerce website templates ready to customize.',
     productTable: 'ecommerce_projects',
     kind: 'websites',
   },
   marketing: {
     root: 'marketing',
-    label: 'Creative & Marketing',
-    shortLabel: 'Marketing',
+    label: 'Digital Marketing',
+    shortLabel: 'Digital Marketing',
     path: '/marketing',
     legacyPath: '/creative-marketing',
     description: 'Creative design and digital marketing packages for growing brands.',

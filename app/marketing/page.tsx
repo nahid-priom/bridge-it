@@ -1,24 +1,33 @@
 import { Suspense } from 'react';
-import Link from 'next/link';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { ROUTES } from '@/lib/routes';
-import { IndustryGrid, listIndustries, productPath } from '@/src/features/catalog';
+import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
+import {
+  ExploreCatalogLayout,
+  buildCategoryBreadcrumbs,
+  listIndustries,
+  productPath,
+} from '@/src/features/catalog';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 import {
   CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
   parseCreativeGroupParam,
   parseCreativeMoreParam,
 } from '@/src/features/creative-marketing-showcase/config/constants';
-import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
-import { CreativeMarketingCardSkeleton } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
+import {
+  CreativeMarketingCatalog,
+  creativeMarketingListingQueryKey,
+} from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
+import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;
 
-const PAGE_TITLE = 'Creative & Digital Marketing';
+const PAGE_TITLE = 'Digital Marketing';
 const PAGE_DESCRIPTION =
   'Graphic design, branding, Facebook ads, e-commerce marketing, and lead generation services for growing brands.';
 
@@ -96,59 +105,45 @@ export default async function MarketingShowroomPage({ searchParams }: { searchPa
     },
   };
 
+  const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
+
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
+  });
+  queryClient.setQueryData(
+    creativeMarketingListingQueryKey({
+      q,
+      group: group || 'all',
+      more,
+      page,
+      pageSize: CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
+      industrySlug: '',
+    }),
+    result
+  );
+
   return (
     <>
       <JsonLd data={jsonLd} />
       <PageBreadcrumbJsonLd path={ROUTES.marketingShowroom} />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
-        <header className="mb-6 md:mb-8">
-          <h1 className="font-display text-3xl font-black tracking-tight text-[#0f2744] dark:text-white md:text-4xl">
-            Creative &amp; Digital Marketing
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-text-secondary md:text-base">{PAGE_DESCRIPTION}</p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <a
-              href="#cm-catalog"
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-[#0f2744] px-5 text-sm font-semibold text-white"
-            >
-              Explore Services
-            </a>
-            <Link
-              href={ROUTES.consultation}
-              className="inline-flex h-11 items-center justify-center rounded-xl border border-border-subtle px-5 text-sm font-semibold"
-            >
-              Free Consultation
-            </Link>
-          </div>
-        </header>
-        {industries.length > 0 ? (
-          <section className="mb-8 md:mb-10" aria-labelledby="marketing-industries-heading">
-            <h2
-              id="marketing-industries-heading"
-              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-            >
-              Browse by industry
-            </h2>
-            <IndustryGrid industries={industries} root="marketing" />
-          </section>
-        ) : null}
-        <div id="cm-catalog">
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <CreativeMarketingCardSkeleton key={i} />
-                ))}
-              </div>
-            }
-          >
+      <ExploreCatalogLayout
+        activeRoot="marketing"
+        industries={sidebarIndustries}
+        breadcrumbs={buildCategoryBreadcrumbs('marketing')}
+        title={PAGE_TITLE}
+        description={PAGE_DESCRIPTION}
+        resultCount={result.total}
+      >
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Suspense fallback={<CatalogGridSkeleton count={6} />}>
             <CreativeMarketingCatalog
               initialFilters={{ q, group, more, page }}
               initialData={result}
+              hideChrome
             />
           </Suspense>
-        </div>
-      </div>
+        </HydrationBoundary>
+      </ExploreCatalogLayout>
     </>
   );
 }

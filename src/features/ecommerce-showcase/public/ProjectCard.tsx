@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { cn, focusVisibleRing } from '@/lib/cn';
+import { FeaturedBadge } from '@/src/features/catalog/components/FeaturedBadge';
+import { StarRating } from '@/src/features/catalog/components/StarRating';
+import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
 import type { EcommerceProjectCard } from '../types';
 import { websiteDetailUrl } from '../utils/filters';
 import { ShowcaseImage } from './ShowcaseImage';
@@ -26,6 +29,9 @@ export function ProjectCard({
   const href = websiteDetailUrl(project.slug, project.industry_slug, project.canonical_path);
   const categoryLabel =
     project.industry_name ?? project.category_name ?? project.industry ?? 'E-commerce';
+  const ratingFallback = fallbackRatingFromSlug(project.slug);
+  const ratingAvg = project.rating_avg ?? ratingFallback.rating_avg;
+  const reviewCount = project.review_count ?? ratingFallback.review_count;
 
   const prefetchDetail = () => {
     router.prefetch(href);
@@ -51,10 +57,11 @@ export function ProjectCard({
           aria-label={`View ${project.title}`}
         >
           <div className="relative aspect-card overflow-hidden rounded-t-xl bg-background-soft sm:rounded-t-2xl">
+            {project.featured ? <FeaturedBadge /> : null}
             <ShowcaseImage
               src={project.cover_image_url}
               fallbackSrc={project.cover_fallback_url}
-              alt={`${project.title} custom e-commerce website design`}
+              alt={`${project.title} e-commerce website template`}
               width={800}
               height={600}
               eager={eager || priority}
@@ -71,6 +78,7 @@ export function ProjectCard({
                 {project.title}
               </h4>
               <p className="mt-0.5 text-xs text-text-muted line-clamp-1">{categoryLabel}</p>
+              <StarRating rating={ratingAvg} reviewCount={reviewCount} className="mt-1" />
             </div>
             <span
               aria-hidden
@@ -97,15 +105,11 @@ export function ProjectCard({
         onMouseEnter={prefetchDetail}
         onFocus={prefetchDetail}
       >
-        {project.featured ? (
-          <span className="absolute top-3 left-3 z-10 rounded-md bg-[#0f2744] px-2 py-0.5 text-[11px] font-semibold tracking-wide text-white">
-            Featured
-          </span>
-        ) : null}
+        {project.featured ? <FeaturedBadge /> : null}
         <ShowcaseImage
           src={project.cover_image_url}
           fallbackSrc={project.cover_fallback_url}
-          alt={`${project.title} custom e-commerce website design`}
+          alt={`${project.title} e-commerce website template`}
           width={800}
           height={600}
           eager={eager || priority}
@@ -118,13 +122,13 @@ export function ProjectCard({
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb]">
             {categoryLabel}
           </p>
           <h3 className="mt-1 font-display text-lg font-bold leading-snug text-text-primary">
             <Link
               href={href}
-              className="hover:text-emerald-700 dark:hover:text-emerald-400"
+              className="hover:text-[#2563eb]"
               prefetch={false}
               onMouseEnter={prefetchDetail}
               onFocus={prefetchDetail}
@@ -132,6 +136,7 @@ export function ProjectCard({
               {project.title}
             </Link>
           </h3>
+          <StarRating rating={ratingAvg} reviewCount={reviewCount} className="mt-1.5" />
           {project.short_description ? (
             <p className="mt-1.5 line-clamp-1 text-sm text-text-secondary">{project.short_description}</p>
           ) : null}
@@ -143,10 +148,10 @@ export function ProjectCard({
           onFocus={prefetchDetail}
           className={cn(
             'mt-auto inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold',
-            'bg-[#0f2744] text-white transition-colors hover:bg-[#16375f]'
+            'bg-[#2563eb] text-white transition-colors hover:bg-[#1d4ed8]'
           )}
         >
-          View Website
+          View Template
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>

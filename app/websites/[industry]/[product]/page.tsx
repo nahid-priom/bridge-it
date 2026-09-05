@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
@@ -14,10 +15,13 @@ import {
   RelatedProducts,
   buildProductMetadata,
   getProductByPath,
+  listApprovedReviews,
   listProducts,
   listRelatedProducts,
   productPath,
 } from '@/src/features/catalog';
+import { DeferredRelatedSection } from '@/src/features/catalog/components/DeferredRelatedSection';
+import { ProductHeroSkeleton } from '@/src/components/skeletons/ProductHeroSkeleton';
 
 export const revalidate = 60;
 
@@ -57,6 +61,39 @@ export async function generateMetadata({ params, searchParams }: Props) {
   });
 }
 
+async function WebsiteRelatedRail({
+  projectId,
+  industryId,
+}: {
+  projectId: string;
+  industryId: string | null | undefined;
+}) {
+  const relatedFromCatalog = await listRelatedProducts('websites', projectId, { limit: 8 });
+  let relatedItems = relatedFromCatalog.filter((r) => r.product && r.product.id !== projectId);
+
+  if (relatedItems.length === 0 && industryId) {
+    const sameIndustry = await listProducts({
+      root: 'websites',
+      industryId,
+      pageSize: 8,
+    });
+    relatedItems = sameIndustry.items
+      .filter((p) => p.id !== projectId)
+      .slice(0, 4)
+      .map((product, index) => ({
+        id: `same-${product.id}`,
+        source_kind: 'websites' as const,
+        source_id: projectId,
+        related_kind: 'websites' as const,
+        related_id: product.id,
+        sort_order: index,
+        product,
+      }));
+  }
+
+  return <RelatedProducts items={relatedItems} title="Similar templates" />;
+}
+
 export default async function WebsiteProductPage({ params, searchParams }: Props) {
   const { industry, product: productSlug } = await params;
   const { preview } = await searchParams;
@@ -71,28 +108,7 @@ export default async function WebsiteProductPage({ params, searchParams }: Props
   const project = await getProjectBySlug(productSlug, { includeDrafts });
   if (!project) notFound();
 
-  const relatedFromCatalog = await listRelatedProducts('websites', project.id, { limit: 8 });
-  let relatedItems = relatedFromCatalog.filter((r) => r.product && r.product.id !== project.id);
-
-  if (relatedItems.length === 0 && catalogProduct.industry_id) {
-    const sameIndustry = await listProducts({
-      root: 'websites',
-      industryId: catalogProduct.industry_id,
-      pageSize: 8,
-    });
-    relatedItems = sameIndustry.items
-      .filter((p) => p.id !== project.id)
-      .slice(0, 4)
-      .map((product, index) => ({
-        id: `same-${product.id}`,
-        source_kind: 'websites' as const,
-        source_id: project.id,
-        related_kind: 'websites' as const,
-        related_id: product.id,
-        sort_order: index,
-        product,
-      }));
-  }
+  const reviews = await listApprovedReviews('websites', project.id);
 
   const industryMeta = {
     name: catalogProduct.industry_name || industry,
@@ -125,10 +141,12 @@ export default async function WebsiteProductPage({ params, searchParams }: Props
       {!project.published ? (
         <p className="bg-amber-100 py-2 text-center text-sm text-amber-900">Draft preview — not public</p>
       ) : null}
-      <ProjectPreview project={project} />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-12 sm:px-6 lg:px-8 xl:px-10">
-        <RelatedProducts items={relatedItems} />
-      </div>
+      <Suspense fallback={<ProductHeroSkeleton />}>
+        <ProjectPreview project={project} reviews={reviews} />
+      </Suspense>
+      <DeferredRelatedSection>
+        <WebsiteRelatedRail projectId={project.id} industryId={catalogProduct.industry_id} />
+      </DeferredRelatedSection>
     </>
   );
 }

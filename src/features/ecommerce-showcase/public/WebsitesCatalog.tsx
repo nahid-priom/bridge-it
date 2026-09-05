@@ -1,25 +1,26 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
 import { ProjectGridError } from '@/src/components/skeletons/section-errors';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
+import { useReportCatalogTotal } from '@/src/features/catalog/components/explore/CatalogResultsContext';
+import { cn } from '@/lib/cn';
 import type { ShowcaseListResult } from '../types';
 import { parseFilterList, serializeFilterList } from '../utils/filters';
 import { ProjectGrid } from './ProjectGrid';
-import { WebsiteFilterToolbar } from './WebsiteFilterToolbar';
-import { WebsiteSearch } from './WebsiteSearch';
 import { LISTING_LIMIT } from './websites-listing';
 
 async function fetchListing(params: {
   q: string;
   category: string;
   view: string;
+  industrySlug?: string;
   offset?: number;
 }): Promise<ShowcaseListResult> {
   const search = new URLSearchParams();
@@ -28,79 +29,49 @@ async function fetchListing(params: {
   if (params.q) search.set('q', params.q);
   if (params.category) search.set('category', params.category);
   if (params.view) search.set('view', params.view);
+  if (params.industrySlug) search.set('industrySlug', params.industrySlug);
   const res = await fetch(`/api/showcase/projects?${search.toString()}`);
-  if (!res.ok) throw new Error('Failed to load website designs');
+  if (!res.ok) throw new Error('Failed to load website templates');
   return (await res.json()) as ShowcaseListResult;
 }
 
-type ListingFilters = { q: string; category: string; view: string };
+type ListingFilters = {
+  q: string;
+  category: string;
+  view: string;
+  industrySlug?: string;
+};
 
 export function WebsitesCatalog({
   initialFilters,
   initialData,
-  hideChrome = false,
+  hideChrome = true,
+  lockedIndustrySlug,
 }: {
   initialFilters: ListingFilters;
   initialData: ShowcaseListResult;
-  /** When true, search + industry chips are provided by ExploreFilterChrome. */
+  /** When true, search/filters live in CatalogToolbar / sidebar. */
   hideChrome?: boolean;
+  /** Path-locked industry (`/websites/{slug}`). */
+  lockedIndustrySlug?: string;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [, startTransition] = useTransition();
-  const isExplore = hideChrome || pathname.includes('/explore');
 
   const views = parseFilterList(searchParams.get('view') || searchParams.get('page') || initialFilters.view);
-  const categories = parseFilterList(searchParams.get('category') || initialFilters.category);
+  const categories = lockedIndustrySlug
+    ? []
+    : parseFilterList(searchParams.get('category') || initialFilters.category);
+  const industrySlug = lockedIndustrySlug || initialFilters.industrySlug || '';
   const q = (searchParams.get('q') ?? initialFilters.q).trim();
   const viewKey = serializeFilterList(views) ?? 'all';
-  const categoryKey = serializeFilterList(categories) ?? 'all';
+  const categoryKey = industrySlug || serializeFilterList(categories) || 'all';
 
   const [extraItems, setExtraItems] = useState<ShowcaseListResult['items']>([]);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [searchInput, setSearchInput] = useState(q);
-
-  useEffect(() => {
-    setSearchInput(q);
-  }, [q]);
-
-  useEffect(() => {
-    if (isExplore) return;
-    const handle = window.setTimeout(() => {
-      const next = searchInput.trim();
-      if (next === q) return;
-      const params = new URLSearchParams(searchParams.toString());
-      if (next) params.set('q', next);
-      else params.delete('q');
-      const qs = params.toString();
-      startTransition(() => {
-        router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-      });
-    }, 320);
-    return () => window.clearTimeout(handle);
-  }, [searchInput, q, pathname, router, searchParams, isExplore]);
 
   useEffect(() => {
     setExtraItems([]);
-  }, [viewKey, categoryKey, q]);
-
-  const writeFilters = (nextViews: string[], nextCategories: string[]) => {
-    const params = new URLSearchParams(searchParams.toString());
-    const view = serializeFilterList(nextViews);
-    const category = serializeFilterList(nextCategories);
-    if (view) params.set('view', view);
-    else params.delete('view');
-    params.delete('page');
-    if (category) params.set('category', category);
-    else params.delete('category');
-    if (isExplore) params.set('type', 'websites');
-    const qs = params.toString();
-    const href = qs ? `${pathname}?${qs}` : pathname;
-    startTransition(() => {
-      router.replace(href, { scroll: false });
-    });
-  };
+  }, [viewKey, categoryKey, q, industrySlug]);
 
   const queryKey = showcaseListingQueryKey({
     q,
@@ -112,7 +83,7 @@ export function WebsitesCatalog({
 
   const matchesInitial =
     q === initialFilters.q &&
-    categoryKey === (initialFilters.category || 'all') &&
+    categoryKey === (initialFilters.industrySlug || initialFilters.category || 'all') &&
     viewKey === (initialFilters.view || 'all');
 
   const { data, isFetching, isError, isPending, refetch, isPlaceholderData } = useQuery({
@@ -120,8 +91,9 @@ export function WebsitesCatalog({
     queryFn: () =>
       fetchListing({
         q,
-        category: serializeFilterList(categories) ?? '',
+        category: industrySlug ? '' : serializeFilterList(categories) ?? '',
         view: serializeFilterList(views) ?? '',
+        industrySlug: industrySlug || undefined,
       }),
     initialData: matchesInitial ? initialData : undefined,
     placeholderData: keepPreviousData,
@@ -130,112 +102,103 @@ export function WebsitesCatalog({
 
   const items = [...(data?.items ?? []), ...extraItems];
   const total = data?.total ?? 0;
-  const hasFilters = Boolean(q || views.length || categories.length);
-  const showGridSkeleton = isPending || (isFetching && isPlaceholderData);
+  const hasFilters = Boolean(q || views.length || categories.length || industrySlug);
+  const showGridSkeleton = isPending && !data;
+  const isFilterRefreshing = Boolean(isFetching && isPlaceholderData && data);
+  const showEmpty = !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);
   const remaining = total - items.length;
   const showingFrom = items.length === 0 ? 0 : 1;
   const showingTo = items.length;
 
-  return (
-    <>
-      {!isExplore ? (
-        <div className="scrollbar-none mb-5 flex flex-nowrap items-center gap-2 overflow-x-auto overscroll-x-contain md:mb-6 md:gap-3">
-          <WebsiteSearch
-            id="websites-catalog-search"
-            value={searchInput}
-            onChange={setSearchInput}
-            className="w-[min(100%,16.5rem)] shrink-0 sm:w-72 md:w-80"
-          />
-          <div className="min-w-0 flex-1">
-            <WebsiteFilterToolbar
-              views={views}
-              categories={categories}
-              onViewsChange={(next) => writeFilters(next, categories)}
-              onCategoriesChange={(next) => writeFilters(views, next)}
-              hideCategories={false}
-            />
-          </div>
-        </div>
-      ) : null}
+  useReportCatalogTotal(data?.total, Boolean(data) && !showGridSkeleton);
 
-      <div className={isExplore ? 'mt-4 md:mt-5' : 'mt-2 md:mt-3'}>
-        {isError && !data ? (
-          <ProjectGridError onRetry={() => void refetch()} />
-        ) : showGridSkeleton ? (
-          <ProjectGridSkeleton count={6} />
-        ) : (
+  return (
+    <div className={hideChrome ? undefined : 'mt-2 md:mt-3'}>
+      {isError && !data ? (
+        <ProjectGridError onRetry={() => void refetch()} />
+      ) : showGridSkeleton ? (
+        <ProjectGridSkeleton count={6} />
+      ) : (
+        <div
+          className={cn(
+            'transition-opacity duration-200 motion-reduce:transition-none',
+            isFilterRefreshing && 'opacity-60'
+          )}
+          aria-busy={isFilterRefreshing || loadingMore || undefined}
+        >
           <ProjectGrid
             projects={items}
             eagerCount={3}
             priorityFirst
-            busy={loadingMore}
-            emptyTitle={hasFilters ? 'No designs match your filters' : 'No website designs yet'}
+            busy={loadingMore || isFilterRefreshing}
+            emptyTitle={hasFilters ? 'No templates match your filters' : 'No website templates yet'}
             emptyDescription={
               hasFilters
                 ? 'Clear filters or talk to us about a custom storefront for your brand.'
-                : 'Premium e-commerce designs will appear here soon.'
+                : 'Premium e-commerce templates will appear here soon.'
             }
             emptyActionHref={hasFilters ? '/websites' : ROUTES.consultation}
             emptyActionLabel={hasFilters ? 'Clear filters' : 'Book a consultation'}
           />
-        )}
+        </div>
+      )}
 
-        {hasFilters && items.length === 0 && data && !showGridSkeleton ? (
-          <p className="mt-4 text-center text-sm text-text-secondary">
-            Need something custom?{' '}
-            <Link href={ROUTES.consultation} className="font-semibold text-[#2563eb] hover:underline">
-              Book a free consultation
-            </Link>
+      {showEmpty && hasFilters ? (
+        <p className="mt-4 text-center text-sm text-text-secondary">
+          Need something custom?{' '}
+          <Link href={ROUTES.consultation} className="font-semibold text-[#2563eb] hover:underline">
+            Book a free consultation
+          </Link>
+        </p>
+      ) : null}
+
+      {!showGridSkeleton && (remaining > 0 || items.length > 0) ? (
+        <nav
+          className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row"
+          aria-label="Catalog pagination"
+        >
+          <p className="text-sm text-text-muted">
+            {items.length === 0
+              ? 'Showing 0 templates'
+              : `Showing ${showingFrom}–${showingTo} of ${total}`}
           </p>
-        ) : null}
+          {remaining > 0 ? (
+            <button
+              type="button"
+              disabled={loadingMore}
+              aria-busy={loadingMore || undefined}
+              className="inline-flex min-w-[10.5rem] items-center justify-center gap-2 rounded-xl border border-border-subtle px-6 py-3 text-sm font-semibold disabled:opacity-60"
+              onClick={async () => {
+                setLoadingMore(true);
+                try {
+                  const next = await fetchListing({
+                    q,
+                    category: industrySlug ? '' : serializeFilterList(categories) ?? '',
+                    view: serializeFilterList(views) ?? '',
+                    industrySlug: industrySlug || undefined,
+                    offset: items.length,
+                  });
+                  setExtraItems((current) => [...current, ...next.items]);
+                } finally {
+                  setLoadingMore(false);
+                }
+              }}
+            >
+              {loadingMore ? (
+                <InlineSpinner size={18} label="Loading more templates" />
+              ) : (
+                `Load more (${remaining})`
+              )}
+            </button>
+          ) : null}
+        </nav>
+      ) : null}
 
-        {!showGridSkeleton && (remaining > 0 || items.length > 0) ? (
-          <nav
-            className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row"
-            aria-label="Catalog pagination"
-          >
-            <p className="text-sm text-text-muted">
-              {items.length === 0
-                ? 'Showing 0 designs'
-                : `Showing ${showingFrom}–${showingTo} of ${total}`}
-            </p>
-            {remaining > 0 ? (
-              <button
-                type="button"
-                disabled={loadingMore}
-                aria-busy={loadingMore || undefined}
-                className="inline-flex min-w-[10.5rem] items-center justify-center gap-2 rounded-xl border border-border-subtle px-6 py-3 text-sm font-semibold disabled:opacity-60"
-                onClick={async () => {
-                  setLoadingMore(true);
-                  try {
-                    const next = await fetchListing({
-                      q,
-                      category: serializeFilterList(categories) ?? '',
-                      view: serializeFilterList(views) ?? '',
-                      offset: items.length,
-                    });
-                    setExtraItems((current) => [...current, ...next.items]);
-                  } finally {
-                    setLoadingMore(false);
-                  }
-                }}
-              >
-                {loadingMore ? (
-                  <InlineSpinner size={18} label="Loading more projects" />
-                ) : (
-                  `Load more (${remaining})`
-                )}
-              </button>
-            ) : null}
-          </nav>
-        ) : null}
-
-        {loadingMore ? (
-          <div className="mt-6">
-            <ProjectGridSkeleton count={Math.min(3, remaining)} />
-          </div>
-        ) : null}
-      </div>
-    </>
+      {loadingMore ? (
+        <div className="mt-6">
+          <ProjectGridSkeleton count={Math.min(3, remaining)} />
+        </div>
+      ) : null}
+    </div>
   );
 }

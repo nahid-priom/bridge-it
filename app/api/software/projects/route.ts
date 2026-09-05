@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import {
+  parseSoftwareBusinessSizeParam,
+  parseSoftwareSortParam,
+} from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import {
   parseSoftwareGroupParam,
@@ -18,6 +22,8 @@ export async function GET(request: NextRequest) {
   const q = params.get('q')?.trim() || undefined;
   const child = params.get('child')?.trim() || undefined;
   const more = parseSoftwareMoreParam(params.get('more'));
+  const businessSizes = parseSoftwareBusinessSizeParam(params.get('size'));
+  const sort = parseSoftwareSortParam(params.get('sort'));
 
   const categoryRaw = params.get('category')?.trim();
   const group = parseSoftwareGroupParam(params.get('group'), params.get('solutionGroup'));
@@ -42,6 +48,11 @@ export async function GET(request: NextRequest) {
     child: child && child !== 'all' ? child : undefined,
     group: group === 'all' ? undefined : group,
     more: more.length ? more : undefined,
+    industrySlug: params.get('industrySlug')?.trim() || undefined,
+    minPrice: params.get('minPrice') ? Number(params.get('minPrice')) : undefined,
+    maxPrice: params.get('maxPrice') ? Number(params.get('maxPrice')) : undefined,
+    businessSizes: businessSizes.length ? businessSizes : undefined,
+    sort,
   });
 
   return NextResponse.json(result);

@@ -1,26 +1,29 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { PageBreadcrumbJsonLd } from '@/components/seo/PageBreadcrumbJsonLd';
 import { SITE_URL } from '@/lib/site';
 import { ROUTES } from '@/lib/routes';
+import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import {
   CatalogAnalytics,
-  CatalogProductCard,
-  IndustryGrid,
+  ExploreCatalogLayout,
+  buildCategoryBreadcrumbs,
   listIndustries,
-  listProducts,
+  parseSoftwarePriceParam,
   productPath,
+  softwarePriceBounds,
+  industryPath,
 } from '@/src/features/catalog';
 import {
-  SOFTWARE_HUB_PRIORITY_SLUGS,
-} from '@/src/features/catalog/config/software-industries-45';
-import {
-  listShowcaseTaxonomy,
-  listSoftwareProjectCards,
-} from '@/src/features/software-showcase/api/projects';
+  parseSoftwareBusinessSizeParam,
+  parseSoftwareSortParam,
+} from '@/src/features/catalog/components/explore/types';
+import { SOFTWARE_HUB_PRIORITY_SLUGS } from '@/src/features/catalog/config/software-industries-45';
+import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import {
   parseSoftwareGroupParam,
   parseSoftwareMoreParam,
@@ -28,14 +31,17 @@ import {
   SOFTWARE_GALLERY_PAGE_SIZE,
   SOFTWARE_PRIMARY_FILTERS,
 } from '@/src/features/software-showcase/config/constants';
-import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
-import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
+import {
+  SoftwareCatalog,
+  softwareListingQueryKey,
+} from '@/src/features/software-showcase/public/SoftwareCatalog';
+import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;
 
 const PAGE_TITLE = 'Business Software & ERP Solutions';
 const PAGE_DESCRIPTION =
-  'Industry-focused ERP and business software for growing companies — compare packages, request a free demo, and order a scoped implementation.';
+  'Industry ERP, POS, CRM and HR tools with clear one-time packages — built for Bangladesh operations.';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -49,38 +55,35 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const noIndex = listingHasSeoFilters({
     q: first(sp.q),
     page: first(sp.page),
-    filters: [first(sp.group), first(sp.solutionGroup), first(sp.category), first(sp.child), first(sp.more)],
+    filters: [
+      first(sp.group),
+      first(sp.solutionGroup),
+      first(sp.category),
+      first(sp.child),
+      first(sp.more),
+      first(sp.price),
+      first(sp.size),
+      first(sp.sort),
+    ],
   });
   return buildPageMetadata({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     path: ROUTES.softwareShowroom,
     keywords: [
-      'software solutions Bangladesh',
-      'custom software development',
+      'business software solutions Bangladesh',
+      'ERP software Bangladesh',
+      'business management software',
       'POS software Bangladesh',
       'CRM software for small business',
       'HR payroll software Bangladesh',
-      'business automation software',
-      'SaaS development',
-      'mobile business app development',
     ],
     noIndex,
   });
 }
 
 function CatalogFallback() {
-  return (
-    <div
-      className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
-      aria-busy="true"
-      aria-label="Loading software"
-    >
-      {Array.from({ length: 6 }).map((_, index) => (
-        <SoftwareCardSkeleton key={index} />
-      ))}
-    </div>
-  );
+  return <CatalogGridSkeleton count={6} />;
 }
 
 export default async function SoftwareShowroomPage({ searchParams }: { searchParams: SearchParams }) {
@@ -91,6 +94,10 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
   const child = first(sp.child).trim() || 'all';
   const more = parseSoftwareMoreParam(first(sp.more));
   const page = Math.max(1, Number(first(sp.page)) || 1);
+  const priceId = parseSoftwarePriceParam(first(sp.price));
+  const priceBounds = softwarePriceBounds(priceId);
+  const businessSizes = parseSoftwareBusinessSizeParam(first(sp.size));
+  const sort = parseSoftwareSortParam(first(sp.sort));
 
   const primaryIds = new Set(SOFTWARE_PRIMARY_FILTERS.map((f) => f.id));
   let category = 'all';
@@ -109,7 +116,7 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
     taxonomyCategory = primaryFilterToTaxonomySlug(group);
   }
 
-  const [result, taxonomy, industries, featured] = await Promise.all([
+  const [result, industries] = await Promise.all([
     listSoftwareProjectCards({
       q: q || undefined,
       taxonomyCategory,
@@ -118,32 +125,13 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
       more: more.length ? more : undefined,
       page,
       pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
+      minPrice: priceBounds.minPrice,
+      maxPrice: priceBounds.maxPrice,
+      businessSizes: businessSizes.length ? businessSizes : undefined,
+      sort,
     }),
-    listShowcaseTaxonomy(),
     listIndustries('software'),
-    listProducts({ root: 'software', featured: true, pageSize: 8 }),
   ]);
-
-  const bySlug = new Map(industries.map((i) => [i.slug, i]));
-  const popularIndustries = SOFTWARE_HUB_PRIORITY_SLUGS.map((slug) => bySlug.get(slug)).filter(
-    Boolean
-  ) as typeof industries;
-
-  const businessNeedIndustries = industries.filter(
-    (i) => i.taxonomy_type === 'business_function'
-  );
-
-  const softwareMain = taxonomy.mains.find((m) => m.slug === 'software');
-  const softwareCats = taxonomy.categories.filter((c) => c.main_category_id === softwareMain?.id);
-  const catById = new Map(softwareCats.map((c) => [c.id, c]));
-  const childOptions = taxonomy.children
-    .filter((ch) => catById.has(ch.category_id))
-    .map((ch) => ({
-      id: ch.id,
-      label: ch.name,
-      slug: ch.slug,
-      categorySlug: catById.get(ch.category_id)?.slug,
-    }));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -168,6 +156,30 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
     },
   };
 
+  const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
+  const popular = SOFTWARE_HUB_PRIORITY_SLUGS.map((slug) =>
+    industries.find((i) => i.slug === slug)
+  ).filter(Boolean) as typeof industries;
+
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
+  });
+  queryClient.setQueryData(
+    softwareListingQueryKey({
+      q,
+      category: category || 'all',
+      child: child === 'all' ? 'all' : child,
+      more,
+      page,
+      pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
+      industrySlug: '',
+      price: priceId ?? '',
+      size: businessSizes.length ? businessSizes.join(',') : '',
+      sort,
+    }),
+    result
+  );
+
   return (
     <>
       <JsonLd data={jsonLd} />
@@ -179,114 +191,57 @@ export default async function SoftwareShowroomPage({ searchParams }: { searchPar
           software_hub_view: true,
         }}
       />
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-0 sm:px-6 lg:px-8 xl:px-10">
-        <header className="mb-4 md:mb-6">
-          <h1 className="font-display text-2xl font-black tracking-tight text-[#0f2744] dark:text-white sm:text-3xl md:text-4xl">
-            Business Software & ERP Solutions
-          </h1>
-          <p className="mt-1.5 max-w-2xl text-sm text-text-secondary md:text-base">
-            Industry ERP, POS, CRM and HR tools with clear one-time packages — built for Bangladesh operations.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <a
-              href="#popular-industries"
-              className="inline-flex h-10 items-center justify-center rounded-xl bg-[#0f2744] px-4 text-sm font-semibold text-white hover:bg-[#16375f]"
-            >
-              Browse Industries
-            </a>
-            <Link
-              href={ROUTES.consultation}
-              className="inline-flex h-10 items-center justify-center rounded-xl border border-border-subtle px-4 text-sm font-semibold text-text-primary hover:border-[#2563eb]/40"
-            >
-              Free Demo
-            </Link>
-          </div>
-        </header>
-
-        {popularIndustries.length > 0 ? (
-          <section
-            id="popular-industries"
-            className="mb-8 md:mb-10"
-            aria-labelledby="software-popular-industries-heading"
-          >
-            <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
-              <h2
-                id="software-popular-industries-heading"
-                className="font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-              >
-                Popular Industries
-              </h2>
-              <a
-                href="#all-industries"
-                className="text-sm font-semibold text-[#2563eb] hover:underline"
-              >
-                View All Industries
-              </a>
-            </div>
-            <IndustryGrid industries={popularIndustries} root="software" />
-          </section>
-        ) : null}
-
-        {featured.items.length > 0 ? (
-          <section className="mb-8 md:mb-10" aria-labelledby="software-featured-heading">
-            <h2
-              id="software-featured-heading"
-              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-            >
-              Featured Software
-            </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {featured.items.map((product) => (
-                <CatalogProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {businessNeedIndustries.length > 0 ? (
-          <section className="mb-8 md:mb-10" aria-labelledby="software-business-need-heading">
-            <h2
-              id="software-business-need-heading"
-              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-            >
-              Browse by Business Need
-            </h2>
-            <p className="mb-3 max-w-xl text-sm text-text-secondary">
-              Cross-industry tools for HR, finance, CRM, inventory and more.
-            </p>
-            <IndustryGrid industries={businessNeedIndustries} root="software" />
-          </section>
-        ) : null}
-
-        {industries.length > 0 ? (
-          <section
-            id="all-industries"
-            className="mb-8 md:mb-10 scroll-mt-20"
-            aria-labelledby="software-all-industries-heading"
-          >
-            <h2
-              id="software-all-industries-heading"
-              className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl"
-            >
-              All Industries
-            </h2>
-            <IndustryGrid industries={industries} root="software" />
-          </section>
-        ) : null}
-
-        <div id="software-catalog">
-          <h2 className="mb-3 font-display text-lg font-bold text-[#0f2744] dark:text-white md:text-xl">
-            All Solutions
-          </h2>
+      <ExploreCatalogLayout
+        activeRoot="software"
+        industries={sidebarIndustries}
+        breadcrumbs={buildCategoryBreadcrumbs('software')}
+        title={PAGE_TITLE}
+        description={PAGE_DESCRIPTION}
+        resultCount={result.total}
+      >
+        <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<CatalogFallback />}>
             <SoftwareCatalog
-              initialFilters={{ q, category, group, child, more, page }}
+              initialFilters={{
+                q,
+                category,
+                group,
+                child,
+                more,
+                page,
+                price: priceId ?? '',
+                size: businessSizes.length ? businessSizes.join(',') : '',
+                sort,
+              }}
               initialData={result}
-              childOptions={childOptions}
+              hideChrome
             />
           </Suspense>
-        </div>
-      </div>
+        </HydrationBoundary>
+
+        {popular.length > 0 ? (
+          <section className="mt-12 border-t border-border-subtle pt-8" aria-labelledby="browse-industries">
+            <h2 id="browse-industries" className="font-display text-lg font-bold text-[#0f2744] dark:text-white">
+              Browse industries
+            </h2>
+            <p className="mt-1 text-sm text-text-secondary">
+              Dedicated industry catalogs for SEO and focused discovery.
+            </p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {popular.map((industry) => (
+                <li key={industry.id}>
+                  <Link
+                    href={industryPath('software', industry.slug)}
+                    className="inline-flex rounded-lg border border-border-subtle px-3 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40 hover:text-text-primary"
+                  >
+                    {industry.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+      </ExploreCatalogLayout>
     </>
   );
 }

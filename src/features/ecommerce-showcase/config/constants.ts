@@ -12,27 +12,27 @@ export const HOMEPAGE_SECTION_MAX = 8;
 export const HOMEPAGE_SECTIONS = [
   {
     key: 'fashion_lifestyle',
-    title: 'Fashion Website Designs',
+    title: 'Fashion Website Templates',
     eyebrow: 'Fashion',
     description: 'Apparel, jewellery and lifestyle storefronts for your brand.',
-    viewAllHref: '/websites?category=fashion',
-    viewAllLabel: 'View fashion websites',
+    viewAllHref: '/websites/fashion',
+    viewAllLabel: 'View fashion templates',
   },
   {
     key: 'electronics_gadgets',
-    title: 'Electronics Website Designs',
+    title: 'Electronics Website Templates',
     eyebrow: 'Electronics',
     description: 'Mobile, gadgets and appliance storefronts ready to customize.',
-    viewAllHref: '/websites?category=electronics',
-    viewAllLabel: 'View electronics websites',
+    viewAllHref: '/websites/electronics',
+    viewAllLabel: 'View electronics templates',
   },
   {
     key: 'popular',
-    title: 'Beauty & Lifestyle Designs',
+    title: 'Beauty & Lifestyle Templates',
     eyebrow: 'Beauty',
     description: 'Beauty, lifestyle and specialty storefronts for Bangladesh brands.',
-    viewAllHref: '/websites?category=cosmetics',
-    viewAllLabel: 'View more websites',
+    viewAllHref: '/websites/cosmetics',
+    viewAllLabel: 'View more templates',
   },
 ] as const;
 

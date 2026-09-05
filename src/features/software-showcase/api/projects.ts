@@ -20,6 +20,7 @@ import type {
   SoftwareListFilters,
   SoftwareListResult,
   SoftwarePackage,
+  SoftwarePackageFeature,
   SoftwareProductFeature,
   SoftwareProject,
   SoftwareProjectCard,
@@ -28,7 +29,7 @@ import type {
 } from '../types';
 
 const CARD_SELECT =
-  'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, badge, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, asset_version, created_at, updated_at, deleted_at, screen_count';
+  'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, badge, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, asset_version, rating_avg, review_count, created_at, updated_at, deleted_at, screen_count';
 
 function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
   return {
@@ -61,6 +62,8 @@ function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
     published: Boolean(row.published),
     sort_order: Number(row.sort_order ?? 0),
     asset_version: Number(row.asset_version ?? 1),
+    rating_avg: row.rating_avg != null ? Number(row.rating_avg) : undefined,
+    review_count: row.review_count != null ? Number(row.review_count) : undefined,
     created_at: String(row.created_at ?? ''),
     updated_at: String(row.updated_at ?? ''),
     category_name: (row.category_name as string | null) ?? null,
@@ -110,6 +113,8 @@ function mapProject(row: Record<string, unknown>): SoftwareProject {
     seo_keywords: Array.isArray(row.seo_keywords) ? (row.seo_keywords as string[]) : [],
     sort_order: Number(row.sort_order ?? 0),
     asset_version: Number(row.asset_version ?? 1),
+    rating_avg: row.rating_avg != null ? Number(row.rating_avg) : undefined,
+    review_count: row.review_count != null ? Number(row.review_count) : undefined,
     created_by: (row.created_by as string | null) ?? null,
     updated_by: (row.updated_by as string | null) ?? null,
     created_at: String(row.created_at),
@@ -122,6 +127,7 @@ function mapScreen(row: Record<string, unknown>): SoftwareProjectScreen {
   return {
     id: String(row.id),
     project_id: String(row.project_id),
+    package_id: (row.package_id as string | null) ?? null,
     screen_key: String(row.screen_key),
     screen_name: String(row.screen_name),
     module_name: (row.module_name as string | null) ?? null,
@@ -159,9 +165,25 @@ function mapFeature(row: Record<string, unknown>): SoftwareProductFeature {
   };
 }
 
-function mapPackage(row: Record<string, unknown>): SoftwarePackage {
+function mapPackageFeature(row: Record<string, unknown>): SoftwarePackageFeature {
+  return {
+    id: String(row.id),
+    package_id: String(row.package_id),
+    feature_key: String(row.feature_key),
+    label: String(row.label),
+    feature_group: String(row.feature_group ?? 'Operations'),
+    is_included: row.is_included !== false,
+    is_highlighted: Boolean(row.is_highlighted),
+    display_order: Number(row.display_order ?? 0),
+  };
+}
+
+function mapPackage(
+  row: Record<string, unknown>,
+  featureRows: SoftwarePackageFeature[] = []
+): SoftwarePackage {
   const rawFeatures = row.features;
-  const features = Array.isArray(rawFeatures)
+  const legacyFeatures = Array.isArray(rawFeatures)
     ? (rawFeatures as unknown[]).map((item) => {
         if (typeof item === 'string') return item;
         if (item && typeof item === 'object' && 'title' in item) {
@@ -173,6 +195,11 @@ function mapPackage(row: Record<string, unknown>): SoftwarePackage {
         return String(item);
       })
     : [];
+  const includedRows = featureRows
+    .filter((f) => f.is_included)
+    .sort((a, b) => a.display_order - b.display_order);
+  const features =
+    includedRows.length > 0 ? includedRows.map((f) => f.label) : legacyFeatures;
   return {
     id: String(row.id),
     project_id: String(row.project_id),
@@ -181,6 +208,7 @@ function mapPackage(row: Record<string, unknown>): SoftwarePackage {
     currency: String(row.currency ?? 'BDT'),
     short_description: (row.short_description as string | null) ?? null,
     features,
+    feature_rows: featureRows.slice().sort((a, b) => a.display_order - b.display_order),
     is_popular: Boolean(row.is_popular),
     sort_order: Number(row.sort_order ?? 0),
     active: Boolean(row.active ?? true),
@@ -330,6 +358,17 @@ async function listSoftwareProjectCardsUncached(
     query = query.eq('category_slug', filters.industry);
   }
 
+  if (filters.industrySlug && filters.industrySlug !== 'all') {
+    query = query.eq('industry_slug', filters.industrySlug);
+  }
+
+  if (filters.minPrice != null) query = query.gte('starting_price', filters.minPrice);
+  if (filters.maxPrice != null) query = query.lte('starting_price', filters.maxPrice);
+
+  if (filters.businessSizes && filters.businessSizes.length > 0) {
+    query = query.in('business_size', filters.businessSizes);
+  }
+
   // Legacy more filters → solution_group OR when no taxonomy/child set
   if (!taxonomySlug && !filters.child) {
     const groupSlugs = resolveSoftwareGroupSlugs({
@@ -354,11 +393,19 @@ async function listSoftwareProjectCardsUncached(
   if (filters.featured) query = query.eq('featured', true);
   if (filters.popular) query = query.eq('popular', true);
 
-  const { data, count, error } = await query
-    .order('featured', { ascending: false })
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: false })
-    .range(offset, offset + pageSize - 1);
+  const sort = filters.sort ?? 'popular';
+  if (sort === 'newest') {
+    query = query.order('created_at', { ascending: false });
+  } else if (sort === 'price-asc') {
+    query = query.order('starting_price', { ascending: true, nullsFirst: false });
+  } else {
+    query = query
+      .order('featured', { ascending: false })
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false });
+  }
+
+  const { data, count, error } = await query.range(offset, offset + pageSize - 1);
 
   if (error) {
     console.error('[software-showcase] listSoftwareProjectCards', error.message);
@@ -388,11 +435,16 @@ export async function listSoftwareProjectCards(
   const key = JSON.stringify({
     q: filters.q ?? null,
     industry: filters.industry ?? null,
+    industrySlug: filters.industrySlug ?? null,
     taxonomyCategory: filters.taxonomyCategory ?? null,
     child: filters.child ?? null,
     solutionGroup: filters.solutionGroup ?? null,
     group: filters.group ?? null,
     more: filters.more ?? null,
+    minPrice: filters.minPrice ?? null,
+    maxPrice: filters.maxPrice ?? null,
+    businessSizes: filters.businessSizes?.slice().sort() ?? null,
+    sort: filters.sort ?? 'popular',
     featured: filters.featured ?? null,
     popular: filters.popular ?? null,
     published: filters.published ?? null,
@@ -425,7 +477,7 @@ async function getSoftwareProjectBySlugUncached(
       supabase
         .from('software_project_screens')
         .select(
-          'id, project_id, screen_key, screen_name, module_name, short_caption, image_url, image_path, thumbnail_url, thumbnail_path, mobile_image_url, mobile_image_path, image_width, image_height, sort_order, is_featured, published, created_at, updated_at, deleted_at'
+          'id, project_id, package_id, screen_key, screen_name, module_name, short_caption, image_url, image_path, thumbnail_url, thumbnail_path, mobile_image_url, mobile_image_path, image_width, image_height, sort_order, is_featured, published, created_at, updated_at, deleted_at'
         )
         .eq('project_id', project.id)
         .is('deleted_at', null)
@@ -474,6 +526,31 @@ async function getSoftwareProjectBySlugUncached(
     .map((row) => mapFeature(row as Record<string, unknown>))
     .filter((feature) => includeDrafts || feature.published);
 
+  const packageRows = packages ?? [];
+  const packageIds = packageRows.map((row) => String((row as { id: string }).id));
+  const featureRowsByPackage = new Map<string, SoftwarePackageFeature[]>();
+  if (packageIds.length > 0) {
+    const { data: packageFeatureRows } = await supabase
+      .from('software_package_features')
+      .select(
+        'id, package_id, feature_key, label, feature_group, is_included, is_highlighted, display_order, deleted_at'
+      )
+      .in('package_id', packageIds)
+      .is('deleted_at', null)
+      .order('display_order', { ascending: true });
+    for (const row of packageFeatureRows ?? []) {
+      const mapped = mapPackageFeature(row as Record<string, unknown>);
+      const list = featureRowsByPackage.get(mapped.package_id) ?? [];
+      list.push(mapped);
+      featureRowsByPackage.set(mapped.package_id, list);
+    }
+  }
+
+  const mappedPackages = packageRows.map((row) => {
+    const pkgId = String((row as { id: string }).id);
+    return mapPackage(row as Record<string, unknown>, featureRowsByPackage.get(pkgId) ?? []);
+  });
+
   const isEcommerceAdmin =
     childCat?.slug === 'ecommerce-admin' ||
     taxCat?.slug === 'ecommerce-admin' ||
@@ -486,7 +563,7 @@ async function getSoftwareProjectBySlugUncached(
     child_category: (childCat as Pick<ShowcaseChildCategory, 'id' | 'name' | 'slug'> | null) ?? null,
     features: publicFeatures,
     screens: publicScreens,
-    packages: (packages ?? []).map((row) => mapPackage(row as Record<string, unknown>)),
+    packages: mappedPackages,
     related_websites_cta: Boolean(isEcommerceAdmin),
   };
 }
@@ -567,19 +644,19 @@ function hasCanonicalCover(card: SoftwareProjectCard): boolean {
   return Boolean(url) && !url.includes('/showroom/covers/') && !url.includes('placeholder');
 }
 
+/** Business / SaaS tools — kept disjoint from industry section. */
 const POPULAR_HOMEPAGE_ORDER = [
   'dealership-management',
   'retail-pos',
   'hr-payroll',
   'crm-system',
-  'garments-erp',
   'hospital-management',
-  'feed-mill-erp',
   'school-management',
   'logistics-erp',
   'multi-branch-erp',
 ] as const;
 
+/** Manufacturing / agro / factory — kept disjoint from popular section. */
 const INDUSTRY_HOMEPAGE_ORDER = [
   'garments-erp',
   'feed-mill-erp',
@@ -596,11 +673,12 @@ const INDUSTRY_HOMEPAGE_ORDER = [
 function pickOrderedPremium(
   cards: SoftwareProjectCard[],
   order: readonly string[],
-  limit: number
+  limit: number,
+  excludeIds: ReadonlySet<string> = new Set()
 ): SoftwareProjectCard[] {
   const bySlug = new Map(cards.map((c) => [c.slug, c]));
   const picked: SoftwareProjectCard[] = [];
-  const seen = new Set<string>();
+  const seen = new Set<string>(excludeIds);
 
   for (const slug of order) {
     if (picked.length >= limit) break;
@@ -666,28 +744,44 @@ async function listHomepageSoftwareSectionsUncached(): Promise<SoftwareHomepageS
 
   const cardById = new Map(premiumCards.map((card) => [card.id, card] as const));
   const grouped = emptyHomepageSections();
+  /** One product may appear in only one homepage software section. */
+  const usedAcrossSections = new Set<string>();
+  const industrySlugSet = new Set<string>(INDUSTRY_HOMEPAGE_ORDER);
 
   for (const row of placements ?? []) {
-    const key = String((row as { section_key: string }).section_key) as SoftwareHomepageSectionKey;
+    let key = String((row as { section_key: string }).section_key) as SoftwareHomepageSectionKey;
     if (!SOFTWARE_HOMEPAGE_SECTIONS.some((section) => section.key === key)) continue;
-    if (grouped[key].length >= SOFTWARE_HOMEPAGE_SECTION_MAX) continue;
     const projectId = String((row as { project_id: string }).project_id);
+    if (usedAcrossSections.has(projectId)) continue;
     const card = cardById.get(projectId);
     if (!card) continue; // drops non-premium / missing-cover placements
+    // Industry flagships always belong in manufacturing_erp (avoids cross-section dupes)
+    if (industrySlugSet.has(card.slug)) key = 'manufacturing_erp';
+    if (grouped[key].length >= SOFTWARE_HOMEPAGE_SECTION_MAX) continue;
     grouped[key].push(card);
+    usedAcrossSections.add(projectId);
   }
 
-  // Fill or replace thin sections with curated premium order
+  // Fill thin sections with curated premium order (no cross-section duplicates)
   if (grouped.popular.length < SOFTWARE_HOMEPAGE_SECTION_MAX) {
-    const fill = pickOrderedPremium(premiumCards, POPULAR_HOMEPAGE_ORDER, SOFTWARE_HOMEPAGE_SECTION_MAX);
+    const fill = pickOrderedPremium(
+      premiumCards,
+      POPULAR_HOMEPAGE_ORDER,
+      SOFTWARE_HOMEPAGE_SECTION_MAX,
+      usedAcrossSections
+    );
     const existing = new Set(grouped.popular.map((c) => c.id));
     for (const card of fill) {
       if (grouped.popular.length >= SOFTWARE_HOMEPAGE_SECTION_MAX) break;
-      if (existing.has(card.id)) continue;
+      if (existing.has(card.id) || usedAcrossSections.has(card.id)) continue;
       grouped.popular.push(card);
       existing.add(card.id);
+      usedAcrossSections.add(card.id);
     }
-    if (grouped.popular.length === 0) grouped.popular = fill;
+    if (grouped.popular.length === 0) {
+      grouped.popular = fill.slice(0, SOFTWARE_HOMEPAGE_SECTION_MAX);
+      for (const card of grouped.popular) usedAcrossSections.add(card.id);
+    }
   }
 
   if (grouped.manufacturing_erp.length < SOFTWARE_HOMEPAGE_SECTION_MAX) {
@@ -700,19 +794,24 @@ async function listHomepageSoftwareSectionsUncached(): Promise<SoftwareHomepageS
     const fill = pickOrderedPremium(
       industryPool.length ? industryPool : premiumCards,
       INDUSTRY_HOMEPAGE_ORDER,
-      SOFTWARE_HOMEPAGE_SECTION_MAX
+      SOFTWARE_HOMEPAGE_SECTION_MAX,
+      usedAcrossSections
     );
     const existing = new Set(grouped.manufacturing_erp.map((c) => c.id));
     for (const card of fill) {
       if (grouped.manufacturing_erp.length >= SOFTWARE_HOMEPAGE_SECTION_MAX) break;
-      if (existing.has(card.id)) continue;
+      if (existing.has(card.id) || usedAcrossSections.has(card.id)) continue;
       grouped.manufacturing_erp.push(card);
       existing.add(card.id);
+      usedAcrossSections.add(card.id);
     }
-    if (grouped.manufacturing_erp.length === 0) grouped.manufacturing_erp = fill;
+    if (grouped.manufacturing_erp.length === 0) {
+      grouped.manufacturing_erp = fill.slice(0, SOFTWARE_HOMEPAGE_SECTION_MAX);
+      for (const card of grouped.manufacturing_erp) usedAcrossSections.add(card.id);
+    }
   }
 
-  // Cap and ensure popular section prefers popular=true ordering when rebuilt from fill only
+  // Cap each section at 6 unique items
   grouped.popular = grouped.popular.slice(0, SOFTWARE_HOMEPAGE_SECTION_MAX);
   grouped.manufacturing_erp = grouped.manufacturing_erp.slice(0, SOFTWARE_HOMEPAGE_SECTION_MAX);
 

@@ -8,9 +8,9 @@ import { useWebsiteSearchPlaceholder } from '@/hooks/useWebsiteSearchPlaceholder
 import type { ExploreTypeId } from '@/components/explore/explore-types';
 
 const PLACEHOLDER_BY_TYPE: Record<ExploreTypeId, string> = {
-  websites: 'Search website designs…',
-  software: 'Search software solutions…',
-  marketing: 'Search creative & marketing…',
+  websites: 'Search templates…',
+  software: 'Search software…',
+  marketing: 'Search marketing services…',
 };
 
 export function ExploreSearch({

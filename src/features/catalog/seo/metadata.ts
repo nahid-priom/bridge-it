@@ -32,18 +32,26 @@ export function buildIndustryMetadata(
   const rootMeta = CATALOG_ROOTS[root];
   const title =
     industry.seo_title?.trim() ||
-    `${industry.name} ${rootMeta.shortLabel} | ${SITE_SUFFIX}`;
+    (root === 'software'
+      ? `${industry.name} Software & ERP Solutions | ${SITE_SUFFIX}`
+      : root === 'websites'
+        ? `${industry.name} E-commerce Templates | ${SITE_SUFFIX}`
+        : `${industry.name} ${rootMeta.shortLabel} | ${SITE_SUFFIX}`);
   const description = trimDescription(
     industry.seo_description?.trim() ||
       industry.short_description?.trim() ||
       industry.seo_intro?.trim() ||
-      `${industry.name} solutions from Bridge IT Park.`
+      (root === 'software'
+        ? `${industry.name} software and ERP solutions for Bangladesh businesses.`
+        : `${industry.name} solutions from Bridge IT Park.`)
   );
   return {
     title,
     description,
     canonicalPath: industryPath(root, industry.slug),
-    h1: industry.seo_h1?.trim() || industry.name,
+    h1:
+      industry.seo_h1?.trim() ||
+      (root === 'software' ? `${industry.name} Software` : industry.name),
   };
 }
 
@@ -58,12 +66,16 @@ export function buildProductMetadata(
 
   const title =
     product.seo_title?.trim() ||
-    `${product.title} | ${industryName} | ${SITE_SUFFIX}`;
+    (root === 'software'
+      ? `${product.title} Software | ${SITE_SUFFIX}`
+      : `${product.title} | ${industryName} | ${SITE_SUFFIX}`);
 
   const description = trimDescription(
     product.seo_description?.trim() ||
       product.short_description?.trim() ||
-      `${product.title} — ${industryName} ${rootMeta.shortLabel.toLowerCase()} from Bridge IT Park.`
+      (root === 'software'
+        ? `${product.title} — ${industryName} ERP and operations software from Bridge IT Park.`
+        : `${product.title} — ${industryName} ${rootMeta.shortLabel.toLowerCase()} from Bridge IT Park.`)
   );
 
   const canonical =

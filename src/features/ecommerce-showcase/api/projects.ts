@@ -42,6 +42,8 @@ function mapCard(row: Record<string, unknown>): EcommerceProjectCard {
     featured: Boolean(row.featured),
     published: Boolean(row.published),
     sort_order: Number(row.sort_order ?? 0),
+    rating_avg: row.rating_avg != null ? Number(row.rating_avg) : undefined,
+    review_count: row.review_count != null ? Number(row.review_count) : undefined,
     created_at: String(row.created_at),
     updated_at: String(row.updated_at),
     category_name: (row.category_name as string | null) ?? null,
@@ -76,6 +78,8 @@ function mapProject(row: Record<string, unknown>): EcommerceProject {
     seo_description: (row.seo_description as string | null) ?? null,
     seo_keywords: (row.seo_keywords as string[]) ?? [],
     sort_order: Number(row.sort_order ?? 0),
+    rating_avg: row.rating_avg != null ? Number(row.rating_avg) : undefined,
+    review_count: row.review_count != null ? Number(row.review_count) : undefined,
     created_by: (row.created_by as string | null) ?? null,
     updated_by: (row.updated_by as string | null) ?? null,
     created_at: String(row.created_at),
@@ -233,6 +237,10 @@ async function listProjectCardsUncached(
   }
   if (categories.length === 1) query = query.eq('category_slug', categories[0]);
   else if (categories.length > 1) query = query.in('category_slug', categories);
+  if (filters.industrySlug && filters.industrySlug !== 'all') {
+    const slug = filters.industrySlug.replace(/,/g, '');
+    query = query.or(`industry_slug.eq.${slug},category_slug.eq.${slug}`);
+  }
   if (filters.tech) {
     const techName =
       TECHNOLOGY_OPTIONS.find((item) => item.slug === filters.tech || item.id === filters.tech)?.id ??
@@ -291,6 +299,7 @@ export async function listProjectCards(
     category: filters.category ?? null,
     tech: filters.tech ?? null,
     industry: filters.industry ?? null,
+    industrySlug: filters.industrySlug ?? null,
     websiteType: filters.websiteType ?? null,
     featured: filters.featured ?? null,
     minPrice: filters.minPrice ?? null,

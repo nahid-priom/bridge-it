@@ -5,6 +5,7 @@ import {
   deriveQuickActions,
   hashSlug,
   kpiValue,
+  maturityProfile,
   money,
   brandOf,
   type VisualFamily,
@@ -27,17 +28,33 @@ import { iconAt } from '../icons';
 
 export function renderDashboardScreen(product: SeedSoftwareProduct, family: VisualFamily) {
   const { x, y, w } = contentOrigin();
-  const kpis = product.dashboardKPIs.slice(0, 4);
+  const maturity = maturityProfile(product);
+  const kpiCount = maturity === 'starter' ? 3 : maturity === 'enterprise' ? 6 : maturity === 'professional' ? 5 : 4;
+  const kpis = product.dashboardKPIs.slice(0, kpiCount);
   const gap = 14;
-  const cardW = (w - gap * 3) / 4;
+  const cols = Math.min(kpiCount, 4);
+  const cardW = (w - gap * (cols - 1)) / cols;
   const chartKind = (['bar', 'line', 'area', 'donut'] as const)[hashSlug(product.slug) % 4];
-  const rows = demoRows(product, family, 5);
+  const rowCount = maturity === 'starter' ? 4 : maturity === 'enterprise' ? 6 : 5;
+  const rows = demoRows(product, family, rowCount);
   const actions = deriveQuickActions(product, family);
-  const tableTitle = family === 'logistics' ? 'Live Operations' : family === 'retail-pos' ? 'Recent Sales' : 'Recent Activity';
+  const tableTitle =
+    family === 'logistics'
+      ? 'Live Operations'
+      : family === 'retail-pos'
+        ? 'Recent Sales'
+        : family === 'feed-mill'
+          ? 'Batch & Dispatch Activity'
+          : family === 'garments'
+            ? 'Style & Line Activity'
+            : 'Recent Activity';
   const tableW = family === 'retail-pos' ? w - 300 : w;
+  const kpiRow2Y = y + 114;
+  const chartY = kpis.length > 4 ? kpiRow2Y + 114 : y + 118;
 
   return `
     ${kpis
+      .slice(0, cols)
       .map((kpi, i) =>
         KpiCard(
           x + i * (cardW + gap),
@@ -52,17 +69,37 @@ export function renderDashboardScreen(product: SeedSoftwareProduct, family: Visu
         )
       )
       .join('')}
-    ${ChartCard(x, y + 118, w - 280, 220, product.dashboardKPIs[0] || 'Trend', chartKind === 'donut' ? 'area' : chartKind, product.theme.primary, product.theme.accent)}
-    ${QuickActionCard(x + w - 264, y + 118, 264, 220, actions, product.theme.primary)}
-    ${card(x, y + 356, tableW, 400)}
-    ${t(x + 20, y + 388, tableTitle, { size: TYPE.title, weight: 700 })}
+    ${
+      kpis.length > 4
+        ? kpis
+            .slice(4)
+            .map((kpi, i) =>
+              KpiCard(
+                x + i * (cardW + gap),
+                kpiRow2Y,
+                cardW,
+                100,
+                kpi,
+                kpiValue(product, i + 4),
+                `+${1 + i}.8%`,
+                true,
+                product.theme.primary
+              )
+            )
+            .join('')
+        : ''
+    }
+    ${ChartCard(x, chartY, w - 280, 220, product.dashboardKPIs[0] || 'Trend', chartKind === 'donut' ? 'area' : chartKind, product.theme.primary, product.theme.accent)}
+    ${QuickActionCard(x + w - 264, chartY, 264, 220, actions, product.theme.primary)}
+    ${card(x, chartY + 238, tableW, 400)}
+    ${t(x + 20, chartY + 270, tableTitle, { size: TYPE.title, weight: 700 })}
     ${['Code', 'Party', 'Owner', 'Amount', 'Status', 'Date']
-      .map((h, i) => t(x + 20 + i * 180, y + 420, h.toUpperCase(), { size: 12, fill: COLOR.faint, weight: 700 }))
+      .map((h, i) => t(x + 20 + i * 180, chartY + 302, h.toUpperCase(), { size: 12, fill: COLOR.faint, weight: 700 }))
       .join('')}
-    <line x1="${x + 16}" y1="${y + 432}" x2="${x + tableW - 16}" y2="${y + 432}" stroke="${COLOR.border}"/>
+    <line x1="${x + 16}" y1="${chartY + 314}" x2="${x + tableW - 16}" y2="${chartY + 314}" stroke="${COLOR.border}"/>
     ${rows
       .map((r, i) => {
-        const ry = y + 468 + i * 52;
+        const ry = chartY + 350 + i * 52;
         return `${i % 2 ? rect(x + 12, ry - 28, tableW - 24, 48, COLOR.soft, ' rx="8"') : ''}
           ${t(x + 20, ry, r.code, { size: TYPE.table, weight: 600 })}
           ${t(x + 200, ry, r.party, { size: TYPE.table })}
@@ -74,14 +111,14 @@ export function renderDashboardScreen(product: SeedSoftwareProduct, family: Visu
       .join('')}
     ${
       family === 'retail-pos'
-        ? `${card(x + w - 284, y + 356, 284, 400)}
-           ${t(x + w - 264, y + 388, 'Top Products', { size: TYPE.body, weight: 700 })}
+        ? `${card(x + w - 284, chartY + 238, 284, 400)}
+           ${t(x + w - 264, chartY + 270, 'Top Products', { size: TYPE.body, weight: 700 })}
            ${rows
              .slice(0, 5)
              .map(
                (r, i) =>
-                 `${t(x + w - 264, y + 430 + i * 56, r.term, { size: TYPE.body, weight: 600 })}
-                  ${t(x + w - 40, y + 430 + i * 56, money(r.amount / 3), { size: TYPE.body, anchor: 'end', fill: product.theme.primary, weight: 700 })}`
+                 `${t(x + w - 264, chartY + 312 + i * 56, r.term, { size: TYPE.body, weight: 600 })}
+                  ${t(x + w - 40, chartY + 312 + i * 56, money(r.amount / 3), { size: TYPE.body, anchor: 'end', fill: product.theme.primary, weight: 700 })}`
              )
              .join('')}`
         : ''

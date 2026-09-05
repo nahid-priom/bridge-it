@@ -58,9 +58,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 1,
-    seo_title: 'Fashion E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Fashion E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Explore a premium fashion e-commerce website design with responsive shopping, product, cart and checkout experiences.',
+      'Explore a premium fashion e-commerce website template with responsive shopping, product, cart and checkout experiences.',
     seo_keywords: [
       'fashion ecommerce website',
       'custom ecommerce website',
@@ -84,7 +84,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'Techora Electronics',
     short_description: 'A modern gadget storefront for phones, audio, and accessories with a fast checkout.',
     full_description:
-      'Techora is a premium electronics e-commerce design built for high-intent shoppers. Specification-first cards, comparison-friendly layouts, and a streamlined checkout help gadget brands convert with confidence.',
+      'Techora is a premium electronics e-commerce template built for high-intent shoppers. Specification-first cards, comparison-friendly layouts, and a streamlined checkout help gadget brands convert with confidence.',
     categorySlug: 'electronics',
     website_type: 'electronics_store',
     industry: 'electronics',
@@ -94,9 +94,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 2,
-    seo_title: 'Electronics E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Electronics E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Preview a modern electronics store design with landing, shop, product details, cart and checkout pages.',
+      'Preview a modern electronics store template with landing, shop, product details, cart and checkout pages.',
     seo_keywords: [
       'electronics ecommerce website',
       'gadget shop website',
@@ -120,7 +120,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'FreshBasket',
     short_description: 'Neighbourhood grocery design focused on fresh produce, weekly deals, and practical checkout.',
     full_description:
-      'FreshBasket is a grocery e-commerce website designed for organic shops and local markets. Category browsing, weight-based products, and COD-ready checkout keep everyday ordering simple on desktop and mobile.',
+      'FreshBasket is a grocery e-commerce website templateed for organic shops and local markets. Category browsing, weight-based products, and COD-ready checkout keep everyday ordering simple on desktop and mobile.',
     categorySlug: 'grocery',
     website_type: 'grocery_store',
     industry: 'grocery',
@@ -130,9 +130,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 3,
-    seo_title: 'Grocery E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Grocery E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Browse an organic grocery website design with shop, category, product, cart and mobile checkout experiences.',
+      'Browse an organic grocery website template with shop, category, product, cart and mobile checkout experiences.',
     seo_keywords: [
       'grocery ecommerce website',
       'organic food online shop',
@@ -165,9 +165,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 4,
-    seo_title: 'Beauty E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Beauty E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'See a premium cosmetics website design with landing, collection, product details, cart and checkout pages.',
+      'See a premium cosmetics website template with landing, collection, product details, cart and checkout pages.',
     seo_keywords: [
       'cosmetics ecommerce website',
       'skincare online shop',
@@ -201,9 +201,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 5,
-    seo_title: 'Furniture E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Furniture E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Explore a furniture and home décor website design with collections, product pages, cart and checkout.',
+      'Explore a furniture and home décor website template with collections, product pages, cart and checkout.',
     seo_keywords: [
       'furniture ecommerce website',
       'home decor online shop',
@@ -227,7 +227,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'URBANO Menswear',
     short_description: 'Editorial menswear storefront for shirts, polos, jackets, and lifestyle footwear.',
     full_description:
-      'URBANO is a premium men\'s fashion e-commerce design built around black, charcoal, and off-white editorial photography. Lookbook heroes, refined product grids, and a confident checkout help menswear brands sell shirts, pants, jackets, and accessories with clarity.',
+      'URBANO is a premium men\'s fashion e-commerce template built around black, charcoal, and off-white editorial photography. Lookbook heroes, refined product grids, and a confident checkout help menswear brands sell shirts, pants, jackets, and accessories with clarity.',
     categorySlug: 'fashion',
     website_type: 'fashion_store',
     industry: 'menswear',
@@ -237,9 +237,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 6,
-    seo_title: "Men's Fashion E-commerce Website Design | Bridge IT Park",
+    seo_title: "Men's Fashion E-commerce Website Template | Bridge IT Park",
     seo_description:
-      'Explore a premium responsive men\'s fashion e-commerce website design for clothing, footwear and lifestyle brands.',
+      'Explore a premium responsive men\'s fashion e-commerce website template for clothing, footwear and lifestyle brands.',
     seo_keywords: ['menswear ecommerce', 'men fashion online shop', 'custom ecommerce Bangladesh'],
     pages: [...STANDARD_NEW_PAGES],
     packages: CANONICAL_PACKAGES,
@@ -250,7 +250,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'LITTLELOOM Kids',
     short_description: 'Clean premium children\'s store for kids clothing, shoes, toys, and accessories.',
     full_description:
-      'LITTLELOOM is a premium kids fashion e-commerce design with soft cream, pastel blue, and warm yellow accents. Calm photography, clear size guidance, and a gentle checkout keep children\'s apparel and essentials easy to shop—without cartoon clutter.',
+      'LITTLELOOM is a premium kids fashion e-commerce template with soft cream, pastel blue, and warm yellow accents. Calm photography, clear size guidance, and a gentle checkout keep children\'s apparel and essentials easy to shop—without cartoon clutter.',
     categorySlug: 'fashion',
     website_type: 'fashion_store',
     industry: 'kids_fashion',
@@ -260,7 +260,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 7,
-    seo_title: 'Kids Fashion E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Kids Fashion E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a premium children\'s fashion e-commerce website with clothing, shoes, toys and soft responsive shopping.',
     seo_keywords: ['kids fashion ecommerce', 'children clothing website', 'kids online shop Bangladesh'],
@@ -273,7 +273,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'STEPORA Footwear',
     short_description: 'Modern sneaker and footwear store with bold neutrals and clear size shopping.',
     full_description:
-      'STEPORA is a modern footwear e-commerce design for sneakers, formal shoes, running shoes, and sandals. White and black layouts, large product photography, and size-first product pages help footwear brands convert with confidence.',
+      'STEPORA is a modern footwear e-commerce template for sneakers, formal shoes, running shoes, and sandals. White and black layouts, large product photography, and size-first product pages help footwear brands convert with confidence.',
     categorySlug: 'fashion',
     website_type: 'fashion_store',
     industry: 'footwear',
@@ -283,9 +283,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 8,
-    seo_title: 'Footwear E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Footwear E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Browse a modern sneaker and footwear e-commerce website design with product grids, size options, cart and checkout.',
+      'Browse a modern sneaker and footwear e-commerce website template with product grids, size options, cart and checkout.',
     seo_keywords: ['footwear ecommerce', 'sneaker shop website', 'shoe store Bangladesh'],
     pages: [...STANDARD_NEW_PAGES],
     packages: CANONICAL_PACKAGES,
@@ -306,7 +306,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 9,
-    seo_title: 'Bags & Accessories E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Bags & Accessories E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a premium handbag and leather goods e-commerce website with collection pages, product details and checkout.',
     seo_keywords: ['handbag ecommerce', 'leather bags website', 'accessories online shop'],
@@ -319,7 +319,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'GLEAMORA Jewellery',
     short_description: 'Luxury jewellery commerce for rings, necklaces, earrings, and watches.',
     full_description:
-      'GLEAMORA is a luxury jewellery e-commerce design in off-white, gold accents, and deep charcoal. Quiet typography, macro product photography, and trusted checkout help jewellery brands present rings, necklaces, earrings, bracelets, and watches.',
+      'GLEAMORA is a luxury jewellery e-commerce template in off-white, gold accents, and deep charcoal. Quiet typography, macro product photography, and trusted checkout help jewellery brands present rings, necklaces, earrings, bracelets, and watches.',
     categorySlug: 'fashion',
     website_type: 'fashion_store',
     industry: 'jewellery',
@@ -329,9 +329,9 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 10,
-    seo_title: 'Jewellery E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Jewellery E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Explore a luxury jewellery e-commerce website design for rings, necklaces, earrings and premium accessories.',
+      'Explore a luxury jewellery e-commerce website template for rings, necklaces, earrings and premium accessories.',
     seo_keywords: ['jewellery ecommerce', 'jewelry online shop', 'luxury jewellery website Bangladesh'],
     pages: [...STANDARD_NEW_PAGES],
     packages: CANONICAL_PACKAGES,
@@ -352,7 +352,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 11,
-    seo_title: 'Watch Boutique E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Watch Boutique E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a luxury watch e-commerce website with product details, strap options, cart and premium checkout.',
     seo_keywords: ['watch ecommerce', 'luxury watches website', 'smart watch online shop'],
@@ -365,7 +365,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'FITCORE Activewear',
     short_description: 'High-energy fitness commerce for gym clothing, sports shoes, and gear.',
     full_description:
-      'FITCORE is a graphite-and-white activewear e-commerce design with subtle energetic accents. Performance product grids, kit builders, and mobile-first CTAs help gym and sports brands sell clothing, shoes, bags, and fitness gear.',
+      'FITCORE is a graphite-and-white activewear e-commerce template with subtle energetic accents. Performance product grids, kit builders, and mobile-first CTAs help gym and sports brands sell clothing, shoes, bags, and fitness gear.',
     categorySlug: 'fashion',
     website_type: 'fashion_store',
     industry: 'activewear',
@@ -375,7 +375,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 12,
-    seo_title: 'Activewear E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Activewear E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium gym and sports activewear e-commerce website with product grids, cart and checkout.',
     seo_keywords: ['activewear ecommerce', 'gym clothing website', 'sportswear online shop Bangladesh'],
@@ -398,7 +398,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 13,
-    seo_title: 'Healthy Food E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Healthy Food E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a modern nutrition and healthy food e-commerce website for snacks, organic items and beverages.',
     seo_keywords: ['healthy food ecommerce', 'nutrition store website', 'organic snacks online shop'],
@@ -411,7 +411,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     title: 'PETORA',
     short_description: 'Premium pet commerce for food, toys, grooming, beds, and accessories.',
     full_description:
-      'PETORA is a cream and green pet e-commerce design with warm neutrals and real pet photography. Category browsing for dogs and cats, clear product cards, and trusted checkout help pet brands sell food, toys, grooming, beds, and accessories.',
+      'PETORA is a cream and green pet e-commerce template with warm neutrals and real pet photography. Category browsing for dogs and cats, clear product cards, and trusted checkout help pet brands sell food, toys, grooming, beds, and accessories.',
     categorySlug: 'lifestyle',
     website_type: 'local_shop',
     industry: 'pets',
@@ -421,7 +421,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 14,
-    seo_title: 'Pet Shop E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Pet Shop E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium pet store e-commerce website with food, toys, grooming products, cart and checkout.',
     seo_keywords: ['pet shop ecommerce', 'pet food website', 'pet store Bangladesh'],
@@ -444,7 +444,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 15,
-    seo_title: 'Baby Products E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Baby Products E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium baby care e-commerce website for clothing, feeding, toys, strollers and essentials.',
     seo_keywords: ['baby products ecommerce', 'baby care website', 'baby store Bangladesh'],
@@ -467,7 +467,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 16,
-    seo_title: 'Automotive Accessories E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Automotive Accessories E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a premium automotive accessories e-commerce website for car and bike gear, helmets and tools.',
     seo_keywords: ['auto accessories ecommerce', 'bike gear website', 'car accessories online shop'],
@@ -494,7 +494,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 17,
-    seo_title: 'Mobile Shop E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Mobile Shop E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Premium mobile phone and accessories e-commerce website with responsive product, cart and checkout experiences.',
     seo_keywords: ['mobile shop ecommerce', 'phone accessories website', 'smartphone store Bangladesh'],
@@ -517,7 +517,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 18,
-    seo_title: 'Home Appliances E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Home Appliances E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a clean home appliances e-commerce website for fridge, AC, TV, washing machine and small appliances.',
     seo_keywords: ['home appliances ecommerce', 'electronics appliance website', 'fridge AC online shop'],
@@ -544,7 +544,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: false,
     published: true,
     sort_order: 19,
-    seo_title: 'Stationery E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Stationery E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium office and stationery e-commerce website for notebooks, pens, organizers and school items.',
     seo_keywords: ['stationery ecommerce', 'office supplies website', 'notebooks online shop'],
@@ -567,7 +567,7 @@ const SEED_BRANDS_CORE: SeedBrand[] = [
     featured: true,
     published: true,
     sort_order: 20,
-    seo_title: 'Flower & Gifts E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Flower & Gifts E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a premium flower and gifting e-commerce website for bouquets, gift boxes, chocolates and occasions.',
     seo_keywords: ['flower ecommerce', 'gift shop website', 'bouquet online shop Bangladesh'],

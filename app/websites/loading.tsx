@@ -1,15 +1,5 @@
-import { PageHeaderSkeleton } from '@/src/components/skeletons/PageHeaderSkeleton';
-import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
-import { FilterSkeleton } from '@/src/components/skeletons/FilterSkeleton';
+import { CatalogPageSkeleton } from '@/src/components/skeletons/CatalogPageSkeleton';
 
 export default function WebsitesLoading() {
-  return (
-    <div className="mx-auto w-full max-w-[1480px] px-4 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8 xl:px-10">
-      <PageHeaderSkeleton className="mb-6 md:mb-8" />
-      <FilterSkeleton />
-      <div className="mt-6">
-        <ProjectGridSkeleton count={6} />
-      </div>
-    </div>
-  );
+  return <CatalogPageSkeleton />;
 }

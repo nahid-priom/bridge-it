@@ -46,7 +46,7 @@ export function ProjectGridError(props: SectionErrorProps) {
   return (
     <SectionError
       title={props.title ?? 'Unable to load projects'}
-      message={props.message ?? 'We could not load website designs. Please try again.'}
+      message={props.message ?? 'We could not load website templates. Please try again.'}
       onRetry={props.onRetry}
       className={props.className}
     />

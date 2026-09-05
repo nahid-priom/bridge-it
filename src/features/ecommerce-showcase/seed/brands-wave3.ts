@@ -43,15 +43,15 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     title: 'LUMÉRA',
     short_description: 'Luxury fragrance boutique for perfume, attar, and gift sets.',
     full_description:
-      'LUMÉRA is a black-and-ivory fragrance e-commerce design with soft gold accents and cinematic bottle photography. Quiet navigation, product spotlight heroes, and a refined checkout help perfume brands present attars, body mists, and gift sets with editorial clarity.',
+      'LUMÉRA is a black-and-ivory fragrance e-commerce template with soft gold accents and cinematic bottle photography. Quiet navigation, product spotlight heroes, and a refined checkout help perfume brands present attars, body mists, and gift sets with editorial clarity.',
     categorySlug: 'cosmetics',
     website_type: 'cosmetics_store',
     industry: 'fragrance',
     featured: true,
     sort_order: 21,
-    seo_title: 'Perfume E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Perfume E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'Explore a luxury fragrance e-commerce website design for perfume, attar, body mist and gift sets.',
+      'Explore a luxury fragrance e-commerce website template for perfume, attar, body mist and gift sets.',
     seo_keywords: ['perfume ecommerce', 'fragrance website Bangladesh', 'luxury perfume shop'],
   }),
   brand({
@@ -65,7 +65,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'coffee',
     featured: false,
     sort_order: 22,
-    seo_title: 'Coffee Shop E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Coffee Shop E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium artisan coffee e-commerce website for beans, ground coffee, brewing tools and gifts.',
     seo_keywords: ['coffee ecommerce', 'coffee beans online shop', 'artisan coffee website'],
@@ -81,9 +81,9 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'organic_food',
     featured: false,
     sort_order: 23,
-    seo_title: 'Organic Grocery E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Organic Grocery E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'See a farm-to-home organic grocery website design for vegetables, fruits, staples and honey.',
+      'See a farm-to-home organic grocery website template for vegetables, fruits, staples and honey.',
     seo_keywords: ['organic grocery ecommerce', 'farm fresh website', 'organic food online shop'],
   }),
   brand({
@@ -98,7 +98,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     technology_stack: [...techReact],
     featured: true,
     sort_order: 24,
-    seo_title: 'Gaming Store E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Gaming Store E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a premium gaming e-commerce website for keyboards, mouse, headsets, controllers and chairs.',
     seo_keywords: ['gaming ecommerce', 'gaming gear website', 'esports shop Bangladesh'],
@@ -114,7 +114,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'audio',
     featured: false,
     sort_order: 25,
-    seo_title: 'Audio Equipment E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Audio Equipment E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a minimal premium audio e-commerce website for headphones, speakers, earbuds and microphones.',
     seo_keywords: ['audio ecommerce', 'headphones online shop', 'speaker store website'],
@@ -131,7 +131,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     technology_stack: [...techLaravel],
     featured: true,
     sort_order: 26,
-    seo_title: 'Camera Shop E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Camera Shop E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a professional camera e-commerce website for cameras, lenses, gimbals, lights and bags.',
     seo_keywords: ['camera ecommerce', 'photography gear website', 'lens shop Bangladesh'],
@@ -141,13 +141,13 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     title: 'BOOKORA',
     short_description: 'Modern bookstore for Bangla, English, business, and children’s books.',
     full_description:
-      'BOOKORA is a warm paper-and-cream bookstore design with dark green accents. Magazine-style merchandising helps bookshops sell Bangla and English titles, business books, and children’s collections.',
+      'BOOKORA is a warm paper-and-cream bookstore template with dark green accents. Magazine-style merchandising helps bookshops sell Bangla and English titles, business books, and children’s collections.',
     categorySlug: 'lifestyle',
     website_type: 'local_shop',
     industry: 'books',
     featured: false,
     sort_order: 27,
-    seo_title: 'Bookstore E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Bookstore E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a modern bookstore e-commerce website for Bangla, English, business and children books.',
     seo_keywords: ['bookstore ecommerce', 'online book shop Bangladesh', 'Bangla books website'],
@@ -163,7 +163,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'office_tech',
     featured: false,
     sort_order: 28,
-    seo_title: 'Office Tech E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Office Tech E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a productivity-focused office technology website for laptops, monitors, keyboards and desks.',
     seo_keywords: ['office tech ecommerce', 'laptop monitor shop', 'workstation website'],
@@ -179,7 +179,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'bedding',
     featured: false,
     sort_order: 29,
-    seo_title: 'Bedding E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Bedding E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium bedding e-commerce website for bedsheets, pillows, comforters and accessories.',
     seo_keywords: ['bedding ecommerce', 'bedsheet online shop', 'home textile website'],
@@ -195,7 +195,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'kitchenware',
     featured: false,
     sort_order: 30,
-    seo_title: 'Kitchenware E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Kitchenware E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium kitchenware e-commerce website for cookware, knives, storage and dinnerware.',
     seo_keywords: ['kitchenware ecommerce', 'cookware online shop', 'kitchen store website'],
@@ -212,7 +212,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     technology_stack: [...techLaravel],
     featured: false,
     sort_order: 31,
-    seo_title: 'Hardware Tools E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Hardware Tools E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a clean hardware e-commerce website for drills, hand tools, tool kits and safety equipment.',
     seo_keywords: ['hardware ecommerce', 'tools online shop', 'power tools website Bangladesh'],
@@ -228,7 +228,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'cycling',
     featured: false,
     sort_order: 32,
-    seo_title: 'Cycling Store E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Cycling Store E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a premium cycling e-commerce website for bicycles, helmets, apparel and accessories.',
     seo_keywords: ['cycling ecommerce', 'bicycle shop website', 'bike gear online shop'],
@@ -244,7 +244,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'travel',
     featured: false,
     sort_order: 33,
-    seo_title: 'Travel Gear E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Travel Gear E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium travel gear e-commerce website for luggage, backpacks and organizers.',
     seo_keywords: ['travel gear ecommerce', 'luggage online shop', 'backpack store website'],
@@ -260,7 +260,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'modest_fashion',
     featured: false,
     sort_order: 34,
-    seo_title: 'Modest Fashion E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Modest Fashion E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium modest fashion e-commerce website for hijab, abaya, dresses and accessories.',
     seo_keywords: ['modest fashion ecommerce', 'hijab online shop', 'abaya website Bangladesh'],
@@ -276,7 +276,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'panjabi',
     featured: true,
     sort_order: 35,
-    seo_title: 'Panjabi E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Panjabi E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium responsive Panjabi and traditional fashion e-commerce website for Bangladeshi clothing businesses.',
     seo_keywords: ['panjabi ecommerce', 'traditional fashion website', 'Eid panjabi online shop'],
@@ -292,9 +292,9 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'saree',
     featured: true,
     sort_order: 36,
-    seo_title: 'Saree E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Saree E-commerce Website Template | Bridge IT Park',
     seo_description:
-      'See a luxury saree e-commerce website design for Jamdani, silk, cotton and party sarees.',
+      'See a luxury saree e-commerce website template for Jamdani, silk, cotton and party sarees.',
     seo_keywords: ['saree ecommerce', 'Jamdani online shop', 'silk saree website Bangladesh'],
   }),
   brand({
@@ -308,7 +308,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'handicraft',
     featured: false,
     sort_order: 37,
-    seo_title: 'Handicraft E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Handicraft E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a Bangladeshi handicraft e-commerce website for jute products, decor, baskets and gifts.',
     seo_keywords: ['handicraft ecommerce', 'jute products website', 'artisan marketplace Bangladesh'],
@@ -325,7 +325,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     technology_stack: [...techLaravel],
     featured: true,
     sort_order: 38,
-    seo_title: 'Luxury Furniture E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Luxury Furniture E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore an architectural luxury furniture website for sofas, beds, dining tables and storage.',
     seo_keywords: ['furniture ecommerce', 'luxury sofa website', 'dining table online shop'],
@@ -341,7 +341,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'lighting',
     featured: true,
     sort_order: 39,
-    seo_title: 'Lighting Store E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Lighting Store E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a premium lighting e-commerce website for pendant lights, lamps and outdoor lighting.',
     seo_keywords: ['lighting ecommerce', 'pendant light shop', 'lamp store website'],
@@ -357,7 +357,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'tiles',
     featured: false,
     sort_order: 40,
-    seo_title: 'Tiles & Sanitary E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Tiles & Sanitary E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a premium tiles and sanitary e-commerce website for floor tiles, basins and faucets.',
     seo_keywords: ['tiles ecommerce', 'sanitary ware website', 'bathroom fittings online shop'],
@@ -373,7 +373,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'skincare',
     featured: false,
     sort_order: 41,
-    seo_title: 'Skincare E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Skincare E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a clinical modern skincare e-commerce website for serum, cleanser, moisturizer and sunscreen.',
     seo_keywords: ['skincare ecommerce', 'serum online shop', 'clinical beauty website'],
@@ -389,7 +389,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'haircare',
     featured: false,
     sort_order: 42,
-    seo_title: 'Hair Care E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Hair Care E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium hair care e-commerce website for shampoo, conditioner, hair oil and serum.',
     seo_keywords: ['haircare ecommerce', 'shampoo online shop', 'hair oil website Bangladesh'],
@@ -405,7 +405,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'chocolate',
     featured: true,
     sort_order: 43,
-    seo_title: 'Chocolate Gift E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Chocolate Gift E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a luxury chocolate e-commerce website for premium chocolates, truffles and gift boxes.',
     seo_keywords: ['chocolate ecommerce', 'gift chocolate website', 'truffle online shop'],
@@ -421,7 +421,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'bakery',
     featured: false,
     sort_order: 44,
-    seo_title: 'Bakery E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Bakery E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a premium bakery e-commerce website for cakes, desserts, cookies and gift boxes.',
     seo_keywords: ['bakery ecommerce', 'cake online shop', 'dessert website Bangladesh'],
@@ -437,7 +437,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'seafood',
     featured: false,
     sort_order: 45,
-    seo_title: 'Fish & Seafood E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Fish & Seafood E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a fresh fish and seafood e-commerce website for local fish, frozen packs and family packs.',
     seo_keywords: ['fish ecommerce', 'seafood online shop', 'fresh fish website Bangladesh'],
@@ -453,7 +453,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'meat',
     featured: false,
     sort_order: 46,
-    seo_title: 'Meat Shop E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Meat Shop E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium meat e-commerce website for beef, mutton, chicken and ready-to-cook products.',
     seo_keywords: ['meat ecommerce', 'beef mutton online shop', 'halal meat website'],
@@ -469,7 +469,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'otc_health',
     featured: false,
     sort_order: 47,
-    seo_title: 'Health Store E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Health Store E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Browse a clean OTC health and personal care e-commerce website for wellness and hygiene essentials.',
     seo_keywords: ['health store ecommerce', 'personal care website', 'OTC wellness online shop'],
@@ -485,7 +485,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'sports',
     featured: false,
     sort_order: 48,
-    seo_title: 'Sports Equipment E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Sports Equipment E-commerce Website Template | Bridge IT Park',
     seo_description:
       'See a dynamic sports e-commerce website for football, cricket, badminton and fitness equipment.',
     seo_keywords: ['sports ecommerce', 'cricket gear website', 'football shop Bangladesh'],
@@ -502,7 +502,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     technology_stack: [...techLaravel],
     featured: false,
     sort_order: 49,
-    seo_title: 'Agriculture Supplies E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Agriculture Supplies E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Preview a modern agriculture supplies e-commerce website for farm tools and irrigation accessories.',
     seo_keywords: ['agriculture ecommerce', 'farm tools website', 'irrigation shop Bangladesh'],
@@ -518,7 +518,7 @@ export const WAVE3_SEED_BRANDS: SeedBrand[] = [
     industry: 'events',
     featured: false,
     sort_order: 50,
-    seo_title: 'Party Supplies E-commerce Website Design | Bridge IT Park',
+    seo_title: 'Party Supplies E-commerce Website Template | Bridge IT Park',
     seo_description:
       'Explore a premium party and event supplies e-commerce website for décor, balloons and gift packaging.',
     seo_keywords: ['party supplies ecommerce', 'event décor website', 'balloon shop online'],

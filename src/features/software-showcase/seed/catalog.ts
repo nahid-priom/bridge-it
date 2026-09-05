@@ -1,12 +1,14 @@
 import type { SeedSoftwareProduct } from '../types';
 import { SOFTWARE_CATEGORIES } from '../config/constants';
+import { MATURITY_LADDER_PRODUCTS } from './maturity-ladder';
 
 export { SOFTWARE_CATEGORIES };
+export { MATURITY_LADDER_PRODUCTS, GARMENTS_LADDER_SLUGS, FEED_MILL_LADDER_SLUGS } from './maturity-ladder';
 
-export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
+const SOFTWARE_SEED_CORE: SeedSoftwareProduct[] = [
   {
     slug: 'garments-erp',
-    title: 'Garments ERP',
+    title: 'Garments ERP Standard',
     brandName: 'GarmentPro',
     logoText: 'GP',
     categorySlug: 'garments-textile',
@@ -14,18 +16,52 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
     softwareType: 'ERP',
     platformType: 'web',
     industry: 'Apparel manufacturing',
-    businessType: 'Export & domestic garments factory',
+    businessType: 'Growing garments factory',
     primaryUser: 'Factory owner / Merchandiser / Production manager',
-    shortDescription: 'End-to-end ERP for garments factories covering merchandising, production, inventory and shipment.',
-    fullDescription: 'Business Problem: Garments factories juggle buyer orders, fabric booking, cutting, sewing lines, finishing and shipment documents across spreadsheets and separate departments. Missed trim arrivals, unclear line output and last-minute packing errors delay LCs and raise CM cost. When merchandising and the floor do not share one status, managers spend hours chasing updates instead of fixing bottlenecks. Solution: Garments ERP connects merchandising, production planning, inventory and accounts so every style has one live record from order booking to vessel departure. Teams see fabric utilization, line efficiency and shipment readiness without calling multiple supervisors. Exceptions surface early enough to rebalance lines or chase delayed trims. Main Modules: Order booking and style master hold buyer, season and delivery dates. Merchandising tracks BOM, fabric and trim status. Cut plans and bundle tickets feed sewing lines. Finishing and QC record defects before packing. Fabric and accessories stores post issues against styles. Shipment builds packing lists and invoice packs. Accounts and HR cover party ledgers, payroll and cost reports. Who It Is For: Export-oriented and domestic apparel factories in Bangladesh that need factory-floor discipline plus commercial control. Owners, merchandisers, production managers, storekeepers and accountants work from the same style timeline. Day-to-day operators enter transactions; owners and accountants rely on the built-in reports instead of rebuilding spreadsheets each month.',
-    startingPrice: 135000,
-    priceSuffix: '+',
+    shortDescription:
+      'Production, inventory, costing, delivery and accounts together for growing garments factories.',
+    fullDescription:
+      'Business Problem: Garments factories juggle buyer orders, fabric booking, cutting, sewing lines, finishing and shipment documents across spreadsheets and separate departments. Missed trim arrivals, unclear line output and last-minute packing errors delay LCs and raise CM cost. Solution: Garments ERP Standard connects merchandising, production planning, inventory, costing, delivery and basic accounts so every style has one live record. Main Modules: Buyer, Style, Sales Order, Size/Color Matrix, Production Planning, Cutting, Sewing, Finishing, Raw Materials, Ready Stock, Costing, Delivery, Supplier, Customer Ledger and Management Reports. Who It Is For: Growing apparel factories in Bangladesh that need complete business management without enterprise multi-factory complexity.',
+    startingPrice: 100000,
+    priceSuffix: '',
     featured: true,
     popular: true,
-    sortOrder: 10,
-    modules: ['Buyer & Style', 'Sales Order', 'Size/Color Matrix', 'Production Planning', 'Cutting', 'Sewing', 'Costing', 'Delivery'],
-    dashboardKPIs: ['Open Style Orders', 'Cutting Efficiency %', 'Sewing Line Output', 'On-Time Shipment %', 'Fabric Utilization %', 'Outstanding LC Value'],
-    terminology: ['Style', 'BOM', 'Cut plan', 'Bundle', 'Line balancing', 'CM', 'PI', 'LC', 'Shipment packing list', 'Trim card'],
+    sortOrder: 30,
+    modules: [
+      'Buyer',
+      'Style',
+      'Sales Order',
+      'Size/Color Matrix',
+      'Production Planning',
+      'Cutting',
+      'Sewing',
+      'Costing',
+      'Raw Materials',
+      'Ready Stock',
+      'Delivery',
+      'Basic Accounts',
+      'Management Reports',
+    ],
+    dashboardKPIs: [
+      'Open Style Orders',
+      'Cutting Efficiency %',
+      'Sewing Line Output',
+      'On-Time Shipment %',
+      'Fabric Utilization %',
+      'Outstanding LC Value',
+    ],
+    terminology: [
+      'Style',
+      'BOM',
+      'Cut plan',
+      'Bundle',
+      'Line balancing',
+      'CM',
+      'PI',
+      'LC',
+      'Shipment packing list',
+      'Trim card',
+    ],
     screens: [
       { key: 'dashboard', name: 'Dashboard', category: 'dashboard' },
       { key: 'buyer-style', name: 'Buyer & Style', category: 'list' },
@@ -38,16 +74,22 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
       { key: 'raw-material-stock', name: 'Raw Material Stock', category: 'stock' },
       { key: 'ready-stock', name: 'Ready Stock', category: 'stock' },
       { key: 'delivery', name: 'Delivery', category: 'transaction' },
-      { key: 'reports', name: 'Reports', category: 'reports' }
+      { key: 'reports', name: 'Reports', category: 'reports' },
     ],
-    theme: { primary: '#1B4F72', accent: '#F39C12', sidebar: 'dark', density: 'compact' },
-    seoTitle: 'Garments ERP Software Bangladesh | Factory Production & Merchandising',
-    seoDescription: 'Garments ERP for apparel factories in Bangladesh—manage styles, cutting, sewing, inventory, accounts and export shipments from one system.',
-    seoKeywords: ['garments erp bangladesh', 'apparel factory software', 'erp software development', 'business management software', 'merchandising erp'],
+    theme: { primary: '#1B4F72', accent: '#10b981', sidebar: 'dark', density: 'compact' },
+    seoTitle: 'Garments ERP Software for Production & Inventory | Bridge IT Park',
+    seoDescription:
+      'Garments ERP Standard for Bangladesh factories—styles, cutting, sewing, inventory, costing, delivery and accounts.',
+    seoKeywords: [
+      'garments erp software',
+      'garments erp bangladesh',
+      'apparel factory software',
+      'merchandising erp',
+    ],
   },
   {
     slug: 'feed-mill-erp',
-    title: 'Feed Mill ERP',
+    title: 'Feed Mill ERP Standard',
     brandName: 'FeedMill Pro',
     logoText: 'FM',
     categorySlug: 'agro-farming',
@@ -55,18 +97,50 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
     softwareType: 'Manufacturing',
     platformType: 'web',
     industry: 'Animal feed manufacturing',
-    businessType: 'Feed mill / feed producer',
+    businessType: 'Medium / growing feed mill',
     primaryUser: 'Mill owner / Production supervisor / Storekeeper',
-    shortDescription: 'Feed mill ERP for formula control, batch production, bagging, dealer sales and stock accounting.',
-    fullDescription: 'Business Problem: Feed mills lose money when formulas drift, baghouse counts disagree with dispatch, or dealers dispute weights and credit. Paper batch tickets make it hard to prove which lot used which raw materials when a quality complaint arrives. Month-end reconciliation then becomes a debate instead of a clear audit trail. Solution: Feed Mill ERP locks approved formulas, posts each mixer run against raw material lots, records QC assays and links finished bags to dealer orders. Stock and ledgers stay aligned with production instead of end-of-month guesswork. Supervisors can pause release when assays fall outside limits. Main Modules: Formula management stores ingredients and cost. Raw material store tracks moisture and lot numbers. Batch production issues mixer tickets and records actual usage. QC lab captures assay results before release. Finished stock and dispatch handle bagging and challans. Sales orders and dealer ledger manage credit. Accounts closes purchases, production variance and receivables. Who It Is For: Commercial feed producers and agro mills in Bangladesh that supply poultry, cattle or fish feed through dealers and need batch-level traceability with clear dealer accounting. Day-to-day operators enter transactions; owners and accountants rely on the built-in reports instead of rebuilding spreadsheets each month.',
-    startingPrice: 95000,
+    shortDescription:
+      'Feed mill ERP for formula, batch production, dealer sales, dispatch and stock accounting.',
+    fullDescription:
+      'Business Problem: Feed mills lose money when formulas drift, baghouse counts disagree with dispatch, or dealers dispute weights and credit. Solution: Feed Mill ERP Standard locks approved formulas, posts each mixer run against raw material lots, and links finished bags to dealer orders, dispatch and collection. Main Modules: Raw Material, Formula, Production Batch, Material Issue, Finished Feed, Production Cost, Dealer, Sales Order, Dispatch, Collection, Dealer Ledger, Cash/Bank and Reports. Who It Is For: Medium and growing commercial feed producers in Bangladesh.',
+    startingPrice: 50000,
     priceSuffix: '',
     featured: true,
     popular: true,
-    sortOrder: 20,
-    modules: ['Dealer', 'Raw Materials', 'Formula', 'Production Batch', 'Material Issue', 'Finished Feed', 'Sales Order', 'Dispatch'],
-    dashboardKPIs: ['Today Batches', 'Raw Material Cover Days', 'Finished Feed Stock MT', 'Dealer Outstanding', 'Yield Variance %', 'Pending Dispatches'],
-    terminology: ['Formula', 'Batch ticket', 'Premix', 'Baghouse', 'Lot number', 'Moisture %', 'Dealer challan', 'MT stock', 'Mixer run', 'QC assay'],
+    sortOrder: 30,
+    modules: [
+      'Dealer',
+      'Raw Materials',
+      'Formula',
+      'Production Batch',
+      'Material Issue',
+      'Finished Feed',
+      'Sales Order',
+      'Dispatch',
+      'Collection',
+      'Dealer Ledger',
+      'Reports',
+    ],
+    dashboardKPIs: [
+      'Today Batches',
+      'Raw Material Cover Days',
+      'Finished Feed Stock MT',
+      'Dealer Outstanding',
+      'Yield Variance %',
+      'Pending Dispatches',
+    ],
+    terminology: [
+      'Formula',
+      'Batch ticket',
+      'Premix',
+      'Baghouse',
+      'Lot number',
+      'Moisture %',
+      'Dealer challan',
+      'MT stock',
+      'Mixer run',
+      'QC assay',
+    ],
     screens: [
       { key: 'dashboard', name: 'Dashboard', category: 'dashboard' },
       { key: 'dealer', name: 'Dealer', category: 'list' },
@@ -79,12 +153,18 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
       { key: 'dispatch', name: 'Dispatch', category: 'transaction' },
       { key: 'collection', name: 'Collection', category: 'accounts' },
       { key: 'dealer-ledger', name: 'Dealer Ledger', category: 'accounts' },
-      { key: 'reports', name: 'Reports', category: 'reports' }
+      { key: 'reports', name: 'Reports', category: 'reports' },
     ],
-    theme: { primary: '#2E7D32', accent: '#FFB300', sidebar: 'brand', density: 'comfortable' },
-    seoTitle: 'Feed Mill Manufacturing Software | Batch Production & Dealer Management',
-    seoDescription: 'Manufacturing management software for feed mills—formulas, batches, raw materials, QC and dealer sales for Bangladesh agro industries.',
-    seoKeywords: ['manufacturing management software', 'feed mill software bangladesh', 'feed batch production', 'dealer management software'],
+    theme: { primary: '#166534', accent: '#34d399', sidebar: 'brand', density: 'comfortable' },
+    seoTitle: 'Feed Mill ERP Software | Bridge IT Park',
+    seoDescription:
+      'Feed Mill ERP Standard—formulas, batches, raw materials, dealer sales, dispatch and collection for Bangladesh mills.',
+    seoKeywords: [
+      'feed mill erp software',
+      'feed mill software bangladesh',
+      'feed batch production',
+      'dealer management software',
+    ],
   },
   {
     slug: 'poultry-management-erp',
@@ -1614,7 +1694,7 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
     priceSuffix: '',
     featured: false,
     popular: false,
-    sortOrder: 410,
+    sortOrder: 60,
     modules: ['Style Orders', 'Trim BOM', 'Production', 'QC', 'Finished Stock', 'Delivery', 'Accounts'],
     dashboardKPIs: ['Open Style Orders', 'WIP Lots', 'Finished Ready', 'OTIF %', 'Stock Value', 'Party Dues'],
     terminology: ['Trim', 'Style linked PO', 'Sample approval', 'Lot', 'Packing list', 'OTIF', 'Garments buyer', 'Accessory SKU', 'Shade/size run', 'Delivery carton'],
@@ -1989,7 +2069,12 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
     seoTitle: 'Enterprise Multi-Branch Business Software Bangladesh',
     seoDescription: 'Enterprise software for multi-branch inventory, accounts and consolidated reports.',
     seoKeywords: ['enterprise solutions bangladesh', 'multi branch erp', 'custom software development', 'business management software'],
-  }
+  },
+];
+
+export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
+  ...SOFTWARE_SEED_CORE,
+  ...MATURITY_LADDER_PRODUCTS,
 ];
 
 export function getSoftwareSeedBySlug(slug: string): SeedSoftwareProduct | undefined {

@@ -4,6 +4,7 @@ export type VisualFamily =
   | 'operations-erp'
   | 'retail-pos'
   | 'manufacturing'
+  | 'feed-mill'
   | 'garments'
   | 'healthcare'
   | 'education'
@@ -15,11 +16,24 @@ export type VisualFamily =
   | 'distribution'
   | 'real-estate';
 
+/** Maturity ladder for KPI density / sidebar depth (slug heuristics). */
+export type MaturityProfile = 'starter' | 'production' | 'standard' | 'professional' | 'enterprise';
+
+export function maturityProfile(p: SeedSoftwareProduct): MaturityProfile {
+  const s = p.slug;
+  if (/starter|mini/.test(s)) return 'starter';
+  if (/production-management|basic/.test(s) && !/erp-professional|enterprise/.test(s)) return 'production';
+  if (/enterprise/.test(s)) return 'enterprise';
+  if (/professional/.test(s)) return 'professional';
+  return 'standard';
+}
+
 export function visualFamily(p: SeedSoftwareProduct): VisualFamily {
   const t = p.softwareType.toLowerCase();
   const g = p.solutionGroup;
   const slug = p.slug;
   if (t === 'pos' || g === 'pos-retail') return 'retail-pos';
+  if (slug.includes('feed-mill')) return 'feed-mill';
   if (slug.includes('garment') || slug.includes('textile') || slug.includes('dyeing') || slug.includes('accessories'))
     return 'garments';
   if (t === 'crm' || g === 'crm-sales') return 'crm-sales';
@@ -83,15 +97,28 @@ const DATASETS: Record<VisualFamily, Dataset> = {
     ],
   },
   garments: {
-    parties: ['H&M Buyer', 'Zara Agent', 'Local Brand Co', 'Export House BD', 'Knit Line Ltd'],
-    people: ['Merch Lead', 'Cutting In-Charge', 'QC Officer', 'Floor Manager'],
-    cities: ['Gazipur', 'Narayanganj', 'Dhaka', 'Ashulia'],
-    products: ['PO-Style A12', 'Colorway Navy', 'Size Run M-L', 'Sewing Line-3', 'Finish Pack'],
+    parties: ['H&M Buyer', 'Zara Agent', 'Next Sourcing', 'Local Brand Co', 'Export House BD', 'Knit Line Ltd'],
+    people: ['Merch Lead', 'Cutting In-Charge', 'QC Officer', 'Floor Manager', 'IE Officer'],
+    cities: ['Gazipur', 'Narayanganj', 'Dhaka', 'Ashulia', 'Savar'],
+    products: ['ST-4821', 'ST-3904', 'Colorway Navy', 'Size Run S-XXL', 'Sewing Line-3', 'Finish Pack', 'Trim Card'],
     statuses: [
       ['In Cutting', '#2563eb'],
       ['Sewing', '#d97706'],
+      ['Finishing', '#7c3aed'],
       ['QC Pass', '#059669'],
       ['Shipped', '#0f766e'],
+    ],
+  },
+  'feed-mill': {
+    parties: ['Agro Dealer North', 'Poultry Hub BD', 'Cattle Feed Mart', 'Aqua Feed Co', 'District Depot'],
+    people: ['Mill Owner', 'Mixer Operator', 'Store Keeper', 'QC Chemist', 'Sales Officer'],
+    cities: ['Gazipur', 'Bogura', 'Jessore', 'Chattogram', 'Rangpur'],
+    products: ['Broiler Grower', 'Layer Mash', 'Cattle Concentrate', 'Fish Starter', 'Premix Lot'],
+    statuses: [
+      ['Mixing', '#2563eb'],
+      ['QC Hold', '#d97706'],
+      ['Bagged', '#059669'],
+      ['Dispatched', '#0f766e'],
     ],
   },
   manufacturing: {
@@ -291,6 +318,7 @@ export function deriveQuickActions(product: SeedSoftwareProduct, family: VisualF
     case 'crm-sales':
       return ['New Lead', 'Log Call', 'Create Quote', 'Schedule Visit'];
     case 'manufacturing':
+    case 'feed-mill':
     case 'garments':
       return ['Production Batch', `New ${term(0)}`, 'Issue Materials', 'QC Release'];
     case 'healthcare':

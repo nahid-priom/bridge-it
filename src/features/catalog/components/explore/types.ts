@@ -64,10 +64,56 @@ export function softwarePriceBounds(id: SoftwarePriceFilterId | null): {
   };
 }
 
-export function catalogSearchPlaceholder(root: CatalogCategoryRoot): string {
-  if (root === 'websites') return 'Search templates...';
-  if (root === 'software') return 'Search software...';
-  return 'Search marketing services...';
+export const SOFTWARE_BUSINESS_SIZE_OPTIONS = [
+  { id: 'small', label: 'Small Business' },
+  { id: 'growing', label: 'Growing Business' },
+  { id: 'professional', label: 'Professional' },
+  { id: 'enterprise', label: 'Enterprise' },
+] as const;
+
+export type SoftwareBusinessSizeId = (typeof SOFTWARE_BUSINESS_SIZE_OPTIONS)[number]['id'];
+
+export const SOFTWARE_SORT_OPTIONS = [
+  { id: 'popular', label: 'Popular' },
+  { id: 'newest', label: 'Newest' },
+  { id: 'price-asc', label: 'Price: Low to High' },
+] as const;
+
+export type SoftwareSortId = (typeof SOFTWARE_SORT_OPTIONS)[number]['id'];
+
+export function parseSoftwareBusinessSizeParam(
+  value: string | null | undefined
+): SoftwareBusinessSizeId[] {
+  if (!value?.trim()) return [];
+  const allowed = new Set(SOFTWARE_BUSINESS_SIZE_OPTIONS.map((o) => o.id));
+  return value
+    .split(',')
+    .map((part) => part.trim())
+    .filter((part): part is SoftwareBusinessSizeId => allowed.has(part as SoftwareBusinessSizeId));
+}
+
+export function serializeSoftwareBusinessSizes(sizes: SoftwareBusinessSizeId[]): string {
+  return sizes.slice().sort().join(',');
+}
+
+export function parseSoftwareSortParam(value: string | null | undefined): SoftwareSortId {
+  const v = (value ?? '').trim();
+  if (v === 'newest' || v === 'price-asc') return v;
+  return 'popular';
+}
+
+export function catalogSearchPlaceholder(
+  root: CatalogCategoryRoot,
+  industryName?: string | null
+): string {
+  const industry = industryName?.trim();
+  if (root === 'websites') {
+    return industry ? `Search ${industry} templates...` : 'Search templates...';
+  }
+  if (root === 'software') {
+    return industry ? `Search ${industry} software...` : 'Search software...';
+  }
+  return industry ? `Search ${industry} services...` : 'Search marketing services...';
 }
 
 export function industryLinkTitle(root: CatalogCategoryRoot, name: string): string {

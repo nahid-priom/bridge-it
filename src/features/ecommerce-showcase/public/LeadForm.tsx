@@ -57,7 +57,7 @@ export function LeadForm({
       <div className="text-center py-6">
         <h3 className="font-display text-2xl font-bold text-emerald-700">Request received</h3>
         <p className="mt-2 text-sm text-text-secondary">
-          আমরা শীঘ্রই আপনার সাথে কথা বলে এই Design অনুযায়ী Website নিয়ে আলোচনা করব।
+          আমরা শীঘ্রই আপনার সাথে কথা বলে এই Template অনুযায়ী Website নিয়ে আলোচনা করব।
         </p>
         {onClose ? (
           <button type="button" onClick={onClose} className="mt-5 text-sm font-semibold text-[#0f2744]">

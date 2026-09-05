@@ -112,6 +112,8 @@ export type SoftwareProject = {
   seo_keywords: string[];
   sort_order: number;
   asset_version: number;
+  rating_avg?: number;
+  review_count?: number;
   created_by: string | null;
   updated_by: string | null;
   created_at: string;
@@ -122,6 +124,8 @@ export type SoftwareProject = {
 export type SoftwareProjectScreen = {
   id: string;
   project_id: string;
+  /** When set, screen is package-specific; null = shared across packages. */
+  package_id: string | null;
   screen_key: string;
   screen_name: string;
   module_name: string | null;
@@ -150,6 +154,17 @@ export type SoftwarePackageTier =
   | 'enterprise'
   | 'advanced';
 
+export type SoftwarePackageFeature = {
+  id: string;
+  package_id: string;
+  feature_key: string;
+  label: string;
+  feature_group: string;
+  is_included: boolean;
+  is_highlighted: boolean;
+  display_order: number;
+};
+
 export type SoftwarePackage = {
   id: string;
   project_id: string;
@@ -157,7 +172,10 @@ export type SoftwarePackage = {
   price: number;
   currency: string;
   short_description: string | null;
+  /** Included feature labels (derived from feature_rows when present). */
   features: string[];
+  /** Normalized feature rows with groups. */
+  feature_rows: SoftwarePackageFeature[];
   is_popular: boolean;
   sort_order: number;
   active: boolean;
@@ -204,6 +222,8 @@ export type SoftwareProjectCard = {
   published: boolean;
   sort_order: number;
   asset_version?: number;
+  rating_avg?: number;
+  review_count?: number;
   created_at: string;
   updated_at: string;
   category_name: string | null;
@@ -231,6 +251,8 @@ export type SoftwareListFilters = {
   q?: string;
   /** @deprecated Industry category slug — prefer taxonomyCategory */
   industry?: string;
+  /** Catalog industry path slug (`/software/{slug}`) → industry_slug column */
+  industrySlug?: string;
   /** Showcase L2 taxonomy category slug (erp, pos, …) */
   taxonomyCategory?: string;
   /** Showcase L3 child category slug */
@@ -241,6 +263,12 @@ export type SoftwareListFilters = {
   group?: string;
   /** Secondary More Filters chip ids / child slugs */
   more?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  /** Project-level business_size values (small | growing | professional | enterprise) */
+  businessSizes?: string[];
+  /** Listing sort — default popular (featured → sort_order → created_at) */
+  sort?: 'popular' | 'newest' | 'price-asc';
   featured?: boolean;
   popular?: boolean;
   published?: boolean | 'all';

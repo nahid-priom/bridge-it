@@ -18,10 +18,13 @@ import {
   RelatedProducts,
   buildProductMetadata,
   getProductByPath,
+  listApprovedReviews,
+  listFaqs,
   listProducts,
   listRelatedProducts,
   productPath,
 } from '@/src/features/catalog';
+import { DeferredRelatedSection } from '@/src/features/catalog/components/DeferredRelatedSection';
 
 export const revalidate = 60;
 
@@ -62,6 +65,39 @@ export async function generateMetadata({ params, searchParams }: Props) {
   });
 }
 
+async function SoftwareRelatedRail({
+  projectId,
+  industryId,
+}: {
+  projectId: string;
+  industryId: string | null | undefined;
+}) {
+  const relatedFromCatalog = await listRelatedProducts('software', projectId, { limit: 4 });
+  let relatedItems = relatedFromCatalog.filter((r) => r.product && r.product.id !== projectId).slice(0, 4);
+
+  if (relatedItems.length === 0 && industryId) {
+    const sameIndustry = await listProducts({
+      root: 'software',
+      industryId,
+      pageSize: 8,
+    });
+    relatedItems = sameIndustry.items
+      .filter((p) => p.id !== projectId)
+      .slice(0, 4)
+      .map((product, index) => ({
+        id: `same-${product.id}`,
+        source_kind: 'software' as const,
+        source_id: projectId,
+        related_kind: 'software' as const,
+        related_id: product.id,
+        sort_order: index,
+        product,
+      }));
+  }
+
+  return <RelatedProducts items={relatedItems} title="Similar software" />;
+}
+
 export default async function SoftwareProductPage({ params, searchParams }: Props) {
   const { industry, product: productSlug } = await params;
   const { preview } = await searchParams;
@@ -76,28 +112,13 @@ export default async function SoftwareProductPage({ params, searchParams }: Prop
   const project = await getSoftwareProjectBySlug(productSlug, { includeDrafts });
   if (!project) notFound();
 
-  const relatedFromCatalog = await listRelatedProducts('software', project.id, { limit: 8 });
-  let relatedItems = relatedFromCatalog.filter((r) => r.product && r.product.id !== project.id);
-
-  if (relatedItems.length === 0 && catalogProduct.industry_id) {
-    const sameIndustry = await listProducts({
-      root: 'software',
-      industryId: catalogProduct.industry_id,
-      pageSize: 8,
-    });
-    relatedItems = sameIndustry.items
-      .filter((p) => p.id !== project.id)
-      .slice(0, 4)
-      .map((product, index) => ({
-        id: `same-${product.id}`,
-        source_kind: 'software' as const,
-        source_id: project.id,
-        related_kind: 'software' as const,
-        related_id: product.id,
-        sort_order: index,
-        product,
-      }));
-  }
+  const reviews = await listApprovedReviews('software', project.id);
+  const faqs = await listFaqs({
+    categoryRoot: 'software',
+    industryId: catalogProduct.industry_id,
+    productKind: 'software',
+    productId: project.id,
+  });
 
   const industryMeta = {
     name: catalogProduct.industry_name || industry,
@@ -112,6 +133,7 @@ export default async function SoftwareProductPage({ params, searchParams }: Prop
             ...project,
             industry_slug: industryMeta.slug,
             canonical_path: catalogProduct.canonical_path,
+            packages: project.packages,
           }),
           softwareShowcaseBreadcrumbJsonLd(project.title, project.slug, {
             industryName: industryMeta.name,
@@ -133,11 +155,11 @@ export default async function SoftwareProductPage({ params, searchParams }: Prop
         </p>
       ) : null}
       <Suspense fallback={<SoftwarePreviewSkeleton />}>
-        <SoftwarePreview project={project} />
+        <SoftwarePreview project={project} reviews={reviews} faqs={faqs} />
       </Suspense>
-      <div className="mx-auto w-full max-w-[1480px] px-4 pb-12 sm:px-6 lg:px-8 xl:px-10">
-        <RelatedProducts items={relatedItems} />
-      </div>
+      <DeferredRelatedSection>
+        <SoftwareRelatedRail projectId={project.id} industryId={catalogProduct.industry_id} />
+      </DeferredRelatedSection>
     </>
   );
 }

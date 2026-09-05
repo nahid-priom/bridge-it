@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
+import { useReportCatalogTotal } from '@/src/features/catalog/components/explore/CatalogResultsContext';
+import { cn } from '@/lib/cn';
 import {
   CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
-  CREATIVE_MORE_FILTERS,
-  CREATIVE_PRIMARY_FILTERS,
   parseCreativeGroupParam,
   parseCreativeMoreParam,
   serializeCreativeMoreParam,
@@ -18,7 +18,6 @@ import {
 } from '../config/constants';
 import type { CreativeMarketingListResult } from '../types';
 import { CreativeMarketingCard, CreativeMarketingCardSkeleton } from './CreativeMarketingCard';
-import { CreativeMoreFiltersSheet } from './CreativeMoreFiltersSheet';
 
 const LISTING_KEY = 'creative-marketing-listing' as const;
 
@@ -27,9 +26,10 @@ type CatalogFilters = {
   group: string;
   more: CreativeMoreFilterId[];
   page: number;
+  industrySlug: string;
 };
 
-function listingQueryKey(filters: CatalogFilters & { pageSize: number }) {
+export function creativeMarketingListingQueryKey(filters: CatalogFilters & { pageSize: number }) {
   return [
     LISTING_KEY,
     {
@@ -38,6 +38,7 @@ function listingQueryKey(filters: CatalogFilters & { pageSize: number }) {
       more: filters.more.slice().sort().join(','),
       page: filters.page,
       pageSize: filters.pageSize,
+      industrySlug: filters.industrySlug || '',
     },
   ] as const;
 }
@@ -47,9 +48,10 @@ async function fetchListing(params: CatalogFilters & { pageSize: number }): Prom
   search.set('page', String(params.page));
   search.set('pageSize', String(params.pageSize));
   if (params.q) search.set('q', params.q);
-  if (params.group && params.group !== 'all') search.set('group', params.group);
+  if (!params.industrySlug && params.group && params.group !== 'all') search.set('group', params.group);
   const more = serializeCreativeMoreParam(params.more);
-  if (more) search.set('more', more);
+  if (!params.industrySlug && more) search.set('more', more);
+  if (params.industrySlug) search.set('industrySlug', params.industrySlug);
   const res = await fetch(`/api/creative-marketing/projects?${search.toString()}`);
   if (!res.ok) throw new Error('Failed to load services');
   return (await res.json()) as CreativeMarketingListResult;
@@ -65,12 +67,20 @@ function readFilters(searchParams: URLSearchParams, initial: CatalogFilters): Ca
   const more = searchParams.has('more') ? moreFromUrl : initial.more;
   const q = (searchParams.get('q') ?? initial.q).trim();
   const page = Math.max(1, Number(searchParams.get('page') ?? initial.page ?? 1) || 1);
-  return { q, group, more, page };
+  return {
+    q,
+    group,
+    more,
+    page,
+    industrySlug: initial.industrySlug || '',
+  };
 }
 
 export function CreativeMarketingCatalog({
   initialFilters,
   initialData,
+  hideChrome = true,
+  lockedIndustrySlug,
 }: {
   initialFilters: {
     q: string;
@@ -78,87 +88,31 @@ export function CreativeMarketingCatalog({
     serviceGroup?: string;
     more?: CreativeMoreFilterId[];
     page: number;
+    industrySlug?: string;
   };
   initialData: CreativeMarketingListResult;
+  hideChrome?: boolean;
+  lockedIndustrySlug?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
-  const isExplore = pathname.includes('/explore');
 
   const normalizedInitial: CatalogFilters = {
     q: initialFilters.q || '',
     group: parseCreativeGroupParam(initialFilters.group, initialFilters.serviceGroup),
     more: initialFilters.more ?? [],
     page: initialFilters.page || 1,
+    industrySlug: lockedIndustrySlug || initialFilters.industrySlug || '',
   };
 
-  const { q, group, more, page } = readFilters(searchParams, normalizedInitial);
+  const { q, group, more, page, industrySlug } = readFilters(searchParams, normalizedInitial);
   const pageSize = CREATIVE_MARKETING_GALLERY_PAGE_SIZE;
-  const [searchInput, setSearchInput] = useState(q);
-
-  const sanitizeParams = (params: URLSearchParams) => {
-    params.delete('serviceGroup');
-    if (isExplore) params.set('type', 'marketing');
-    else params.delete('type');
-  };
-
-  useEffect(() => setSearchInput(q), [q]);
-
-  useEffect(() => {
-    if (isExplore) return;
-    const handle = window.setTimeout(() => {
-      const next = searchInput.trim();
-      if (next === q) return;
-      const params = new URLSearchParams(searchParams.toString());
-      if (next) params.set('q', next);
-      else params.delete('q');
-      params.delete('page');
-      sanitizeParams(params);
-      const qs = params.toString();
-      startTransition(() => router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false }));
-    }, 300);
-    return () => window.clearTimeout(handle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchInput, q, pathname, router, searchParams, isExplore]);
-
-  const writeParams = (mutate: (params: URLSearchParams) => void, scroll = false) => {
-    const params = new URLSearchParams(searchParams.toString());
-    mutate(params);
-    params.delete('page');
-    sanitizeParams(params);
-    const qs = params.toString();
-    startTransition(() => router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll }));
-  };
-
-  const writeGroup = (next: string) => {
-    writeParams((params) => {
-      if (next && next !== 'all') params.set('group', next);
-      else params.delete('group');
-    });
-  };
-
-  const writeMore = (next: CreativeMoreFilterId[]) => {
-    writeParams((params) => {
-      const serialized = serializeCreativeMoreParam(next);
-      if (serialized) params.set('more', serialized);
-      else params.delete('more');
-    });
-  };
-
-  const clearMore = () => {
-    writeParams((params) => {
-      params.delete('more');
-    });
-  };
 
   const clearAllFilters = () => {
     startTransition(() => {
-      router.replace(
-        isExplore ? `${pathname}?type=marketing` : ROUTES.creativeMarketingShowroom,
-        { scroll: false }
-      );
+      router.replace(pathname, { scroll: false });
     });
   };
 
@@ -166,21 +120,36 @@ export function CreativeMarketingCatalog({
     const params = new URLSearchParams(searchParams.toString());
     if (nextPage > 1) params.set('page', String(nextPage));
     else params.delete('page');
-    sanitizeParams(params);
     const qs = params.toString();
     startTransition(() => router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: true }));
   };
 
-  const queryKey = listingQueryKey({ q, group, more, page, pageSize });
+  const queryKey = creativeMarketingListingQueryKey({
+    q,
+    group: industrySlug ? 'all' : group,
+    more: industrySlug ? [] : more,
+    page,
+    pageSize,
+    industrySlug,
+  });
   const matchesInitial =
     q === normalizedInitial.q &&
-    group === normalizedInitial.group &&
+    (industrySlug || group) === (normalizedInitial.industrySlug || normalizedInitial.group) &&
     more.slice().sort().join(',') === normalizedInitial.more.slice().sort().join(',') &&
-    page === normalizedInitial.page;
+    page === normalizedInitial.page &&
+    industrySlug === normalizedInitial.industrySlug;
 
-  const { data, isFetching, isError, isPending, refetch, isPlaceholderData, isLoading } = useQuery({
+  const { data, isFetching, isError, isPending, refetch, isPlaceholderData } = useQuery({
     queryKey,
-    queryFn: () => fetchListing({ q, group, more, page, pageSize }),
+    queryFn: () =>
+      fetchListing({
+        q,
+        group: industrySlug ? 'all' : group,
+        more: industrySlug ? [] : more,
+        page,
+        pageSize,
+        industrySlug,
+      }),
     initialData: matchesInitial ? initialData : undefined,
     placeholderData: keepPreviousData,
     staleTime: STALE_PUBLIC_LISTING,
@@ -189,162 +158,106 @@ export function CreativeMarketingCatalog({
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const hasFilters = Boolean(q || (group && group !== 'all') || more.length > 0);
-  const showGridSkeleton = isPending || isLoading || (isFetching && isPlaceholderData);
-  const showEmpty = !showGridSkeleton && !isError && items.length === 0;
+  const hasFilters = Boolean(
+    q || (!industrySlug && group && group !== 'all') || (!industrySlug && more.length > 0) || industrySlug
+  );
+  const showGridSkeleton = isPending && !data;
+  const isFilterRefreshing = Boolean(isFetching && isPlaceholderData && data);
+  const showEmpty =
+    !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);
   const showingFrom = items.length === 0 ? 0 : (page - 1) * pageSize + 1;
   const showingTo = items.length === 0 ? 0 : showingFrom + items.length - 1;
 
+  void hideChrome;
+  useReportCatalogTotal(data?.total, Boolean(data) && !showGridSkeleton);
+
   return (
-    <>
-      {!isExplore ? (
-        <div className="scrollbar-none mb-3 flex flex-nowrap items-center gap-2 overflow-x-auto overscroll-x-contain sm:mb-4 md:gap-3">
-          <div className="w-[min(100%,16.5rem)] shrink-0 sm:w-72 md:w-80">
-            <label htmlFor="cm-catalog-search" className="sr-only">
-              Search services
-            </label>
-            <input
-              id="cm-catalog-search"
-              type="search"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search creative & marketing…"
-              className="h-10 w-full rounded-xl border border-border-subtle bg-surface px-4 text-sm outline-none focus:border-[#2563eb]"
-            />
-          </div>
-          <div
-            className="flex min-w-0 flex-1 flex-nowrap items-center gap-2"
-            role="group"
-            aria-label="Service type filters"
-          >
-            {CREATIVE_PRIMARY_FILTERS.map((item) => {
-              const active = group === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => writeGroup(item.id)}
-                  className={
-                    active
-                      ? 'shrink-0 rounded-full bg-[#0f2744] px-3.5 py-1.5 text-sm font-semibold text-white'
-                      : 'shrink-0 rounded-full border border-border-subtle px-3.5 py-1.5 text-sm font-medium text-text-secondary hover:border-[#2563eb]/40'
-                  }
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-            <CreativeMoreFiltersSheet applied={more} onApply={writeMore} onClear={clearMore} />
-          </div>
+    <div>
+      {isError && !data ? (
+        <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-white/15">
+          <h3 className="font-display text-xl font-bold">Could not load services</h3>
+          <button type="button" onClick={() => void refetch()} className="mt-4 text-sm font-semibold">
+            Try again
+          </button>
         </div>
-      ) : null}
-
-      {more.length > 0 ? (
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {more.map((id) => {
-            const label = CREATIVE_MORE_FILTERS.find((f) => f.id === id)?.label ?? id;
-            return (
+      ) : showGridSkeleton ? (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <CreativeMarketingCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : showEmpty ? (
+        <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-white/15">
+          <h3 className="font-display text-xl font-bold">
+            {hasFilters ? 'No services match your filters' : 'No services yet'}
+          </h3>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            {hasFilters ? (
               <button
-                key={id}
                 type="button"
-                onClick={() => writeMore(more.filter((item) => item !== id))}
-                className="inline-flex items-center gap-1 rounded-full border border-[#2563eb]/30 bg-[#2563eb]/08 px-2.5 py-1 text-xs font-semibold text-[#1d4ed8] dark:text-[#60a5fa]"
+                onClick={clearAllFilters}
+                className="inline-flex rounded-xl border border-border-subtle px-4 py-2 text-sm font-semibold"
               >
-                {label}
-                <span aria-hidden>×</span>
+                Clear Filters
               </button>
-            );
-          })}
-        </div>
-      ) : null}
-
-      <div className="mt-4 md:mt-6">
-        {!showGridSkeleton && total > 0 ? (
-          <p className="mb-3 text-sm text-text-muted">
-            {total} Service{total === 1 ? '' : 's'}
-          </p>
-        ) : null}
-
-        {isError && !data ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-white/15">
-            <h3 className="font-display text-xl font-bold">Could not load services</h3>
-            <button type="button" onClick={() => void refetch()} className="mt-4 text-sm font-semibold">
-              Try again
-            </button>
-          </div>
-        ) : showGridSkeleton ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <CreativeMarketingCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : showEmpty ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-white/15">
-            <h3 className="font-display text-xl font-bold">
-              {hasFilters ? 'No services match your filters' : 'No services yet'}
-            </h3>
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-              {hasFilters ? (
-                <button
-                  type="button"
-                  onClick={clearAllFilters}
-                  className="inline-flex rounded-xl border border-border-subtle px-4 py-2 text-sm font-semibold"
-                >
-                  Clear Filters
-                </button>
-              ) : null}
-              <Link
-                href={ROUTES.consultation}
-                className="inline-flex rounded-xl bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
-              >
-                Free Consultation
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((project, index) => (
-              <CreativeMarketingCard
-                key={project.id}
-                project={project}
-                eager={index < 3}
-                priority={index === 0}
-              />
-            ))}
-          </div>
-        )}
-
-        {!showGridSkeleton && total > 0 ? (
-          <nav className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row" aria-label="Pagination">
-            <p className="text-sm text-text-muted">
-              Showing {showingFrom}–{showingTo} of {total}
-            </p>
-            {totalPages > 1 ? (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={page <= 1 || isFetching}
-                  className="rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
-                  onClick={() => writePage(page - 1)}
-                >
-                  Previous
-                </button>
-                <span className="px-2 text-sm">
-                  {isFetching ? <InlineSpinner size={16} label="Loading" /> : `${page} / ${totalPages}`}
-                </span>
-                <button
-                  type="button"
-                  disabled={page >= totalPages || isFetching}
-                  className="rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
-                  onClick={() => writePage(page + 1)}
-                >
-                  Next
-                </button>
-              </div>
             ) : null}
-          </nav>
-        ) : null}
-      </div>
-    </>
+            <Link
+              href={ROUTES.consultation}
+              className="inline-flex rounded-xl bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
+            >
+              Free Consultation
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-5 transition-opacity duration-200 motion-reduce:transition-none md:grid-cols-2 lg:grid-cols-3',
+            isFilterRefreshing && 'opacity-60'
+          )}
+          aria-busy={isFilterRefreshing || undefined}
+        >
+          {items.map((project, index) => (
+            <CreativeMarketingCard
+              key={project.id}
+              project={project}
+              eager={index < 3}
+              priority={index === 0}
+            />
+          ))}
+        </div>
+      )}
+
+      {!showGridSkeleton && total > 0 ? (
+        <nav className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row" aria-label="Pagination">
+          <p className="text-sm text-text-muted">
+            Showing {showingFrom}–{showingTo} of {total}
+          </p>
+          {totalPages > 1 ? (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={page <= 1 || isFetching}
+                className="rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
+                onClick={() => writePage(page - 1)}
+              >
+                Previous
+              </button>
+              <span className="px-2 text-sm">
+                {isFetching ? <InlineSpinner size={16} label="Loading" /> : `${page} / ${totalPages}`}
+              </span>
+              <button
+                type="button"
+                disabled={page >= totalPages || isFetching}
+                className="rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
+                onClick={() => writePage(page + 1)}
+              >
+                Next
+              </button>
+            </div>
+          ) : null}
+        </nav>
+      ) : null}
+    </div>
   );
 }
