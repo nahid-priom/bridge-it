@@ -1,13 +1,10 @@
 'use client';
 
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { SoftwareCard } from './SoftwareCard';
 import type { SoftwareProjectCard } from '../types';
 
-/** Same density as homepage software cards. */
-const RELATED_HOME_GRID_CLASS =
-  'mt-4 grid grid-cols-2 gap-2.5 min-w-0 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
-
-/** Related software rail — homepage-style cards. */
+/** Related software rail — unified PortfolioCard via SoftwareCard adapter. */
 export function RelatedSoftware({
   projects,
   title = 'Related Software',
@@ -27,16 +24,13 @@ export function RelatedSoftware({
       >
         {title}
       </h2>
-      <div className={RELATED_HOME_GRID_CLASS}>
+      <ul className={`mt-4 ${CATALOG_LISTING_GRID_CLASS}`}>
         {projects.slice(0, 4).map((project, index) => (
-          <SoftwareCard
-            key={project.id}
-            project={project}
-            variant="home"
-            eager={index < 2}
-          />
+          <li key={project.id} className="min-w-0 list-none">
+            <SoftwareCard project={project} eager={index < 2} />
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

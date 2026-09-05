@@ -4,6 +4,9 @@ export function formatBdt(amount: number): string {
   return `৳${amount.toLocaleString('en-BD')}`;
 }
 
+/** Alias — portfolio / marketplace SSOT. */
+export const formatBDTPrice = formatBdt;
+
 export function formatProductPrice(
   amount: number,
   pricingType: PricingType | string = 'fixed',

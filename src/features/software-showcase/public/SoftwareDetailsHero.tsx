@@ -4,39 +4,42 @@ import Link from 'next/link';
 import { StarRating } from '@/src/features/catalog/components/StarRating';
 import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
-import type { SoftwareProductFeature } from '../types';
-import { ImportantFeatureGrid } from './ImportantFeatureGrid';
-import { TrustPoints } from './TrustPoints';
 import { OrderButton, TalkToExpertButton } from './ProductCtaButtons';
 
+/**
+ * Compact product identity — breadcrumb, badge, H1, rating, short summary.
+ * Features / trust / gallery live outside this hero (screens-first layout).
+ */
 export function SoftwareDetailsHero({
   categoryLabel,
   title,
   ratingAvg,
   reviewCount,
   description,
-  features,
   industrySlug,
   onOrder,
   onTalk,
   ctaDisabled,
+  /** Desktop-only hero CTAs — mobile uses StickyProductCTA. */
+  showCtas = false,
   className,
 }: {
   categoryLabel: string;
   title: string;
-  ratingAvg: number;
-  reviewCount: number;
+  ratingAvg?: number | null;
+  reviewCount?: number | null;
   description: string | null;
-  features: SoftwareProductFeature[];
   industrySlug?: string | null;
-  onOrder: () => void;
-  onTalk: () => void;
+  onOrder?: () => void;
+  onTalk?: () => void;
   ctaDisabled?: boolean;
+  showCtas?: boolean;
   className?: string;
 }) {
   const breadcrumbSoftwareHref = industrySlug
     ? ROUTES.softwareIndustry(industrySlug)
     : ROUTES.softwareShowroom;
+  const hasRating = ratingAvg != null && ratingAvg > 0;
 
   return (
     <header className={cn('min-w-0', className)}>
@@ -72,22 +75,33 @@ export function SoftwareDetailsHero({
         {title}
       </h1>
 
-      <StarRating rating={ratingAvg} reviewCount={reviewCount} size="md" className="mt-2" />
+      {hasRating ? (
+        <StarRating
+          rating={ratingAvg!}
+          reviewCount={reviewCount}
+          size="md"
+          compact
+          className="mt-2"
+        />
+      ) : null}
 
       {description ? (
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary line-clamp-4 sm:text-base sm:line-clamp-none">
+        <p className="mt-3 max-w-xl text-sm leading-snug text-text-secondary line-clamp-2 sm:text-base">
           {description}
         </p>
       ) : null}
 
-      <ImportantFeatureGrid features={features} className="mt-4 sm:mt-5" />
-
-      <TrustPoints className="mt-4" />
-
-      <div className="mt-5 flex flex-col gap-2 sm:mt-6 sm:flex-row">
-        <OrderButton onClick={onOrder} disabled={ctaDisabled} />
-        <TalkToExpertButton onClick={onTalk} disabled={ctaDisabled} />
-      </div>
+      {showCtas && onOrder && onTalk ? (
+        <div className="mt-5 hidden gap-2 lg:mt-6 lg:flex lg:flex-row">
+          <OrderButton onClick={onOrder} disabled={ctaDisabled} fullWidth={false} className="min-w-[10rem]" />
+          <TalkToExpertButton
+            onClick={onTalk}
+            disabled={ctaDisabled}
+            fullWidth={false}
+            className="min-w-[10rem]"
+          />
+        </div>
+      ) : null}
     </header>
   );
 }

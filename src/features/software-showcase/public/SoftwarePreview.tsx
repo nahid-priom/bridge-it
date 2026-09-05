@@ -1,15 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ROUTES } from '@/lib/routes';
 import { ProductReviews } from '@/src/features/catalog/components/ProductReviews';
-import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
 import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
 import type { CatalogFaq } from '@/src/features/catalog/types';
 import type { CatalogProductReview } from '@/src/features/catalog/types/reviews';
 import type { SoftwarePackage, SoftwareProjectDetail } from '../types';
+import { ImportantFeatureGrid } from './ImportantFeatureGrid';
 import { PackageFeatureAccordion } from './PackageFeatureAccordion';
 import { ProjectScreenGallery } from './ProjectScreenGallery';
 import { SoftwarePackageLeadModal } from './SoftwarePackageLeadModal';
@@ -18,9 +16,9 @@ import { SoftwareProductFaq } from './SoftwareProductFaq';
 import { SoftwareEmptyPreview } from './SoftwareEmptyPreview';
 import { SoftwareDetailsHero } from './SoftwareDetailsHero';
 import { StickyProductCTA } from './StickyProductCTA';
-import { OrderButton } from './ProductCtaButtons';
+import { TrustPoints } from './TrustPoints';
 import { screensForPackage } from './package-features';
-import { packageDisplayName, pickDefaultPackage } from './package-utils';
+import { pickDefaultPackage } from './package-utils';
 
 export function SoftwarePreview({
   project,
@@ -31,9 +29,9 @@ export function SoftwarePreview({
   reviews?: CatalogProductReview[];
   faqs?: CatalogFaq[];
 }) {
-  const ratingFallback = fallbackRatingFromSlug(project.slug);
-  const ratingAvg = project.rating_avg ?? ratingFallback.rating_avg;
-  const reviewCount = project.review_count ?? ratingFallback.review_count;
+  // Real ratings only — never fabricate for listing/detail SEO.
+  const ratingAvg = project.rating_avg ?? null;
+  const reviewCount = project.review_count ?? null;
   const activePackages = useMemo(
     () => project.packages.filter((pkg) => pkg.active !== false),
     [project.packages]
@@ -91,7 +89,6 @@ export function SoftwarePreview({
       .filter((f) => f.published)
       .sort((a, b) => a.sort_order - b.sort_order);
     if (fromDb.length > 0) return fromDb;
-    // Fallback: project modules as soft features (no invented copy beyond title)
     const modules = project.modules ?? [];
     return modules.slice(0, 8).map((title, index) => ({
       id: `module-${index}-${title}`,
@@ -132,43 +129,52 @@ export function SoftwarePreview({
     (project as { industry_slug?: string | null }).industry_slug;
   const ctaDisabled = hasPackages && !selectedPackage;
 
-  const gallery = screens.length > 0 ? (
-    <ProjectScreenGallery
-      screens={screens}
-      assetVersion={assetVersion}
-      productTitle={project.title}
-      selectedKey={screenFromUrl ?? undefined}
-      onSelectKey={syncScreenUrl}
-    />
-  ) : (
-    <SoftwareEmptyPreview
-      title="Screens coming soon"
-      description="Premium screenshots are being prepared. Talk to an expert to see the live system."
-    />
-  );
+  const gallery =
+    screens.length > 0 ? (
+      <ProjectScreenGallery
+        screens={screens}
+        assetVersion={assetVersion}
+        productTitle={project.title}
+        selectedKey={screenFromUrl ?? undefined}
+        onSelectKey={syncScreenUrl}
+        heroMode
+      />
+    ) : (
+      <SoftwareEmptyPreview
+        title="Screens coming soon"
+        description="Premium screenshots are being prepared. Talk to an expert to see the live system."
+      />
+    );
 
   return (
     <div className="overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-16">
-      <div className="mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] xl:px-10">
-        {/* Mobile: stacked. Desktop: info left, gallery right */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-10">
+      <main className="mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 lg:pt-[calc(var(--header-offset)+1rem)] xl:px-10">
+        {/*
+          Mobile: identity → gallery → features → trust → packages
+          Desktop: identity+CTA | gallery, then features / packages below
+        */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-start lg:gap-10">
           <SoftwareDetailsHero
             categoryLabel={categoryLabel}
             title={project.title}
             ratingAvg={ratingAvg}
             reviewCount={reviewCount}
             description={outcome}
-            features={features}
             industrySlug={industrySlug}
             onOrder={() => openLead('order')}
-            onTalk={() => openLead('order')}
+            onTalk={() => openLead('demo')}
             ctaDisabled={ctaDisabled}
+            showCtas
           />
           <div className="min-w-0 lg:pt-1">{gallery}</div>
         </div>
 
+        <ImportantFeatureGrid features={features} className="mt-8 lg:mt-12" />
+
+        <TrustPoints className="mt-5 lg:mt-6" />
+
         {hasPackages ? (
-          <div className="mt-8 lg:mt-14">
+          <div className="mt-8 lg:mt-12" id="packages">
             <SoftwarePackageSelector
               packages={activePackages}
               productSlug={project.slug}
@@ -188,38 +194,20 @@ export function SoftwarePreview({
 
         <SoftwareProductFaq faqs={faqs} className="mt-8 lg:mt-14" />
 
-        <section className="mt-8 rounded-2xl border border-border-subtle bg-surface px-5 py-5 lg:mt-14 sm:px-6 sm:py-6">
-          <h2 className="font-display text-xl font-black text-text-primary">Ready to order?</h2>
-          <p className="mt-1 text-sm text-text-secondary">
-            {selectedPackage
-              ? `Order ${packageDisplayName(selectedPackage)} or talk to a consultant.`
-              : 'Place an order or talk to our expert — no obligation.'}
-          </p>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-            <OrderButton onClick={() => openLead('order')} disabled={ctaDisabled} />
-            <Link
-              href={ROUTES.contact}
-              className="inline-flex min-h-[3.25rem] flex-1 items-center justify-center rounded-xl border border-border-subtle px-4 py-3 text-sm font-semibold text-text-primary"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </section>
-
         <div className="mt-8 lg:mt-10">
           <ProductReviews
             kind="software"
             productId={project.id}
             initialReviews={reviews}
-            ratingAvg={ratingAvg}
-            reviewCount={reviewCount}
+            ratingAvg={ratingAvg ?? 0}
+            reviewCount={reviewCount ?? 0}
           />
         </div>
-      </div>
+      </main>
 
       <StickyProductCTA
         onOrder={() => openLead('order')}
-        onTalk={() => openLead('order')}
+        onTalk={() => openLead('demo')}
         disabled={ctaDisabled}
       />
 

@@ -19,6 +19,7 @@ export function TrustPoints({
         'flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-text-muted sm:text-sm',
         className
       )}
+      aria-label="Trust points"
     >
       {points.map((item) => (
         <li key={item} className="inline-flex items-center gap-1.5">

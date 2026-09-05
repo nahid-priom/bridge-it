@@ -7,12 +7,15 @@ export function StarRating({
   size = 'sm',
   className,
   showValue = true,
+  compact = false,
 }: {
   rating: number;
   reviewCount?: number | null;
   size?: 'xs' | 'sm' | 'md';
   className?: string;
   showValue?: boolean;
+  /** One star + value — preferred for compact listing cards. */
+  compact?: boolean;
 }) {
   const safe = Math.max(0, Math.min(5, Number(rating) || 0));
   const starSize = size === 'md' ? 'h-4 w-4' : size === 'xs' ? 'h-3 w-3' : 'h-3.5 w-3.5';
@@ -21,6 +24,23 @@ export function StarRating({
     typeof reviewCount === 'number' && reviewCount > 0
       ? `${safe.toFixed(1)} out of 5 from ${reviewCount} reviews`
       : `${safe.toFixed(1)} out of 5`;
+
+  if (compact) {
+    return (
+      <div className={cn('inline-flex items-center gap-1', className)} title={label}>
+        <Star className={cn(starSize, 'fill-amber-400 text-amber-400')} aria-hidden />
+        {showValue ? (
+          <span className={cn('font-semibold text-text-primary', valueClass)}>
+            {safe.toFixed(1)}
+            {typeof reviewCount === 'number' && reviewCount > 0 ? (
+              <span className="ml-0.5 font-normal text-text-muted">({reviewCount})</span>
+            ) : null}
+          </span>
+        ) : null}
+        <span className="sr-only">{label}</span>
+      </div>
+    );
+  }
 
   return (
     <div className={cn('inline-flex items-center', size === 'xs' ? 'gap-1' : 'gap-1.5', className)} title={label}>
@@ -53,3 +73,4 @@ export function StarRating({
     </div>
   );
 }
+

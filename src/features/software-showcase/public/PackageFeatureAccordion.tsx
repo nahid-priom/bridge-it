@@ -94,17 +94,17 @@ export function PackageFeatureAccordion({
       <div id={panelId} className="mt-5 flex flex-col gap-2 sm:flex-row">
         <button
           type="button"
-          onClick={onDemo}
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border-subtle px-4 py-3 text-sm font-semibold text-text-primary hover:border-bridge-primary/40"
-        >
-          Request Free Demo
-        </button>
-        <button
-          type="button"
           onClick={onOrder}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-bridge-primary px-4 py-3 text-sm font-semibold text-white hover:bg-bridge-primary-dark"
         >
           Choose {name}
+        </button>
+        <button
+          type="button"
+          onClick={onDemo}
+          className="hidden min-h-11 flex-1 items-center justify-center rounded-xl border border-border-subtle px-4 py-3 text-sm font-semibold text-text-primary hover:border-bridge-primary/40 sm:inline-flex"
+        >
+          Request Free Demo
         </button>
       </div>
     </section>

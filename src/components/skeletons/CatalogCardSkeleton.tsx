@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { Skeleton } from './Skeleton';
 
-/** Matches catalog ProjectCard / SoftwareCard / CreativeMarketingCard home layout. */
+/** Matches unified PortfolioCard listing layout. */
 export function CatalogCardSkeleton({ className }: { className?: string }) {
   return (
     <div
@@ -12,19 +12,12 @@ export function CatalogCardSkeleton({ className }: { className?: string }) {
         className
       )}
     >
-      <Skeleton rounded="none" className="aspect-card w-full rounded-none" />
-      <div className="flex flex-1 flex-col gap-1 border-t border-border-subtle/70 px-2.5 py-2 sm:gap-1.5 sm:px-3 sm:py-2.5">
-        <div className="flex min-h-[2.5em] items-center">
-          <div className="w-full space-y-1">
-            <Skeleton className="h-3.5 w-3/4" />
-            <Skeleton className="h-3.5 w-1/2" />
-          </div>
-        </div>
-        <Skeleton className="h-3 w-24" />
-        <div className="min-h-[2.5em] space-y-1">
-          <Skeleton className="h-3 w-4/5" />
-          <Skeleton className="h-3 w-3/5" />
-        </div>
+      <Skeleton rounded="none" className="aspect-[4/3] w-full rounded-none" />
+      <div className="flex flex-1 flex-col gap-1.5 border-t border-border-subtle/70 px-3 py-2.5">
+        <Skeleton className="h-3 w-16" />
+        <Skeleton className="h-5 w-3/4" />
+        <Skeleton className="h-3.5 w-20" />
+        <Skeleton className="mt-1 h-5 w-24" />
       </div>
     </div>
   );
@@ -39,10 +32,7 @@ export function CatalogGridSkeleton({
 }) {
   return (
     <div
-      className={cn(
-        CATALOG_LISTING_GRID_CLASS,
-        className
-      )}
+      className={cn(CATALOG_LISTING_GRID_CLASS, className)}
       aria-busy="true"
       aria-label="Loading catalog"
     >

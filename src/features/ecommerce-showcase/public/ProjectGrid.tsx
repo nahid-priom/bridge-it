@@ -46,7 +46,7 @@ export function ProjectGrid({
     <div
       className={cn(
         columns === 'home'
-          ? 'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 max-md:[&>*:nth-child(n+5)]:hidden'
+          ? `${CATALOG_LISTING_GRID_CLASS} max-md:[&>*:nth-child(n+5)]:hidden`
           : CATALOG_LISTING_GRID_CLASS
       )}
       aria-busy={busy || undefined}

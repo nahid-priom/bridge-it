@@ -4,11 +4,15 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
 import { ROUTES } from '@/lib/routes';
-import { ProjectCard } from '@/src/features/ecommerce-showcase/public/ProjectCard';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
+import {
+  PortfolioCard,
+  normalizeWebsiteProject,
+  normalizeSoftwareProject,
+  normalizeMarketingProject,
+} from '@/src/features/catalog/components/portfolio-card';
 import type { EcommerceProjectCard } from '@/src/features/ecommerce-showcase/types';
-import { SoftwareCard } from '@/src/features/software-showcase/public/SoftwareCard';
 import type { SoftwareProjectCard } from '@/src/features/software-showcase/types';
-import { CreativeMarketingCard } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
 import type { CreativeMarketingProjectCard } from '@/src/features/creative-marketing-showcase/types';
 
 export type ExploreWorkItem =
@@ -25,8 +29,11 @@ const FILTERS: { id: FilterId; label: string; hubHref?: string }[] = [
   { id: 'marketing', label: 'Marketing', hubHref: ROUTES.creativeMarketingShowroom },
 ];
 
-const GRID_CLASS =
-  'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
+function toCardData(item: ExploreWorkItem) {
+  if (item.kind === 'website') return normalizeWebsiteProject(item.project);
+  if (item.kind === 'software') return normalizeSoftwareProject(item.project);
+  return normalizeMarketingProject(item.project);
+}
 
 export function ExploreAllWork({ items }: { items: ExploreWorkItem[] }) {
   const [filter, setFilter] = useState<FilterId>('all');
@@ -72,41 +79,17 @@ export function ExploreAllWork({ items }: { items: ExploreWorkItem[] }) {
           </Link>
         </div>
       ) : (
-        <div className={GRID_CLASS}>
-          {visible.map((item, index) => {
-            if (item.kind === 'website') {
-              return (
-                <ProjectCard
-                  key={item.id}
-                  project={item.project}
-                  variant="home"
-                  eager={index < 4}
-                  priority={index === 0}
-                />
-              );
-            }
-            if (item.kind === 'software') {
-              return (
-                <SoftwareCard
-                  key={item.id}
-                  project={item.project}
-                  variant="home"
-                  eager={index < 4}
-                  priority={index === 0}
-                />
-              );
-            }
-            return (
-              <CreativeMarketingCard
-                key={item.id}
-                project={item.project}
-                variant="home"
+        <ul className={CATALOG_LISTING_GRID_CLASS}>
+          {visible.map((item, index) => (
+            <li key={item.id} className="min-w-0 list-none">
+              <PortfolioCard
+                data={toCardData(item)}
                 eager={index < 4}
                 priority={index === 0}
               />
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border-subtle/80 pt-8 md:mt-14">

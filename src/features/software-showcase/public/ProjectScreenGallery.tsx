@@ -7,7 +7,7 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import type { SoftwareProjectScreen } from '../types';
 import {
@@ -58,6 +58,8 @@ export function GalleryLightbox({
   onNext: () => void;
   onClose: () => void;
 }) {
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
@@ -83,6 +85,19 @@ export function GalleryLightbox({
       role="dialog"
       aria-modal="true"
       aria-label={title}
+      onPointerDown={(e) => {
+        pointerStart.current = { x: e.clientX, y: e.clientY };
+      }}
+      onPointerUp={(e) => {
+        const start = pointerStart.current;
+        pointerStart.current = null;
+        if (!start) return;
+        const dx = e.clientX - start.x;
+        const dy = e.clientY - start.y;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) onNext();
+        else onPrev();
+      }}
     >
       <div className="flex items-center justify-between gap-3 px-4 py-3 text-white">
         <p className="min-w-0 truncate text-sm font-semibold sm:text-base">{title}</p>
@@ -100,7 +115,7 @@ export function GalleryLightbox({
           type="button"
           onClick={onPrev}
           disabled={!canPrev}
-          aria-label="Previous screen"
+          aria-label="Previous screenshot"
           className={cn(
             'absolute left-2 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-xl bg-white/10 text-white',
             !canPrev && 'cursor-not-allowed opacity-30'
@@ -109,16 +124,12 @@ export function GalleryLightbox({
           <ChevronLeft className="h-6 w-6" aria-hidden />
         </button>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageUrl}
-          alt={title}
-          className="max-h-full max-w-full object-contain"
-        />
+        <img src={imageUrl} alt={title} className="max-h-full max-w-full object-contain" />
         <button
           type="button"
           onClick={onNext}
           disabled={!canNext}
-          aria-label="Next screen"
+          aria-label="Next screenshot"
           className={cn(
             'absolute right-2 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-xl bg-white/10 text-white',
             !canNext && 'cursor-not-allowed opacity-30'
@@ -138,6 +149,8 @@ export function ProjectScreenGallery({
   selectedKey,
   onSelectKey,
   className,
+  /** When true, omit large “Screenshots” chrome — image is the hero. */
+  heroMode = true,
 }: {
   screens: SoftwareProjectScreen[];
   assetVersion?: number;
@@ -145,6 +158,7 @@ export function ProjectScreenGallery({
   selectedKey?: string;
   onSelectKey?: (key: string) => void;
   className?: string;
+  heroMode?: boolean;
 }) {
   const published = screens.filter((s) => s.published !== false);
   const initial =
@@ -158,8 +172,7 @@ export function ProjectScreenGallery({
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const selected =
-    published.find((s) => s.screen_key === activeKey) ?? initial;
+  const selected = published.find((s) => s.screen_key === activeKey) ?? initial;
   const selectedIndex = selected
     ? published.findIndex((s) => s.screen_key === selected.screen_key)
     : 0;
@@ -246,59 +259,22 @@ export function ProjectScreenGallery({
   if (published.length === 0) return null;
 
   const title = selected ? screenLabel(selected) : 'Screen';
+  const counter = `${Math.max(1, selectedIndex + 1)} / ${published.length}`;
 
   return (
     <section
       ref={rootRef}
       className={cn('min-w-0', className)}
-      aria-label="Software screenshots"
+      aria-labelledby="screens-heading"
     >
-      <div className="mb-3 flex items-start justify-between gap-2 sm:items-center">
-        <div className="min-w-0">
-          <h2 className="font-display text-xl font-black text-text-primary md:text-2xl">
-            Screenshots
-          </h2>
-          <p className="mt-0.5 text-sm text-text-secondary">
-            Explore the complete system with detailed screenshots
-          </p>
-          <p className="mt-1 truncate text-sm font-semibold text-text-primary">
-            {title}
-            <span className="ml-2 font-normal tabular-nums text-text-muted">
-              {Math.max(1, selectedIndex + 1)} / {published.length}
-            </span>
-          </p>
-        </div>
-        <div className="flex shrink-0 gap-2 pt-0.5">
-          <button
-            type="button"
-            onClick={() => goRelative(-1)}
-            disabled={!canPrev}
-            aria-label="Previous screen"
-            className={cn(
-              'inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border-subtle bg-surface',
-              canPrev ? 'text-text-primary hover:border-bridge-primary/40' : 'cursor-not-allowed text-text-muted opacity-40'
-            )}
-          >
-            <ChevronLeft className="h-5 w-5" aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={() => goRelative(1)}
-            disabled={!canNext}
-            aria-label="Next screen"
-            className={cn(
-              'inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border-subtle bg-surface',
-              canNext ? 'text-text-primary hover:border-bridge-primary/40' : 'cursor-not-allowed text-text-muted opacity-40'
-            )}
-          >
-            <ChevronRight className="h-5 w-5" aria-hidden />
-          </button>
-        </div>
-      </div>
+      <h2 id="screens-heading" className={heroMode ? 'sr-only' : 'mb-3 font-display text-xl font-black text-text-primary md:text-2xl'}>
+        Screens
+      </h2>
 
+      {/* Active screenshot — primary hero visual */}
       <button
         type="button"
-        className="relative block w-full overflow-hidden rounded-2xl border border-border-subtle bg-background-soft text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
+        className="group relative block w-full overflow-hidden rounded-2xl border border-border-subtle bg-[#0a1628] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
         onClick={() => setLightbox(true)}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -312,54 +288,79 @@ export function ProjectScreenGallery({
             assetVersion={assetVersion}
             eager
             className="w-full"
-            sizes="(min-width: 1024px) 60vw, 100vw"
-            imgClassName="mx-auto max-h-[70vh] w-full object-contain"
+            sizes="(min-width: 1024px) 55vw, 100vw"
+            imgClassName="mx-auto max-h-[min(70vh,32rem)] w-full object-contain lg:max-h-[min(75vh,36rem)]"
           />
         ) : (
           <div className="flex aspect-video items-center justify-center text-sm text-text-muted">
             Preview unavailable
           </div>
         )}
+        <span
+          className="absolute right-2.5 top-2.5 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/55 text-white backdrop-blur-sm transition-opacity group-hover:bg-black/70"
+          aria-hidden
+        >
+          <Maximize2 className="h-4 w-4" />
+        </span>
       </button>
 
-      {/* Mobile dots */}
-      <div className="mt-3 flex justify-center gap-1.5 sm:hidden" role="tablist" aria-label="Screen pages">
-        {published.map((screen, i) => {
-          const active = screen.screen_key === selected?.screen_key;
-          return (
-            <button
-              key={screen.id}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              aria-label={screenLabel(screen)}
-              onClick={() => selectScreen(screen)}
-              className={cn(
-                'h-2.5 w-2.5 rounded-full transition-colors',
-                active ? 'bg-bridge-primary' : 'bg-border-subtle'
-              )}
-            />
-          );
-        })}
+      {/* Label + counter + compact arrows */}
+      <div className="mt-2.5 flex items-center justify-between gap-3">
+        <p className="min-w-0 truncate text-sm font-semibold text-text-primary">
+          {title}
+        </p>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="tabular-nums text-xs text-text-muted sm:text-sm">{counter}</span>
+          <button
+            type="button"
+            onClick={() => goRelative(-1)}
+            disabled={!canPrev}
+            aria-label="Previous screenshot"
+            className={cn(
+              'inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border-subtle bg-surface',
+              canPrev
+                ? 'text-text-primary hover:border-bridge-primary/40'
+                : 'cursor-not-allowed text-text-muted opacity-40'
+            )}
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => goRelative(1)}
+            disabled={!canNext}
+            aria-label="Next screenshot"
+            className={cn(
+              'inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border-subtle bg-surface',
+              canNext
+                ? 'text-text-primary hover:border-bridge-primary/40'
+                : 'cursor-not-allowed text-text-muted opacity-40'
+            )}
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden />
+          </button>
+        </div>
       </div>
 
       {/* Thumbnail rail */}
-      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+      <div className="mt-3 flex gap-2 overflow-x-auto pb-1" role="list" aria-label="Screenshot thumbnails">
         {published.map((screen) => {
           const thumb = screenThumbUrl(screen, assetVersion);
           const active = screen.screen_key === selected?.screen_key;
+          const label = screenLabel(screen);
           return (
             <button
               key={screen.id}
               type="button"
+              role="listitem"
               onClick={() => selectScreen(screen)}
               className={cn(
-                'relative w-[5.5rem] shrink-0 overflow-hidden rounded-lg border text-left sm:w-28',
+                'relative w-[4.75rem] shrink-0 overflow-hidden rounded-lg border text-left transition-[border-color,opacity] duration-200 sm:w-24',
                 active
                   ? 'border-bridge-primary ring-1 ring-bridge-primary/30'
                   : 'border-border-subtle opacity-85 hover:opacity-100'
               )}
-              aria-label={screenLabel(screen)}
+              aria-label={label}
               aria-current={active ? 'true' : undefined}
             >
               {thumb ? (
@@ -376,9 +377,6 @@ export function ProjectScreenGallery({
                   —
                 </span>
               )}
-              <span className="block truncate px-1.5 py-1 text-[10px] font-medium text-text-secondary sm:text-xs">
-                {screenLabel(screen)}
-              </span>
             </button>
           );
         })}

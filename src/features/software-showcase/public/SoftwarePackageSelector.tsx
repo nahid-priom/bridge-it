@@ -83,9 +83,12 @@ export function SoftwarePackageSelector({
   const tabs = (orderedTabs.length > 0 ? orderedTabs : sorted).slice(0, 4);
 
   return (
-    <div className={cn('w-full', className)}>
-      <h2 className="mb-2 font-display text-xl font-black text-text-primary sm:text-2xl">
-        Choose the Right Package
+    <div className={cn('w-full', className)} aria-labelledby="packages-heading">
+      <h2
+        id="packages-heading"
+        className="mb-2 font-display text-xl font-black text-text-primary sm:text-2xl"
+      >
+        Packages & Pricing
       </h2>
       <p className="mb-4 text-sm text-text-secondary">
         Pick a package that matches your business size. You can upgrade later.

@@ -74,18 +74,31 @@ export {
   IndustryCard,
   IndustryGrid,
   PackageBadge,
+  PortfolioCard,
+  PortfolioCardSkeleton,
   ProductReviews,
   RelatedProducts,
   StarRating,
   consultationDeepLink,
+  formatBDTPrice,
   formatCatalogPrice,
+  formatPortfolioPriceLabel,
+  normalizeCatalogProductRef,
+  normalizeMarketingProject,
+  normalizePortfolioCardData,
+  normalizeSoftwareProject,
+  normalizeWebsiteProject,
   parseSoftwarePriceParam,
+  resolvePricingMode,
   softwarePriceBounds,
 } from './components';
 export type {
   CatalogAnalyticsPayload,
   CatalogProductFeature,
   CatalogSidebarIndustry,
+  PortfolioCardData,
+  PortfolioContentType,
+  PortfolioPricingMode,
 } from './components';
 export { listApprovedReviews, submitCatalogReview } from './api/reviews';
 export type { CatalogProductReview, CatalogReviewKind } from './types/reviews';
