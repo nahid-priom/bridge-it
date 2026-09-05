@@ -19,7 +19,7 @@ export function HeroActions({ className }: { className?: string }) {
       />
 
       <Link
-        href={`${ROUTES.explore}?type=websites`}
+        href={ROUTES.explore}
         className={cn(
           'hero-cta group inline-flex h-14 w-full items-center justify-center gap-2 rounded-[1.125rem]',
           'bg-bridge-primary px-5 text-[0.9375rem] font-semibold text-white sm:h-[3.75rem] sm:text-base',
@@ -31,7 +31,7 @@ export function HeroActions({ className }: { className?: string }) {
           'motion-reduce:transition-none motion-reduce:hover:shadow-none'
         )}
       >
-        Explore 500+ Live Demos
+        Explore Our Work
         <ArrowRight
           className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
           aria-hidden

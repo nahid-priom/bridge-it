@@ -10,7 +10,7 @@ export type SoftwarePackageLeadInput = {
   business_location?: string;
   requirement?: string;
   software_project_id: string;
-  package_id: string;
+  package_id?: string;
   product_slug: string;
   product_title: string;
   source_url?: string;
@@ -23,13 +23,13 @@ export async function submitSoftwarePackageLeadAction(
   const name = input.name?.trim();
   const phone = input.phone?.trim();
   if (!name || !phone) return { error: 'Name and phone are required' };
-  if (!input.software_project_id || !input.package_id) {
-    return { error: 'Product and package are required' };
+  if (!input.software_project_id) {
+    return { error: 'Product is required' };
   }
 
   // Prefer admin client so price validation works even if RLS hides packages from anon
   const admin = await getAdminClient();
-  if (admin) {
+  if (admin && input.package_id) {
     const { data: pkg } = await admin
       .from('software_packages')
       .select('id, project_id, name, tier, price, currency, active, deleted_at')

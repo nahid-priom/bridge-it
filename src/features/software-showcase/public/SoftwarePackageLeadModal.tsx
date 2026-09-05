@@ -28,7 +28,7 @@ export function SoftwarePackageLeadModal({
   projectId: string;
   productSlug: string;
   productTitle: string;
-  selectedPackage: SoftwarePackage;
+  selectedPackage: SoftwarePackage | null;
 }) {
   const titleId = useId();
   const firstFieldRef = useRef<HTMLInputElement>(null);
@@ -57,12 +57,12 @@ export function SoftwarePackageLeadModal({
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose, selectedPackage.id, intent]);
+  }, [open, onClose, selectedPackage?.id, intent]);
 
   if (!open) return null;
 
-  const tierLabel = packageDisplayName(selectedPackage);
-  const heading = intent === 'demo' ? 'Request Free Demo' : `Order ${tierLabel}`;
+  const tierLabel = selectedPackage ? packageDisplayName(selectedPackage) : productTitle;
+  const heading = intent === 'demo' ? 'Request Free Demo' : selectedPackage ? `Order ${tierLabel}` : 'Talk to Our Expert';
 
   const submit = () => {
     setServerError(null);
@@ -74,7 +74,7 @@ export function SoftwarePackageLeadModal({
         business_location: businessLocation,
         requirement,
         software_project_id: projectId,
-        package_id: selectedPackage.id,
+        package_id: selectedPackage?.id,
         product_slug: productSlug,
         product_title: productTitle,
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
@@ -90,8 +90,8 @@ export function SoftwarePackageLeadModal({
           event: 'order_submit',
           category_root: 'software',
           product: productSlug,
-          package: selectedPackage.name,
-          package_tier: selectedPackage.tier,
+          package: selectedPackage?.name,
+          package_tier: selectedPackage?.tier,
           intent,
         });
       }
@@ -158,17 +158,25 @@ export function SoftwarePackageLeadModal({
                 <span className="text-text-muted">Software:</span>{' '}
                 <span className="font-semibold">{productTitle}</span>
               </p>
-              <p className="mt-1">
-                <span className="text-text-muted">Package:</span>{' '}
-                <span className="font-semibold">{tierLabel}</span>
-              </p>
-              <p className="mt-1">
-                <span className="text-text-muted">Price:</span>{' '}
-                <span className="font-semibold tabular-nums">
-                  {formatCatalogPrice(selectedPackage.price, { currency: selectedPackage.currency })}
-                </span>
-              </p>
-              <p className="mt-1 text-text-muted">{paymentTypeLabel(selectedPackage.payment_type)}</p>
+              {selectedPackage ? (
+                <>
+                  <p className="mt-1">
+                    <span className="text-text-muted">Package:</span>{' '}
+                    <span className="font-semibold">{tierLabel}</span>
+                  </p>
+                  <p className="mt-1">
+                    <span className="text-text-muted">Price:</span>{' '}
+                    <span className="font-semibold tabular-nums">
+                      {formatCatalogPrice(selectedPackage.price, {
+                        currency: selectedPackage.currency,
+                      })}
+                    </span>
+                  </p>
+                  <p className="mt-1 text-text-muted">
+                    {paymentTypeLabel(selectedPackage.payment_type)}
+                  </p>
+                </>
+              ) : null}
             </div>
 
             {serverError ? <p className="text-sm text-red-600">{serverError}</p> : null}

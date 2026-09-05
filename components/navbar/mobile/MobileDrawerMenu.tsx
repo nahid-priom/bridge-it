@@ -313,15 +313,23 @@ export function MobileDrawerMenu({
               </div>
 
               <div className="mt-2 border-t border-slate-100/90 pb-6 pt-4 dark:border-white/[0.08]">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                  Follow Us
-                </p>
                 <SocialLinks
                   variant="light"
                   size="sm"
-                  className="flex flex-nowrap items-center justify-between gap-1"
+                  className="flex flex-nowrap items-center justify-center gap-1"
                   linkClassName="h-8 w-8 shrink-0 rounded-lg"
                 />
+                <p className="mt-3 text-center text-xs text-text-muted">
+                  Powered by{' '}
+                  <a
+                    href="https://www.codebondhuit.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold tracking-wide text-text-primary"
+                  >
+                    Code Bondhu IT
+                  </a>
+                </p>
               </div>
             </div>
           </motion.div>

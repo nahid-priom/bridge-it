@@ -1,18 +1,129 @@
-import Link from 'next/link';
-import type { CatalogProductRef, CatalogRelatedProduct } from '../types';
-import { productPath } from '../utils/paths';
-import { CatalogPrice } from './CatalogPrice';
-import { CatalogCoverImage } from './CatalogCoverImage';
-import { FeaturedBadge } from './FeaturedBadge';
-import { StarRating } from './StarRating';
-import { fallbackRatingFromSlug } from '../types/reviews';
+'use client';
 
-function relatedHref(product: CatalogProductRef): string {
-  if (product.canonical_path?.trim()) return product.canonical_path.trim();
-  if (product.industry_slug) {
-    return productPath(product.kind, product.industry_slug, product.slug);
-  }
-  return `/${product.kind}/${product.slug}`;
+import type { CatalogProductRef, CatalogRelatedProduct } from '../types';
+import { ProjectCard } from '@/src/features/ecommerce-showcase/public/ProjectCard';
+import type { EcommerceProjectCard } from '@/src/features/ecommerce-showcase/types';
+import { SoftwareCard } from '@/src/features/software-showcase/public/SoftwareCard';
+import type { SoftwareProjectCard } from '@/src/features/software-showcase/types';
+import { CreativeMarketingCard } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
+import type { CreativeMarketingProjectCard } from '@/src/features/creative-marketing-showcase/types';
+
+/** Same density/grid as homepage portfolio sections. */
+const RELATED_HOME_GRID_CLASS =
+  'mt-4 grid grid-cols-2 gap-2.5 min-w-0 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
+
+function toSoftwareCard(product: CatalogProductRef): SoftwareProjectCard {
+  const cover = product.coverImageUrl ?? product.cover_url ?? null;
+  return {
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    short_description: product.short_description,
+    feature_summary: product.short_description,
+    category_id: null,
+    industry: product.industry_name,
+    business_type: product.business_size,
+    solution_group: null,
+    software_type: null,
+    platform_type: null,
+    main_category_id: null,
+    taxonomy_category_id: null,
+    child_category_id: null,
+    industry_id: product.industry_id,
+    industry_slug: product.industry_slug,
+    industry_name: product.industry_name,
+    canonical_path: product.canonical_path,
+    badge: product.badge,
+    cover_card_url: cover,
+    cover_detail_url: cover,
+    coverImageUrl: cover,
+    starting_price: Math.max(Number(product.starting_price ?? 0), 10000),
+    price_suffix: product.price_suffix ?? '',
+    currency: product.currency ?? 'BDT',
+    featured: product.featured,
+    popular: product.popular,
+    published: product.published,
+    sort_order: product.sort_order,
+    rating_avg: product.rating_avg ?? undefined,
+    review_count: product.review_count ?? undefined,
+    created_at: '',
+    updated_at: '',
+    category_name: product.industry_name,
+    category_slug: product.industry_slug,
+    taxonomy_category_name: null,
+    taxonomy_category_slug: null,
+    child_category_name: null,
+    child_category_slug: null,
+    screen_count: 0,
+    primary_features: [],
+  };
+}
+
+function toWebsiteCard(product: CatalogProductRef): EcommerceProjectCard {
+  const cover = product.coverImageUrl ?? product.cover_url ?? null;
+  return {
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    short_description: product.short_description,
+    category_id: null,
+    technology_stack: [],
+    website_type: null,
+    industry: product.industry_name,
+    industry_id: product.industry_id,
+    industry_slug: product.industry_slug,
+    industry_name: product.industry_name,
+    canonical_path: product.canonical_path,
+    cover_image_url: cover,
+    cover_fallback_url: null,
+    coverImageUrl: cover,
+    coverImageFallbackUrl: null,
+    starting_price: Number(product.starting_price ?? 0),
+    currency: product.currency ?? 'BDT',
+    featured: product.featured,
+    published: product.published,
+    sort_order: product.sort_order,
+    rating_avg: product.rating_avg ?? undefined,
+    review_count: product.review_count ?? undefined,
+    created_at: '',
+    updated_at: '',
+    category_name: product.industry_name,
+    category_slug: product.industry_slug,
+    page_count: 0,
+  };
+}
+
+function toMarketingCard(product: CatalogProductRef): CreativeMarketingProjectCard {
+  const cover = product.coverImageUrl ?? product.cover_url ?? null;
+  return {
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    short_description: product.short_description,
+    outcome_line: product.short_description,
+    service_group: 'branding',
+    service_type: null,
+    service_subcategory: null,
+    target_business: null,
+    pricing_model: 'one_time',
+    industry_id: product.industry_id,
+    industry_slug: product.industry_slug,
+    industry_name: product.industry_name,
+    canonical_path: product.canonical_path,
+    cover_card_url: cover,
+    cover_detail_url: cover,
+    coverImageUrl: cover,
+    starting_price: Number(product.starting_price ?? 0),
+    price_suffix: product.price_suffix ?? '',
+    currency: product.currency ?? 'BDT',
+    featured: product.featured,
+    popular: product.popular,
+    published: product.published,
+    sort_order: product.sort_order,
+    created_at: '',
+    updated_at: '',
+    asset_count: 0,
+  };
 }
 
 export function RelatedProducts({
@@ -29,59 +140,48 @@ export function RelatedProducts({
   if (products.length === 0) return null;
 
   return (
-    <section className="mt-10 md:mt-14" aria-labelledby="similar-products-heading">
+    <section
+      className="mx-auto mt-10 w-full max-w-[1480px] px-4 md:mt-14 sm:px-6 lg:px-8 xl:px-10"
+      aria-labelledby="similar-products-heading"
+    >
       <h2
         id="similar-products-heading"
-        className="font-display text-xl font-black text-[#0f2744] dark:text-white md:text-2xl"
+        className="font-display text-xl font-black text-text-primary md:text-2xl"
       >
         {title}
       </h2>
-      <ul className="mt-4 flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 xl:grid-cols-4">
-        {products.map((product) => {
-          const rating =
-            product.rating_avg ?? fallbackRatingFromSlug(product.slug).rating_avg;
-          const reviewCount =
-            product.review_count ?? fallbackRatingFromSlug(product.slug).review_count;
+      <div className={RELATED_HOME_GRID_CLASS}>
+        {products.slice(0, 4).map((product, index) => {
+          if (product.kind === 'software') {
+            return (
+              <SoftwareCard
+                key={product.id}
+                project={toSoftwareCard(product)}
+                variant="home"
+                eager={index < 2}
+              />
+            );
+          }
+          if (product.kind === 'marketing') {
+            return (
+              <CreativeMarketingCard
+                key={product.id}
+                project={toMarketingCard(product)}
+                variant="home"
+                eager={index < 2}
+              />
+            );
+          }
           return (
-            <li key={product.id} className="min-w-[240px] shrink-0 sm:min-w-0">
-              <Link
-                href={relatedHref(product)}
-                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface transition-colors hover:border-[#2563eb]/40"
-              >
-                <div className="relative overflow-hidden bg-background-soft">
-                  {product.featured ? <FeaturedBadge /> : null}
-                  <CatalogCoverImage
-                    src={product.coverImageUrl ?? product.cover_url}
-                    alt={`${product.title} project preview`}
-                    emptyTitle={product.title}
-                    fit="cover"
-                    sizes="(min-width: 1280px) 20vw, (min-width: 640px) 33vw, 70vw"
-                    imgClassName="transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col gap-1.5 p-3.5">
-                  {product.industry_name ? (
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[#2563eb]">
-                      {product.industry_name}
-                    </p>
-                  ) : null}
-                  <p className="font-display font-bold leading-snug text-text-primary line-clamp-2">
-                    {product.title}
-                  </p>
-                  <StarRating rating={rating} reviewCount={reviewCount} />
-                  <p className="mt-auto pt-1 text-sm font-semibold text-text-secondary">
-                    <CatalogPrice
-                      amount={product.starting_price}
-                      suffix={product.price_suffix}
-                      currency={product.currency}
-                    />
-                  </p>
-                </div>
-              </Link>
-            </li>
+            <ProjectCard
+              key={product.id}
+              project={toWebsiteCard(product)}
+              variant="home"
+              eager={index < 2}
+            />
           );
         })}
-      </ul>
+      </div>
     </section>
   );
 }

@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "ecommerce-admin-dashboard",
+    "title": "E-commerce Admin Dashboard",
+    "aspectRatio": "16:9",
+    "recommendedWidth": 1600,
+    "recommendedHeight": 900,
+    "visualIdentity": "Modern SaaS admin — blue accents, left sidebar, KPI cards, data tables, Bangladesh e-commerce context",
+    "screens": [
+      {
+        "key": "dashboard-overview",
+        "title": "Dashboard Overview",
+        "filename": "dashboard-overview.avif",
+        "visualDescription": "KPI cards for orders/sales/customers, sales line chart, order status donut, recent orders table with Delivered/Pending/Processing badges"
+      },
+      {
+        "key": "products",
+        "title": "Product Management",
+        "filename": "products.avif",
+        "visualDescription": "Product grid/table with thumbnails, SKU, stock, price in BDT, category filters"
+      },
+      {
+        "key": "orders",
+        "title": "Orders Management",
+        "filename": "orders.avif",
+        "visualDescription": "Orders list with customer, phone, courier status, payment method, COD amount"
+      },
+      {
+        "key": "inventory",
+        "title": "Inventory / Stock",
+        "filename": "inventory.avif",
+        "visualDescription": "Stock levels by SKU/warehouse, low-stock alerts, variant quantities"
+      },
+      {
+        "key": "courier",
+        "title": "Courier Management",
+        "filename": "courier.avif",
+        "visualDescription": "Multi-courier integration (Pathao, Steadfast, RedX style), consignments, delivery status"
+      },
+      {
+        "key": "customers",
+        "title": "Customer Management",
+        "filename": "customers.avif",
+        "visualDescription": "Customer list with order count, lifetime value, address, tags"
+      },
+      {
+        "key": "analytics",
+        "title": "Analytics",
+        "filename": "analytics.avif",
+        "visualDescription": "Revenue trends, top products, conversion funnel, channel breakdown"
+      },
+      {
+        "key": "discounts",
+        "title": "Discounts / Promotions",
+        "filename": "discounts.avif",
+        "visualDescription": "Coupon codes, flash sales, percentage/fixed discounts, schedule windows"
+      },
+      {
+        "key": "payments",
+        "title": "Payment / Transaction",
+        "filename": "payments.avif",
+        "visualDescription": "bKash/Nagad/card settlements, transaction table, refunds, payout status"
+      },
+      {
+        "key": "settings",
+        "title": "Settings",
+        "filename": "settings.avif",
+        "visualDescription": "Store profile, shipping zones, payment gateways, team roles"
+      }
+    ]
+  },
+  {
+    "slug": "feed-mill-erp",
+    "title": "Feed Mill ERP",
+    "aspectRatio": "16:9",
+    "recommendedWidth": 1600,
+    "recommendedHeight": 900,
+    "visualIdentity": "Industrial ERP — green/teal accents, dark sidebar, feed/raw-material terminology, bags and formula context",
+    "screens": [
+      {
+        "key": "dashboard",
+        "title": "Feed Mill Dashboard",
+        "filename": "dashboard.avif",
+        "visualDescription": "KPIs: today production MT, raw stock days, open dealer orders, outstanding due"
+      },
+      {
+        "key": "raw-purchase",
+        "title": "Raw Material Purchase",
+        "filename": "raw-purchase.avif",
+        "visualDescription": "Purchase orders for maize, soybean, additives with supplier and rate"
+      },
+      {
+        "key": "raw-stock",
+        "title": "Raw Material Stock",
+        "filename": "raw-stock.avif",
+        "visualDescription": "Warehouse bins, lot numbers, available vs reserved tonnage"
+      },
+      {
+        "key": "formula",
+        "title": "Formula / Recipe Management",
+        "filename": "formula.avif",
+        "visualDescription": "Feed formula composition with ingredient %, cost/MT, approved versions"
+      },
+      {
+        "key": "production-planning",
+        "title": "Production Planning",
+        "filename": "production-planning.avif",
+        "visualDescription": "Daily/weekly mixer plan by formula and bag size"
+      },
+      {
+        "key": "daily-production",
+        "title": "Daily Feed Production",
+        "filename": "daily-production.avif",
+        "visualDescription": "Batch runs, mixer output, bag counts, material issue against formula"
+      },
+      {
+        "key": "finished-stock",
+        "title": "Finished Goods Stock",
+        "filename": "finished-stock.avif",
+        "visualDescription": "Finished bag stock by SKU (layer, broiler, cattle), warehouse location"
+      },
+      {
+        "key": "sales-delivery",
+        "title": "Sales & Delivery",
+        "filename": "sales-delivery.avif",
+        "visualDescription": "Dealer orders, truck dispatch, challan, delivery confirmation"
+      },
+      {
+        "key": "dealer-due",
+        "title": "Dealer / Customer Due",
+        "filename": "dealer-due.avif",
+        "visualDescription": "Dealer ledger, credit limit, aging, collections"
+      },
+      {
+        "key": "accounts-pnl",
+        "title": "Accounts / Profit & Loss",
+        "filename": "accounts-pnl.avif",
+        "visualDescription": "P&L summary, production cost vs sales, cash/bank balances"
+      }
+    ]
+  },
+  {
+    "slug": "garments-erp",
+    "title": "Garments ERP",
+    "aspectRatio": "16:9",
+    "recommendedWidth": 1600,
+    "recommendedHeight": 900,
+    "visualIdentity": "Apparel ERP — navy sidebar, cyan accents, style/buyer/line floor language",
+    "screens": [
+      {
+        "key": "dashboard",
+        "title": "Garments Dashboard",
+        "filename": "dashboard.avif",
+        "visualDescription": "Open styles, cutting/sewing efficiency, on-time shipment %, fabric utilization"
+      },
+      {
+        "key": "sales-orders",
+        "title": "Sales Orders",
+        "filename": "sales-orders.avif",
+        "visualDescription": "Buyer orders with style, quantity, delivery date, LC/PI references"
+      },
+      {
+        "key": "order-details",
+        "title": "Order Details",
+        "filename": "order-details.avif",
+        "visualDescription": "Style detail with size/color matrix, BOM summary, delivery schedule"
+      },
+      {
+        "key": "cutting",
+        "title": "Cutting",
+        "filename": "cutting.avif",
+        "visualDescription": "Cut plans, marker efficiency, bundle tickets, fabric issue"
+      },
+      {
+        "key": "sewing",
+        "title": "Sewing",
+        "filename": "sewing.avif",
+        "visualDescription": "Line-wise output, hourly production, WIP by operation"
+      },
+      {
+        "key": "finishing",
+        "title": "Finishing",
+        "filename": "finishing.avif",
+        "visualDescription": "Finishing floor board, ironing, poly, carton readiness"
+      },
+      {
+        "key": "quality-control",
+        "title": "Quality Control",
+        "filename": "quality-control.avif",
+        "visualDescription": "QC checklists, AQL sampling, defect reasons, pass/fail"
+      },
+      {
+        "key": "packing",
+        "title": "Packing",
+        "filename": "packing.avif",
+        "visualDescription": "Assortment packing, carton marks, packing list"
+      },
+      {
+        "key": "ready-stock",
+        "title": "Ready Stock",
+        "filename": "ready-stock.avif",
+        "visualDescription": "Finished garment warehouse by style/color/size"
+      },
+      {
+        "key": "delivery-billing",
+        "title": "Delivery / Billing",
+        "filename": "delivery-billing.avif",
+        "visualDescription": "Shipment packing list, commercial invoice, delivery challan"
+      }
+    ]
+  }
+]

@@ -30,6 +30,7 @@ function firePackageSelect(pkg: SoftwarePackage, productSlug: string) {
   });
 }
 
+/** Mobile: always 2×2. Desktop: up to 4 in a row. */
 export function SoftwarePackageSelector({
   packages,
   productSlug,
@@ -79,15 +80,18 @@ export function SoftwarePackageSelector({
     sorted.find((pkg) => pkg.tier === tier)
   ).filter(Boolean) as SoftwarePackage[];
 
-  const tabs = orderedTabs.length > 0 ? orderedTabs : sorted;
+  const tabs = (orderedTabs.length > 0 ? orderedTabs : sorted).slice(0, 4);
 
   return (
     <div className={cn('w-full', className)}>
-      <h2 className="mb-3 font-display text-lg font-black text-[#0f2744] dark:text-white sm:text-xl">
-        Choose Your Package
+      <h2 className="mb-2 font-display text-xl font-black text-text-primary sm:text-2xl">
+        Choose the Right Package
       </h2>
+      <p className="mb-4 text-sm text-text-secondary">
+        Pick a package that matches your business size. You can upgrade later.
+      </p>
       <div
-        className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+        className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4"
         role="tablist"
         aria-label="Software packages"
       >
@@ -104,21 +108,33 @@ export function SoftwarePackageSelector({
                 syncUrl(pkg);
               }}
               className={cn(
-                'flex min-h-[4.5rem] flex-col items-start justify-center rounded-2xl border px-3 py-3 text-left transition-colors sm:min-h-[5rem] sm:px-4',
+                'flex min-h-[4.75rem] flex-col items-start justify-center rounded-2xl border px-3 py-3 text-left transition-colors sm:min-h-[5.25rem] sm:px-4',
                 active
-                  ? 'border-[#0f2744] bg-[#0f2744] text-white dark:border-white dark:bg-white dark:text-[#0f2744]'
-                  : 'border-border-subtle bg-surface text-text-secondary hover:border-[#2563eb]/40 hover:text-text-primary'
+                  ? 'border-bridge-primary bg-bridge-primary text-white'
+                  : 'border-border-subtle bg-surface text-text-secondary hover:border-bridge-primary/40 hover:text-text-primary'
               )}
             >
               <span className="text-sm font-bold sm:text-[0.9375rem]">{packageDisplayName(pkg)}</span>
               <span
                 className={cn(
                   'mt-1 text-xs tabular-nums sm:text-sm',
-                  active ? 'text-white/80 dark:text-[#0f2744]/80' : 'text-text-muted'
+                  active ? 'text-white/85' : 'text-text-muted'
                 )}
               >
-                {formatCatalogPrice(pkg.price, { currency: pkg.currency })}
+                {pkg.tier === 'enterprise' && pkg.price >= 250000
+                  ? 'Custom'
+                  : formatCatalogPrice(pkg.price, { currency: pkg.currency })}
               </span>
+              {pkg.is_recommended ? (
+                <span
+                  className={cn(
+                    'mt-1 text-[10px] font-semibold uppercase tracking-wide',
+                    active ? 'text-white/90' : 'text-bridge-primary'
+                  )}
+                >
+                  Most Popular
+                </span>
+              ) : null}
             </button>
           );
         })}

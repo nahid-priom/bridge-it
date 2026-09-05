@@ -133,8 +133,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex max-w-full min-w-0 flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          <p className="shrink-0 text-xs text-slate-500">
+        <div className="mt-10 flex max-w-full min-w-0 flex-col-reverse gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <p className="shrink-0 text-center text-xs text-slate-500 sm:text-left">
             Powered by{' '}
             <a
               href="https://www.codebondhuit.com"
@@ -146,17 +146,12 @@ export function Footer() {
             </a>
           </p>
 
-          <div className="flex min-w-0 items-center gap-3">
-            <p className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-white/80 sm:text-xs">
-              Follow Us
-            </p>
-            <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <SocialLinks
-                size="sm"
-                className="flex flex-nowrap items-center gap-2"
-                linkClassName="h-9 w-9 shrink-0"
-              />
-            </div>
+          <div className="min-w-0 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <SocialLinks
+              size="sm"
+              className="flex flex-nowrap items-center justify-center gap-2 sm:justify-end"
+              linkClassName="h-9 w-9 shrink-0"
+            />
           </div>
         </div>
       </div>

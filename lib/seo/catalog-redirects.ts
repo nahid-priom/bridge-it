@@ -217,5 +217,44 @@ export function buildCatalogHierarchyRedirects(): ReadonlyArray<{
     });
   }
 
+  // Maturity-ladder products merged into garments-erp / feed-mill-erp packages
+  const mergedLadderRedirects: Array<{ source: string; destination: string }> = [
+    {
+      source: '/software/garments/garments-starter-software',
+      destination: '/software/garments/garments-erp?package=starter',
+    },
+    {
+      source: '/software/garments/garments-production-management',
+      destination: '/software/garments/garments-erp?package=standard',
+    },
+    {
+      source: '/software/garments/garments-erp-professional',
+      destination: '/software/garments/garments-erp?package=professional',
+    },
+    {
+      source: '/software/garments/garments-enterprise-erp',
+      destination: '/software/garments/garments-erp?package=enterprise',
+    },
+    {
+      source: '/software/feed-mill/feed-mill-mini',
+      destination: '/software/feed-mill/feed-mill-erp?package=starter',
+    },
+    {
+      source: '/software/feed-mill/feed-mill-basic',
+      destination: '/software/feed-mill/feed-mill-erp?package=starter',
+    },
+    {
+      source: '/software/feed-mill/feed-mill-erp-professional',
+      destination: '/software/feed-mill/feed-mill-erp?package=professional',
+    },
+    {
+      source: '/software/feed-mill/feed-mill-enterprise-erp',
+      destination: '/software/feed-mill/feed-mill-erp?package=enterprise',
+    },
+  ];
+  for (const r of mergedLadderRedirects) {
+    redirects.push({ ...r, permanent: true });
+  }
+
   return redirects;
 }

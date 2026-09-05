@@ -75,27 +75,24 @@ async function generateProduct(product: SeedSoftwareProduct) {
 
   if (manifestsOnly) return;
 
-  if (!screensOnly) {
+  // Always fill missing covers (even with --screens-only) so upload never skips a product
+  {
     const cardPath = path.join(coverDir, 'card.avif');
     const detailPath = path.join(coverDir, 'detail.avif');
-    // Preserve lifestyle covers — only generate SVG covers when missing
-    if (force && !(await exists(cardPath))) {
-      const svg = coverSvg(product);
-      const card = await svgToAvif(svg, cardPath, CARD_W, 58, 80 * 1024);
-      const detail = await svgToAvif(svg, detailPath, DETAIL_W, 65);
-      console.log(`  cover card ${(card / 1024).toFixed(1)}KB detail ${(detail / 1024).toFixed(1)}KB (svg fallback)`);
-    } else if (!(await exists(cardPath)) || !(await exists(detailPath))) {
-      const svg = coverSvg(product);
-      if (!(await exists(cardPath))) {
-        const card = await svgToAvif(svg, cardPath, CARD_W, 58, 80 * 1024);
-        console.log(`  cover card ${(card / 1024).toFixed(1)}KB (svg fallback)`);
+    if (!screensOnly || !(await exists(cardPath)) || !(await exists(detailPath))) {
+      if (!(await exists(cardPath)) || !(await exists(detailPath))) {
+        const svg = coverSvg(product);
+        if (!(await exists(cardPath))) {
+          const card = await svgToAvif(svg, cardPath, CARD_W, 58, 80 * 1024);
+          console.log(`  cover card ${(card / 1024).toFixed(1)}KB (svg fallback)`);
+        }
+        if (!(await exists(detailPath))) {
+          const detail = await svgToAvif(svg, detailPath, DETAIL_W, 65);
+          console.log(`  cover detail ${(detail / 1024).toFixed(1)}KB (svg fallback)`);
+        }
+      } else if (!screensOnly) {
+        console.log('  covers preserved (lifestyle / existing)');
       }
-      if (!(await exists(detailPath))) {
-        const detail = await svgToAvif(svg, detailPath, DETAIL_W, 65);
-        console.log(`  cover detail ${(detail / 1024).toFixed(1)}KB (svg fallback)`);
-      }
-    } else {
-      console.log('  covers preserved (lifestyle / existing)');
     }
   }
 

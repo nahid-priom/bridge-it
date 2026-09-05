@@ -26,7 +26,8 @@ config({ path: '.env.local' });
 config({ path: '.env' });
 
 const ASSETS_ROOT = path.join(process.cwd(), 'seed-assets/software');
-const ASSET_VERSION = 4;
+/** Baseline version folder; force uploads bump above DB value for cache bust. */
+const ASSET_VERSION_BASE = 4;
 const force = process.argv.includes('--force') || !process.argv.includes('--skip-existing');
 const dryRun = process.argv.includes('--dry-run');
 const slugArg = process.argv.find((a) => a.startsWith('--slug='))?.slice(7);
@@ -108,10 +109,14 @@ async function syncProduct(product: (typeof SOFTWARE_SEED_PRODUCTS)[number]) {
     return { ok: false, issues: ['missing db row'] };
   }
 
-  const version = ASSET_VERSION;
+  const currentVersion = Math.max(1, Number(existing.asset_version ?? 1));
+  // Force replace: new version folder so CDN/browser caches bust even with immutable Cache-Control
+  const version = force
+    ? Math.max(currentVersion + 1, ASSET_VERSION_BASE + 1)
+    : Math.max(currentVersion, ASSET_VERSION_BASE);
   const dir = path.join(ASSETS_ROOT, product.slug);
 
-  console.log(`  uploading v${version}…`);
+  console.log(`  uploading v${version}${force ? ' (force replace)' : ''}…`);
 
   const cardBuf = await readFile(path.join(dir, 'cover/card.avif'));
   const detailBuf = await readFile(path.join(dir, 'cover/detail.avif'));
@@ -231,7 +236,13 @@ async function main() {
     else fail += 1;
   }
   console.log(`\nDone. ok=${ok} fail=${fail}`);
-  if (fail) process.exit(1);
+  if (fail && !process.argv.includes('--allow-partial')) {
+    console.error(
+      `\nTip: re-run a single skip with:\n  npm run software:force-refresh -- --slug=<failed-slug>\n` +
+        `Or allow partial success: add --allow-partial`
+    );
+    process.exit(1);
+  }
 }
 
 main().catch((e) => {

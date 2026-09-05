@@ -32,10 +32,12 @@ import { SOFTWARE_GALLERY_PAGE_SIZE } from '@/src/features/software-showcase/con
 import { specializedSlugsForIndustry } from '@/src/features/software-showcase/config/specialized-solutions';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
-import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
-import { MaturityCompareBlock } from '@/src/features/software-showcase/public/MaturityCompareBlock';
-import { MaturityPackagesSection } from '@/src/features/software-showcase/public/MaturityPackagesSection';
+import { SoftwareCard, SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
 import { SpecializedSolutionsSection } from '@/src/features/software-showcase/public/SpecializedSolutionsSection';
+import {
+  FEED_MILL_ERP_SLUG,
+  GARMENTS_ERP_SLUG,
+} from '@/src/features/software-showcase/config/maturity-ladder';
 
 export const revalidate = 60;
 
@@ -129,9 +131,11 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
   const businessSizes = parseSoftwareBusinessSizeParam(first(sp.size));
   const sort = parseSoftwareSortParam(first(sp.sort));
 
-  const isLadderIndustry = industry.slug === 'garments' || industry.slug === 'feed-mill';
   const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular'));
-  const useSectionedListing = isLadderIndustry && !hasActiveFilters && page === 1;
+  const useSectionedListing =
+    (industry.slug === 'garments' || industry.slug === 'feed-mill') &&
+    !hasActiveFilters &&
+    page === 1;
   const pageSize = useSectionedListing
     ? Math.max(SOFTWARE_GALLERY_PAGE_SIZE, 24)
     : SOFTWARE_GALLERY_PAGE_SIZE;
@@ -228,8 +232,34 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
       >
         {useSectionedListing ? (
           <>
-            <MaturityPackagesSection industrySlug={industry.slug} products={result.items} />
-            <MaturityCompareBlock industrySlug={industry.slug} products={result.items} />
+            {(() => {
+              const flagshipSlug =
+                industry.slug === 'garments'
+                  ? GARMENTS_ERP_SLUG
+                  : industry.slug === 'feed-mill'
+                    ? FEED_MILL_ERP_SLUG
+                    : null;
+              const flagship = flagshipSlug
+                ? result.items.find((p) => p.slug === flagshipSlug)
+                : null;
+              if (!flagship) return null;
+              return (
+                <section className="mb-8" aria-labelledby="flagship-erp">
+                  <h2
+                    id="flagship-erp"
+                    className="mb-3 font-display text-lg font-bold text-text-primary sm:text-xl"
+                  >
+                    Complete ERP
+                  </h2>
+                  <div className="max-w-md">
+                    <SoftwareCard project={flagship} priority />
+                  </div>
+                  <p className="mt-3 text-sm text-text-secondary">
+                    Open the product to choose Starter, Standard, Professional, or Enterprise packages.
+                  </p>
+                </section>
+              );
+            })()}
             <SpecializedSolutionsSection industrySlug={industry.slug} products={result.items} />
           </>
         ) : (
@@ -259,10 +289,6 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
             </Suspense>
           </HydrationBoundary>
         )}
-
-        {!useSectionedListing && isLadderIndustry ? (
-          <MaturityCompareBlock industrySlug={industry.slug} products={result.items} />
-        ) : null}
 
         <section className="mt-12 max-w-3xl border-t border-border-subtle pt-8" aria-labelledby="about-industry">
           <h2 id="about-industry" className="font-display text-lg font-bold text-[#0f2744] dark:text-white">
