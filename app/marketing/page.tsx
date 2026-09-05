@@ -19,10 +19,8 @@ import {
   parseCreativeGroupParam,
   parseCreativeMoreParam,
 } from '@/src/features/creative-marketing-showcase/config/constants';
-import {
-  CreativeMarketingCatalog,
-  creativeMarketingListingQueryKey,
-} from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
+import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
+import { creativeMarketingListingQueryKey } from '@/src/features/creative-marketing-showcase/utils/query-keys';
 import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;

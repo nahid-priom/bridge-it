@@ -27,11 +27,24 @@ import type {
   SoftwareProjectDetail,
   SoftwareProjectScreen,
 } from '../types';
+import { isLegacySoftwareUrl, withCacheBust } from '../utils/resolve-software-asset';
+import { getPublicAssetUrl } from '@/src/features/catalog/utils/cover';
 
 const CARD_SELECT =
   'id, title, slug, short_description, feature_summary, category_id, category_name, category_slug, industry, industry_id, industry_slug, industry_name, canonical_path, badge, business_type, solution_group, software_type, platform_type, main_category_id, taxonomy_category_id, taxonomy_category_name, taxonomy_category_slug, child_category_id, child_category_name, child_category_slug, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, asset_version, rating_avg, review_count, created_at, updated_at, deleted_at, screen_count';
 
+function resolveSoftwareCardCoverUrl(
+  coverCardUrl: string | null,
+  assetVersion: number
+): string | null {
+  const raw = getPublicAssetUrl(coverCardUrl);
+  if (!raw || isLegacySoftwareUrl(raw)) return null;
+  return withCacheBust(raw, assetVersion);
+}
+
 function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
+  const cover_card_url = (row.cover_card_url as string | null) ?? null;
+  const asset_version = Number(row.asset_version ?? 1);
   return {
     id: String(row.id),
     title: String(row.title),
@@ -52,8 +65,9 @@ function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
     industry_name: (row.industry_name as string | null) ?? null,
     canonical_path: (row.canonical_path as string | null) ?? null,
     badge: (row.badge as string | null) ?? null,
-    cover_card_url: (row.cover_card_url as string | null) ?? null,
+    cover_card_url,
     cover_detail_url: (row.cover_detail_url as string | null) ?? null,
+    coverImageUrl: resolveSoftwareCardCoverUrl(cover_card_url, asset_version),
     starting_price: Number(row.starting_price ?? 0),
     price_suffix: String(row.price_suffix ?? ''),
     currency: String(row.currency ?? 'BDT'),
@@ -61,7 +75,7 @@ function mapCard(row: Record<string, unknown>): SoftwareProjectCard {
     popular: Boolean(row.popular),
     published: Boolean(row.published),
     sort_order: Number(row.sort_order ?? 0),
-    asset_version: Number(row.asset_version ?? 1),
+    asset_version,
     rating_avg: row.rating_avg != null ? Number(row.rating_avg) : undefined,
     review_count: row.review_count != null ? Number(row.review_count) : undefined,
     created_at: String(row.created_at ?? ''),
@@ -395,14 +409,17 @@ async function listSoftwareProjectCardsUncached(
 
   const sort = filters.sort ?? 'popular';
   if (sort === 'newest') {
-    query = query.order('created_at', { ascending: false });
+    query = query.order('created_at', { ascending: false }).order('id', { ascending: true });
   } else if (sort === 'price-asc') {
-    query = query.order('starting_price', { ascending: true, nullsFirst: false });
+    query = query
+      .order('starting_price', { ascending: true, nullsFirst: false })
+      .order('id', { ascending: true });
   } else {
     query = query
       .order('featured', { ascending: false })
       .order('sort_order', { ascending: true })
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: true });
   }
 
   const { data, count, error } = await query.range(offset, offset + pageSize - 1);

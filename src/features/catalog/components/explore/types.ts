@@ -1,5 +1,9 @@
 import type { CatalogCategoryRoot } from '../../types';
 
+/** Explore listing grids: 2-up from 320px (same density as home), full item list. */
+export const CATALOG_LISTING_GRID_CLASS =
+  'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-3';
+
 export type CatalogSidebarIndustry = {
   slug: string;
   name: string;

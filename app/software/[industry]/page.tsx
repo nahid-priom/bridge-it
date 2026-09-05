@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { listingHasSeoFilters } from '@/lib/seo/listing-index';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { SITE_URL } from '@/lib/site';
+import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import {
   CatalogAnalytics,
   CatalogFaqList,
@@ -23,11 +25,13 @@ import {
 import {
   parseSoftwareBusinessSizeParam,
   parseSoftwareSortParam,
+  CATALOG_LISTING_GRID_CLASS,
 } from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { SOFTWARE_GALLERY_PAGE_SIZE } from '@/src/features/software-showcase/config/constants';
 import { specializedSlugsForIndustry } from '@/src/features/software-showcase/config/specialized-solutions';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
+import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
 import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
 import { MaturityCompareBlock } from '@/src/features/software-showcase/public/MaturityCompareBlock';
 import { MaturityPackagesSection } from '@/src/features/software-showcase/public/MaturityPackagesSection';
@@ -125,15 +129,19 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
   const businessSizes = parseSoftwareBusinessSizeParam(first(sp.size));
   const sort = parseSoftwareSortParam(first(sp.sort));
 
+  const isLadderIndustry = industry.slug === 'garments' || industry.slug === 'feed-mill';
+  const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular'));
+  const useSectionedListing = isLadderIndustry && !hasActiveFilters && page === 1;
+  const pageSize = useSectionedListing
+    ? Math.max(SOFTWARE_GALLERY_PAGE_SIZE, 24)
+    : SOFTWARE_GALLERY_PAGE_SIZE;
+
   const [result, faqs, industries] = await Promise.all([
     listSoftwareProjectCards({
       q: q || undefined,
       industrySlug: industry.slug,
       page,
-      pageSize:
-        industry.slug === 'garments' || industry.slug === 'feed-mill'
-          ? Math.max(SOFTWARE_GALLERY_PAGE_SIZE, 24)
-          : SOFTWARE_GALLERY_PAGE_SIZE,
+      pageSize,
       minPrice: priceBounds.minPrice,
       maxPrice: priceBounds.maxPrice,
       businessSizes: businessSizes.length ? businessSizes : undefined,
@@ -175,10 +183,28 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
     industry.seo_intro?.trim() ||
     `${industry.name} software helps Bangladesh businesses run operations with clearer inventory, production, and reporting — without monthly SaaS lock-in.`;
 
-  const isLadderIndustry = industry.slug === 'garments' || industry.slug === 'feed-mill';
-  const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular'));
   const specializedSlugs = specializedSlugsForIndustry(industry.slug);
-  const useSectionedListing = isLadderIndustry && !hasActiveFilters && page === 1;
+
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
+  });
+  if (!useSectionedListing) {
+    queryClient.setQueryData(
+      softwareListingQueryKey({
+        q,
+        category: 'all',
+        child: 'all',
+        more: [],
+        page,
+        pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
+        industrySlug: industry.slug,
+        price: priceId ?? '',
+        size: businessSizes.length ? businessSizes.join(',') : '',
+        sort,
+      }),
+      result
+    );
+  }
 
   return (
     <>
@@ -207,29 +233,31 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
             <SpecializedSolutionsSection industrySlug={industry.slug} products={result.items} />
           </>
         ) : (
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <SoftwareCardSkeleton key={i} />
-                ))}
-              </div>
-            }
-          >
-            <SoftwareCatalog
-              initialFilters={{
-                q,
-                page,
-                price: priceId ?? '',
-                size: businessSizes.length ? businessSizes.join(',') : '',
-                sort,
-                industrySlug: industry.slug,
-              }}
-              initialData={result}
-              hideChrome
-              lockedIndustrySlug={industry.slug}
-            />
-          </Suspense>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <Suspense
+              fallback={
+                <div className={CATALOG_LISTING_GRID_CLASS}>
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <SoftwareCardSkeleton key={i} />
+                  ))}
+                </div>
+              }
+            >
+              <SoftwareCatalog
+                initialFilters={{
+                  q,
+                  page,
+                  price: priceId ?? '',
+                  size: businessSizes.length ? businessSizes.join(',') : '',
+                  sort,
+                  industrySlug: industry.slug,
+                }}
+                initialData={result}
+                hideChrome
+                lockedIndustrySlug={industry.slug}
+              />
+            </Suspense>
+          </HydrationBoundary>
         )}
 
         {!useSectionedListing && isLadderIndustry ? (

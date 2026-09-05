@@ -10,6 +10,7 @@ export { CatalogEmptyState } from './CatalogEmptyState';
 export { CatalogFaqList } from './CatalogFaqList';
 export { RelatedProducts } from './RelatedProducts';
 export { FeaturedBadge } from './FeaturedBadge';
+export { CatalogCoverImage } from './CatalogCoverImage';
 export { StarRating } from './StarRating';
 export { ProductReviews } from './ProductReviews';
 export { CatalogAnalytics } from './CatalogAnalytics';

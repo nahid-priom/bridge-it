@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import {
   resolveSoftwareCover,
@@ -103,7 +103,7 @@ function PremiumFallback({
     <div
       className={cn(
         'relative flex overflow-hidden',
-        compact ? 'min-h-[7.5rem] aspect-[16/10]' : aspect,
+        compact ? 'aspect-card' : aspect,
         'bg-gradient-to-br from-[#0f2744] via-[#132f52] to-[#1a3a5c]',
         className
       )}
@@ -140,6 +140,7 @@ function PremiumFallback({
 export function SoftwareShowcaseImage(props: (CoverProps | ScreenProps) & Common) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
   const { resolved, alt, eager, priority, sizes, aspect, className, imgClassName, fallbackTitle } =
     resolveProps(props);
 
@@ -150,6 +151,14 @@ export function SoftwareShowcaseImage(props: (CoverProps | ScreenProps) & Common
     setLoaded(false);
     setFailed(false);
   }, [src]);
+
+  useEffect(() => {
+    if (!src || failed) return;
+    const img = imgRef.current;
+    if (img?.complete && img.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, [src, failed]);
 
   if (!resolved || failed) {
     return (
@@ -179,7 +188,7 @@ export function SoftwareShowcaseImage(props: (CoverProps | ScreenProps) & Common
       ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        key={src}
+        ref={imgRef}
         src={src}
         alt={alt}
         width={resolved.width}

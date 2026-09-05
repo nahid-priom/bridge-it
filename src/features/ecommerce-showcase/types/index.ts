@@ -124,6 +124,10 @@ export type EcommerceProjectCard = {
   canonical_path?: string | null;
   cover_image_url: string | null;
   cover_fallback_url: string | null;
+  /** Canonical AVIF (or primary) cover for listing cards. */
+  coverImageUrl: string | null;
+  /** WebP format pair only — not an alternate cover source. */
+  coverImageFallbackUrl: string | null;
   starting_price: number;
   currency: string;
   featured: boolean;

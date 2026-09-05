@@ -15,7 +15,7 @@ export function CategoryHeader({
   headingId: string;
 }) {
   return (
-    <div className="mb-5 flex flex-col gap-2 md:mb-7 md:flex-row md:items-end md:justify-between md:gap-6">
+    <div className="mb-3 flex flex-col gap-1.5 md:mb-7 md:flex-row md:items-end md:justify-between md:gap-6">
       <div className="min-w-0 text-left">
         <h3
           id={headingId}

@@ -1,15 +1,16 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
 import { useReportCatalogTotal } from '@/src/features/catalog/components/explore/CatalogResultsContext';
 import { cn } from '@/lib/cn';
 import {
+  CATALOG_LISTING_GRID_CLASS,
   parseSoftwareBusinessSizeParam,
   parseSoftwarePriceParam,
   parseSoftwareSortParam,
@@ -26,39 +27,15 @@ import {
   type SoftwareMoreFilterId,
 } from '../config/constants';
 import type { SoftwareListResult } from '../types';
+import {
+  softwareListingQueryKey,
+  type SoftwareListingQueryFilters,
+} from '../utils/query-keys';
 import { SoftwareCard, SoftwareCardSkeleton } from './SoftwareCard';
 
-const SOFTWARE_LISTING_KEY = 'softwareCollection' as const;
+export { softwareListingQueryKey };
 
-type CatalogFilters = {
-  q: string;
-  category: string;
-  child: string;
-  more: SoftwareMoreFilterId[];
-  page: number;
-  industrySlug: string;
-  price: string;
-  size: string;
-  sort: SoftwareSortId;
-};
-
-export function softwareListingQueryKey(filters: CatalogFilters & { pageSize: number }) {
-  return [
-    SOFTWARE_LISTING_KEY,
-    {
-      q: filters.q || '',
-      category: filters.category || 'all',
-      child: filters.child || 'all',
-      more: filters.more.slice().sort().join(','),
-      page: filters.page,
-      pageSize: filters.pageSize,
-      industrySlug: filters.industrySlug || '',
-      price: filters.price || '',
-      size: filters.size || '',
-      sort: filters.sort || 'popular',
-    },
-  ] as const;
-}
+type CatalogFilters = Omit<SoftwareListingQueryFilters, 'pageSize'>;
 
 async function fetchListing(
   params: CatalogFilters & { pageSize: number; minPrice?: number; maxPrice?: number }
@@ -83,7 +60,7 @@ async function fetchListing(
 function SoftwareGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div
-      className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 xl:grid-cols-3"
+      className={CATALOG_LISTING_GRID_CLASS}
       aria-busy="true"
       aria-label="Loading software"
     >
@@ -255,9 +232,53 @@ export function SoftwareCatalog({
     staleTime: STALE_PUBLIC_LISTING,
   });
 
+  const queryClient = useQueryClient();
   const items = (data?.items ?? []).filter((p) => !exclude.has(p.slug));
   const total = Math.max(0, (data?.total ?? 0) - (exclude.size ? exclude.size : 0));
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  useEffect(() => {
+    if (!data || page >= totalPages) return;
+    const nextFilters = {
+      q,
+      category: industrySlug ? 'all' : category,
+      child: industrySlug ? 'all' : child,
+      more: industrySlug ? [] : more,
+      page: page + 1,
+      pageSize,
+      industrySlug,
+      price,
+      size,
+      sort,
+    };
+    void queryClient.prefetchQuery({
+      queryKey: softwareListingQueryKey(nextFilters),
+      queryFn: () =>
+        fetchListing({
+          ...nextFilters,
+          minPrice: priceBounds.minPrice,
+          maxPrice: priceBounds.maxPrice,
+        }),
+      staleTime: STALE_PUBLIC_LISTING,
+    });
+  }, [
+    data,
+    page,
+    totalPages,
+    q,
+    category,
+    child,
+    more,
+    pageSize,
+    industrySlug,
+    price,
+    size,
+    sort,
+    priceBounds.minPrice,
+    priceBounds.maxPrice,
+    queryClient,
+  ]);
+
   const hasFilters = Boolean(
     q ||
       (!industrySlug && category && category !== 'all') ||
@@ -322,7 +343,8 @@ export function SoftwareCatalog({
       ) : (
         <div
           className={cn(
-            'grid grid-cols-1 gap-5 transition-opacity duration-200 motion-reduce:transition-none md:grid-cols-2 md:gap-6 xl:grid-cols-3',
+            CATALOG_LISTING_GRID_CLASS,
+            'transition-opacity duration-200 motion-reduce:transition-none',
             isFilterRefreshing && 'opacity-60'
           )}
           aria-busy={isFilterRefreshing || undefined}
@@ -333,6 +355,7 @@ export function SoftwareCatalog({
               project={project}
               eager={index < 3}
               priority={index === 0}
+              variant="home"
             />
           ))}
         </div>

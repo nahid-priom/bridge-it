@@ -12,7 +12,7 @@ import { fallbackRatingFromSlug } from '@/src/features/catalog/types/reviews';
 import { softwareIndustryForProduct } from '@/src/features/catalog/config/software-industry-map';
 import { cardElaboration } from '@/src/features/catalog/utils/card-elaboration';
 import type { SoftwareProjectCard } from '../types';
-import { SoftwareShowcaseImage } from './SoftwareShowcaseImage';
+import { CatalogCoverImage } from '@/src/features/catalog/components/CatalogCoverImage';
 
 export function softwareDetailUrl(
   slug: string,
@@ -82,11 +82,13 @@ export function SoftwareCard({
         >
           <div className="relative overflow-hidden rounded-t-xl">
             {project.featured ? <FeaturedBadge /> : null}
-            <SoftwareShowcaseImage
-              kind="card"
-              project={project}
+            <CatalogCoverImage
+              src={project.coverImageUrl}
+              alt={`${project.title} project preview`}
+              emptyTitle={project.title}
               eager={loadEager}
               priority={priority}
+              fit="contain"
               sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 320px) 50vw, 100vw"
               className="w-full"
               imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
@@ -97,31 +99,13 @@ export function SoftwareCard({
             />
           </div>
           <div className="flex flex-1 flex-col gap-1 border-t border-border-subtle/70 px-2.5 py-2 sm:gap-1.5 sm:px-3 sm:py-2.5">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <h4 className="font-display text-[0.8125rem] font-bold leading-tight tracking-[-0.02em] text-text-primary line-clamp-1 sm:text-sm">
-                  {project.title}
-                </h4>
-                <p className="mt-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.06em] text-text-muted line-clamp-1">
-                  {categoryLabel}
-                </p>
-              </div>
-              <span
-                aria-hidden
-                className={cn(
-                  'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full sm:h-8 sm:w-8',
-                  'border border-border-subtle bg-background-soft text-text-primary',
-                  'transition-[transform,background-color,border-color,box-shadow,color] duration-300',
-                  'group-hover:translate-x-0.5 group-hover:border-[#2563eb]/55 group-hover:bg-[#2563eb] group-hover:text-white',
-                  'group-hover:shadow-[0_0_12px_rgba(37,99,235,0.35)]',
-                  'motion-reduce:transition-none motion-reduce:group-hover:translate-x-0'
-                )}
-              >
-                <ArrowRight className="h-3.5 w-3.5" />
-              </span>
+            <div className="flex min-h-[2.5em] items-center">
+              <h4 className="font-display text-[0.8125rem] font-bold leading-[1.25] tracking-[-0.02em] text-text-primary line-clamp-2 sm:text-sm">
+                {project.title}
+              </h4>
             </div>
             <StarRating rating={ratingAvg} reviewCount={reviewCount} size="xs" />
-            <p className="text-[0.6875rem] leading-snug text-text-secondary line-clamp-1 sm:text-xs">
+            <p className="min-h-[2.5em] text-[0.6875rem] leading-[1.25] text-text-secondary line-clamp-2 sm:text-xs">
               {elaboration}
             </p>
           </div>
@@ -140,11 +124,13 @@ export function SoftwareCard({
         onFocus={prefetchDetail}
       >
         {project.featured ? <FeaturedBadge /> : null}
-        <SoftwareShowcaseImage
-          kind="card"
-          project={project}
+        <CatalogCoverImage
+          src={project.coverImageUrl}
+          alt={`${project.title} project preview`}
+          emptyTitle={project.title}
           eager={loadEager}
           priority={priority}
+          fit="contain"
           className="h-full w-full"
           imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />

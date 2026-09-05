@@ -55,7 +55,7 @@ export function PortfolioExperience({
   return (
     <div id="explore-our-work">
       <PortfolioIntro />
-      <SectionContainer>
+      <SectionContainer className="hidden md:block">
         <CategoryFilter active={filter} onChange={handleFilterChange} />
       </SectionContainer>
 

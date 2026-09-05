@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { cn, focusVisibleRing } from '@/lib/cn';
+import { cn, focusVisibleInput, focusVisibleRing } from '@/lib/cn';
 import type { CatalogCategoryRoot } from '../../types';
 import { CatalogSidebar } from './CatalogSidebar';
-import type { CatalogSidebarIndustry } from './types';
+import {
+  catalogSearchPlaceholder,
+  parseSoftwareSortParam,
+  SOFTWARE_SORT_OPTIONS,
+  type CatalogSidebarIndustry,
+  type SoftwareSortId,
+} from './types';
 
 export function MobileFilterDrawer({
   open,
@@ -24,6 +30,17 @@ export function MobileFilterDrawer({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const urlQ = (searchParams.get('q') ?? '').trim();
+  const urlSort = parseSoftwareSortParam(searchParams.get('sort'));
+  const [searchInput, setSearchInput] = useState(urlQ);
+  const [sort, setSort] = useState<SoftwareSortId>(urlSort);
+
+  useEffect(() => {
+    if (!open) return;
+    setSearchInput(urlQ);
+    setSort(urlSort);
+  }, [open, urlQ, urlSort]);
 
   useEffect(() => {
     if (!open) return;
@@ -45,6 +62,30 @@ export function MobileFilterDrawer({
 
   if (!open) return null;
 
+  const industryName = activeIndustrySlug
+    ? industries.find((i) => i.slug === activeIndustrySlug)?.name
+    : null;
+  const placeholder = catalogSearchPlaceholder(activeRoot, industryName);
+  const searchId = `catalog-filter-search-${activeRoot}`;
+  const sortId = `catalog-filter-sort-${activeRoot}`;
+
+  const applyQueryFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    const nextQ = searchInput.trim();
+    if (nextQ) params.set('q', nextQ);
+    else params.delete('q');
+
+    if (activeRoot === 'software') {
+      if (!sort || sort === 'popular') params.delete('sort');
+      else params.set('sort', sort);
+    }
+
+    params.delete('page');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    onClose();
+  };
+
   const clearQueryFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('view');
@@ -59,9 +100,18 @@ export function MobileFilterDrawer({
     params.delete('child');
     params.delete('solutionGroup');
     const qs = params.toString();
+    setSearchInput('');
+    setSort('popular');
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     onClose();
   };
+
+  const fieldClass = cn(
+    focusVisibleInput,
+    'h-10 w-full rounded-xl border border-border-subtle bg-white px-3 text-sm text-text-primary',
+    'dark:bg-[#0f2744] dark:text-white dark:border-white/15',
+    'scheme-light dark:scheme-dark'
+  );
 
   return (
     <div className="fixed inset-0 z-[70] lg:hidden" role="dialog" aria-modal="true" aria-label="Filters">
@@ -88,7 +138,50 @@ export function MobileFilterDrawer({
             <X className="h-4 w-4" />
           </button>
         </div>
+
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+          <div className="mb-5 space-y-3 border-b border-border-subtle pb-5">
+            <div>
+              <label htmlFor={searchId} className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                Search
+              </label>
+              <input
+                id={searchId}
+                type="search"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applyQueryFilters();
+                  }
+                }}
+                placeholder={placeholder}
+                className={fieldClass}
+              />
+            </div>
+
+            {activeRoot === 'software' ? (
+              <div>
+                <label htmlFor={sortId} className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  Sort
+                </label>
+                <select
+                  id={sortId}
+                  value={sort}
+                  onChange={(e) => setSort(parseSoftwareSortParam(e.target.value))}
+                  className={cn(fieldClass, 'font-medium')}
+                >
+                  {SOFTWARE_SORT_OPTIONS.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+          </div>
+
           <CatalogSidebar
             activeRoot={activeRoot}
             activeIndustrySlug={activeIndustrySlug}
@@ -96,6 +189,7 @@ export function MobileFilterDrawer({
             onNavigate={onClose}
           />
         </div>
+
         <div className="sticky bottom-0 flex gap-2 border-t border-border-subtle bg-background px-4 py-3">
           <button
             type="button"
@@ -109,7 +203,7 @@ export function MobileFilterDrawer({
           </button>
           <button
             type="button"
-            onClick={onClose}
+            onClick={applyQueryFilters}
             className={cn(
               focusVisibleRing,
               'flex-1 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1d4ed8]'

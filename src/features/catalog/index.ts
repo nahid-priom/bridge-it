@@ -54,6 +54,8 @@ export {
 } from './seo/breadcrumbs';
 
 export { catalogKeys } from './utils/query-keys';
+export { getPublicAssetUrl } from './utils/cover';
+export type { CatalogCoverFields } from './utils/cover';
 export { categoryPath, industryPath, normalizeCatalogPath, productPath } from './utils/paths';
 
 export {
@@ -68,6 +70,7 @@ export {
   CatalogSidebar,
   CatalogToolbar,
   FeaturedBadge,
+  CatalogCoverImage,
   IndustryCard,
   IndustryGrid,
   PackageBadge,

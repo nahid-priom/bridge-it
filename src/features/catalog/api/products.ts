@@ -11,6 +11,7 @@ import type {
   CatalogProductRef,
 } from '../types';
 import { getIndustryByPath } from './industries';
+import { getPublicAssetUrl } from '../utils/cover';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -33,9 +34,9 @@ function productSelect(root: CatalogCategoryRoot): string {
 
 function coverFromRow(root: CatalogCategoryRoot, row: ProductTableRow): string | null {
   if (root === 'websites') {
-    return (row.cover_image_url as string | null) ?? null;
+    return getPublicAssetUrl((row.cover_image_url as string | null) ?? null);
   }
-  return (row.cover_card_url as string | null) ?? null;
+  return getPublicAssetUrl((row.cover_card_url as string | null) ?? null);
 }
 
 function mapProductRef(
@@ -43,6 +44,7 @@ function mapProductRef(
   row: ProductTableRow,
   industry?: { id: string; slug: string; name: string } | null
 ): CatalogProductRef {
+  const cover_url = coverFromRow(root, row);
   return {
     kind: root,
     id: String(row.id),
@@ -53,7 +55,8 @@ function mapProductRef(
     industry_name: industry?.name ?? null,
     canonical_path: (row.canonical_path as string | null) ?? null,
     short_description: (row.short_description as string | null) ?? null,
-    cover_url: coverFromRow(root, row),
+    cover_url,
+    coverImageUrl: cover_url,
     starting_price: Number(row.starting_price ?? 0),
     price_suffix: String(row.price_suffix ?? ''),
     currency: String(row.currency ?? 'BDT'),

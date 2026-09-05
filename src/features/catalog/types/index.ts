@@ -38,6 +38,8 @@ export interface CatalogProductRef {
   canonical_path: string | null;
   short_description: string | null;
   cover_url: string | null;
+  /** Normalized listing cover (same as cover_url; preferred for CatalogCoverImage). */
+  coverImageUrl?: string | null;
   starting_price: number;
   price_suffix: string;
   currency: string;

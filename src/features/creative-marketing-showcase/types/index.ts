@@ -98,6 +98,8 @@ export type CreativeMarketingProjectCard = {
   canonical_path?: string | null;
   cover_card_url: string | null;
   cover_detail_url: string | null;
+  /** Canonical cover for listing cards. */
+  coverImageUrl: string | null;
   starting_price: number;
   price_suffix: string;
   currency: string;

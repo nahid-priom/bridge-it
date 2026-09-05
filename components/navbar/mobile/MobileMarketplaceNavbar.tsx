@@ -21,6 +21,7 @@ type MobileMarketplaceNavbarProps = {
   cartCount?: number;
   messageCount?: number;
   isScrolled?: boolean;
+  isTransparent?: boolean;
   isHeroMode?: boolean;
 };
 
@@ -92,8 +93,10 @@ export function MobileMarketplaceNavbar({
   cartCount = 0,
   messageCount = 0,
   isScrolled = false,
+  isTransparent = false,
   isHeroMode = false,
 }: MobileMarketplaceNavbarProps) {
+  void isHeroMode;
   const isMenuOpen = useStore((s) => s.isMenuOpen);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -130,9 +133,9 @@ export function MobileMarketplaceNavbar({
         className={cn(
           'mobile-premium-navbar-shell relative min-w-0 w-full',
           'rounded-none border-0 py-2 min-h-[64px] max-h-[68px]',
-          'transition-[box-shadow,backdrop-filter,transform] duration-300',
-          isScrolled && 'mobile-premium-navbar-shell--scrolled',
-          isHeroMode && 'mobile-premium-navbar-shell--hero'
+          'transition-[background,box-shadow,border-color,backdrop-filter] duration-500 ease-out',
+          isTransparent ? 'mobile-premium-navbar-shell--transparent' : 'mobile-premium-navbar-shell--scrolled',
+          isScrolled && 'mobile-premium-navbar-shell--scrolled'
         )}
         aria-label="Mobile navigation"
       >

@@ -26,7 +26,7 @@ const FILTERS: { id: FilterId; label: string; hubHref?: string }[] = [
 ];
 
 const GRID_CLASS =
-  'grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
+  'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4';
 
 export function ExploreAllWork({ items }: { items: ExploreWorkItem[] }) {
   const [filter, setFilter] = useState<FilterId>('all');

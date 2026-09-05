@@ -22,6 +22,6 @@ export function SectionContainer({
   );
 }
 
-/** Shared vertical rhythm for portfolio category blocks. */
+/** Shared vertical rhythm for portfolio category blocks — tighter on mobile so sections merge. */
 export const portfolioCategorySpacing =
-  'scroll-mt-[calc(var(--header-offset)+0.75rem)] py-12 md:py-16 lg:py-20';
+  'scroll-mt-[calc(var(--header-offset)+0.75rem)] py-6 md:py-16 lg:py-20';

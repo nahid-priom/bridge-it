@@ -13,7 +13,7 @@ export function HomepageHero({ className }: { className?: string }) {
       aria-labelledby="homepage-hero-heading"
     >
       <HeroDecorations />
-      <div className="relative z-[1] mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] pb-6 sm:px-6 sm:pb-8 lg:px-8 lg:pt-[calc(var(--header-offset)+1.25rem)] lg:pb-10 xl:px-10">
+      <div className="relative z-[1] mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+1.5rem)] pb-6 sm:px-6 sm:pb-8 lg:px-8 lg:pt-[calc(var(--header-offset)+1.25rem)] lg:pb-10 xl:px-10">
         <div className="mx-auto flex w-full min-w-0 max-w-[48rem] flex-col items-center lg:max-w-[56rem]">
           <HeroContent />
           <HeroActions className="mt-6 w-full sm:mt-7" />

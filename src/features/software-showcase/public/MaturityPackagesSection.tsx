@@ -1,6 +1,7 @@
 import type { SoftwareProjectCard } from '../types';
 import { SoftwareCard } from './SoftwareCard';
 import { isMaturitySlug } from '../config/specialized-solutions';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 
 /** Section 1 grid: Complete ERP maturity packages only. */
 export function MaturityPackagesSection({
@@ -32,10 +33,10 @@ export function MaturityPackagesSection({
         {title}
       </h2>
       <p className="mt-1 max-w-2xl text-sm text-text-secondary">{intro}</p>
-      <ul className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <ul className={`mt-5 ${CATALOG_LISTING_GRID_CLASS}`}>
         {packages.map((project) => (
           <li key={project.id}>
-            <SoftwareCard project={project} />
+            <SoftwareCard project={project} variant="home" />
           </li>
         ))}
       </ul>

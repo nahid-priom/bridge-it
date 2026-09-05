@@ -91,7 +91,7 @@ export default async function WebsitesPage({ searchParams }: { searchParams: Sea
       limit: LISTING_LIMIT,
       offset: 0,
     }),
-    result
+    { pages: [result], pageParams: [0] }
   );
 
   const jsonLd = {

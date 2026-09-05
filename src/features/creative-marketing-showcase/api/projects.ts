@@ -19,11 +19,13 @@ import type {
   CreativeMarketingProjectCard,
   CreativeMarketingProjectDetail,
 } from '../types';
+import { getPublicAssetUrl } from '@/src/features/catalog/utils/cover';
 
 const CARD_SELECT =
   'id, title, slug, short_description, outcome_line, service_group, service_type, service_subcategory, target_business, pricing_model, industry_id, industry_slug, industry_name, canonical_path, cover_card_url, cover_detail_url, starting_price, price_suffix, currency, featured, popular, published, sort_order, created_at, updated_at, deleted_at, asset_count';
 
 function mapCard(row: Record<string, unknown>): CreativeMarketingProjectCard {
+  const cover_card_url = getPublicAssetUrl((row.cover_card_url as string | null) ?? null);
   return {
     id: String(row.id),
     title: String(row.title),
@@ -39,8 +41,9 @@ function mapCard(row: Record<string, unknown>): CreativeMarketingProjectCard {
     industry_slug: (row.industry_slug as string | null) ?? null,
     industry_name: (row.industry_name as string | null) ?? null,
     canonical_path: (row.canonical_path as string | null) ?? null,
-    cover_card_url: (row.cover_card_url as string | null) ?? null,
-    cover_detail_url: (row.cover_detail_url as string | null) ?? null,
+    cover_card_url,
+    cover_detail_url: getPublicAssetUrl((row.cover_detail_url as string | null) ?? null),
+    coverImageUrl: cover_card_url,
     starting_price: Number(row.starting_price ?? 0),
     price_suffix: String(row.price_suffix ?? ''),
     currency: String(row.currency ?? 'BDT'),
@@ -182,6 +185,7 @@ async function listCreativeMarketingCardsUncached(
     .order('featured', { ascending: false })
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: true })
     .range(offset, offset + pageSize - 1);
 
   if (error) {

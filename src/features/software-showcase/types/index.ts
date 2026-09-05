@@ -214,6 +214,8 @@ export type SoftwareProjectCard = {
   badge?: string | null;
   cover_card_url: string | null;
   cover_detail_url: string | null;
+  /** Canonical resolved cover for listing cards (legacy-rejected + cache-busted). */
+  coverImageUrl: string | null;
   starting_price: number;
   price_suffix: string;
   currency: string;

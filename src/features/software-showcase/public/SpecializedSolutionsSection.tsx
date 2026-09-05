@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import {
   specializedSlugsForIndustry,
 } from '../config/specialized-solutions';
@@ -38,10 +39,10 @@ export function SpecializedSolutionsSection({
         {title}
       </h2>
       <p className="mt-1 max-w-2xl text-sm text-text-secondary">{intro}</p>
-      <ul className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <ul className={`mt-5 ${CATALOG_LISTING_GRID_CLASS}`}>
         {specialized.map((project) => (
           <li key={project.id}>
-            <SoftwareCard project={project} />
+            <SoftwareCard project={project} variant="home" />
           </li>
         ))}
       </ul>

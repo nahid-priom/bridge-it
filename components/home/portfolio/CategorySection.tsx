@@ -26,7 +26,7 @@ export function CategorySection({
       className={cn(portfolioCategorySpacing, className)}
     >
       <SectionContainer>
-        <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-400 sm:text-xs">
+        <p className="mb-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-400 sm:mb-2 sm:text-xs">
           {section.eyebrow}
         </p>
         <CategoryHeader

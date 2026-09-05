@@ -31,10 +31,8 @@ import {
   SOFTWARE_GALLERY_PAGE_SIZE,
   SOFTWARE_PRIMARY_FILTERS,
 } from '@/src/features/software-showcase/config/constants';
-import {
-  SoftwareCatalog,
-  softwareListingQueryKey,
-} from '@/src/features/software-showcase/public/SoftwareCatalog';
+import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
+import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
 import { CatalogGridSkeleton } from '@/src/components/skeletons/CatalogCardSkeleton';
 
 export const revalidate = 60;

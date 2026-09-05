@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import type { EcommerceProjectCard } from '../types';
 import { ProjectCard } from './ProjectCard';
 
@@ -46,7 +47,7 @@ export function ProjectGrid({
       className={cn(
         columns === 'home'
           ? 'grid grid-cols-1 gap-2.5 min-[320px]:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 max-md:[&>*:nth-child(n+5)]:hidden'
-          : 'grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3'
+          : CATALOG_LISTING_GRID_CLASS
       )}
       aria-busy={busy || undefined}
     >

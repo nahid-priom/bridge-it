@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING, showcaseListingQueryKey } from '@/lib/query/client';
 import { ProjectGridSkeleton } from '@/src/components/skeletons/ProjectGridSkeleton';
@@ -65,52 +65,68 @@ export function WebsitesCatalog({
   const q = (searchParams.get('q') ?? initialFilters.q).trim();
   const viewKey = serializeFilterList(views) ?? 'all';
   const categoryKey = industrySlug || serializeFilterList(categories) || 'all';
-
-  const [extraItems, setExtraItems] = useState<ShowcaseListResult['items']>([]);
-  const [loadingMore, setLoadingMore] = useState(false);
-
-  useEffect(() => {
-    setExtraItems([]);
-  }, [viewKey, categoryKey, q, industrySlug]);
-
-  const queryKey = showcaseListingQueryKey({
-    q,
-    category: categoryKey,
-    view: viewKey,
-    limit: LISTING_LIMIT,
-    offset: 0,
-  });
+  const categoryParam = industrySlug ? '' : serializeFilterList(categories) ?? '';
+  const viewParam = serializeFilterList(views) ?? '';
 
   const matchesInitial =
     q === initialFilters.q &&
     categoryKey === (initialFilters.industrySlug || initialFilters.category || 'all') &&
     viewKey === (initialFilters.view || 'all');
 
-  const { data, isFetching, isError, isPending, refetch, isPlaceholderData } = useQuery({
-    queryKey,
-    queryFn: () =>
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    isError,
+    isPending,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: showcaseListingQueryKey({
+      q,
+      category: categoryKey,
+      view: viewKey,
+      limit: LISTING_LIMIT,
+      offset: 0,
+    }),
+    queryFn: ({ pageParam }) =>
       fetchListing({
         q,
-        category: industrySlug ? '' : serializeFilterList(categories) ?? '',
-        view: serializeFilterList(views) ?? '',
+        category: categoryParam,
+        view: viewParam,
         industrySlug: industrySlug || undefined,
+        offset: pageParam,
       }),
-    initialData: matchesInitial ? initialData : undefined,
-    placeholderData: keepPreviousData,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce((sum, page) => sum + page.items.length, 0);
+      if (loaded >= lastPage.total) return undefined;
+      return loaded;
+    },
+    initialData: matchesInitial
+      ? {
+          pages: [initialData],
+          pageParams: [0],
+        }
+      : undefined,
     staleTime: STALE_PUBLIC_LISTING,
   });
 
-  const items = [...(data?.items ?? []), ...extraItems];
-  const total = data?.total ?? 0;
+  const items = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data]
+  );
+  const total = data?.pages[0]?.total ?? 0;
   const hasFilters = Boolean(q || views.length || categories.length || industrySlug);
   const showGridSkeleton = isPending && !data;
-  const isFilterRefreshing = Boolean(isFetching && isPlaceholderData && data);
+  const isFilterRefreshing = Boolean(isFetching && !isFetchingNextPage && data);
   const showEmpty = !showGridSkeleton && !isFetching && !isError && items.length === 0 && Boolean(data);
-  const remaining = total - items.length;
+  const remaining = Math.max(0, total - items.length);
   const showingFrom = items.length === 0 ? 0 : 1;
   const showingTo = items.length;
 
-  useReportCatalogTotal(data?.total, Boolean(data) && !showGridSkeleton);
+  useReportCatalogTotal(total || undefined, Boolean(data) && !showGridSkeleton);
 
   return (
     <div className={hideChrome ? undefined : 'mt-2 md:mt-3'}>
@@ -124,13 +140,13 @@ export function WebsitesCatalog({
             'transition-opacity duration-200 motion-reduce:transition-none',
             isFilterRefreshing && 'opacity-60'
           )}
-          aria-busy={isFilterRefreshing || loadingMore || undefined}
+          aria-busy={isFilterRefreshing || isFetchingNextPage || undefined}
         >
           <ProjectGrid
             projects={items}
             eagerCount={3}
             priorityFirst
-            busy={loadingMore || isFilterRefreshing}
+            busy={isFetchingNextPage || isFilterRefreshing}
             emptyTitle={hasFilters ? 'No templates match your filters' : 'No website templates yet'}
             emptyDescription={
               hasFilters
@@ -162,29 +178,15 @@ export function WebsitesCatalog({
               ? 'Showing 0 templates'
               : `Showing ${showingFrom}–${showingTo} of ${total}`}
           </p>
-          {remaining > 0 ? (
+          {hasNextPage ? (
             <button
               type="button"
-              disabled={loadingMore}
-              aria-busy={loadingMore || undefined}
+              disabled={isFetchingNextPage}
+              aria-busy={isFetchingNextPage || undefined}
               className="inline-flex min-w-[10.5rem] items-center justify-center gap-2 rounded-xl border border-border-subtle px-6 py-3 text-sm font-semibold disabled:opacity-60"
-              onClick={async () => {
-                setLoadingMore(true);
-                try {
-                  const next = await fetchListing({
-                    q,
-                    category: industrySlug ? '' : serializeFilterList(categories) ?? '',
-                    view: serializeFilterList(views) ?? '',
-                    industrySlug: industrySlug || undefined,
-                    offset: items.length,
-                  });
-                  setExtraItems((current) => [...current, ...next.items]);
-                } finally {
-                  setLoadingMore(false);
-                }
-              }}
+              onClick={() => void fetchNextPage()}
             >
-              {loadingMore ? (
+              {isFetchingNextPage ? (
                 <InlineSpinner size={18} label="Loading more templates" />
               ) : (
                 `Load more (${remaining})`
@@ -194,7 +196,7 @@ export function WebsitesCatalog({
         </nav>
       ) : null}
 
-      {loadingMore ? (
+      {isFetchingNextPage ? (
         <div className="mt-6">
           <ProjectGridSkeleton count={Math.min(3, remaining)} />
         </div>

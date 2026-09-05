@@ -1,8 +1,10 @@
 import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { buildPageMetadata } from '@/lib/metadata';
 import { JsonLd } from '@/components/layout/JsonLd';
 import { SITE_URL } from '@/lib/site';
+import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import {
   CatalogAnalytics,
   CatalogFaqList,
@@ -16,9 +18,11 @@ import {
   lookupRedirect,
   productPath,
 } from '@/src/features/catalog';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { listCreativeMarketingCards } from '@/src/features/creative-marketing-showcase/api/projects';
 import { CREATIVE_MARKETING_GALLERY_PAGE_SIZE } from '@/src/features/creative-marketing-showcase/config/constants';
 import { CreativeMarketingCatalog } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCatalog';
+import { creativeMarketingListingQueryKey } from '@/src/features/creative-marketing-showcase/utils/query-keys';
 import { CreativeMarketingCardSkeleton } from '@/src/features/creative-marketing-showcase/public/CreativeMarketingCard';
 
 export const revalidate = 60;
@@ -105,6 +109,21 @@ export default async function MarketingIndustryPage({ params, searchParams }: Pr
 
   const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
 
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { staleTime: STALE_PUBLIC_LISTING } },
+  });
+  queryClient.setQueryData(
+    creativeMarketingListingQueryKey({
+      q,
+      group: 'all',
+      more: [],
+      page,
+      pageSize: CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
+      industrySlug: industry.slug,
+    }),
+    result
+  );
+
   return (
     <>
       <JsonLd data={jsonLd} />
@@ -124,22 +143,24 @@ export default async function MarketingIndustryPage({ params, searchParams }: Pr
         description={intro}
         resultCount={result.total}
       >
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <CreativeMarketingCardSkeleton key={i} />
-              ))}
-            </div>
-          }
-        >
-          <CreativeMarketingCatalog
-            initialFilters={{ q, page, industrySlug: industry.slug }}
-            initialData={result}
-            hideChrome
-            lockedIndustrySlug={industry.slug}
-          />
-        </Suspense>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Suspense
+            fallback={
+              <div className={CATALOG_LISTING_GRID_CLASS}>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <CreativeMarketingCardSkeleton key={i} />
+                ))}
+              </div>
+            }
+          >
+            <CreativeMarketingCatalog
+              initialFilters={{ q, page, industrySlug: industry.slug }}
+              initialData={result}
+              hideChrome
+              lockedIndustrySlug={industry.slug}
+            />
+          </Suspense>
+        </HydrationBoundary>
         <CatalogFaqList faqs={faqs} />
       </ExploreCatalogLayout>
     </>

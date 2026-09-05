@@ -5,12 +5,14 @@ import { usePathname } from 'next/navigation';
 import { ROUTES } from '@/lib/routes';
 import { useScrollThreshold } from '@/hooks/useScrollThreshold';
 
-const SCROLL_THRESHOLD = 140;
+const SCROLL_THRESHOLD = 24;
 
 export type FloatingNavbarState = {
-  /** Home (hero) page at top — minimal navbar, no search */
+  /** Home page at top — compact chrome (e.g. delayed search reveal) */
   isHeroMode: boolean;
-  /** Past scroll threshold — compact, solid navbar */
+  /** At page top — transparent shell so nav aligns with hero atmosphere */
+  isTransparent: boolean;
+  /** Past scroll threshold — sticky frosted surface */
   isScrolled: boolean;
   /** Reveal navbar search (desktop bar + mobile trigger) */
   showNavbarSearch: boolean;
@@ -28,20 +30,24 @@ export function useFloatingNavbar(
 
   const isHomeHeroRoute =
     pathname === heroPath || pathname === `${heroPath}/` || pathname === '';
-  const isHeroMode = isHomeHeroRoute && !isPastThreshold;
+  const isTransparent = !isPastThreshold;
+  const isHeroMode = isHomeHeroRoute && isTransparent;
   const showNavbarSearch = !isHeroMode;
 
   useEffect(() => {
     document.documentElement.dataset.navScrolled = isScrolled ? 'true' : 'false';
+    document.documentElement.dataset.navTransparent = isTransparent ? 'true' : 'false';
     document.documentElement.dataset.navHeroMode = isHeroMode ? 'true' : 'false';
     return () => {
       delete document.documentElement.dataset.navScrolled;
+      delete document.documentElement.dataset.navTransparent;
       delete document.documentElement.dataset.navHeroMode;
     };
-  }, [isScrolled, isHeroMode]);
+  }, [isScrolled, isTransparent, isHeroMode]);
 
   return {
     isHeroMode,
+    isTransparent,
     isScrolled,
     showNavbarSearch,
     scrollY,

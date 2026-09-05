@@ -18,10 +18,13 @@ import type {
   ShowcaseListFilters,
   ShowcaseListResult,
 } from '../types';
+import { getPublicAssetUrl } from '@/src/features/catalog/utils/cover';
 
 type Db = NonNullable<Awaited<ReturnType<typeof getServerClient>>>;
 
 function mapCard(row: Record<string, unknown>): EcommerceProjectCard {
+  const cover_image_url = getPublicAssetUrl((row.cover_image_url as string | null) ?? null);
+  const cover_fallback_url = getPublicAssetUrl((row.cover_fallback_url as string | null) ?? null);
   return {
     id: String(row.id),
     title: String(row.title),
@@ -35,8 +38,11 @@ function mapCard(row: Record<string, unknown>): EcommerceProjectCard {
     industry_slug: (row.industry_slug as string | null) ?? null,
     industry_name: (row.industry_name as string | null) ?? null,
     canonical_path: (row.canonical_path as string | null) ?? null,
-    cover_image_url: (row.cover_image_url as string | null) ?? null,
-    cover_fallback_url: (row.cover_fallback_url as string | null) ?? null,
+    cover_image_url,
+    cover_fallback_url,
+    coverImageUrl: cover_image_url ?? cover_fallback_url,
+    coverImageFallbackUrl:
+      cover_fallback_url && cover_fallback_url !== cover_image_url ? cover_fallback_url : null,
     starting_price: Number(row.starting_price ?? 0),
     currency: String(row.currency ?? 'BDT'),
     featured: Boolean(row.featured),
@@ -263,6 +269,7 @@ async function listProjectCardsUncached(
     .order('featured', { ascending: false })
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: true })
     .range(offset, offset + limit - 1);
 
   if (error) {

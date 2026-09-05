@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { Skeleton } from './Skeleton';
 
 /** Matches catalog ProjectCard / SoftwareCard / CreativeMarketingCard home layout. */
@@ -13,15 +14,17 @@ export function CatalogCardSkeleton({ className }: { className?: string }) {
     >
       <Skeleton rounded="none" className="aspect-card w-full rounded-none" />
       <div className="flex flex-1 flex-col gap-1 border-t border-border-subtle/70 px-2.5 py-2 sm:gap-1.5 sm:px-3 sm:py-2.5">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex min-h-[2.5em] items-center">
+          <div className="w-full space-y-1">
             <Skeleton className="h-3.5 w-3/4" />
-            <Skeleton className="h-2.5 w-16" />
+            <Skeleton className="h-3.5 w-1/2" />
           </div>
-          <Skeleton className="h-7 w-7 shrink-0 sm:h-8 sm:w-8" rounded="full" />
         </div>
         <Skeleton className="h-3 w-24" />
-        <Skeleton className="h-3 w-4/5" />
+        <div className="min-h-[2.5em] space-y-1">
+          <Skeleton className="h-3 w-4/5" />
+          <Skeleton className="h-3 w-3/5" />
+        </div>
       </div>
     </div>
   );
@@ -37,8 +40,7 @@ export function CatalogGridSkeleton({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 gap-5 min-[360px]:grid-cols-2 md:grid-cols-3 md:gap-6 xl:grid-cols-3',
-        'max-md:[&>*:nth-child(n+5)]:hidden',
+        CATALOG_LISTING_GRID_CLASS,
         className
       )}
       aria-busy="true"

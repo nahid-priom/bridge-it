@@ -9,6 +9,7 @@ export { TypeFilter } from './TypeFilter';
 export { PriceFilter } from './PriceFilter';
 export { BusinessSizeFilter } from './BusinessSizeFilter';
 export {
+  CATALOG_LISTING_GRID_CLASS,
   CATALOG_MOTHER_NAV,
   catalogSearchPlaceholder,
   parseSoftwareBusinessSizeParam,

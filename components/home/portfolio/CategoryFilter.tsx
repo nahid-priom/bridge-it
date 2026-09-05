@@ -14,7 +14,7 @@ export function CategoryFilter({
 }) {
   return (
     <div
-      className={cn('mt-5 md:mt-6', className)}
+      className={cn('mt-3 md:mt-6', className)}
       role="navigation"
       aria-label="Portfolio categories"
     >

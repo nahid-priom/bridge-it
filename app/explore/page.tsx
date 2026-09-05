@@ -108,7 +108,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Sear
         className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.10),_transparent_55%),linear-gradient(180deg,rgba(15,39,68,0.04),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top,_rgba(96,165,250,0.12),_transparent_55%),linear-gradient(180deg,rgba(15,39,68,0.35),transparent_70%)]"
       />
 
-      <div className="relative mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 xl:px-10">
+      <div className="relative mx-auto w-full max-w-[1480px] px-4 pt-[calc(var(--header-offset)+1.5rem)] sm:px-6 sm:pt-[calc(var(--header-offset)+0.75rem)] lg:px-8 xl:px-10">
         <header className="mx-auto max-w-3xl text-center">
           <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-400 sm:text-xs">
             Portfolio

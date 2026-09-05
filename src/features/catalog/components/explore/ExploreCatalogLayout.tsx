@@ -34,7 +34,7 @@ export function ExploreCatalogLayout({
 }) {
   return (
     <CatalogResultsProvider initialTotal={resultCount ?? null}>
-      <div className="mx-auto w-full max-w-[1480px] min-w-0 overflow-x-hidden px-4 pb-16 pt-[calc(var(--header-offset)+0.75rem)] sm:px-6 lg:px-8 xl:px-10">
+      <div className="mx-auto w-full max-w-[1480px] min-w-0 overflow-x-hidden px-4 pb-16 pt-[calc(var(--header-offset)+1.5rem)] sm:px-6 sm:pt-[calc(var(--header-offset)+0.75rem)] lg:px-8 xl:px-10">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(230px,22%)_minmax(0,1fr)] lg:gap-8 xl:gap-10">
           <div className="hidden min-w-0 max-w-[300px] lg:block">
             <div

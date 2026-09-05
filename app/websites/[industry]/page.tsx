@@ -110,7 +110,7 @@ export default async function WebsitesIndustryPage({ params, searchParams }: Pro
       limit: LISTING_LIMIT,
       offset: 0,
     }),
-    result
+    { pages: [result], pageParams: [0] }
   );
 
   const jsonLd = {

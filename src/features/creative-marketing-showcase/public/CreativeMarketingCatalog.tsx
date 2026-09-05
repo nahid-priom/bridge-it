@@ -1,13 +1,14 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ROUTES } from '@/lib/routes';
 import { STALE_PUBLIC_LISTING } from '@/lib/query/client';
 import { InlineSpinner } from '@/src/components/loading/InlineSpinner';
 import { useReportCatalogTotal } from '@/src/features/catalog/components/explore/CatalogResultsContext';
+import { CATALOG_LISTING_GRID_CLASS } from '@/src/features/catalog/components/explore/types';
 import { cn } from '@/lib/cn';
 import {
   CREATIVE_MARKETING_GALLERY_PAGE_SIZE,
@@ -17,31 +18,15 @@ import {
   type CreativeMoreFilterId,
 } from '../config/constants';
 import type { CreativeMarketingListResult } from '../types';
+import {
+  creativeMarketingListingQueryKey,
+  type CreativeMarketingListingQueryFilters,
+} from '../utils/query-keys';
 import { CreativeMarketingCard, CreativeMarketingCardSkeleton } from './CreativeMarketingCard';
 
-const LISTING_KEY = 'creative-marketing-listing' as const;
+export { creativeMarketingListingQueryKey };
 
-type CatalogFilters = {
-  q: string;
-  group: string;
-  more: CreativeMoreFilterId[];
-  page: number;
-  industrySlug: string;
-};
-
-export function creativeMarketingListingQueryKey(filters: CatalogFilters & { pageSize: number }) {
-  return [
-    LISTING_KEY,
-    {
-      q: filters.q || '',
-      group: filters.group || 'all',
-      more: filters.more.slice().sort().join(','),
-      page: filters.page,
-      pageSize: filters.pageSize,
-      industrySlug: filters.industrySlug || '',
-    },
-  ] as const;
-}
+type CatalogFilters = Omit<CreativeMarketingListingQueryFilters, 'pageSize'>;
 
 async function fetchListing(params: CatalogFilters & { pageSize: number }): Promise<CreativeMarketingListResult> {
   const search = new URLSearchParams();
@@ -155,9 +140,28 @@ export function CreativeMarketingCatalog({
     staleTime: STALE_PUBLIC_LISTING,
   });
 
+  const queryClient = useQueryClient();
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  useEffect(() => {
+    if (!data || page >= totalPages) return;
+    const nextFilters = {
+      q,
+      group: industrySlug ? 'all' : group,
+      more: industrySlug ? [] : more,
+      page: page + 1,
+      pageSize,
+      industrySlug,
+    };
+    void queryClient.prefetchQuery({
+      queryKey: creativeMarketingListingQueryKey(nextFilters),
+      queryFn: () => fetchListing(nextFilters),
+      staleTime: STALE_PUBLIC_LISTING,
+    });
+  }, [data, page, totalPages, q, group, more, pageSize, industrySlug, queryClient]);
+
   const hasFilters = Boolean(
     q || (!industrySlug && group && group !== 'all') || (!industrySlug && more.length > 0) || industrySlug
   );
@@ -181,7 +185,7 @@ export function CreativeMarketingCatalog({
           </button>
         </div>
       ) : showGridSkeleton ? (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+        <div className={CATALOG_LISTING_GRID_CLASS} aria-busy="true">
           {Array.from({ length: 6 }).map((_, i) => (
             <CreativeMarketingCardSkeleton key={i} />
           ))}
@@ -212,7 +216,8 @@ export function CreativeMarketingCatalog({
       ) : (
         <div
           className={cn(
-            'grid grid-cols-1 gap-5 transition-opacity duration-200 motion-reduce:transition-none md:grid-cols-2 lg:grid-cols-3',
+            CATALOG_LISTING_GRID_CLASS,
+            'transition-opacity duration-200 motion-reduce:transition-none',
             isFilterRefreshing && 'opacity-60'
           )}
           aria-busy={isFilterRefreshing || undefined}
@@ -222,6 +227,7 @@ export function CreativeMarketingCatalog({
               key={project.id}
               project={project}
               eager={index < 3}
+              variant="home"
               priority={index === 0}
             />
           ))}

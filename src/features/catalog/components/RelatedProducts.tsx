@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { CatalogProductRef, CatalogRelatedProduct } from '../types';
 import { productPath } from '../utils/paths';
 import { CatalogPrice } from './CatalogPrice';
+import { CatalogCoverImage } from './CatalogCoverImage';
 import { FeaturedBadge } from './FeaturedBadge';
 import { StarRating } from './StarRating';
 import { fallbackRatingFromSlug } from '../types/reviews';
@@ -47,22 +48,16 @@ export function RelatedProducts({
                 href={relatedHref(product)}
                 className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface transition-colors hover:border-[#2563eb]/40"
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-background-soft">
+                <div className="relative overflow-hidden bg-background-soft">
                   {product.featured ? <FeaturedBadge /> : null}
-                  {product.cover_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={product.cover_url}
-                      alt=""
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#0f2744] to-[#1a3a5c]">
-                      <span className="font-display text-2xl font-bold text-white/80">
-                        {product.title.charAt(0)}
-                      </span>
-                    </div>
-                  )}
+                  <CatalogCoverImage
+                    src={product.coverImageUrl ?? product.cover_url}
+                    alt={`${product.title} project preview`}
+                    emptyTitle={product.title}
+                    fit="cover"
+                    sizes="(min-width: 1280px) 20vw, (min-width: 640px) 33vw, 70vw"
+                    imgClassName="transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col gap-1.5 p-3.5">
                   {product.industry_name ? (

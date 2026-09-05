@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -31,7 +31,7 @@ export function FloatingNavbar({
   void _categories;
   const openSearchModal = useStore((s) => s.openSearchModal);
   const pathname = usePathname();
-  const { isHeroMode, isScrolled } = useFloatingNavbar();
+  const { isHeroMode, isTransparent, isScrolled } = useFloatingNavbar();
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,19 +53,20 @@ export function FloatingNavbar({
     <header className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
       <div
         className={cn(
-          'navbar-glow-bg w-full pt-2 lg:pt-3 transition-opacity duration-300',
-          isHeroMode ? 'opacity-70' : 'opacity-100'
+          'navbar-glow-bg w-full pt-2 lg:pt-3 transition-opacity duration-500',
+          isTransparent ? 'opacity-0' : 'opacity-100'
         )}
         aria-hidden
       />
 
       <div ref={navRef} className="pointer-events-auto w-full min-w-0">
         <div className="lg:hidden">
-            <MobileMarketplaceNavbar
+          <MobileMarketplaceNavbar
             authProfile={authProfile}
             cartCount={0}
             messageCount={0}
             isScrolled={isScrolled}
+            isTransparent={isTransparent}
             isHeroMode={isHeroMode}
           />
         </div>
@@ -75,11 +76,11 @@ export function FloatingNavbar({
           transition={{ duration: 0.32, ease: navEase }}
           className={cn(
             'premium-navbar-shell relative hidden lg:block min-w-0 w-full',
-            'rounded-none border-0 transition-[box-shadow,transform,padding] duration-300',
-            /* Fixed height — avoid mid-scroll layout jumps in reserved page padding */
+            'rounded-none border-0 transition-[background,box-shadow,border-color,backdrop-filter,padding] duration-500 ease-out',
             'h-[80px]',
-            isHeroMode ? 'py-3.5 shadow-md' : 'py-2.5 shadow-lg',
-            isScrolled && !isHeroMode && 'premium-navbar-shell--scrolled'
+            isTransparent
+              ? 'premium-navbar-shell--transparent py-3.5'
+              : 'premium-navbar-shell--scrolled py-2.5'
           )}
           aria-label="Main navigation"
         >
@@ -87,7 +88,7 @@ export function FloatingNavbar({
             className={cn(
               'container mx-auto px-4 sm:px-6 lg:px-8',
               'grid w-full min-w-0 h-full grid-cols-[1fr_auto_1fr] items-center',
-              isHeroMode ? 'gap-3 lg:gap-5' : 'gap-2 lg:gap-3'
+              isTransparent ? 'gap-3 lg:gap-5' : 'gap-2 lg:gap-3'
             )}
           >
             <div className="flex min-w-0 items-center justify-self-start">
@@ -135,10 +136,11 @@ export function FloatingNavbar({
                 <Link
                   href={ROUTES.login}
                   className={cn(
-                    'inline-flex items-center rounded-xl text-sm font-semibold',
-                    'text-deshi-green border border-deshi-green/35 bg-emerald-50/50 dark:bg-emerald-500/10',
-                    'hover:bg-emerald-100/80 dark:hover:bg-emerald-500/15',
-                    isHeroMode ? 'px-4 py-2.5' : 'px-3.5 py-2'
+                    'inline-flex items-center rounded-xl text-sm font-semibold transition-colors',
+                    'text-deshi-green border border-deshi-green/35',
+                    isTransparent
+                      ? 'bg-transparent hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 px-4 py-2.5'
+                      : 'bg-emerald-50/50 dark:bg-emerald-500/10 hover:bg-emerald-100/80 dark:hover:bg-emerald-500/15 px-3.5 py-2'
                   )}
                 >
                   Login
