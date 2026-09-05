@@ -53,6 +53,8 @@ export const SOFTWARE_PRODUCT_INDUSTRY_MAP = {
   'isp-management': 'saas-subscription',
   'saas-management': 'saas-subscription',
   'multi-branch-erp': 'saas-subscription',
+  'ecommerce-admin-dashboard': 'ecommerce',
+  'ecommerce-admin-operations': 'ecommerce',
 } as const;
 
 export type SoftwareProductSlug = keyof typeof SOFTWARE_PRODUCT_INDUSTRY_MAP;

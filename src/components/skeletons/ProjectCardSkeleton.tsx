@@ -13,7 +13,7 @@ export function ProjectCardSkeleton({ className }: { className?: string }) {
     >
       <Skeleton
         rounded="none"
-        className="aspect-[16/10] min-h-[220px] w-full rounded-none sm:min-h-[260px]"
+        className="aspect-card w-full rounded-none"
       />
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div className="space-y-2">

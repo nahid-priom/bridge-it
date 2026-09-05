@@ -50,7 +50,7 @@ export function ProjectCard({
           className={cn('flex h-full flex-col outline-none', focusVisibleRing)}
           aria-label={`View ${project.title}`}
         >
-          <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-background-soft sm:rounded-t-2xl">
+          <div className="relative aspect-card overflow-hidden rounded-t-xl bg-background-soft sm:rounded-t-2xl">
             <ShowcaseImage
               src={project.cover_image_url}
               fallbackSrc={project.cover_fallback_url}
@@ -92,7 +92,7 @@ export function ProjectCard({
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface">
       <Link
         href={href}
-        className="relative block aspect-[16/10] min-h-[220px] overflow-hidden bg-background-soft sm:min-h-[260px]"
+        className="relative block aspect-card overflow-hidden bg-background-soft"
         prefetch={false}
         onMouseEnter={prefetchDetail}
         onFocus={prefetchDetail}
@@ -106,8 +106,8 @@ export function ProjectCard({
           src={project.cover_image_url}
           fallbackSrc={project.cover_fallback_url}
           alt={`${project.title} custom e-commerce website design`}
-          width={1600}
-          height={1000}
+          width={800}
+          height={600}
           eager={eager || priority}
           priority={priority}
           fit="cover"

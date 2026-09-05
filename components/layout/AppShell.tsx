@@ -8,10 +8,10 @@ import type { Category } from '@/types';
 import type { AuthProfile } from '@/lib/auth/types';
 import { Notification } from '@/components/Notification';
 import { SiteBreadcrumb } from '@/components/layout/SiteBreadcrumb';
+import { SiteAtmosphere } from '@/components/layout/SiteAtmosphere';
 import { ScrollManager } from '@/components/layout/ScrollManager';
 import { AuthProfileProvider } from '@/components/auth/AuthProfileContext';
 import { SellerActivationListener } from '@/components/seller/SellerActivationListener';
-import { cn } from '@/lib/cn';
 
 const GlobalSearchModal = dynamic(
   () =>
@@ -58,25 +58,23 @@ export function AppShell({
       ) : (
         <AuthProfileProvider profile={authProfile}>
           <SellerActivationListener />
-          <div
-            className={cn(
-              'min-h-screen text-text-primary',
-              isHome ? 'bg-transparent' : 'bg-background'
-            )}
-          >
-            <Navbar categories={categories} authProfile={authProfile} />
-            <main
-              id="main-content"
-              className={
-                isHome || hideBreadcrumb ? '' : 'page-content page-content--with-breadcrumb'
-              }
-            >
-              {!hideBreadcrumb && <SiteBreadcrumb />}
-              {children}
-            </main>
-            <Footer />
-            <GlobalSearchModal />
-            <Notification />
+          <div className="site-atmosphere-bg relative isolate min-h-screen text-text-primary">
+            <SiteAtmosphere />
+            <div className="relative z-[1]">
+              <Navbar categories={categories} authProfile={authProfile} />
+              <main
+                id="main-content"
+                className={
+                  isHome || hideBreadcrumb ? '' : 'page-content page-content--with-breadcrumb'
+                }
+              >
+                {!hideBreadcrumb && <SiteBreadcrumb />}
+                {children}
+              </main>
+              <Footer />
+              <GlobalSearchModal />
+              <Notification />
+            </div>
           </div>
         </AuthProfileProvider>
       )}

@@ -157,7 +157,7 @@ export function MobileDrawerMenu({
                         : 'text-text-primary'
                     )}
                   >
-                    Browse by category
+                    Services
                     <ChevronDown
                       className={cn(
                         'h-4 w-4 opacity-70 transition-transform',
@@ -204,7 +204,10 @@ export function MobileDrawerMenu({
                             {expanded ? (
                               pillar.id === 'software' ? (
                                 <div className="mb-2 ml-2 space-y-2">
-                                  <ul className="grid grid-cols-2 gap-1">
+                                  <p className="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                                    Popular industries
+                                  </p>
+                                  <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3">
                                     {pillar.children.map((child) => {
                                       const ChildIcon = softwareNavIcon(child.id);
                                       return (
@@ -226,9 +229,9 @@ export function MobileDrawerMenu({
                                   {pillar.moreChildren && pillar.moreChildren.length > 0 ? (
                                     <>
                                       <p className="px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                                        More
+                                        More industries
                                       </p>
-                                      <ul className="grid grid-cols-2 gap-1">
+                                      <ul className="grid max-h-56 grid-cols-2 gap-1 overflow-y-auto sm:grid-cols-3">
                                         {pillar.moreChildren.map((child) => {
                                           const ChildIcon = softwareNavIcon(child.id);
                                           return (
@@ -253,17 +256,6 @@ export function MobileDrawerMenu({
                               ) : (
                                 <ul className="mb-2 ml-6 space-y-0.5 border-l border-slate-100 pl-3 dark:border-white/10">
                                   {pillar.children.map((child) => (
-                                    <li key={child.id}>
-                                      <Link
-                                        href={child.href}
-                                        onClick={closeAndNavigate}
-                                        className="block py-1.5 text-[13px] font-medium text-text-secondary hover:text-text-primary"
-                                      >
-                                        {child.label}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                  {pillar.moreChildren?.map((child) => (
                                     <li key={child.id}>
                                       <Link
                                         href={child.href}

@@ -55,6 +55,8 @@ const SOFTWARE_PRODUCT_INDUSTRY_MAP: Record<string, string> = {
   'isp-management': 'saas-subscription',
   'saas-management': 'saas-subscription',
   'multi-branch-erp': 'saas-subscription',
+  'ecommerce-admin-dashboard': 'ecommerce',
+  'ecommerce-admin-operations': 'ecommerce',
 };
 
 /** Prior hierarchy industry → new 45-industry slug */
@@ -170,11 +172,15 @@ export function buildCatalogHierarchyRedirects(): ReadonlyArray<{
   }
 
   for (const [product, industry] of Object.entries(SOFTWARE_PRODUCT_INDUSTRY_MAP)) {
-    redirects.push({
-      source: `/software/${product}`,
-      destination: `/software/${industry}/${product}`,
-      permanent: true,
-    });
+    // Never steal industry hub URLs when product slug equals industry slug
+    // (e.g. retail-pos, hr-payroll). Product lives at /software/{industry}/{product}.
+    if (product !== industry) {
+      redirects.push({
+        source: `/software/${product}`,
+        destination: `/software/${industry}/${product}`,
+        permanent: true,
+      });
+    }
 
     const legacyIndustry = SOFTWARE_PRODUCT_INDUSTRY_MAP_LEGACY[product];
     if (legacyIndustry && legacyIndustry !== industry) {

@@ -34,7 +34,8 @@
     "sync:software-homepage": "tsx scripts/sync-software-homepage-placements.ts",
     "audit:sitemap": "tsx scripts/audit-sitemap.ts",
     "audit:public-routes": "tsx scripts/audit-public-routes.ts",
-    "audit:internal-links": "tsx scripts/audit-internal-links.ts"
+    "audit:internal-links": "tsx scripts/audit-internal-links.ts",
+    "complete:software-catalog": "tsx scripts/complete-software-catalog.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

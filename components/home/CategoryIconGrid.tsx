@@ -121,7 +121,7 @@ export function CategoryIconGrid({ categories }: CategoryIconGridProps) {
   return (
     <section
       id={HOME_SECTION_IDS.categories}
-      className="py-12 md:py-16 bg-background overflow-hidden"
+      className="overflow-hidden bg-transparent py-12 md:py-16"
       aria-labelledby="category-grid-heading"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

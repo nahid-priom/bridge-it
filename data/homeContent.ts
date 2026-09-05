@@ -200,10 +200,10 @@ export const FOOTER_COLUMNS = {
     { label: 'About', href: ROUTES.about },
   ],
   popular: [
-    { label: 'Garments ERP', href: ROUTES.softwareSolution('garments-erp') },
-    { label: 'Feed Mill ERP', href: ROUTES.softwareSolution('feed-mill-erp') },
-    { label: 'Retail POS', href: ROUTES.softwareSolution('retail-pos') },
-    { label: 'CRM System', href: ROUTES.softwareSolution('crm-system') },
+    { label: 'Garments ERP', href: ROUTES.softwareProduct('garments', 'garments-erp') },
+    { label: 'Feed Mill ERP', href: ROUTES.softwareProduct('feed-mill', 'feed-mill-erp') },
+    { label: 'Retail POS', href: ROUTES.softwareProduct('retail-pos', 'retail-pos') },
+    { label: 'CRM System', href: ROUTES.softwareProduct('crm', 'crm-system') },
     { label: 'E-commerce Websites', href: ROUTES.websites },
   ],
   legal: [

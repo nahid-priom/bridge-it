@@ -105,7 +105,7 @@ export function SoftwareCard({
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface">
       <Link
         href={href}
-        className="relative block aspect-[16/10] min-h-[200px] overflow-hidden bg-background-soft sm:min-h-[220px]"
+        className="relative block aspect-card overflow-hidden bg-background-soft"
         prefetch={false}
         onMouseEnter={prefetchDetail}
         onFocus={prefetchDetail}
@@ -176,7 +176,7 @@ export function SoftwareCardSkeleton() {
       aria-hidden
       className="flex h-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface"
     >
-      <div className="aspect-[16/10] min-h-[200px] w-full animate-pulse bg-background-soft sm:min-h-[220px]" />
+      <div className="aspect-card w-full animate-pulse bg-background-soft" />
       <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div className="h-3 w-24 animate-pulse rounded bg-background-soft" />
         <div className="mt-1 h-5 w-3/4 animate-pulse rounded bg-background-soft" />

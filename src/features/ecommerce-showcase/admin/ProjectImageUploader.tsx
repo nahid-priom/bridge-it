@@ -72,7 +72,7 @@ export function ProjectImageUploader({
       </div>
       <div
         className={cn(
-          'rounded-xl overflow-hidden border border-border-subtle aspect-[16/10] bg-background-soft',
+          'rounded-xl overflow-hidden border border-border-subtle aspect-card bg-background-soft',
           dragOver && 'ring-2 ring-emerald-500/50'
         )}
         onDragOver={(event) => {

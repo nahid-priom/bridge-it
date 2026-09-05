@@ -72,7 +72,7 @@ export function ShowcaseImage({
           'flex items-center justify-center bg-background-soft text-sm text-text-muted',
           className
         )}
-        style={{ aspectRatio: width && height ? `${width} / ${height}` : '16 / 10' }}
+        style={{ aspectRatio: width && height ? `${width} / ${height}` : '4 / 3' }}
       >
         No cover uploaded
       </div>
@@ -86,7 +86,7 @@ export function ShowcaseImage({
           'flex items-center justify-center bg-background-soft text-sm text-text-muted',
           className
         )}
-        style={{ aspectRatio: width && height ? `${width} / ${height}` : '16 / 10' }}
+        style={{ aspectRatio: width && height ? `${width} / ${height}` : '4 / 3' }}
       >
         Preview unavailable
       </div>
@@ -109,8 +109,8 @@ export function ShowcaseImage({
         ref={imgRef}
         src={displaySrc}
         alt={alt}
-        width={width ?? 1600}
-        height={height ?? 1000}
+        width={width ?? 800}
+        height={height ?? 600}
         loading={loadEager ? 'eager' : 'lazy'}
         decoding="async"
         fetchPriority={priority ? 'high' : 'auto'}

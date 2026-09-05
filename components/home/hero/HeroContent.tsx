@@ -2,13 +2,13 @@ import { Boxes, MonitorPlay, Wallet, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 const TRUST_POINTS: {
-  lines: [string, string];
+  label: string;
   Icon: LucideIcon;
   tone: 'websites' | 'software' | 'marketing';
 }[] = [
-  { lines: ['Custom', 'Solutions'], Icon: Boxes, tone: 'websites' },
-  { lines: ['500+', 'Live Demos'], Icon: MonitorPlay, tone: 'software' },
-  { lines: ['Affordable', 'Prices'], Icon: Wallet, tone: 'marketing' },
+  { label: 'Custom Solutions', Icon: Boxes, tone: 'websites' },
+  { label: '500+ Live Demos', Icon: MonitorPlay, tone: 'software' },
+  { label: 'Affordable Prices', Icon: Wallet, tone: 'marketing' },
 ];
 
 export function HeroContent({ className }: { className?: string }) {
@@ -22,9 +22,8 @@ export function HeroContent({ className }: { className?: string }) {
     >
       <span
         className={cn(
-          'inline-flex items-center rounded-full px-3.5 py-1.5',
-          'bg-gradient-to-r from-[#146BFF] via-[#14C8E6] to-[#21D47B]',
-          'text-[11px] font-semibold tracking-wide text-white sm:text-xs'
+          'hero-eyebrow-pill inline-flex items-center rounded-full px-3.5 py-1.5',
+          'text-xs font-semibold tracking-wide text-white sm:text-[13px]'
         )}
       >
         Everything Your Business Needs
@@ -34,7 +33,7 @@ export function HeroContent({ className }: { className?: string }) {
         id="homepage-hero-heading"
         className={cn(
           'mt-5 max-w-[22rem] font-display font-extrabold tracking-[-0.035em] text-text-primary',
-          'sm:mt-6 sm:max-w-[34rem] lg:max-w-[40rem]',
+          'sm:mt-6 sm:max-w-[36rem] lg:max-w-[44rem]',
           'text-[clamp(1.85rem,7.2vw,3.35rem)] leading-[1.08]'
         )}
       >
@@ -48,28 +47,26 @@ export function HeroContent({ className }: { className?: string }) {
 
       <ul
         className={cn(
-          'mt-6 flex w-full max-w-[22rem] flex-row items-stretch gap-0 sm:mt-7 sm:max-w-[32rem]',
+          'mt-6 flex w-full max-w-[36rem] flex-row items-center justify-center gap-0 sm:mt-7 sm:max-w-[44rem] lg:max-w-[52rem]',
           'motion-safe:opacity-0 motion-safe:[animation:hero-fade-up_0.55s_ease-out_0.1s_forwards]'
         )}
       >
-        {TRUST_POINTS.map(({ lines, Icon, tone }, index) => (
+        {TRUST_POINTS.map(({ label, Icon, tone }, index) => (
           <li
-            key={lines.join(' ')}
+            key={label}
             className={cn(
-              'group flex min-w-0 flex-1 flex-col items-center gap-1.5 px-2 text-center sm:gap-2 sm:px-4',
+              'group flex min-w-0 flex-1 items-center justify-center gap-2 px-2.5 py-1 sm:gap-2.5 sm:px-4',
               index > 0 && 'border-l border-border-subtle'
             )}
           >
             <span
-              className={cn('hero-benefit-icon', `hero-benefit-icon--${tone}`)}
+              className={cn('hero-benefit-icon shrink-0', `hero-benefit-icon--${tone}`)}
               aria-hidden
             >
-              <Icon className="h-[1.125rem] w-[1.125rem] sm:h-6 sm:w-6" strokeWidth={2} />
+              <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2} />
             </span>
-            <span className="text-[0.8125rem] font-bold leading-tight tracking-[-0.015em] text-text-primary sm:text-[1.0625rem]">
-              {lines[0]}
-              <br />
-              {lines[1]}
+            <span className="whitespace-nowrap text-left text-[0.8125rem] font-bold leading-none tracking-[-0.015em] text-text-primary sm:text-[0.9375rem] lg:text-base">
+              {label}
             </span>
           </li>
         ))}

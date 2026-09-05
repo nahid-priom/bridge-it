@@ -104,7 +104,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
       className={`${inter.variable} ${poppins.variable} ${notoSansBengali.variable}`}
     >
-      <body className="font-sans antialiased bg-background text-text-primary">
+      <body className="font-sans antialiased text-text-primary">
         <GoogleTagManager />
         <MicrosoftClarity />
         <ThemeProvider>

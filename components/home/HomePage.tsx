@@ -20,20 +20,16 @@ export function HomePage({
 }) {
   return (
     <div className="home-page-shell">
-      {/* Full-page gradient scoped to homepage content (does not cover footer) */}
-      <div className="home-page-gradient" aria-hidden />
-      <div className="relative z-[1]">
-        <HomepageHero />
-        <MainCategoryStrip />
-        <PortfolioExperience
-          sections={sections}
-          legacySections={legacySections}
-          softwareSections={softwareSections}
-          creativeSections={creativeSections}
-        />
-        <WhyBridgeItParkSection />
-        <HomeCtaBanner />
-      </div>
+      <HomepageHero />
+      <MainCategoryStrip />
+      <PortfolioExperience
+        sections={sections}
+        legacySections={legacySections}
+        softwareSections={softwareSections}
+        creativeSections={creativeSections}
+      />
+      <WhyBridgeItParkSection />
+      <HomeCtaBanner />
     </div>
   );
 }

@@ -76,8 +76,7 @@ export function PageHero({
   return (
     <section
       className={cn(
-        'relative w-full overflow-x-hidden',
-        'marketplace-hero-bg',
+        'relative w-full overflow-x-hidden bg-transparent',
         variant === 'marketing' && sectionSpacing.hero,
         variant === 'dashboard' && sectionSpacing.dashboardHero,
         variant === 'compact' && sectionSpacing.heroCompact,

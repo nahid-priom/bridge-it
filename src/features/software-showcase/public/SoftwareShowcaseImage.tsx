@@ -63,7 +63,7 @@ function resolveProps(props: (CoverProps | ScreenProps) & Common): {
         (cover.kind === 'card'
           ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
           : '100vw'),
-      aspect: cover.kind === 'card' ? 'aspect-[4/3]' : 'aspect-[16/10]',
+      aspect: cover.kind === 'card' ? 'aspect-card' : 'aspect-[16/10]',
       className: cover.className,
       imgClassName: cover.imgClassName,
     };

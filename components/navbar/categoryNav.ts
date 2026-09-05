@@ -1,10 +1,12 @@
 import { ROUTES } from '@/lib/routes';
 import { LISTING_CATEGORIES } from '@/src/features/ecommerce-showcase/config/constants';
-import {
-  SOFTWARE_MORE_FILTERS,
-  SOFTWARE_PRIMARY_FILTERS,
-} from '@/src/features/software-showcase/config/constants';
 import { CREATIVE_MARKETING_SERVICE_GROUPS } from '@/src/features/creative-marketing-showcase/config/constants';
+import {
+  SOFTWARE_HUB_PRIORITY_SLUGS,
+  SOFTWARE_INDUSTRIES_45,
+  SOFTWARE_INDUSTRY_LABELS,
+  type SoftwareIndustry45Slug,
+} from '@/src/features/catalog/config/software-industries-45';
 
 export type NavCategoryChild = {
   id: string;
@@ -19,33 +21,31 @@ export type NavCategoryPillar = {
   label: string;
   href: string;
   children: NavCategoryChild[];
-  /** Extra children shown under a “More” divider (software only). */
+  /** Extra children shown under a “More” divider. */
   moreChildren?: NavCategoryChild[];
 };
 
 export function exploreWebsitesHref(categorySlug?: string): string {
-  const params = new URLSearchParams();
-  params.set('type', 'websites');
-  if (categorySlug && categorySlug !== 'all') params.set('category', categorySlug);
-  return `${ROUTES.explore}?${params.toString()}`;
+  if (categorySlug && categorySlug !== 'all') {
+    return ROUTES.websiteIndustry(categorySlug);
+  }
+  return ROUTES.websites;
 }
 
 export function exploreSoftwareHref(options?: {
   group?: string;
   more?: string;
+  industry?: string;
 }): string {
-  const params = new URLSearchParams();
-  params.set('type', 'software');
-  if (options?.group && options.group !== 'all') params.set('group', options.group);
-  if (options?.more) params.set('more', options.more);
-  return `${ROUTES.explore}?${params.toString()}`;
+  if (options?.industry) return ROUTES.softwareIndustry(options.industry);
+  return ROUTES.softwareShowroom;
 }
 
 export function exploreMarketingHref(serviceGroup?: string): string {
-  const params = new URLSearchParams();
-  params.set('type', 'marketing');
-  if (serviceGroup && serviceGroup !== 'all') params.set('serviceGroup', serviceGroup);
-  return `${ROUTES.explore}?${params.toString()}`;
+  if (serviceGroup && serviceGroup !== 'all') {
+    return ROUTES.marketingIndustry(serviceGroup);
+  }
+  return ROUTES.marketingShowroom;
 }
 
 const websiteChildren: NavCategoryChild[] = LISTING_CATEGORIES.filter(
@@ -57,18 +57,20 @@ const websiteChildren: NavCategoryChild[] = LISTING_CATEGORIES.filter(
   href: exploreWebsitesHref(item.slug),
 }));
 
-const softwarePrimaryChildren: NavCategoryChild[] = SOFTWARE_PRIMARY_FILTERS.filter(
-  (item) => item.id !== 'all'
-).map((item) => ({
-  id: item.id,
-  label: item.label,
-  href: exploreSoftwareHref({ group: item.id }),
+const prioritySet = new Set<string>(SOFTWARE_HUB_PRIORITY_SLUGS);
+
+const softwarePrimaryChildren: NavCategoryChild[] = SOFTWARE_HUB_PRIORITY_SLUGS.map((slug) => ({
+  id: slug,
+  label: SOFTWARE_INDUSTRY_LABELS[slug],
+  href: ROUTES.softwareIndustry(slug),
 }));
 
-const softwareMoreChildren: NavCategoryChild[] = SOFTWARE_MORE_FILTERS.map((item) => ({
-  id: item.id,
-  label: item.label,
-  href: exploreSoftwareHref({ more: item.id }),
+const softwareMoreChildren: NavCategoryChild[] = SOFTWARE_INDUSTRIES_45.filter(
+  (slug) => !prioritySet.has(slug)
+).map((slug: SoftwareIndustry45Slug) => ({
+  id: slug,
+  label: SOFTWARE_INDUSTRY_LABELS[slug],
+  href: ROUTES.softwareIndustry(slug),
 }));
 
 const marketingChildren: NavCategoryChild[] = CREATIVE_MARKETING_SERVICE_GROUPS.map((item) => ({
@@ -81,20 +83,20 @@ export const NAV_CATEGORY_PILLARS: NavCategoryPillar[] = [
   {
     id: 'websites',
     label: 'Websites',
-    href: exploreWebsitesHref(),
+    href: ROUTES.websites,
     children: websiteChildren,
   },
   {
     id: 'software',
     label: 'Software',
-    href: exploreSoftwareHref(),
+    href: ROUTES.softwareShowroom,
     children: softwarePrimaryChildren,
     moreChildren: softwareMoreChildren,
   },
   {
     id: 'marketing',
     label: 'Creative & Marketing',
-    href: exploreMarketingHref(),
+    href: ROUTES.marketingShowroom,
     children: marketingChildren,
   },
 ];
@@ -108,6 +110,8 @@ export function isCategoryNavPath(pathname: string): boolean {
     pathname === ROUTES.softwareShowroom ||
     pathname.startsWith(`${ROUTES.softwareShowroom}/`) ||
     pathname === ROUTES.creativeMarketingShowroom ||
-    pathname.startsWith(`${ROUTES.creativeMarketingShowroom}/`)
+    pathname.startsWith(`${ROUTES.creativeMarketingShowroom}/`) ||
+    pathname === ROUTES.marketingShowroom ||
+    pathname.startsWith(`${ROUTES.marketingShowroom}/`)
   );
 }

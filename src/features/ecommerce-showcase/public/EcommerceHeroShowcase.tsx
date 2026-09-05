@@ -9,7 +9,7 @@ export function EcommerceHeroShowcase({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="relative w-full min-w-0 max-w-full overflow-hidden bg-transparent aspect-[4/3] lg:aspect-[16/10]">
+      <div className="relative w-full min-w-0 max-w-full overflow-hidden bg-transparent aspect-card">
         <picture>
           <source
             media="(max-width: 1023px)"

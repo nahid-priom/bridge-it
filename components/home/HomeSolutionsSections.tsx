@@ -13,7 +13,7 @@ export function HomeFeaturedSolutions({ products }: HomeFeaturedSolutionsProps) 
   if (!products.length) return null;
 
   return (
-    <section id={HOME_SECTION_IDS.popular} className="py-12 md:py-16 bg-slate-50/80 dark:bg-[#0a0e1a]/50">
+    <section id={HOME_SECTION_IDS.popular} className="bg-transparent py-12 md:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
           <div>

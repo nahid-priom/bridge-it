@@ -6,7 +6,7 @@ export function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      className="py-12 md:py-20 bg-background-soft/50 dark:bg-background-soft/30"
+      className="bg-transparent py-12 md:py-20"
       aria-labelledby="how-it-works-heading"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

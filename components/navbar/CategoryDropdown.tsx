@@ -14,6 +14,7 @@ import {
   type NavCategoryPillar,
 } from '@/components/navbar/categoryNav';
 import { softwareNavIcon } from '@/components/navbar/softwareNavIcons';
+import { ROUTES } from '@/lib/routes';
 
 const PILLAR_ICONS = {
   websites: LayoutTemplate,
@@ -74,7 +75,7 @@ function TextChildLink({
   );
 }
 
-function PillarColumn({
+function SidePillarColumn({
   pillar,
   onNavigate,
 }: {
@@ -82,7 +83,6 @@ function PillarColumn({
   onNavigate: () => void;
 }) {
   const Icon = PILLAR_ICONS[pillar.id];
-  const isSoftware = pillar.id === 'software';
 
   return (
     <div className="min-w-0">
@@ -100,46 +100,76 @@ function PillarColumn({
         </span>
       </Link>
 
-      {isSoftware ? (
-        <ul className="grid grid-cols-2 gap-0.5">
-          {pillar.children.map((child) => (
-            <li key={child.id}>
-              <SoftwareChildLink child={child} onNavigate={onNavigate} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <ul className="space-y-0.5">
-          {pillar.children.map((child) => (
-            <li key={child.id}>
-              <TextChildLink child={child} onNavigate={onNavigate} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="space-y-0.5">
+        {pillar.children.map((child) => (
+          <li key={child.id}>
+            <TextChildLink child={child} onNavigate={onNavigate} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function SoftwareWideColumn({
+  pillar,
+  onNavigate,
+}: {
+  pillar: NavCategoryPillar;
+  onNavigate: () => void;
+}) {
+  const Icon = PILLAR_ICONS.software;
+
+  return (
+    <div className="min-w-0 border-x border-slate-100 px-3 dark:border-white/10 md:px-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 px-1">
+        <Link
+          href={pillar.href}
+          onClick={onNavigate}
+          className="flex min-w-0 items-center gap-2 rounded-xl px-1 py-1.5 transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.04]"
+        >
+          <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2563eb]/10 text-[#2563eb] dark:bg-[#2563eb]/20 dark:text-[#60a5fa]">
+            <Icon className="h-4 w-4" aria-hidden />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-sm font-bold text-text-primary">{pillar.label}</span>
+            <span className="block text-[11px] font-medium text-text-muted">
+              Browse industries
+            </span>
+          </span>
+        </Link>
+        <Link
+          href={ROUTES.softwareShowroom}
+          onClick={onNavigate}
+          className="rounded-lg px-2.5 py-1.5 text-[12px] font-semibold text-[#2563eb] hover:bg-[#2563eb]/08 dark:text-[#60a5fa]"
+        >
+          View all
+        </Link>
+      </div>
+
+      <p className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+        Popular industries
+      </p>
+      <ul className="grid grid-cols-2 gap-0.5 lg:grid-cols-3">
+        {pillar.children.map((child) => (
+          <li key={child.id}>
+            <SoftwareChildLink child={child} onNavigate={onNavigate} />
+          </li>
+        ))}
+      </ul>
 
       {pillar.moreChildren && pillar.moreChildren.length > 0 ? (
         <>
-          <p className="mb-1 mt-3 px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
-            More
+          <p className="mb-1.5 mt-4 px-2 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+            More industries
           </p>
-          {isSoftware ? (
-            <ul className="grid grid-cols-2 gap-0.5">
-              {pillar.moreChildren.map((child) => (
-                <li key={child.id}>
-                  <SoftwareChildLink child={child} onNavigate={onNavigate} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <ul className="space-y-0.5">
-              {pillar.moreChildren.map((child) => (
-                <li key={child.id}>
-                  <TextChildLink child={child} onNavigate={onNavigate} />
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className="grid max-h-[280px] grid-cols-2 gap-0.5 overflow-y-auto overscroll-contain pr-1 lg:grid-cols-3">
+            {pillar.moreChildren.map((child) => (
+              <li key={child.id}>
+                <SoftwareChildLink child={child} onNavigate={onNavigate} />
+              </li>
+            ))}
+          </ul>
         </>
       ) : null}
     </div>
@@ -152,6 +182,10 @@ export function CategoryDropdown({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = isCategoryNavPath(pathname);
+
+  const websites = NAV_CATEGORY_PILLARS.find((p) => p.id === 'websites')!;
+  const software = NAV_CATEGORY_PILLARS.find((p) => p.id === 'software')!;
+  const marketing = NAV_CATEGORY_PILLARS.find((p) => p.id === 'marketing')!;
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimer.current) {
@@ -227,18 +261,18 @@ export function CategoryDropdown({ className }: { className?: string }) {
             exit={{ opacity: 0, y: 6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              'absolute left-1/2 top-[calc(100%+10px)] z-50 w-[min(100vw-2rem,960px)] -translate-x-1/2',
+              'absolute left-1/2 top-[calc(100%+10px)] z-50 w-[min(100vw-1.5rem,1180px)] -translate-x-1/2',
               'overflow-hidden rounded-2xl border border-slate-200/90 dark:border-white/10',
-              'bg-white/96 dark:bg-slate-900/96 backdrop-blur-2xl',
+              'bg-white/96 dark:bg-deshi-navy/96 backdrop-blur-2xl',
               'shadow-[0_24px_60px_rgba(15,23,42,0.14)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.5)]'
             )}
             role="menu"
             aria-label="Services"
           >
-            <div className="grid grid-cols-3 gap-3 p-4 md:gap-4 md:p-5">
-              {NAV_CATEGORY_PILLARS.map((pillar) => (
-                <PillarColumn key={pillar.id} pillar={pillar} onNavigate={close} />
-              ))}
+            <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-[200px_minmax(0,1fr)_220px] md:gap-0 md:p-5">
+              <SidePillarColumn pillar={websites} onNavigate={close} />
+              <SoftwareWideColumn pillar={software} onNavigate={close} />
+              <SidePillarColumn pillar={marketing} onNavigate={close} />
             </div>
           </motion.div>
         ) : null}

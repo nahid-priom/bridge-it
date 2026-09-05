@@ -36,7 +36,7 @@ export function PopularServicesCarousel({
   return (
     <section
       id={HOME_SECTION_IDS.popular}
-      className="py-12 md:py-16 bg-deshi-mint/30 dark:bg-deshi-navy/20"
+      className="bg-transparent py-12 md:py-16"
       aria-labelledby="popular-services-heading"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

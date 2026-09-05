@@ -12,7 +12,7 @@ export function ClientTestimonials({ testimonials }: ClientTestimonialsProps) {
   const items = mergeTestimonials(testimonials);
 
   return (
-    <section className="py-12 md:py-16 bg-deshi-mint/20 dark:bg-deshi-navy/30" aria-labelledby="testimonials-heading">
+    <section className="bg-transparent py-12 md:py-16" aria-labelledby="testimonials-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2
           id="testimonials-heading"

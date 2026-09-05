@@ -3,11 +3,11 @@ export const CREATIVE_MARKETING_CURRENCY = 'BDT';
 export const CREATIVE_MARKETING_GALLERY_PAGE_SIZE = 12;
 export const CREATIVE_MARKETING_HOMEPAGE_SECTION_MAX = 8;
 
-/** Native cover-card encode size (1536×1024 → 720×480). */
+/** Native cover-card encode size (4:3). */
 export const CREATIVE_COVER_CARD = {
-  width: 720,
-  height: 480,
-  aspectClass: 'aspect-[3/2]',
+  width: 800,
+  height: 600,
+  aspectClass: 'aspect-card',
 } as const;
 
 export const CREATIVE_MARKETING_HOMEPAGE_SECTIONS = [
