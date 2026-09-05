@@ -23,24 +23,14 @@ export function ConsultationAtmosphere() {
       className="consultation-atmosphere pointer-events-none absolute inset-0 overflow-hidden select-none"
       aria-hidden
     >
-      {/* Soft aurora base */}
+      {/* Soft aurora base — no strong left-green / right-blue washes */}
       <div className="consultation-aurora absolute inset-0" />
 
-      {/* Drifting glow orbs */}
+      {/* Soft center glow only */}
       <motion.div
-        className="absolute -left-20 top-[8%] h-[22rem] w-[22rem] rounded-full bg-teal-400/20 blur-3xl dark:bg-teal-500/15"
-        animate={{ x: [0, 36, 0], y: [0, 28, 0], scale: [1, 1.08, 1] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute -right-16 top-[18%] h-[20rem] w-[20rem] rounded-full bg-blue-500/15 blur-3xl dark:bg-blue-400/12"
-        animate={{ x: [0, -40, 0], y: [0, 22, 0], scale: [1, 1.12, 1] }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-      />
-      <motion.div
-        className="absolute bottom-[8%] left-[28%] h-[18rem] w-[18rem] rounded-full bg-emerald-400/10 blur-3xl dark:bg-cyan-400/10"
-        animate={{ x: [0, 24, 0], y: [0, -30, 0], opacity: [0.45, 0.8, 0.45] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+        className="absolute bottom-[12%] left-1/2 h-[16rem] w-[16rem] -translate-x-1/2 rounded-full bg-cyan-400/8 blur-3xl dark:bg-cyan-400/8"
+        animate={{ y: [0, -20, 0], opacity: [0.4, 0.7, 0.4] }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Slow rotating premium rings */}
@@ -159,26 +149,6 @@ export function ConsultationAtmosphere() {
       >
         <FourPointStar className="h-3 w-3 md:h-4 md:w-4" color="#FBBF24" />
       </motion.div>
-
-      {/* Right ripple fan — slow breathe */}
-      <motion.svg
-        className="absolute -right-2 top-[28%] hidden h-[50%] w-24 text-[#2563EB] opacity-25 sm:block md:w-32 md:opacity-35"
-        viewBox="0 0 80 200"
-        preserveAspectRatio="none"
-        fill="none"
-        animate={{ opacity: [0.18, 0.38, 0.18], x: [0, -6, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-          <path
-            key={i}
-            d={`M0 ${20 + i * 22} Q ${40 + i * 3} ${10 + i * 20}, 80 ${25 + i * 22}`}
-            stroke="currentColor"
-            strokeWidth={1.2 - i * 0.05}
-            opacity={0.9 - i * 0.08}
-          />
-        ))}
-      </motion.svg>
     </div>
   );
 }
