@@ -33,7 +33,7 @@ export function visualFamily(p: SeedSoftwareProduct): VisualFamily {
   const g = p.solutionGroup;
   const slug = p.slug;
   if (t === 'pos' || g === 'pos-retail') return 'retail-pos';
-  if (slug.includes('feed-mill')) return 'feed-mill';
+  if (slug.includes('feed-mill') || slug.startsWith('feed-')) return 'feed-mill';
   if (slug.includes('garment') || slug.includes('textile') || slug.includes('dyeing') || slug.includes('accessories'))
     return 'garments';
   if (t === 'crm' || g === 'crm-sales') return 'crm-sales';
@@ -42,10 +42,13 @@ export function visualFamily(p: SeedSoftwareProduct): VisualFamily {
   if (t === 'logistics' || g === 'logistics-courier') return 'logistics';
   if (t === 'agro' || g === 'agro-farm-management') return 'agro';
   if (t === 'saas' || g === 'saas-platforms') return 'saas-admin';
-  if (t === 'manufacturing' || g === 'manufacturing-production') return 'manufacturing';
-  if (g === 'distribution-wholesale' || /distribution|wholesale|dealership|trading/.test(slug)) return 'distribution';
+  if (t === 'manufacturing' || g === 'manufacturing-production' || t === 'production' || t === 'formulation')
+    return 'manufacturing';
+  if (g === 'distribution-dealership' || g === 'distribution-wholesale' || /distribution|wholesale|dealership|trading/.test(slug))
+    return 'distribution';
   if (/real-estate|property|construction/.test(slug)) return 'real-estate';
-  if (t === 'hrm' || /account|finance|payroll/i.test(t)) return 'finance';
+  if (t === 'hrm' || g === 'hrm-payroll' || g === 'accounting-finance' || /account|finance|payroll/i.test(t))
+    return 'finance';
   return 'operations-erp';
 }
 
@@ -97,10 +100,10 @@ const DATASETS: Record<VisualFamily, Dataset> = {
     ],
   },
   garments: {
-    parties: ['H&M Buyer', 'Zara Agent', 'Next Sourcing', 'Local Brand Co', 'Export House BD', 'Knit Line Ltd'],
+    parties: ['H&M', 'Zara', 'M&S', 'Next', 'Primark', 'Export House BD'],
     people: ['Merch Lead', 'Cutting In-Charge', 'QC Officer', 'Floor Manager', 'IE Officer'],
     cities: ['Gazipur', 'Narayanganj', 'Dhaka', 'Ashulia', 'Savar'],
-    products: ['ST-4821', 'ST-3904', 'Colorway Navy', 'Size Run S-XXL', 'Sewing Line-3', 'Finish Pack', 'Trim Card'],
+    products: ['GM-2401', 'GM-2402', 'GM-2403', 'Colorway Navy', 'Size XS-XXL', 'Sewing Line-3', 'Finish Pack'],
     statuses: [
       ['In Cutting', '#2563eb'],
       ['Sewing', '#d97706'],
@@ -113,7 +116,18 @@ const DATASETS: Record<VisualFamily, Dataset> = {
     parties: ['Agro Dealer North', 'Poultry Hub BD', 'Cattle Feed Mart', 'Aqua Feed Co', 'District Depot'],
     people: ['Mill Owner', 'Mixer Operator', 'Store Keeper', 'QC Chemist', 'Sales Officer'],
     cities: ['Gazipur', 'Bogura', 'Jessore', 'Chattogram', 'Rangpur'],
-    products: ['Broiler Grower', 'Layer Mash', 'Cattle Concentrate', 'Fish Starter', 'Premix Lot'],
+    products: [
+      'Maize',
+      'Soybean Meal',
+      'Rice Polish',
+      'Wheat Bran',
+      'Limestone',
+      'Premix',
+      'Broiler Starter',
+      'Broiler Grower',
+      'Broiler Finisher',
+      'Layer Feed',
+    ],
     statuses: [
       ['Mixing', '#2563eb'],
       ['QC Hold', '#d97706'],

@@ -13,11 +13,16 @@ export function CategoryFilter({
   className?: string;
 }) {
   return (
-    <div className={cn('mt-8 md:mt-10', className)} role="navigation" aria-label="Portfolio categories">
+    <div
+      className={cn('mt-5 md:mt-6', className)}
+      role="navigation"
+      aria-label="Portfolio categories"
+    >
       <div
         className={cn(
-          'scrollbar-none flex gap-2 overflow-x-auto',
-          'snap-x snap-mandatory md:flex-wrap md:justify-center md:overflow-visible'
+          'scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5',
+          'snap-x snap-proximity scroll-smooth',
+          'md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0 md:pb-0'
         )}
       >
         {PORTFOLIO_FILTERS.map((filter) => {
@@ -29,11 +34,12 @@ export function CategoryFilter({
               onClick={() => onChange(filter.id)}
               aria-pressed={isActive}
               className={cn(
-                'snap-start shrink-0 rounded-full px-4 text-sm font-semibold transition-colors',
-                'inline-flex min-h-11 items-center justify-center',
+                'snap-start shrink-0 rounded-full px-2.5 text-[0.6875rem] font-semibold tracking-[-0.01em]',
+                'inline-flex h-8 items-center justify-center sm:px-3 sm:text-xs',
+                'border transition-[color,background-color,border-color,box-shadow] duration-200',
                 isActive
-                  ? 'bg-[#0f2744] text-white dark:bg-cyan-500/20 dark:text-cyan-100 dark:ring-1 dark:ring-cyan-400/40'
-                  : 'border border-border-subtle bg-surface text-text-secondary hover:border-[#2563eb]/35 hover:text-text-primary',
+                  ? 'border-transparent bg-[#0f2744] text-white shadow-sm dark:border-cyan-400/35 dark:bg-cyan-500/15 dark:text-cyan-100 dark:shadow-[0_0_12px_-4px_rgba(34,211,238,0.35)]'
+                  : 'border-border-subtle/80 bg-transparent text-text-muted hover:border-border-subtle hover:bg-surface/60 hover:text-text-primary',
                 'active:opacity-80',
                 focusVisibleRing
               )}

@@ -25,7 +25,7 @@ export function CategoryHeader({
           {title}
         </h3>
         {description ? (
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-text-muted md:mt-2.5 md:text-[0.9375rem]">
+          <p className="mt-2 hidden max-w-xl text-sm leading-relaxed text-text-muted md:mt-2.5 md:block md:text-[0.9375rem]">
             {description}
           </p>
         ) : null}

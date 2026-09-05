@@ -21,9 +21,6 @@ export function PortfolioIntro({ className }: { className?: string }) {
         >
           Explore Our Work
         </h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-text-muted sm:mt-4 sm:text-base">
-          View 500+ live websites, software &amp; marketing projects
-        </p>
       </SectionContainer>
     </section>
   );

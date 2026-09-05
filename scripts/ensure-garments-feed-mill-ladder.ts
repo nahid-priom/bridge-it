@@ -18,9 +18,10 @@ import {
   FEED_MILL_LADDER_SLUGS,
   GARMENTS_LADDER_SLUGS,
   SOFTWARE_SEED_PRODUCTS,
+  GARMENTS_SPECIALIZED_SLUGS,
+  FEED_MILL_SPECIALIZED_SLUGS,
 } from '../src/features/software-showcase/seed/catalog';
 import { SOFTWARE_PRODUCT_INDUSTRY_MAP } from '../src/features/catalog/config/software-industry-map';
-import { GARMENTS_ACCESSORIES_SLUG } from '../src/features/software-showcase/config/maturity-ladder';
 
 config({ path: '.env.local' });
 config({ path: '.env' });
@@ -32,7 +33,8 @@ const MIN_SCREENS = 6;
 const LADDER_SLUGS = new Set<string>([
   ...GARMENTS_LADDER_SLUGS,
   ...FEED_MILL_LADDER_SLUGS,
-  GARMENTS_ACCESSORIES_SLUG,
+  ...GARMENTS_SPECIALIZED_SLUGS,
+  ...FEED_MILL_SPECIALIZED_SLUGS,
 ]);
 
 const TIER_BY_SLUG: Record<string, string> = {
@@ -47,6 +49,16 @@ const TIER_BY_SLUG: Record<string, string> = {
   'feed-mill-erp-professional': 'professional',
   'feed-mill-enterprise-erp': 'enterprise',
   'garments-accessories-erp': 'standard',
+  'garments-merchandising-management': 'standard',
+  'garments-cutting-sewing-management': 'standard',
+  'garments-inventory-warehouse': 'standard',
+  'garments-hr-payroll': 'standard',
+  'garments-commercial-export-management': 'professional',
+  'feed-production-management': 'basic',
+  'feed-formula-costing-software': 'standard',
+  'feed-dealer-distribution-management': 'professional',
+  'feed-mill-inventory-warehouse': 'standard',
+  'feed-mill-accounts-finance': 'professional',
 };
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();

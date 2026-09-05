@@ -41,28 +41,27 @@ export function HeroContent({ className }: { className?: string }) {
         <span className="hero-solutions-wave mt-0.5 block">Digital Marketing</span>
       </h1>
 
-      <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-text-muted sm:mt-4 sm:text-base">
-        Custom solutions built for your business.
-      </p>
-
       <ul
         className={cn(
-          'mt-6 grid w-full max-w-[22rem] grid-cols-3 items-start justify-items-center gap-x-2 sm:mt-7 sm:max-w-[32rem] sm:gap-x-4',
+          'mt-5 grid w-full max-w-[28rem] grid-cols-3 items-stretch justify-items-stretch gap-2.5 sm:mt-6 sm:max-w-[40rem] sm:gap-3.5 lg:max-w-[46rem] lg:gap-4',
           'motion-safe:opacity-0 motion-safe:[animation:hero-fade-up_0.55s_ease-out_0.1s_forwards]'
         )}
       >
         {TRUST_POINTS.map(({ label, Icon, tone }) => (
           <li
             key={label}
-            className="group flex w-full max-w-[7.5rem] flex-col items-center gap-2 text-center sm:max-w-[9rem] sm:gap-2.5"
+            className={cn(
+              'group flex w-full flex-col items-center gap-1.5 rounded-xl',
+              'px-1.5 py-3.5 text-center sm:gap-2 sm:rounded-2xl sm:px-2.5 sm:py-4'
+            )}
           >
             <span
               className={cn('hero-benefit-icon shrink-0', `hero-benefit-icon--${tone}`)}
               aria-hidden
             >
-              <Icon className="h-[1.125rem] w-[1.125rem] sm:h-5 sm:w-5" strokeWidth={2} />
+              <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.75} />
             </span>
-            <span className="text-balance text-[0.75rem] font-bold leading-snug tracking-[-0.015em] text-text-primary sm:text-[0.875rem] lg:text-[0.9375rem]">
+            <span className="whitespace-nowrap text-[0.625rem] font-bold leading-none tracking-[-0.02em] text-text-primary sm:text-[0.75rem] lg:text-[0.8125rem]">
               {label}
             </span>
           </li>

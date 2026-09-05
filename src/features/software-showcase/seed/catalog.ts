@@ -1,9 +1,15 @@
 import type { SeedSoftwareProduct } from '../types';
 import { SOFTWARE_CATEGORIES } from '../config/constants';
 import { MATURITY_LADDER_PRODUCTS } from './maturity-ladder';
+import { SPECIALIZED_CATALOG_PRODUCTS } from './specialized-catalogs';
 
 export { SOFTWARE_CATEGORIES };
 export { MATURITY_LADDER_PRODUCTS, GARMENTS_LADDER_SLUGS, FEED_MILL_LADDER_SLUGS } from './maturity-ladder';
+export {
+  SPECIALIZED_CATALOG_PRODUCTS,
+  GARMENTS_SPECIALIZED_SLUGS,
+  FEED_MILL_SPECIALIZED_SLUGS,
+} from './specialized-catalogs';
 
 const SOFTWARE_SEED_CORE: SeedSoftwareProduct[] = [
   {
@@ -2075,6 +2081,7 @@ const SOFTWARE_SEED_CORE: SeedSoftwareProduct[] = [
 export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   ...SOFTWARE_SEED_CORE,
   ...MATURITY_LADDER_PRODUCTS,
+  ...SPECIALIZED_CATALOG_PRODUCTS,
 ];
 
 export function getSoftwareSeedBySlug(slug: string): SeedSoftwareProduct | undefined {

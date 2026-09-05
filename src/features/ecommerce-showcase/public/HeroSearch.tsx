@@ -54,12 +54,9 @@ export function HeroSearch({
             : 'h-11 rounded-xl border border-slate-300 bg-white shadow-sm dark:border-white/40 dark:bg-[#0c1520]'
         )}
       >
-        {/* Optical balance for centered text (mirrors submit button width). */}
+        {/* Left padding balance for the right-side submit button. */}
         {isPremium ? (
-          <span
-            className="pointer-events-none m-1.5 h-11 w-11 shrink-0 opacity-0 sm:h-12 sm:w-12"
-            aria-hidden
-          />
+          <span className="pointer-events-none w-3 shrink-0 sm:w-4" aria-hidden />
         ) : null}
 
         <label htmlFor="hero-website-search" className="sr-only">
@@ -71,12 +68,12 @@ export function HeroSearch({
             <span
               aria-hidden
               className={cn(
-                'pointer-events-none absolute inset-0 z-[1] flex items-center justify-center px-2',
+                'pointer-events-none absolute inset-0 z-[1] flex items-center justify-start px-2',
                 'text-[0.8125rem] text-slate-600 transition-opacity duration-500 ease-out sm:text-[0.9375rem]',
                 'dark:text-text-muted'
               )}
             >
-              <span className="inline-flex max-w-full items-center justify-center truncate">
+              <span className="inline-flex max-w-full items-center justify-start truncate">
                 <span className="transition-opacity duration-300 ease-out">{hintText}</span>
                 {typed.animating ? (
                   <span
@@ -103,12 +100,12 @@ export function HeroSearch({
               'h-full w-full min-w-0 bg-transparent leading-none outline-none transition-colors duration-300',
               isPremium
                 ? cn(
-                    'px-2 text-center text-[0.8125rem] text-text-primary sm:text-[0.9375rem]',
-                    'placeholder:text-center placeholder:text-slate-600 dark:placeholder:text-text-muted'
+                    'px-2 text-left text-[0.8125rem] text-text-primary sm:text-[0.9375rem]',
+                    'placeholder:text-left placeholder:text-slate-600 dark:placeholder:text-text-muted'
                   )
                 : cn(
-                    'px-3.5 text-center text-sm text-text-primary',
-                    'placeholder:text-center placeholder:text-text-muted'
+                    'px-3.5 text-left text-sm text-text-primary',
+                    'placeholder:text-left placeholder:text-text-muted'
                   )
             )}
             autoComplete="off"

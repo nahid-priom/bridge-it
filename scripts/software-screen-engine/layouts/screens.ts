@@ -25,8 +25,15 @@ import {
   t,
 } from '../primitives';
 import { iconAt } from '../icons';
+import { specialtyLayout } from '../specialty';
+import { renderSpecialtyDashboard } from '../specialty-layouts';
 
 export function renderDashboardScreen(product: SeedSoftwareProduct, family: VisualFamily) {
+  const specialty = specialtyLayout(product);
+  if (specialty) {
+    const custom = renderSpecialtyDashboard(product, family, specialty);
+    if (custom) return custom;
+  }
   const { x, y, w } = contentOrigin();
   const maturity = maturityProfile(product);
   const kpiCount = maturity === 'starter' ? 3 : maturity === 'enterprise' ? 6 : maturity === 'professional' ? 5 : 4;

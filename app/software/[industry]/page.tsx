@@ -26,10 +26,11 @@ import {
 } from '@/src/features/catalog/components/explore/types';
 import { listSoftwareProjectCards } from '@/src/features/software-showcase/api/projects';
 import { SOFTWARE_GALLERY_PAGE_SIZE } from '@/src/features/software-showcase/config/constants';
-import { GARMENTS_ACCESSORIES_SLUG } from '@/src/features/software-showcase/config/maturity-ladder';
+import { specializedSlugsForIndustry } from '@/src/features/software-showcase/config/specialized-solutions';
 import { SoftwareCatalog } from '@/src/features/software-showcase/public/SoftwareCatalog';
 import { SoftwareCardSkeleton } from '@/src/features/software-showcase/public/SoftwareCard';
 import { MaturityCompareBlock } from '@/src/features/software-showcase/public/MaturityCompareBlock';
+import { MaturityPackagesSection } from '@/src/features/software-showcase/public/MaturityPackagesSection';
 import { SpecializedSolutionsSection } from '@/src/features/software-showcase/public/SpecializedSolutionsSection';
 
 export const revalidate = 60;
@@ -129,7 +130,10 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
       q: q || undefined,
       industrySlug: industry.slug,
       page,
-      pageSize: SOFTWARE_GALLERY_PAGE_SIZE,
+      pageSize:
+        industry.slug === 'garments' || industry.slug === 'feed-mill'
+          ? Math.max(SOFTWARE_GALLERY_PAGE_SIZE, 24)
+          : SOFTWARE_GALLERY_PAGE_SIZE,
       minPrice: priceBounds.minPrice,
       maxPrice: priceBounds.maxPrice,
       businessSizes: businessSizes.length ? businessSizes : undefined,
@@ -171,6 +175,11 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
     industry.seo_intro?.trim() ||
     `${industry.name} software helps Bangladesh businesses run operations with clearer inventory, production, and reporting — without monthly SaaS lock-in.`;
 
+  const isLadderIndustry = industry.slug === 'garments' || industry.slug === 'feed-mill';
+  const hasActiveFilters = Boolean(q || priceId || businessSizes.length || (sort && sort !== 'popular'));
+  const specializedSlugs = specializedSlugsForIndustry(industry.slug);
+  const useSectionedListing = isLadderIndustry && !hasActiveFilters && page === 1;
+
   return (
     <>
       <JsonLd data={jsonLd} />
@@ -191,44 +200,41 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
         description={intro}
         resultCount={result.total}
       >
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <SoftwareCardSkeleton key={i} />
-              ))}
-            </div>
-          }
-        >
-          <SoftwareCatalog
-            initialFilters={{
-              q,
-              page,
-              price: priceId ?? '',
-              size: businessSizes.length ? businessSizes.join(',') : '',
-              sort,
-              industrySlug: industry.slug,
-            }}
-            initialData={
-              industry.slug === 'garments'
-                ? {
-                    ...result,
-                    items: result.items.filter((p) => p.slug !== GARMENTS_ACCESSORIES_SLUG),
-                    total: Math.max(
-                      0,
-                      result.total - (result.items.some((p) => p.slug === GARMENTS_ACCESSORIES_SLUG) ? 1 : 0)
-                    ),
-                  }
-                : result
+        {useSectionedListing ? (
+          <>
+            <MaturityPackagesSection industrySlug={industry.slug} products={result.items} />
+            <MaturityCompareBlock industrySlug={industry.slug} products={result.items} />
+            <SpecializedSolutionsSection industrySlug={industry.slug} products={result.items} />
+          </>
+        ) : (
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <SoftwareCardSkeleton key={i} />
+                ))}
+              </div>
             }
-            hideChrome
-            lockedIndustrySlug={industry.slug}
-            excludeSlugs={industry.slug === 'garments' ? [GARMENTS_ACCESSORIES_SLUG] : undefined}
-          />
-        </Suspense>
+          >
+            <SoftwareCatalog
+              initialFilters={{
+                q,
+                page,
+                price: priceId ?? '',
+                size: businessSizes.length ? businessSizes.join(',') : '',
+                sort,
+                industrySlug: industry.slug,
+              }}
+              initialData={result}
+              hideChrome
+              lockedIndustrySlug={industry.slug}
+            />
+          </Suspense>
+        )}
 
-        <MaturityCompareBlock industrySlug={industry.slug} products={result.items} />
-        <SpecializedSolutionsSection industrySlug={industry.slug} products={result.items} />
+        {!useSectionedListing && isLadderIndustry ? (
+          <MaturityCompareBlock industrySlug={industry.slug} products={result.items} />
+        ) : null}
 
         <section className="mt-12 max-w-3xl border-t border-border-subtle pt-8" aria-labelledby="about-industry">
           <h2 id="about-industry" className="font-display text-lg font-bold text-[#0f2744] dark:text-white">
@@ -236,8 +242,11 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-text-secondary">{aboutBody}</p>
           <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-            Browse published solutions above, then open a product page to compare Starter through
-            Enterprise packages, request a free demo, or place an order.
+            Browse published solutions above, then open a product page to compare packages, request a free
+            demo, or place an order.
+            {specializedSlugs.length
+              ? ' Specialized tools sit alongside complete ERP packages for focused departments.'
+              : null}
           </p>
         </section>
 

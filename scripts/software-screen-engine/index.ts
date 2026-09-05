@@ -12,6 +12,7 @@ import {
 import { shadowDefs, rect, t } from './primitives';
 import { renderAppChrome } from './chrome';
 import { renderScreenBody } from './layouts/screens';
+import { specialtyCoverComposition } from './specialty-layouts';
 
 export { visualFamily, brandOf, deriveQuickActions } from './datasets';
 export type { VisualFamily } from './datasets';
@@ -68,8 +69,11 @@ export function mobileSvg(product: SeedSoftwareProduct, screen: SoftwareScreenSe
 </svg>`;
 }
 
-/** Lightweight cover SVG (only used if covers regenerated; lifestyle covers preferred). */
+/** Cover SVG — specialty products get purpose-specific compositions. */
 export function coverSvg(product: SeedSoftwareProduct) {
+  const specialty = specialtyCoverComposition(product);
+  if (specialty) return specialty;
+
   const family = visualFamily(product);
   const brand = brandOf(product);
   const { primary, accent } = product.theme;
