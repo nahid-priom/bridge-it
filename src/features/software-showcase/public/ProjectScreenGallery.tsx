@@ -253,19 +253,22 @@ export function ProjectScreenGallery({
       className={cn('min-w-0', className)}
       aria-label="Software screenshots"
     >
-      <div className="mb-3 flex items-center justify-between gap-2">
+      <div className="mb-3 flex items-start justify-between gap-2 sm:items-center">
         <div className="min-w-0">
           <h2 className="font-display text-xl font-black text-text-primary md:text-2xl">
             Screenshots
           </h2>
-          <p className="mt-0.5 truncate text-sm text-text-secondary">
+          <p className="mt-0.5 text-sm text-text-secondary">
+            Explore the complete system with detailed screenshots
+          </p>
+          <p className="mt-1 truncate text-sm font-semibold text-text-primary">
             {title}
-            <span className="ml-2 tabular-nums text-text-muted">
+            <span className="ml-2 font-normal tabular-nums text-text-muted">
               {Math.max(1, selectedIndex + 1)} / {published.length}
             </span>
           </p>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 gap-2 pt-0.5">
           <button
             type="button"
             onClick={() => goRelative(-1)}
