@@ -71,7 +71,7 @@ export default function PrivacyPage() {
         <section id="information-we-collect">
           <h2 className="font-display text-lg font-bold text-text-primary">2. Information we collect</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>Details you submit (name, phone, email, business name, messages).</li>
+            <li>Details you submit (name, phone, business name, messages).</li>
             <li>Account and project information if you use the client dashboard.</li>
             <li>Technical data such as browser type, device, and approximate location derived from IP.</li>
             <li>Usage analytics if you allow analytics cookies (see below).</li>

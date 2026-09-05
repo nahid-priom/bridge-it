@@ -34,7 +34,7 @@ export default async function ClientConsultationsPage() {
         <div>
           <h1 className="text-2xl font-bold text-text-primary">My Requests</h1>
           <p className="mt-1 text-sm text-text-muted">
-            Free consultation requests linked to your phone or email.
+            Free consultation requests linked to your phone.
           </p>
         </div>
         <Link

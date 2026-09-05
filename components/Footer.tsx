@@ -7,7 +7,6 @@ import { BridgeLogo } from '@/components/brand/BridgeLogo';
 import { SocialLinks } from '@/components/shared/SocialLinks';
 import {
   FOOTER_BRAND_DESCRIPTION,
-  FOOTER_BRAND_HEADLINE,
   FOOTER_BRAND_TAGLINE,
   FOOTER_COLUMNS,
 } from '@/data/homeContent';
@@ -22,12 +21,14 @@ function FooterColumn({
   title,
   links,
 }: {
-  title: string;
+  title?: string;
   links: readonly { label: string; href: string }[];
 }) {
   return (
     <div className="min-w-0">
-      <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">{title}</h3>
+      {title ? (
+        <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">{title}</h3>
+      ) : null}
       <ul className="space-y-2.5">
         {links.map((link) => (
           <li key={link.label}>
@@ -75,14 +76,11 @@ export function Footer() {
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#60a5fa]">
               {FOOTER_BRAND_TAGLINE}
             </p>
-            <p className="mt-3 max-w-sm font-display text-lg font-bold leading-snug text-white">
-              {FOOTER_BRAND_HEADLINE}
-            </p>
-            <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-slate-400">
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-400">
               {FOOTER_BRAND_DESCRIPTION}
             </p>
 
-            <div className="mt-5 flex max-w-sm gap-2.5 text-sm leading-relaxed text-slate-400">
+            <div className="mt-4 flex max-w-sm gap-2.5 text-sm leading-relaxed text-slate-400">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#60a5fa]" aria-hidden />
               <address className="not-italic">{FOOTER_ADDRESS}</address>
             </div>
@@ -130,42 +128,36 @@ export function Footer() {
             </ul>
 
             <div className="mt-6">
-              <FooterColumn title="Legal" links={FOOTER_COLUMNS.legal} />
+              <FooterColumn links={FOOTER_COLUMNS.legal} />
             </div>
-            <h3 className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-white">
-              Follow Us
-            </h3>
-            <SocialLinks
-              size="sm"
-              className="grid w-full grid-cols-8 gap-1.5 sm:max-w-[12.5rem] sm:grid-cols-4 sm:gap-2"
-              linkClassName="h-8 w-8 sm:h-10 sm:w-10"
-            />
           </div>
         </div>
 
-        <div className="mt-8 flex max-w-full min-w-0 flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-slate-500">
+        <div className="mt-10 flex max-w-full min-w-0 flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <p className="shrink-0 text-xs text-slate-500">
             Powered by{' '}
             <a
               href="https://www.codebondhuit.com"
               target="_blank"
-              rel="noopener"
-              className="footer-powered-glow font-semibold tracking-wide text-[#7dd3fc] transition-colors hover:text-[#bae6fd]"
+              rel="noopener noreferrer"
+              className="powered-by-brand font-semibold tracking-wide"
             >
-              CODE BONDHU IT
+              Code Bondhu IT
             </a>
           </p>
-          <nav
-            className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500"
-            aria-label="Legal"
-          >
-            <Link href={ROUTES.privacy} className="transition-colors hover:text-[#60a5fa]">
-              Privacy Policy
-            </Link>
-            <Link href={ROUTES.terms} className="transition-colors hover:text-[#60a5fa]">
-              Terms & Conditions
-            </Link>
-          </nav>
+
+          <div className="flex min-w-0 items-center gap-3">
+            <p className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-white/80 sm:text-xs">
+              Follow Us
+            </p>
+            <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <SocialLinks
+                size="sm"
+                className="flex flex-nowrap items-center gap-2"
+                linkClassName="h-9 w-9 shrink-0"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </footer>

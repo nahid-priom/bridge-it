@@ -665,7 +665,6 @@ export interface OrderStatusHistoryRow {
 export interface CreateConsultationInput {
   name: string;
   phone: string;
-  email?: string;
   business_name?: string;
   /** Preferred DB field */
   service_interested_in?: string;

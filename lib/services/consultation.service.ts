@@ -25,7 +25,7 @@ export async function createConsultationRequest(input: CreateConsultationInput) 
   const { error } = await supabase.from('consultation_requests').insert({
     name,
     phone,
-    email: input.email?.trim() || null,
+    email: null,
     business_name: input.business_name?.trim() || null,
     service_interested_in: interested,
     message: input.message?.trim() || null,

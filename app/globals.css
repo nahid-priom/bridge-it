@@ -887,15 +887,27 @@ body {
   0%,
   100% {
     text-shadow:
-      0 0 6px rgba(125, 211, 252, 0.55),
-      0 0 14px rgba(56, 189, 248, 0.35),
-      0 0 24px rgba(37, 99, 235, 0.25);
+      0 0 6px rgba(16, 185, 129, 0.45),
+      0 0 14px rgba(34, 211, 238, 0.28),
+      0 0 22px rgba(37, 99, 235, 0.18);
+  }
+  25% {
+    text-shadow:
+      0 0 8px rgba(34, 211, 238, 0.55),
+      0 0 18px rgba(56, 189, 248, 0.35),
+      0 0 28px rgba(37, 99, 235, 0.22);
   }
   50% {
     text-shadow:
-      0 0 10px rgba(186, 230, 253, 0.85),
-      0 0 22px rgba(56, 189, 248, 0.55),
-      0 0 36px rgba(37, 99, 235, 0.4);
+      0 0 10px rgba(52, 211, 153, 0.65),
+      0 0 20px rgba(45, 212, 191, 0.4),
+      0 0 32px rgba(16, 185, 129, 0.28);
+  }
+  75% {
+    text-shadow:
+      0 0 8px rgba(45, 212, 191, 0.55),
+      0 0 18px rgba(34, 211, 238, 0.35),
+      0 0 28px rgba(37, 99, 235, 0.2);
   }
 }
 
@@ -907,8 +919,8 @@ body {
   .footer-powered-glow {
     animation: none;
     text-shadow:
-      0 0 8px rgba(125, 211, 252, 0.55),
-      0 0 16px rgba(56, 189, 248, 0.3);
+      0 0 8px rgba(16, 185, 129, 0.45),
+      0 0 16px rgba(34, 211, 238, 0.25);
   }
 }
 
@@ -1231,6 +1243,7 @@ html[data-admin-route] body {
   position: relative;
   z-index: 2;
   background: linear-gradient(180deg, #081827 0%, #0b1f33 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 @keyframes powered-by-color {
@@ -1251,7 +1264,9 @@ html[data-admin-route] body {
 
 .powered-by-brand {
   display: inline-block;
-  animation: powered-by-color 4s ease-in-out infinite;
+  animation:
+    powered-by-color 4s ease-in-out infinite,
+    footer-powered-glow 2.8s ease-in-out infinite;
 }
 
 .deshi-cta-banner {
@@ -1628,6 +1643,9 @@ html[data-nav-scrolled='true'] .mobile-premium-navbar-shell,
   .powered-by-brand {
     animation: none !important;
     color: #10b981;
+    text-shadow:
+      0 0 8px rgba(16, 185, 129, 0.45),
+      0 0 16px rgba(34, 211, 238, 0.25);
   }
 }
 
@@ -1679,6 +1697,95 @@ html[data-nav-scrolled='true'] .mobile-premium-navbar-shell,
   box-shadow:
     var(--toploader-shadow),
     0 0 8px var(--toploader-color) !important;
+}
+
+/* ===== Consultation page premium atmosphere ===== */
+.consultation-aurora {
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 15%, rgba(16, 185, 129, 0.14), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 20%, rgba(37, 99, 235, 0.16), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 50% 85%, rgba(6, 182, 212, 0.1), transparent 55%);
+  animation: consultation-aurora-shift 18s ease-in-out infinite alternate;
+}
+
+.dark .consultation-aurora {
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 12%, rgba(16, 185, 129, 0.18), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 88% 18%, rgba(59, 130, 246, 0.2), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 48% 88%, rgba(34, 211, 238, 0.12), transparent 55%);
+}
+
+@keyframes consultation-aurora-shift {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.08) translate3d(-1.5%, 1%, 0);
+    opacity: 1;
+  }
+}
+
+.consultation-ring--lg {
+  width: min(110vw, 42rem);
+  height: min(110vw, 42rem);
+  opacity: 0.45;
+}
+
+.consultation-ring--lg > svg {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: consultation-spin-plain 56s linear infinite;
+}
+
+.consultation-ring--sm {
+  width: 10rem;
+  height: 10rem;
+  opacity: 0.7;
+}
+
+.consultation-ring--sm > svg {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: consultation-spin-reverse 32s linear infinite;
+}
+
+.consultation-orbit {
+  animation: consultation-spin-plain 22s linear infinite;
+}
+
+.consultation-orbit--slow {
+  animation-duration: 34s;
+  animation-direction: reverse;
+}
+
+@keyframes consultation-spin-plain {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes consultation-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consultation-aurora,
+  .consultation-ring--lg > svg,
+  .consultation-ring--sm > svg,
+  .consultation-orbit {
+    animation: none !important;
+  }
 }
 
 /* Homepage shell — atmosphere comes from AppShell site-atmosphere-bg */

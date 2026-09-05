@@ -25,13 +25,13 @@ export function SocialLinks({
 
   const touch = size === 'sm' ? 'h-10 w-10' : 'h-11 w-11';
   const iconSize = size === 'sm' ? 18 : 20;
-  const isGrid = Boolean(className && /\bgrid\b/.test(className));
+  const hasLayout = Boolean(className && /\b(grid|flex)\b/.test(className));
 
   return (
     <ul
       className={cn(
         'max-w-full min-w-0 gap-2',
-        !isGrid && 'flex flex-wrap items-center',
+        !hasLayout && 'flex flex-wrap items-center',
         className
       )}
     >
