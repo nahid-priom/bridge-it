@@ -36,7 +36,14 @@
     "audit:sitemap": "tsx scripts/audit-sitemap.ts",
     "audit:public-routes": "tsx scripts/audit-public-routes.ts",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
-    "complete:software-catalog": "tsx scripts/complete-software-catalog.ts"
+    "complete:software-catalog": "tsx scripts/complete-software-catalog.ts",
+    "ingest:feed-mill-ai": "tsx scripts/ai-software-generator/ingest-ai-assets.ts",
+    "qa:feed-mill": "tsx scripts/qa-feed-mill-showcase.ts",
+    "manifest:feed-mill-ai": "tsx -e \"require('./scripts/ai-software-generator/generation-manifest').printManifestSummary()\"",
+    "ai:showcase:plan": "tsx scripts/ai-software-showcase/generation/generate-all.ts",
+    "ai:showcase:ingest": "tsx scripts/ai-software-showcase/generation/ingest-ai-assets.ts",
+    "ai:showcase:validate": "tsx scripts/ai-software-showcase/validation/product-completeness.ts",
+    "audit:software-visual": "tsx scripts/audit-software-visual-completeness.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

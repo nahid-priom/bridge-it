@@ -27,11 +27,11 @@ export function SpecializedSolutionsSection({
   const intro =
     industrySlug === 'garments'
       ? 'Focused tools for merchandising, floor production, warehouse, HR and commercial export — separate from complete ERP packages.'
-      : 'Focused tools for production, formula costing, dealers, warehouse and finance — separate from complete Feed Mill ERP packages.';
+      : 'Focused systems for production, formula costing, dealer distribution, inventory and finance. Choose these when you need depth in one department.';
   const flagshipHref =
     industrySlug === 'garments' ? '/software/garments/garments-erp' : '/software/feed-mill/feed-mill-erp';
   const flagshipLabel =
-    industrySlug === 'garments' ? 'Garments ERP Standard' : 'Feed Mill ERP Standard';
+    industrySlug === 'garments' ? 'Garments ERP Standard' : 'Complete Feed Mill ERP';
 
   return (
     <section className="mt-12" aria-labelledby="specialized-solutions">
@@ -39,6 +39,11 @@ export function SpecializedSolutionsSection({
         {title}
       </h2>
       <p className="mt-1 max-w-2xl text-sm text-text-secondary">{intro}</p>
+      {industrySlug === 'feed-mill' ? (
+        <p className="mt-1 max-w-2xl text-xs text-text-muted">
+          Pick Complete ERP for the whole business. Pick specialized software for a focused module you can expand later.
+        </p>
+      ) : null}
       <ul className={`mt-5 ${CATALOG_LISTING_GRID_CLASS}`}>
         {specialized.map((project) => (
           <li key={project.id} className="min-w-0 list-none">

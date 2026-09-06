@@ -1,11 +1,16 @@
 /**
- * Premium Software showcase asset generator (v4).
- * Screens use the componentized software-screen-engine.
- * Covers: prefer existing lifestyle assets; SVG cover only if missing.
+ * Software showcase asset generator.
+ *
+ * Production visual path is AI-premium via scripts/ai-software-showcase/.
+ * This script retains an emergency/dev SVG path only.
  *
  * Usage:
  *   npx tsx scripts/generate-software-showcases.ts [--slug=…] [--force]
  *     [--screens-only] [--covers-only] [--manifests-only]
+ *     [--no-svg-covers] [--ai-primary] [--allow-svg-emergency]
+ *
+ * Default (AI-primary era): do NOT write new SVG covers; skip SVG screens
+ * unless --allow-svg-emergency is set. Existing lifestyle/AI assets are kept.
  */
 import { mkdir, writeFile, access, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -21,11 +26,17 @@ import {
 } from './software-screen-engine';
 
 const ROOT = path.join(process.cwd(), 'seed-assets/software');
-const ASSET_VERSION = 4;
+const ASSET_VERSION = 6;
 const force = process.argv.includes('--force');
 const screensOnly = process.argv.includes('--screens-only');
 const coversOnly = process.argv.includes('--covers-only');
 const manifestsOnly = process.argv.includes('--manifests-only');
+/** Prefer AI pipeline; SVG covers/screens only with --allow-svg-emergency */
+const aiPrimary =
+  process.argv.includes('--ai-primary') ||
+  process.argv.includes('--no-svg-covers') ||
+  !process.argv.includes('--allow-svg-emergency');
+const allowSvgEmergency = process.argv.includes('--allow-svg-emergency');
 const slugArg = process.argv.find((a) => a.startsWith('--slug='))?.slice(7);
 
 const CARD_W = 800;
@@ -75,28 +86,36 @@ async function generateProduct(product: SeedSoftwareProduct) {
 
   if (manifestsOnly) return;
 
-  // Always fill missing covers (even with --screens-only) so upload never skips a product
+  // Covers: preserve existing; SVG only as explicit emergency
   {
     const cardPath = path.join(coverDir, 'card.avif');
     const detailPath = path.join(coverDir, 'detail.avif');
-    if (!screensOnly || !(await exists(cardPath)) || !(await exists(detailPath))) {
-      if (!(await exists(cardPath)) || !(await exists(detailPath))) {
+    const missingCover = !(await exists(cardPath)) || !(await exists(detailPath));
+    if (missingCover) {
+      if (allowSvgEmergency || !aiPrimary) {
         const svg = coverSvg(product);
         if (!(await exists(cardPath))) {
           const card = await svgToAvif(svg, cardPath, CARD_W, 58, 80 * 1024);
-          console.log(`  cover card ${(card / 1024).toFixed(1)}KB (svg fallback)`);
+          console.log(`  cover card ${(card / 1024).toFixed(1)}KB (svg emergency)`);
         }
         if (!(await exists(detailPath))) {
           const detail = await svgToAvif(svg, detailPath, DETAIL_W, 65);
-          console.log(`  cover detail ${(detail / 1024).toFixed(1)}KB (svg fallback)`);
+          console.log(`  cover detail ${(detail / 1024).toFixed(1)}KB (svg emergency)`);
         }
-      } else if (!screensOnly) {
-        console.log('  covers preserved (lifestyle / existing)');
+      } else {
+        console.log('  cover missing — use ai-software-showcase GenerateImage + ingest (SVG blocked)');
       }
+    } else if (!screensOnly) {
+      console.log('  covers preserved (lifestyle / AI / existing)');
     }
   }
 
   if (coversOnly) return;
+
+  if (aiPrimary && !allowSvgEmergency) {
+    console.log('  screens: SVG generation skipped (AI-primary). Use --allow-svg-emergency for emergency fill.');
+    return;
+  }
 
   for (const screen of product.screens) {
     const sdir = path.join(screensDir, screen.key);
@@ -114,7 +133,7 @@ async function generateProduct(product: SeedSoftwareProduct) {
       const m = await svgToAvif(mobileSvg(product, screen), mobile, 420, 58);
       mobileNote = ` mobile ${(m / 1024).toFixed(1)}KB`;
     }
-    console.log(`  ${screen.key} preview ${(p / 1024).toFixed(1)}KB thumb ${(th / 1024).toFixed(1)}KB${mobileNote}`);
+    console.log(`  ${screen.key} preview ${(p / 1024).toFixed(1)}KB thumb ${(th / 1024).toFixed(1)}KB${mobileNote} (svg emergency)`);
   }
 }
 
@@ -125,12 +144,17 @@ async function main() {
     console.error(slugArg ? `No product matched --slug=${slugArg}` : 'No products');
     process.exit(1);
   }
-  const mode = screensOnly ? 'screens-only' : coversOnly ? 'covers-only' : 'manifest+covers+screens';
+  const mode = screensOnly
+    ? 'screens-only'
+    : coversOnly
+      ? 'covers-only'
+      : allowSvgEmergency
+        ? 'manifest+covers+screens (svg emergency)'
+        : 'manifest+covers (AI-primary; no new SVG screens)';
   console.log(`Generating v${ASSET_VERSION} assets for ${list.length} products → ${ROOT} (${mode})`);
-  if (force) console.log('Force: regenerating screens (covers preserved unless missing)');
-  if (coversOnly) console.log('Covers-only: will NOT delete existing screens');
-  if (screensOnly) console.log('Screens-only: will NOT delete existing covers');
-
+  if (aiPrimary && !allowSvgEmergency) {
+    console.log('AI-primary: SVG cover/screen generation disabled. Use scripts/ai-software-showcase/ or --allow-svg-emergency.');
+  }
   for (const product of list) {
     console.log(`\n${product.slug}`);
     if (force) {

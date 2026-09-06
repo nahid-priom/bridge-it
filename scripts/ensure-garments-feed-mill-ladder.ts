@@ -30,6 +30,18 @@ const ASSETS_ROOT = path.join(process.cwd(), 'seed-assets/software');
 const publishForce = process.argv.includes('--publish-force');
 const MIN_SCREENS = 6;
 
+/** Soft-deleted maturity ladder SKUs — never re-insert. */
+const LEGACY_LADDER_ONLY_SLUGS = new Set([
+  'garments-starter-software',
+  'garments-production-management',
+  'garments-erp-professional',
+  'garments-enterprise-erp',
+  'feed-mill-mini',
+  'feed-mill-basic',
+  'feed-mill-erp-professional',
+  'feed-mill-enterprise-erp',
+]);
+
 const LADDER_SLUGS = new Set<string>([
   ...GARMENTS_LADDER_SLUGS,
   ...FEED_MILL_LADDER_SLUGS,
@@ -116,15 +128,26 @@ async function main() {
       continue;
     }
 
+    if (LEGACY_LADDER_ONLY_SLUGS.has(product.slug)) {
+      console.log('skip — legacy ladder SKU (redirect-only)', product.slug);
+      continue;
+    }
+
     const canPublish = await assetGate(product.slug, product.screens.length);
 
-    const { data: existing } = await supabase
+    // Include soft-deleted rows so we never INSERT a duplicate resurrection.
+    const { data: existingAny } = await supabase
       .from('software_projects')
-      .select('id, cover_card_url, cover_detail_url')
+      .select('id, cover_card_url, cover_detail_url, deleted_at')
       .eq('slug', product.slug)
-      .is('deleted_at', null)
       .maybeSingle();
 
+    if (existingAny?.deleted_at) {
+      console.log('skip — soft-deleted (will not resurrect)', product.slug);
+      continue;
+    }
+
+    const existing = existingAny?.deleted_at ? null : existingAny;
     const hasRemoteCovers = Boolean(existing?.cover_card_url && existing?.cover_detail_url);
     const published = canPublish || hasRemoteCovers;
 

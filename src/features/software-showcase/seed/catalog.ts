@@ -2,6 +2,7 @@ import type { SeedSoftwareProduct } from '../types';
 import { SOFTWARE_CATEGORIES } from '../config/constants';
 import { MATURITY_LADDER_PRODUCTS } from './maturity-ladder';
 import { SPECIALIZED_CATALOG_PRODUCTS } from './specialized-catalogs';
+import { GALLERY_MISSING_PRODUCTS } from './gallery-missing-products';
 
 export { SOFTWARE_CATEGORIES };
 export { MATURITY_LADDER_PRODUCTS, GARMENTS_LADDER_SLUGS, FEED_MILL_LADDER_SLUGS } from './maturity-ladder';
@@ -10,7 +11,7 @@ export {
   GARMENTS_SPECIALIZED_SLUGS,
   FEED_MILL_SPECIALIZED_SLUGS,
 } from './specialized-catalogs';
-
+export { GALLERY_MISSING_PRODUCTS, GALLERY_MISSING_SLUGS } from './gallery-missing-products';
 const SOFTWARE_SEED_CORE: SeedSoftwareProduct[] = [
   {
     slug: 'ecommerce-admin-dashboard',
@@ -198,21 +199,25 @@ const SOFTWARE_SEED_CORE: SeedSoftwareProduct[] = [
       'QC assay',
     ],
     screens: [
-      { key: 'dashboard', name: 'Feed Mill Dashboard', category: 'dashboard' },
-      { key: 'raw-purchase', name: 'Raw Material Purchase', category: 'form' },
-      { key: 'raw-stock', name: 'Raw Material Stock', category: 'stock' },
-      { key: 'formula', name: 'Formula / Recipe Management', category: 'list' },
+      // Phase 1 AI heroes (order = gallery priority)
+      { key: 'dashboard', name: 'Executive Dashboard', category: 'dashboard' },
       { key: 'production-planning', name: 'Production Planning', category: 'list' },
-      { key: 'daily-production', name: 'Daily Feed Production', category: 'transaction' },
-      { key: 'finished-stock', name: 'Finished Goods Stock', category: 'stock' },
-      { key: 'sales-delivery', name: 'Sales & Delivery', category: 'transaction' },
-      { key: 'dealer-due', name: 'Dealer / Customer Due', category: 'accounts' },
+      { key: 'formula', name: 'Formula Builder', category: 'list' },
+      { key: 'raw-stock', name: 'Raw Material Stock', category: 'stock' },
       { key: 'accounts-pnl', name: 'Accounts / Profit & Loss', category: 'accounts' },
+      // Secondary (SVG fallback until upgraded)
+      { key: 'raw-purchase', name: 'Raw Material Purchase', category: 'form' },
+      { key: 'production-batch', name: 'Production Batch', category: 'transaction' },
+      { key: 'daily-production', name: 'Daily Feed Production', category: 'transaction' },
+      { key: 'finished-stock', name: 'Finished Feed Stock', category: 'stock' },
+      { key: 'sales-delivery', name: 'Dealer Sales & Dispatch', category: 'transaction' },
+      { key: 'dealer-due', name: 'Dealer Ledger / Due', category: 'accounts' },
+      { key: 'collection', name: 'Collection', category: 'accounts' },
     ],
-    theme: { primary: '#166534', accent: '#34d399', sidebar: 'brand', density: 'comfortable' },
+    theme: { primary: '#0f2744', accent: '#c41e3a', sidebar: 'brand', density: 'comfortable' },
     seoTitle: 'Feed Mill ERP Software | Bridge IT Park',
     seoDescription:
-      'Feed Mill ERP Standard—formulas, batches, raw materials, dealer sales, dispatch and collection for Bangladesh mills.',
+      'Feed Mill ERP—formulas, batches, raw materials, dealer sales, dispatch and accounts for Bangladesh mills.',
     seoKeywords: [
       'feed mill erp software',
       'feed mill software bangladesh',
@@ -2130,8 +2135,9 @@ export const SOFTWARE_SEED_PRODUCTS: SeedSoftwareProduct[] = [
   ...SOFTWARE_SEED_CORE,
   // Maturity-ladder products merged into garments-erp / feed-mill-erp packages (20260922).
   ...SPECIALIZED_CATALOG_PRODUCTS,
+  // Published cover-only products brought into SSOT for AI gallery generation.
+  ...GALLERY_MISSING_PRODUCTS,
 ];
-
 export function getSoftwareSeedBySlug(slug: string): SeedSoftwareProduct | undefined {
   return SOFTWARE_SEED_PRODUCTS.find((product) => product.slug === slug);
 }

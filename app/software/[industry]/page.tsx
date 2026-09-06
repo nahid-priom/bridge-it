@@ -33,6 +33,7 @@ import { SoftwareCatalog } from '@/src/features/software-showcase/public/Softwar
 import { softwareListingQueryKey } from '@/src/features/software-showcase/utils/query-keys';
 import { SoftwareCard } from '@/src/features/software-showcase/public/SoftwareCard';
 import { SpecializedSolutionsSection } from '@/src/features/software-showcase/public/SpecializedSolutionsSection';
+import { FeedMillModuleFlow } from '@/src/features/software-showcase/public/FeedMillModuleFlow';
 import {
   FEED_MILL_ERP_SLUG,
   GARMENTS_ERP_SLUG,
@@ -57,7 +58,7 @@ function shortIntro(industryName: string, slug: string, fallback?: string | null
     return 'ERP and production software for manufacturing businesses.';
   }
   if (slug === 'feed-mill') {
-    return 'Feed mill ERP and inventory software for production and stock control.';
+    return 'Feed mill ERP and specialized software for formula, production, inventory, dealers and accounts — built for Bangladesh mills.';
   }
   if (slug === 'garments') {
     return 'Garments ERP and apparel production software for Bangladesh factories.';
@@ -180,6 +181,22 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
     },
   };
 
+  const faqJsonLd =
+    faqs.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.answer,
+            },
+          })),
+        }
+      : null;
+
   const sidebarIndustries = industries.map((i) => ({ slug: i.slug, name: i.name }));
   const aboutBody =
     industry.description?.trim() ||
@@ -212,6 +229,7 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
   return (
     <>
       <JsonLd data={jsonLd} />
+      {faqJsonLd ? <JsonLd data={faqJsonLd} /> : null}
       <CatalogAnalytics
         payload={{
           event: 'catalog_industry_view',
@@ -246,20 +264,32 @@ export default async function SoftwareIndustryPage({ params, searchParams }: Pro
                 <section className="mb-8" aria-labelledby="flagship-erp">
                   <h2
                     id="flagship-erp"
-                    className="mb-3 font-display text-lg font-bold text-text-primary sm:text-xl"
+                    className="mb-1 font-display text-lg font-bold text-text-primary sm:text-xl"
                   >
-                    Complete ERP
+                    Complete {industry.name} ERP
                   </h2>
+                  <p className="mb-3 max-w-2xl text-sm text-text-secondary">
+                    {industry.slug === 'feed-mill'
+                      ? 'Run the complete feed mill operation from one system — raw materials, formula, production, dealers, dispatch and accounts.'
+                      : 'Open the product to choose Starter, Standard, Professional, or Enterprise packages.'}
+                  </p>
                   <div className="max-w-md">
                     <SoftwareCard project={flagship} priority />
                   </div>
-                  <p className="mt-3 text-sm text-text-secondary">
-                    Open the product to choose Starter, Standard, Professional, or Enterprise packages.
-                  </p>
+                  {industry.slug === 'feed-mill' ? (
+                    <p className="mt-3 text-sm text-text-secondary">
+                      Packages: Starter, Standard, Professional, Enterprise — pick the tier that matches your mill size.
+                    </p>
+                  ) : (
+                    <p className="mt-3 text-sm text-text-secondary">
+                      Open the product to choose Starter, Standard, Professional, or Enterprise packages.
+                    </p>
+                  )}
                 </section>
               );
             })()}
             <SpecializedSolutionsSection industrySlug={industry.slug} products={result.items} />
+            {industry.slug === 'feed-mill' ? <FeedMillModuleFlow /> : null}
           </>
         ) : (
           <HydrationBoundary state={dehydrate(queryClient)}>

@@ -139,7 +139,16 @@ const PACKAGE_FEATURES: Record<
 };
 
 const RELATED: Array<[string, string[]]> = [
-  ['feed-mill-erp', ['inventory-warehouse-erp', 'distribution-management', 'crm-system', 'hr-payroll']],
+  [
+    'feed-mill-erp',
+    [
+      'feed-production-management',
+      'feed-formula-costing-software',
+      'feed-dealer-distribution-management',
+      'feed-mill-inventory-warehouse',
+      'feed-mill-accounts-finance',
+    ],
+  ],
   ['garments-erp', ['textile-erp', 'dyeing-management', 'inventory-warehouse-erp', 'hr-payroll']],
   ['manufacturing-erp', ['inventory-warehouse-erp', 'hr-payroll', 'crm-system']],
   ['hospital-management', ['pharmacy-management', 'diagnostic-center-management', 'clinic-management']],
