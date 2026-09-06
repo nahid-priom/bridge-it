@@ -1,85 +1,30 @@
 {
-  "generatedAt": "2026-09-06T01:10:57.212Z",
+  "generatedAt": "2026-09-06T02:49:39.410Z",
   "publishedCount": 76,
-  "seedCatalogCount": 61,
+  "seedCatalogCount": 76,
   "byStatus": {
-    "screen-gallery-missing": 15,
-    "fully-premium-local": 55,
-    "cover-upgrade-needed": 6
+    "fully-premium-local": 76
   },
   "byCoverClass": {
-    "db-remote-only": 15,
-    "premium-ai": 55,
-    "svg-fallback": 6
+    "premium-ai": 76
   },
-  "svgFallbackActive": [
-    "ecommerce-admin-dashboard",
-    "garments-commercial-export-management",
-    "garments-cutting-sewing-management",
-    "garments-hr-payroll",
-    "garments-inventory-warehouse",
-    "garments-merchandising-management"
-  ],
-  "missingLocalGalleries": [
-    "accounting-software",
-    "ecommerce-admin-operations",
-    "ecommerce-management",
-    "facility-management-software",
-    "furniture-manufacturing-erp",
-    "gym-management",
-    "hotel-management",
-    "jewelry-erp",
-    "microfinance-software",
-    "ngo-management",
-    "procurement-software",
-    "professional-services-erp",
-    "rental-management",
-    "security-services-software",
-    "travel-tourism-software"
-  ],
-  "brokenDbImageUrls": [
-    {
-      "slug": "ecommerce-admin-operations",
-      "keys": [
-        "orders-hub",
-        "stock-sync",
-        "courier-desk",
-        "settlements",
-        "customers",
-        "reports"
-      ]
-    }
-  ],
-  "publishedNotInSeed": [
-    "accounting-software",
-    "ecommerce-admin-operations",
-    "ecommerce-management",
-    "facility-management-software",
-    "furniture-manufacturing-erp",
-    "gym-management",
-    "hotel-management",
-    "jewelry-erp",
-    "microfinance-software",
-    "ngo-management",
-    "procurement-software",
-    "professional-services-erp",
-    "rental-management",
-    "security-services-software",
-    "travel-tourism-software"
-  ],
+  "svgFallbackActive": [],
+  "missingLocalGalleries": [],
+  "brokenDbImageUrls": [],
+  "publishedNotInSeed": [],
   "products": [
     {
       "slug": "accounting-software",
       "title": "Accounting & Finance Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 86937,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "automobile-workshop",
@@ -266,48 +211,41 @@
     {
       "slug": "ecommerce-admin-dashboard",
       "title": "E-commerce Admin Dashboard",
-      "asset_version": 6,
+      "asset_version": 9,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 10114,
+      "coverClass": "premium-ai",
+      "coverBytes": 81024,
       "localScreens": 10,
       "dbScreens": 10,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "ecommerce-admin-operations",
       "title": "E-commerce Operations Suite",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 91576,
+      "localScreens": 6,
       "dbScreens": 6,
-      "dbMissingImageUrl": [
-        "orders-hub",
-        "stock-sync",
-        "courier-desk",
-        "settlements",
-        "customers",
-        "reports"
-      ],
+      "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "ecommerce-management",
       "title": "E-commerce Management Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 71739,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "electronics-assembly-erp",
@@ -325,15 +263,15 @@
     {
       "slug": "facility-management-software",
       "title": "Facility Management Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 77649,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "factory-management",
@@ -455,15 +393,15 @@
     {
       "slug": "furniture-manufacturing-erp",
       "title": "Furniture Manufacturing ERP",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 89167,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "garments-accessories-erp",
@@ -481,28 +419,28 @@
     {
       "slug": "garments-commercial-export-management",
       "title": "Garments Commercial & Export Management",
-      "asset_version": 5,
+      "asset_version": 8,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 9271,
-      "localScreens": 12,
+      "coverClass": "premium-ai",
+      "coverBytes": 95456,
+      "localScreens": 14,
       "dbScreens": 12,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "garments-cutting-sewing-management",
       "title": "Garments Cutting & Sewing Management",
-      "asset_version": 5,
+      "asset_version": 8,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 9218,
-      "localScreens": 12,
+      "coverClass": "premium-ai",
+      "coverBytes": 79999,
+      "localScreens": 16,
       "dbScreens": 12,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "garments-erp",
@@ -520,54 +458,54 @@
     {
       "slug": "garments-hr-payroll",
       "title": "Garments HR & Payroll",
-      "asset_version": 5,
+      "asset_version": 8,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 9772,
-      "localScreens": 12,
+      "coverClass": "premium-ai",
+      "coverBytes": 99834,
+      "localScreens": 13,
       "dbScreens": 12,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "garments-inventory-warehouse",
       "title": "Garments Inventory & Warehouse",
-      "asset_version": 5,
+      "asset_version": 8,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 8692,
-      "localScreens": 12,
+      "coverClass": "premium-ai",
+      "coverBytes": 95510,
+      "localScreens": 15,
       "dbScreens": 12,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "garments-merchandising-management",
       "title": "Garments Merchandising Management",
-      "asset_version": 5,
+      "asset_version": 8,
       "inSeedCatalog": true,
-      "coverClass": "svg-fallback",
-      "coverBytes": 9480,
+      "coverClass": "premium-ai",
+      "coverBytes": 84109,
       "localScreens": 12,
       "dbScreens": 12,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "cover-upgrade-needed"
+      "status": "fully-premium-local"
     },
     {
       "slug": "gym-management",
       "title": "Gym & Fitness Management Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 74201,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "hospital-management",
@@ -585,15 +523,15 @@
     {
       "slug": "hotel-management",
       "title": "Hotel Management Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 70870,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "hr-payroll",
@@ -637,15 +575,15 @@
     {
       "slug": "jewelry-erp",
       "title": "Jewelry ERP Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 88421,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "layer-farm-management",
@@ -702,15 +640,15 @@
     {
       "slug": "microfinance-software",
       "title": "Microfinance Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 76076,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "multi-branch-erp",
@@ -728,15 +666,15 @@
     {
       "slug": "ngo-management",
       "title": "NGO Management Software",
-      "asset_version": 3,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 75441,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "oil-production-erp",
@@ -806,28 +744,28 @@
     {
       "slug": "procurement-software",
       "title": "Procurement Software",
-      "asset_version": 2,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 72660,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "professional-services-erp",
       "title": "Professional Services ERP",
-      "asset_version": 2,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 77705,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "property-management",
@@ -858,15 +796,15 @@
     {
       "slug": "rental-management",
       "title": "Rental Management Software",
-      "asset_version": 2,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 89893,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "restaurant-management",
@@ -962,15 +900,15 @@
     {
       "slug": "security-services-software",
       "title": "Security Services Software",
-      "asset_version": 2,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 89414,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "service-center-management",
@@ -1040,15 +978,15 @@
     {
       "slug": "travel-tourism-software",
       "title": "Travel & Tourism Software",
-      "asset_version": 2,
-      "inSeedCatalog": false,
-      "coverClass": "db-remote-only",
-      "coverBytes": 0,
-      "localScreens": 0,
-      "dbScreens": 0,
+      "asset_version": 6,
+      "inSeedCatalog": true,
+      "coverClass": "premium-ai",
+      "coverBytes": 89153,
+      "localScreens": 6,
+      "dbScreens": 6,
       "dbMissingImageUrl": [],
       "hasCoverUrl": true,
-      "status": "screen-gallery-missing"
+      "status": "fully-premium-local"
     },
     {
       "slug": "wholesale-erp",

@@ -1,0 +1,972 @@
+{
+  "generatedAt": "2026-09-06T02:10:33.313Z",
+  "needCover": 6,
+  "needScreen": 28,
+  "approved": 107,
+  "plan": [
+    {
+      "slug": "ecommerce-admin-dashboard",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "ecommerce-admin-dashboard-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"E-commerce Admin Dashboard\" (ShopAdmin). Industry: ecommerce. Composition: industry environment + realistic desktop software UI preview. Focus: E-commerce admin dashboard with orders, inventory and courier KPIs on a desktop monitor. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (E-commerce): Entities: SKU, Order, Courier, COD, Variant, Consignment. Units: BDT, pcs, orders. Roles: Store owner, Ops lead, Warehouse. KPIs: GMV, Orders today, Pending shipments, COD due. Sample: ORD-10482; Pathao; Steadfast; SKU-TEE-BLK-M."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard-overview",
+          "png": "ecommerce-admin-dashboard-dashboard-overview.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "orders",
+          "png": "ecommerce-admin-dashboard-orders.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: E-commerce Admin Dashboard (ShopAdmin). INDUSTRY: ecommerce. PAGE: Orders Management. PURPOSE: Order pipeline. KEY: orders. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (E-commerce): Entities: SKU, Order, Courier, COD, Variant, Consignment. Units: BDT, pcs, orders. Roles: Store owner, Ops lead, Warehouse. KPIs: GMV, Orders today, Pending shipments, COD due. Sample: ORD-10482; Pathao; Steadfast; SKU-TEE-BLK-M."
+        },
+        {
+          "kind": "screen",
+          "key": "inventory",
+          "png": "ecommerce-admin-dashboard-inventory.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: E-commerce Admin Dashboard (ShopAdmin). INDUSTRY: ecommerce. PAGE: Inventory / Stock. PURPOSE: Stock levels. KEY: inventory. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (E-commerce): Entities: SKU, Order, Courier, COD, Variant, Consignment. Units: BDT, pcs, orders. Roles: Store owner, Ops lead, Warehouse. KPIs: GMV, Orders today, Pending shipments, COD due. Sample: ORD-10482; Pathao; Steadfast; SKU-TEE-BLK-M."
+        },
+        {
+          "kind": "screen",
+          "key": "courier",
+          "png": "ecommerce-admin-dashboard-courier.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: E-commerce Admin Dashboard (ShopAdmin). INDUSTRY: ecommerce. PAGE: Courier Management. PURPOSE: Delivery handoff. KEY: courier. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (E-commerce): Entities: SKU, Order, Courier, COD, Variant, Consignment. Units: BDT, pcs, orders. Roles: Store owner, Ops lead, Warehouse. KPIs: GMV, Orders today, Pending shipments, COD due. Sample: ORD-10482; Pathao; Steadfast; SKU-TEE-BLK-M."
+        },
+        {
+          "kind": "screen",
+          "key": "analytics",
+          "png": "ecommerce-admin-dashboard-analytics.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: E-commerce Admin Dashboard (ShopAdmin). INDUSTRY: ecommerce. PAGE: Analytics. PURPOSE: Sales insights. KEY: analytics. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (E-commerce): Entities: SKU, Order, Courier, COD, Variant, Consignment. Units: BDT, pcs, orders. Roles: Store owner, Ops lead, Warehouse. KPIs: GMV, Orders today, Pending shipments, COD due. Sample: ORD-10482; Pathao; Steadfast; SKU-TEE-BLK-M."
+        }
+      ]
+    },
+    {
+      "slug": "garments-merchandising-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "garments-merchandising-management-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"Garments Merchandising Management\" (MerchDesk). Industry: garments. Composition: industry environment + realistic desktop software UI preview. Focus: Apparel merchandising board with style, buyer PO and TNA timeline on software UI. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "garments-merchandising-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "styles",
+          "png": "garments-merchandising-management-styles.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Merchandising Management (MerchDesk). INDUSTRY: garments. PAGE: Styles. PURPOSE: Style master. KEY: styles. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "inquiries",
+          "png": "garments-merchandising-management-inquiries.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Merchandising Management (MerchDesk). INDUSTRY: garments. PAGE: Inquiries. PURPOSE: Buyer inquiries. KEY: inquiries. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "time-action-calendar",
+          "png": "garments-merchandising-management-time-action-calendar.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Merchandising Management (MerchDesk). INDUSTRY: garments. PAGE: T&A Calendar. PURPOSE: Time & action. KEY: time-action-calendar. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "garments-merchandising-management-reports.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Merchandising Management (MerchDesk). INDUSTRY: garments. PAGE: Reports. PURPOSE: Merch reports. KEY: reports. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        }
+      ]
+    },
+    {
+      "slug": "garments-cutting-sewing-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "garments-cutting-sewing-management-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"Garments Cutting & Sewing Management\" (FloorOps). Industry: garments. Composition: industry environment + realistic desktop software UI preview. Focus: Cutting and sewing floor control board with line efficiency on ERP UI. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "garments-cutting-sewing-management-dashboard.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Cutting & Sewing Management (FloorOps). INDUSTRY: garments. PAGE: Floor Dashboard. PURPOSE: Line KPIs. KEY: dashboard. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "cutting",
+          "png": "garments-cutting-sewing-management-cutting.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Cutting & Sewing Management (FloorOps). INDUSTRY: garments. PAGE: Cutting. PURPOSE: Cut plans. KEY: cutting. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "sewing",
+          "png": "garments-cutting-sewing-management-sewing.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Cutting & Sewing Management (FloorOps). INDUSTRY: garments. PAGE: Sewing Lines. PURPOSE: Line output. KEY: sewing. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "wip",
+          "png": "garments-cutting-sewing-management-wip.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Cutting & Sewing Management (FloorOps). INDUSTRY: garments. PAGE: WIP. PURPOSE: Work in progress. KEY: wip. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "garments-cutting-sewing-management-reports.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Cutting & Sewing Management (FloorOps). INDUSTRY: garments. PAGE: Reports. PURPOSE: Production reports. KEY: reports. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        }
+      ]
+    },
+    {
+      "slug": "garments-inventory-warehouse",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "garments-inventory-warehouse-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"Garments Inventory & Warehouse\" (FabricStore). Industry: garments. Composition: industry environment + realistic desktop software UI preview. Focus: Fabric and trim warehouse stock dashboard with lot control on software UI. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "garments-inventory-warehouse-dashboard.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Inventory & Warehouse (FabricStore). INDUSTRY: garments. PAGE: Inventory Dashboard. PURPOSE: Stock KPIs. KEY: dashboard. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "fabric",
+          "png": "garments-inventory-warehouse-fabric.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Inventory & Warehouse (FabricStore). INDUSTRY: garments. PAGE: Fabric Stock. PURPOSE: Fabric rolls. KEY: fabric. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "trims",
+          "png": "garments-inventory-warehouse-trims.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Inventory & Warehouse (FabricStore). INDUSTRY: garments. PAGE: Trims. PURPOSE: Trim inventory. KEY: trims. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "grn",
+          "png": "garments-inventory-warehouse-grn.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Inventory & Warehouse (FabricStore). INDUSTRY: garments. PAGE: GRN. PURPOSE: Receipts. KEY: grn. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "garments-inventory-warehouse-reports.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Inventory & Warehouse (FabricStore). INDUSTRY: garments. PAGE: Reports. PURPOSE: Stock reports. KEY: reports. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        }
+      ]
+    },
+    {
+      "slug": "garments-hr-payroll",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "garments-hr-payroll-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"Garments HR & Payroll\" (ApparelHR). Industry: garments. Composition: industry environment + realistic desktop software UI preview. Focus: Factory HR and payroll dashboard with attendance and wage sheets on software UI. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "garments-hr-payroll-dashboard.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments HR & Payroll (ApparelHR). INDUSTRY: garments. PAGE: HR Dashboard. PURPOSE: Workforce KPIs. KEY: dashboard. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "attendance",
+          "png": "garments-hr-payroll-attendance.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments HR & Payroll (ApparelHR). INDUSTRY: garments. PAGE: Attendance. PURPOSE: Daily attendance. KEY: attendance. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "payroll",
+          "png": "garments-hr-payroll-payroll.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments HR & Payroll (ApparelHR). INDUSTRY: garments. PAGE: Payroll. PURPOSE: Wage processing. KEY: payroll. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "employees",
+          "png": "garments-hr-payroll-employees.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments HR & Payroll (ApparelHR). INDUSTRY: garments. PAGE: Employees. PURPOSE: Worker master. KEY: employees. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "garments-hr-payroll-reports.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments HR & Payroll (ApparelHR). INDUSTRY: garments. PAGE: Reports. PURPOSE: HR reports. KEY: reports. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        }
+      ]
+    },
+    {
+      "slug": "garments-commercial-export-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "garments-commercial-export-management-cover.png",
+          "status": "upgrade-recommended",
+          "prompt": "Premium enterprise software product cover for \"Garments Commercial & Export Management\" (ExportDesk). Industry: garments. Composition: industry environment + realistic desktop software UI preview. Focus: Export commercial desk with LC, shipment and document checklist on software UI. Software UI must be clearly visible (sidebar + dashboard/KPIs). Professional photography style, Bridge IT Park quality. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect: landscape cover suitable for catalog card and detail hero. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "garments-commercial-export-management-dashboard.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Commercial & Export Management (ExportDesk). INDUSTRY: garments. PAGE: Commercial Dashboard. PURPOSE: Export KPIs. KEY: dashboard. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "lc",
+          "png": "garments-commercial-export-management-lc.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Commercial & Export Management (ExportDesk). INDUSTRY: garments. PAGE: LC Tracking. PURPOSE: Letters of credit. KEY: lc. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "shipment",
+          "png": "garments-commercial-export-management-shipment.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Commercial & Export Management (ExportDesk). INDUSTRY: garments. PAGE: Shipment. PURPOSE: Export shipments. KEY: shipment. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "documents",
+          "png": "garments-commercial-export-management-documents.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Commercial & Export Management (ExportDesk). INDUSTRY: garments. PAGE: Documents. PURPOSE: Export docs. KEY: documents. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "garments-commercial-export-management-reports.png",
+          "status": "generate",
+          "prompt": "Realistic production ERP screenshot — NOT an illustration. PRODUCT: Garments Commercial & Export Management (ExportDesk). INDUSTRY: garments. PAGE: Reports. PURPOSE: Commercial reports. KEY: reports. USER ROLE: operations manager / domain specialist using this screen daily. Show consistent app shell: left sidebar with domain modules, top header with search and primary actions, main content with readable KPIs, filters, and a realistic data table or workflow panel. Industry-specific terminology and sample data only. BDT/local business context when relevant. DESIGN SYSTEM: Deep navy #0f2744, professional blue #1e3a5f, controlled red accent #c41e3a, white, light gray. Desktop ERP shell: sidebar ~220px, header ~56px, radius 8px. Odoo clarity + Stripe spacing + Linear compactness. Readable for business users aged 40+. NEGATIVE: no neon; no glassmorphism; no Dribbble futurism; no lorem ipsum; no gibberish text; no giant whitespace; no purple gradients; no 3D floating cards; no unreadable micro text. Do NOT generate marketing landing pages, device bezels, or phone mockup frames. Do NOT use lorem ipsum, gibberish, neon, glassmorphism, purple gradients, or sci-fi UI. Do NOT invent unrelated industry data. No unreadable micro text. Aspect ratio 16:10 desktop application window. Sharp readable labels. INDUSTRY CONTEXT (Garments): Entities: Buyer, Style, PO, Cutting, Sewing, LC, T&A. Units: pcs, dozen, CM, BDT. Roles: Merchandiser, Production manager, Commercial. KPIs: Open styles, Line output, On-time shipment %. Sample: Style GM-2401; Buyer H&M; LC BD-8891."
+        }
+      ]
+    },
+    {
+      "slug": "accounting-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "accounting-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "accounting-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "chart-of-accounts",
+          "png": "accounting-software-chart-of-accounts.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "journal",
+          "png": "accounting-software-journal.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "ledger",
+          "png": "accounting-software-ledger.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "cash-bank",
+          "png": "accounting-software-cash-bank.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "profit-loss",
+          "png": "accounting-software-profit-loss.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "ecommerce-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "ecommerce-management-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "ecommerce-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "catalog",
+          "png": "ecommerce-management-catalog.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "orders",
+          "png": "ecommerce-management-orders.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "customers",
+          "png": "ecommerce-management-customers.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "inventory",
+          "png": "ecommerce-management-inventory.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "ecommerce-management-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "ecommerce-admin-operations",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "ecommerce-admin-operations-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "orders-hub",
+          "png": "ecommerce-admin-operations-orders-hub.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "stock-sync",
+          "png": "ecommerce-admin-operations-stock-sync.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "courier-desk",
+          "png": "ecommerce-admin-operations-courier-desk.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "settlements",
+          "png": "ecommerce-admin-operations-settlements.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "customers",
+          "png": "ecommerce-admin-operations-customers.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "ecommerce-admin-operations-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "facility-management-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "facility-management-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "facility-management-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "work-orders",
+          "png": "facility-management-software-work-orders.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "assets",
+          "png": "facility-management-software-assets.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "vendors",
+          "png": "facility-management-software-vendors.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "preventive",
+          "png": "facility-management-software-preventive.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "facility-management-software-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "furniture-manufacturing-erp",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "furniture-manufacturing-erp-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "furniture-manufacturing-erp-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "bom",
+          "png": "furniture-manufacturing-erp-bom.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "production",
+          "png": "furniture-manufacturing-erp-production.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "inventory",
+          "png": "furniture-manufacturing-erp-inventory.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "costing",
+          "png": "furniture-manufacturing-erp-costing.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "furniture-manufacturing-erp-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "gym-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "gym-management-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "gym-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "members",
+          "png": "gym-management-members.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "membership",
+          "png": "gym-management-membership.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "attendance",
+          "png": "gym-management-attendance.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "trainers",
+          "png": "gym-management-trainers.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "payments",
+          "png": "gym-management-payments.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "hotel-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "hotel-management-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "hotel-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reservations",
+          "png": "hotel-management-reservations.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "rooms",
+          "png": "hotel-management-rooms.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "check-in",
+          "png": "hotel-management-check-in.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "housekeeping",
+          "png": "hotel-management-housekeeping.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "billing",
+          "png": "hotel-management-billing.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "jewelry-erp",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "jewelry-erp-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "jewelry-erp-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "inventory",
+          "png": "jewelry-erp-inventory.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "orders",
+          "png": "jewelry-erp-orders.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "tagging",
+          "png": "jewelry-erp-tagging.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "sales",
+          "png": "jewelry-erp-sales.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "jewelry-erp-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "microfinance-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "microfinance-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "microfinance-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "loans",
+          "png": "microfinance-software-loans.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "collections",
+          "png": "microfinance-software-collections.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "members",
+          "png": "microfinance-software-members.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "groups",
+          "png": "microfinance-software-groups.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "microfinance-software-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "ngo-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "ngo-management-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "ngo-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "beneficiaries",
+          "png": "ngo-management-beneficiaries.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "projects",
+          "png": "ngo-management-projects.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "funds",
+          "png": "ngo-management-funds.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "donors",
+          "png": "ngo-management-donors.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "ngo-management-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "procurement-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "procurement-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "procurement-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "requisitions",
+          "png": "procurement-software-requisitions.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "purchase-orders",
+          "png": "procurement-software-purchase-orders.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "vendors",
+          "png": "procurement-software-vendors.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "grn",
+          "png": "procurement-software-grn.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "procurement-software-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "professional-services-erp",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "professional-services-erp-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "professional-services-erp-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "projects",
+          "png": "professional-services-erp-projects.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "timesheets",
+          "png": "professional-services-erp-timesheets.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "billing",
+          "png": "professional-services-erp-billing.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "resources",
+          "png": "professional-services-erp-resources.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "professional-services-erp-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "rental-management",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "rental-management-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "rental-management-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "assets",
+          "png": "rental-management-assets.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "bookings",
+          "png": "rental-management-bookings.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "returns",
+          "png": "rental-management-returns.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "billing",
+          "png": "rental-management-billing.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "reports",
+          "png": "rental-management-reports.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "security-services-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "security-services-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "security-services-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "sites",
+          "png": "security-services-software-sites.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "roster",
+          "png": "security-services-software-roster.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "attendance",
+          "png": "security-services-software-attendance.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "guards",
+          "png": "security-services-software-guards.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "billing",
+          "png": "security-services-software-billing.png",
+          "status": "approved-keep"
+        }
+      ]
+    },
+    {
+      "slug": "travel-tourism-software",
+      "actions": [
+        {
+          "kind": "cover",
+          "png": "travel-tourism-software-cover.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "dashboard",
+          "png": "travel-tourism-software-dashboard.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "packages",
+          "png": "travel-tourism-software-packages.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "bookings",
+          "png": "travel-tourism-software-bookings.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "payments",
+          "png": "travel-tourism-software-payments.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "suppliers",
+          "png": "travel-tourism-software-suppliers.png",
+          "status": "approved-keep"
+        },
+        {
+          "kind": "screen",
+          "key": "visa",
+          "png": "travel-tourism-software-visa.png",
+          "status": "approved-keep"
+        }
+      ]
+    }
+  ]
+}

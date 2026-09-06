@@ -1,0 +1,358 @@
+{
+  "generatedAt": "2026-09-06T02:49:12.966Z",
+  "ready": 21,
+  "pending": 0,
+  "products": [
+    {
+      "slug": "ecommerce-admin-dashboard",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard-overview": true,
+        "orders": true,
+        "inventory": true,
+        "courier": true,
+        "analytics": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "garments-merchandising-management",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard": true,
+        "styles": true,
+        "inquiries": true,
+        "time-action-calendar": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "garments-cutting-sewing-management",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard": true,
+        "cutting": true,
+        "sewing": true,
+        "wip": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "garments-inventory-warehouse",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard": true,
+        "fabric": true,
+        "trims": true,
+        "grn": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "garments-hr-payroll",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard": true,
+        "attendance": true,
+        "payroll": true,
+        "employees": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "garments-commercial-export-management",
+      "needsCoverUpgrade": true,
+      "needsGallery": false,
+      "coverAi": true,
+      "aiScreens": 5,
+      "heroCount": 5,
+      "screenStatus": {
+        "dashboard": true,
+        "lc": true,
+        "shipment": true,
+        "documents": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "accounting-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "chart-of-accounts": true,
+        "journal": true,
+        "ledger": true,
+        "cash-bank": true,
+        "profit-loss": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "ecommerce-management",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "catalog": true,
+        "orders": true,
+        "customers": true,
+        "inventory": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "ecommerce-admin-operations",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "orders-hub": true,
+        "stock-sync": true,
+        "courier-desk": true,
+        "settlements": true,
+        "customers": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "facility-management-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "work-orders": true,
+        "assets": true,
+        "vendors": true,
+        "preventive": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "furniture-manufacturing-erp",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "bom": true,
+        "production": true,
+        "inventory": true,
+        "costing": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "gym-management",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "members": true,
+        "membership": true,
+        "attendance": true,
+        "trainers": true,
+        "payments": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "hotel-management",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "reservations": true,
+        "rooms": true,
+        "check-in": true,
+        "housekeeping": true,
+        "billing": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "jewelry-erp",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "inventory": true,
+        "orders": true,
+        "tagging": true,
+        "sales": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "microfinance-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "loans": true,
+        "collections": true,
+        "members": true,
+        "groups": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "ngo-management",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "beneficiaries": true,
+        "projects": true,
+        "funds": true,
+        "donors": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "procurement-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "requisitions": true,
+        "purchase-orders": true,
+        "vendors": true,
+        "grn": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "professional-services-erp",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "projects": true,
+        "timesheets": true,
+        "billing": true,
+        "resources": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "rental-management",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "assets": true,
+        "bookings": true,
+        "returns": true,
+        "billing": true,
+        "reports": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "security-services-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "sites": true,
+        "roster": true,
+        "attendance": true,
+        "guards": true,
+        "billing": true
+      },
+      "ready": true
+    },
+    {
+      "slug": "travel-tourism-software",
+      "needsCoverUpgrade": false,
+      "needsGallery": true,
+      "coverAi": true,
+      "aiScreens": 6,
+      "heroCount": 6,
+      "screenStatus": {
+        "dashboard": true,
+        "packages": true,
+        "bookings": true,
+        "payments": true,
+        "suppliers": true,
+        "visa": true
+      },
+      "ready": true
+    }
+  ]
+}
